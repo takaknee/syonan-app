@@ -39,7 +39,7 @@ class _AnswerInputState extends State<AnswerInput> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Container(
       constraints: const BoxConstraints(maxWidth: 200),
       child: Column(
@@ -97,9 +97,9 @@ class _AnswerInputState extends State<AnswerInput> {
               },
             ),
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           // 送信ボタン
           SizedBox(
             width: double.infinity,
@@ -128,9 +128,9 @@ class _AnswerInputState extends State<AnswerInput> {
               ),
             ),
           ),
-          
+
           const SizedBox(height: 16),
-          
+
           // ヒントテキスト
           Text(
             '数字を入力して「こたえる」を押してください',

@@ -133,13 +133,13 @@ void main() {
     test('should have correct messages and emojis', () {
       expect(ScoreLevel.excellent.message, 'すばらしい！');
       expect(ScoreLevel.excellent.emoji, '🌟');
-      
+
       expect(ScoreLevel.good.message, 'よくできました！');
       expect(ScoreLevel.good.emoji, '⭐');
-      
+
       expect(ScoreLevel.fair.message, 'がんばりました！');
       expect(ScoreLevel.fair.emoji, '👏');
-      
+
       expect(ScoreLevel.needsPractice.message, 'もう少しれんしゅうしよう！');
       expect(ScoreLevel.needsPractice.emoji, '💪');
     });

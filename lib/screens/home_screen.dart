@@ -44,15 +44,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     // ヘッダー
                     _buildHeader(theme),
                     const SizedBox(height: 32),
-                    
+
                     // 練習ボタン
                     _buildPracticeSection(theme),
                     const SizedBox(height: 32),
-                    
+
                     // 統計情報
                     _buildStatsSection(theme, scoreService),
                     const SizedBox(height: 24),
-                    
+
                     // スコア履歴ボタン
                     _buildScoreHistoryButton(theme),
                   ],

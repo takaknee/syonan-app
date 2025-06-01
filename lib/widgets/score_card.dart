@@ -21,7 +21,7 @@ class ScoreCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Card(
       elevation: isBest ? 8 : 2,
       child: Container(
@@ -62,9 +62,9 @@ class ScoreCard extends StatelessWidget {
             size: 20,
           ),
         ),
-        
+
         const SizedBox(width: 12),
-        
+
         // スコア情報
         Expanded(
           child: Column(
@@ -83,7 +83,7 @@ class ScoreCard extends StatelessWidget {
             ],
           ),
         ),
-        
+
         // 日付
         Text(
           _formatDate(scoreRecord.date),
@@ -141,7 +141,7 @@ class ScoreCard extends StatelessWidget {
                 ),
               ],
             ),
-            
+
             // レベルバッジ
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -169,9 +169,9 @@ class ScoreCard extends StatelessWidget {
             ),
           ],
         ),
-        
+
         const SizedBox(height: 12),
-        
+
         // スコア詳細
         Row(
           children: [
@@ -201,7 +201,7 @@ class ScoreCard extends StatelessWidget {
             ),
           ],
         ),
-        
+
         // 改善度表示
         if (showImprovement && previousScore != null) ...[
           const SizedBox(height: 8),
@@ -233,15 +233,15 @@ class ScoreCard extends StatelessWidget {
 
   Widget _buildImprovementIndicator(ThemeData theme) {
     if (previousScore == null) return const SizedBox.shrink();
-    
+
     final currentPercentage = scoreRecord.accuracyPercentage;
     final previousPercentage = previousScore!.accuracyPercentage;
     final difference = currentPercentage - previousPercentage;
-    
+
     final IconData icon;
     final Color color;
     final String text;
-    
+
     if (difference > 0) {
       icon = Icons.arrow_upward;
       color = Colors.green;
@@ -255,7 +255,7 @@ class ScoreCard extends StatelessWidget {
       color = Colors.grey;
       text = '変化なし';
     }
-    
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(

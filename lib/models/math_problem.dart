@@ -4,7 +4,7 @@ enum MathOperationType {
   division('÷', '割り算');
 
   const MathOperationType(this.symbol, this.displayName);
-  
+
   final String symbol;
   final String displayName;
 }

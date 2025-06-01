@@ -16,7 +16,7 @@ class EncouragementDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
@@ -58,9 +58,9 @@ class EncouragementDialog extends StatelessWidget {
                 );
               },
             ),
-            
+
             const SizedBox(height: 24),
-            
+
             // タイトル
             Text(
               improvement.title,
@@ -70,9 +70,9 @@ class EncouragementDialog extends StatelessWidget {
               ),
               textAlign: TextAlign.center,
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             // スコア情報
             Container(
               padding: const EdgeInsets.all(16),
@@ -103,9 +103,9 @@ class EncouragementDialog extends StatelessWidget {
                 ],
               ),
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             // 励ましのメッセージ
             Text(
               improvement.message,
@@ -114,9 +114,9 @@ class EncouragementDialog extends StatelessWidget {
               ),
               textAlign: TextAlign.center,
             ),
-            
+
             const SizedBox(height: 24),
-            
+
             // ボタン
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,

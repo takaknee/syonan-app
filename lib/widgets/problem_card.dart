@@ -13,7 +13,7 @@ class ProblemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Card(
       elevation: 8,
       child: Container(
@@ -48,9 +48,9 @@ class ProblemCard extends StatelessWidget {
                 size: 24,
               ),
             ),
-            
+
             const SizedBox(height: 24),
-            
+
             // 問題文
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -65,9 +65,9 @@ class ProblemCard extends StatelessWidget {
                     color: theme.colorScheme.onPrimaryContainer,
                   ),
                 ),
-                
+
                 const SizedBox(width: 16),
-                
+
                 // 演算子
                 Container(
                   padding: const EdgeInsets.all(8),
@@ -84,9 +84,9 @@ class ProblemCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                
+
                 const SizedBox(width: 16),
-                
+
                 // 第二数値
                 Text(
                   '${problem.secondNumber}',
@@ -96,9 +96,9 @@ class ProblemCard extends StatelessWidget {
                     color: theme.colorScheme.onPrimaryContainer,
                   ),
                 ),
-                
+
                 const SizedBox(width: 16),
-                
+
                 // 等号
                 Text(
                   '=',
@@ -108,9 +108,9 @@ class ProblemCard extends StatelessWidget {
                     color: theme.colorScheme.onPrimaryContainer,
                   ),
                 ),
-                
+
                 const SizedBox(width: 16),
-                
+
                 // クエスチョンマーク
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),

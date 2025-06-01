@@ -60,7 +60,7 @@ class MathService {
     while (problems.length < count && usedProblems.length < _getMaxUniqueProblems(operation)) {
       final problem = generateProblem(operation);
       final problemKey = '${problem.firstNumber}_${problem.secondNumber}_${problem.operation.name}';
-      
+
       if (!usedProblems.contains(problemKey)) {
         problems.add(problem);
         usedProblems.add(problemKey);
@@ -103,7 +103,7 @@ class MathService {
           operation: MathOperationType.multiplication,
           correctAnswer: firstNumber * secondNumber,
         );
-      
+
       case MathOperationType.division:
         final divisor = _random.nextInt(maxNumber) + 1;
         final quotient = _random.nextInt(maxNumber) + 1;

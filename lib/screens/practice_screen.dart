@@ -30,7 +30,7 @@ class _PracticeScreenState extends State<PracticeScreen>
   late final List<int?> _userAnswers;
   late final List<bool> _isCorrect;
   late final DateTime _startTime;
-  
+
   int _currentProblemIndex = 0;
   bool _isCompleted = false;
   late AnimationController _progressController;
@@ -40,13 +40,13 @@ class _PracticeScreenState extends State<PracticeScreen>
   void initState() {
     super.initState();
     _startTime = DateTime.now();
-    
+
     // 問題を生成
     final mathService = context.read<MathService>();
     _problems = mathService.generateProblems(widget.operation, widget.problemCount);
     _userAnswers = List.filled(widget.problemCount, null);
     _isCorrect = List.filled(widget.problemCount, false);
-    
+
     // アニメーションコントローラーの初期化
     _progressController = AnimationController(
       duration: const Duration(milliseconds: 300),
@@ -68,7 +68,7 @@ class _PracticeScreenState extends State<PracticeScreen>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     return Scaffold(
       appBar: AppBar(
         title: Text('${widget.operation.displayName}の練習'),
@@ -80,7 +80,7 @@ class _PracticeScreenState extends State<PracticeScreen>
         children: [
           // プログレスバー
           _buildProgressBar(theme),
-          
+
           // メインコンテンツ
           Expanded(
             child: _isCompleted ? _buildResultView(theme) : _buildProblemView(theme),
@@ -92,7 +92,7 @@ class _PracticeScreenState extends State<PracticeScreen>
 
   Widget _buildProgressBar(ThemeData theme) {
     final progress = (_currentProblemIndex + 1) / widget.problemCount;
-    
+
     return Container(
       padding: const EdgeInsets.all(16),
       color: theme.colorScheme.primaryContainer,
@@ -130,7 +130,7 @@ class _PracticeScreenState extends State<PracticeScreen>
 
   Widget _buildProblemView(ThemeData theme) {
     final currentProblem = _problems[_currentProblemIndex];
-    
+
     return Padding(
       padding: const EdgeInsets.all(20),
       child: Column(
@@ -138,9 +138,9 @@ class _PracticeScreenState extends State<PracticeScreen>
         children: [
           // 問題カード
           ProblemCard(problem: currentProblem),
-          
+
           const SizedBox(height: 32),
-          
+
           // 答え入力
           AnswerInput(
             onAnswerSubmitted: _handleAnswerSubmitted,
@@ -150,9 +150,9 @@ class _PracticeScreenState extends State<PracticeScreen>
               });
             },
           ),
-          
+
           const SizedBox(height: 24),
-          
+
           // ヒントボタン（必要に応じて）
           if (_shouldShowHint()) _buildHintButton(theme, currentProblem),
         ],
@@ -208,9 +208,9 @@ class _PracticeScreenState extends State<PracticeScreen>
               ),
             ),
           ),
-          
+
           const SizedBox(height: 32),
-          
+
           // ボタン
           Row(
             children: [
@@ -256,7 +256,7 @@ class _PracticeScreenState extends State<PracticeScreen>
   void _handleAnswerSubmitted(int answer) {
     final currentProblem = _problems[_currentProblemIndex];
     final isCorrect = currentProblem.isCorrectAnswer(answer);
-    
+
     setState(() {
       _userAnswers[_currentProblemIndex] = answer;
       _isCorrect[_currentProblemIndex] = isCorrect;
@@ -286,7 +286,7 @@ class _PracticeScreenState extends State<PracticeScreen>
   void _showAnswerFeedback(bool isCorrect, int correctAnswer) {
     final message = isCorrect ? 'せいかい！' : '答えは $correctAnswer です';
     final color = isCorrect ? Colors.green : Colors.orange;
-    
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
@@ -305,7 +305,7 @@ class _PracticeScreenState extends State<PracticeScreen>
 
   void _showHint(MathProblem problem) {
     String hint = '';
-    
+
     if (problem.operation == MathOperationType.multiplication) {
       hint = '${problem.firstNumber}を${problem.secondNumber}回足してみましょう';
     } else {
@@ -335,7 +335,7 @@ class _PracticeScreenState extends State<PracticeScreen>
     // スコアを保存
     final correctCount = _isCorrect.where((correct) => correct).length;
     final timeSpent = DateTime.now().difference(_startTime);
-    
+
     final scoreRecord = ScoreRecord(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       date: DateTime.now(),

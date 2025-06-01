@@ -102,7 +102,7 @@ enum ScoreLevel {
   needsPractice('もう少しれんしゅうしよう！', '💪');
 
   const ScoreLevel(this.message, this.emoji);
-  
+
   final String message;
   final String emoji;
 }

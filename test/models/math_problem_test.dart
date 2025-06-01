@@ -94,7 +94,7 @@ void main() {
     test('should have correct symbols and display names', () {
       expect(MathOperationType.multiplication.symbol, '×');
       expect(MathOperationType.multiplication.displayName, '掛け算');
-      
+
       expect(MathOperationType.division.symbol, '÷');
       expect(MathOperationType.division.displayName, '割り算');
     });

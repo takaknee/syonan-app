@@ -90,7 +90,7 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
       children: [
         // 統計サマリー
         _buildStatsSummary(operation, bestScore, averageScore, scores.length),
-        
+
         // スコア一覧
         Expanded(
           child: ListView.builder(
@@ -99,7 +99,7 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
             itemBuilder: (context, index) {
               final score = scores[index];
               final isRecentBest = bestScore != null && score.id == bestScore.id;
-              
+
               return Padding(
                 padding: const EdgeInsets.only(bottom: 12),
                 child: ScoreCard(
@@ -134,14 +134,14 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
         children: [
           // 全体統計
           _buildOverallStatsCard(streakDays, weeklyCount, allScores.length),
-          
+
           const SizedBox(height: 16),
-          
+
           // 操作別比較
           _buildComparisonCard(multiplicationScores, divisionScores, scoreService),
-          
+
           const SizedBox(height: 16),
-          
+
           // 最近の記録
           _buildRecentScores(allScores),
         ],
@@ -151,7 +151,7 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
 
   Widget _buildEmptyState(MathOperationType? operation) {
     final operationName = operation?.displayName ?? '';
-    
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -191,7 +191,7 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
     int totalPractices,
   ) {
     final theme = Theme.of(context);
-    
+
     return Container(
       padding: const EdgeInsets.all(16),
       margin: const EdgeInsets.all(16),
@@ -224,7 +224,7 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
 
   Widget _buildStatItem(String label, String value, IconData icon) {
     final theme = Theme.of(context);
-    
+
     return Column(
       children: [
         Icon(
@@ -252,7 +252,7 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
 
   Widget _buildOverallStatsCard(int streakDays, int weeklyCount, int totalPractices) {
     final theme = Theme.of(context);
-    
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -286,7 +286,7 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
     final theme = Theme.of(context);
     final multiplicationAvg = scoreService.getAverageScore(MathOperationType.multiplication);
     final divisionAvg = scoreService.getAverageScore(MathOperationType.division);
-    
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -350,7 +350,7 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
   Widget _buildRecentScores(List<ScoreRecord> allScores) {
     final theme = Theme.of(context);
     final recentScores = allScores.take(5).toList();
-    
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),

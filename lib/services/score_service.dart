@@ -9,7 +9,7 @@ import '../models/math_problem.dart';
 class ScoreService extends ChangeNotifier {
   static const String _scoresKey = 'score_records';
   static const String _lastScoreKey = 'last_score';
-  
+
   List<ScoreRecord> _scores = [];
   ScoreRecord? _lastScore;
   bool _isLoading = false;
@@ -39,10 +39,10 @@ class ScoreService extends ChangeNotifier {
     try {
       _scores.add(score);
       _scores.sort((a, b) => b.date.compareTo(a.date)); // 新しい順にソート
-      
+
       await _saveScores();
       await _saveLastScore(score);
-      
+
       _lastScore = score;
       notifyListeners();
     } catch (e) {
@@ -59,7 +59,7 @@ class ScoreService extends ChangeNotifier {
   /// 最新のスコアと前回のスコアを比較して改善度を取得
   ScoreImprovement getImprovement(MathOperationType operation) {
     final operationScores = getScoresByOperation(operation);
-    
+
     if (operationScores.length < 2) {
       return ScoreImprovement.noData;
     }
@@ -82,23 +82,23 @@ class ScoreService extends ChangeNotifier {
   /// 操作タイプ別の平均スコアを取得
   double getAverageScore(MathOperationType operation) {
     final operationScores = getScoresByOperation(operation);
-    
+
     if (operationScores.isEmpty) return 0.0;
-    
+
     final totalAccuracy = operationScores
         .map((score) => score.accuracy)
         .reduce((a, b) => a + b);
-    
+
     return totalAccuracy / operationScores.length;
   }
 
   /// 最高スコアを取得
   ScoreRecord? getBestScore(MathOperationType operation) {
     final operationScores = getScoresByOperation(operation);
-    
+
     if (operationScores.isEmpty) return null;
-    
-    return operationScores.reduce((a, b) => 
+
+    return operationScores.reduce((a, b) =>
         a.accuracyPercentage > b.accuracyPercentage ? a : b);
   }
 
@@ -107,25 +107,25 @@ class ScoreService extends ChangeNotifier {
     final now = DateTime.now();
     final weekStart = now.subtract(Duration(days: now.weekday - 1));
     final weekStartDate = DateTime(weekStart.year, weekStart.month, weekStart.day);
-    
+
     return _scores.where((score) => score.date.isAfter(weekStartDate)).length;
   }
 
   /// 連続練習日数を取得
   int getStreakDays() {
     if (_scores.isEmpty) return 0;
-    
+
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     var streakDays = 0;
     var checkDate = today;
-    
+
     final uniqueDates = _scores
         .map((score) => DateTime(score.date.year, score.date.month, score.date.day))
         .toSet()
         .toList()
       ..sort((a, b) => b.compareTo(a)); // 新しい順
-    
+
     for (final scoreDate in uniqueDates) {
       if (scoreDate.isAtSameMomentAs(checkDate)) {
         streakDays++;
@@ -134,7 +134,7 @@ class ScoreService extends ChangeNotifier {
         break;
       }
     }
-    
+
     return streakDays;
   }
 
@@ -142,7 +142,7 @@ class ScoreService extends ChangeNotifier {
   Future<void> _loadScores() async {
     final prefs = await SharedPreferences.getInstance();
     final scoresJson = prefs.getString(_scoresKey);
-    
+
     if (scoresJson != null) {
       final scoresList = jsonDecode(scoresJson) as List;
       _scores = scoresList
@@ -163,7 +163,7 @@ class ScoreService extends ChangeNotifier {
   Future<void> _loadLastScore() async {
     final prefs = await SharedPreferences.getInstance();
     final lastScoreJson = prefs.getString(_lastScoreKey);
-    
+
     if (lastScoreJson != null) {
       final json = jsonDecode(lastScoreJson) as Map<String, dynamic>;
       _lastScore = ScoreRecord.fromJson(json);
@@ -181,11 +181,11 @@ class ScoreService extends ChangeNotifier {
   Future<void> clearAllScores() async {
     _scores.clear();
     _lastScore = null;
-    
+
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_scoresKey);
     await prefs.remove(_lastScoreKey);
-    
+
     notifyListeners();
   }
 }
@@ -198,7 +198,7 @@ enum ScoreImprovement {
   noData('データがありません', '❓', '最初の記録です。頑張りましょう！');
 
   const ScoreImprovement(this.title, this.emoji, this.message);
-  
+
   final String title;
   final String emoji;
   final String message;

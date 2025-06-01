@@ -1,0 +1,128 @@
+name: Copilot-Assisted Development Workflow
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  issue_comment:
+    types: [created]
+
+jobs:
+  code-quality-check:
+    name: コード品質チェック
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    
+    steps:
+    - name: チェックアウト
+      uses: actions/checkout@v4
+      
+    - name: Flutter環境セットアップ
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.x'
+        cache: true
+        
+    - name: 依存関係の取得
+      run: |
+        if [ -f pubspec.yaml ]; then
+          flutter pub get
+        else
+          echo "pubspec.yaml が見つかりません。Flutterプロジェクトがまだ初期化されていない可能性があります。"
+        fi
+        
+    - name: Dart解析
+      run: |
+        if [ -f pubspec.yaml ]; then
+          flutter analyze
+        else
+          echo "Dart解析をスキップします。"
+        fi
+        
+    - name: フォーマットチェック
+      run: |
+        if [ -f pubspec.yaml ]; then
+          dart format --set-exit-if-changed .
+        else
+          echo "フォーマットチェックをスキップします。"
+        fi
+
+  copilot-suggestions:
+    name: Copilot開発提案
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    
+    steps:
+    - name: チェックアウト
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        
+    - name: 変更ファイルの取得
+      id: changed-files
+      uses: tj-actions/changed-files@v40
+      with:
+        files: |
+          **/*.dart
+          **/*.yaml
+          **/*.md
+          
+    - name: Copilot開発ガイドラインの確認
+      run: |
+        echo "変更されたファイル: ${{ steps.changed-files.outputs.all_changed_files }}"
+        echo ""
+        echo "🤖 GitHub Copilot開発提案:"
+        echo ""
+        echo "1. .github/instructions/copilot-guidelines.md の指示に従ってコードを確認してください"
+        echo "2. .github/prompts/ の効果的なプロンプトテンプレートを参照してください"
+        echo "3. 子供向けアプリのセキュリティとプライバシーを確認してください"
+        echo "4. アクセシビリティ要件が満たされているか確認してください"
+        echo "5. パフォーマンスへの影響を評価してください"
+        echo ""
+        echo "📝 推奨アクション:"
+        echo "- GitHub Copilot Chatでコードレビューを依頼"
+        echo "- セキュリティベストプラクティスの確認"
+        echo "- テストカバレッジの向上"
+        echo "- ドキュメントの更新"
+
+  auto-documentation:
+    name: 自動ドキュメント生成
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    
+    steps:
+    - name: チェックアウト
+      uses: actions/checkout@v4
+      
+    - name: ドキュメント生成
+      run: |
+        echo "📚 自動ドキュメント生成"
+        echo ""
+        echo "以下のドキュメントが最新であることを確認してください:"
+        echo ""
+        echo "- README.md: プロジェクトの概要と開始方法"
+        echo "- .github/copilot-context.md: Copilotコンテキスト情報"
+        echo "- .github/instructions/: 開発ガイドライン"
+        echo "- .github/prompts/: プロンプトテンプレート"
+        echo ""
+        echo "🔧 GitHub Copilotを使用してドキュメントを更新:"
+        echo "1. '@github generate documentation for this PR'"
+        echo "2. '@github explain the changes in this PR'"
+        echo "3. '@github suggest improvements for code quality'"
+
+  issue-automation:
+    name: イシュー自動化
+    runs-on: ubuntu-latest
+    if: github.event_name == 'issue_comment' && contains(github.event.comment.body, '@copilot-helper')
+    
+    steps:
+    - name: Copilotヘルパー応答
+      run: |
+        echo "🤖 Copilotヘルパーが起動されました"
+        echo ""
+        echo "利用可能なコマンド:"
+        echo "- @copilot-helper analyze: コード解析の実行"
+        echo "- @copilot-helper test: テスト実行の提案"
+        echo "- @copilot-helper security: セキュリティチェックの実行"
+        echo "- @copilot-helper docs: ドキュメント生成の提案"
+        echo ""
+        echo "詳細なヘルプについては .github/instructions/ を参照してください"

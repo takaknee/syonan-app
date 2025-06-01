@@ -45,12 +45,6 @@ class AppConstants {
   static const String lastScoreKey = 'last_score';
   static const String settingsKey = 'app_settings';
   
-  // ファイルパス
-  static const String assetsPath = 'assets/';
-  static const String imagesPath = 'assets/images/';
-  static const String animationsPath = 'assets/animations/';
-  static const String fontsPath = 'assets/fonts/';
-  
   // Private constructor to prevent instantiation
   AppConstants._();
 }
@@ -109,34 +103,28 @@ class AppStyles {
   static const TextStyle headingLarge = TextStyle(
     fontSize: 32,
     fontWeight: FontWeight.bold,
-    fontFamily: 'NotoSansJP',
   );
   
   static const TextStyle headingMedium = TextStyle(
     fontSize: 28,
     fontWeight: FontWeight.bold,
-    fontFamily: 'NotoSansJP',
   );
   
   static const TextStyle headingSmall = TextStyle(
     fontSize: 24,
     fontWeight: FontWeight.bold,
-    fontFamily: 'NotoSansJP',
   );
   
   static const TextStyle bodyLarge = TextStyle(
     fontSize: 18,
-    fontFamily: 'NotoSansJP',
   );
   
   static const TextStyle bodyMedium = TextStyle(
     fontSize: 16,
-    fontFamily: 'NotoSansJP',
   );
   
   static const TextStyle bodySmall = TextStyle(
     fontSize: 14,
-    fontFamily: 'NotoSansJP',
   );
   
   // パディング

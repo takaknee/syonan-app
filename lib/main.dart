@@ -41,25 +41,20 @@ class SyonanApp extends StatelessWidget {
             headlineLarge: TextStyle(
               fontSize: 32,
               fontWeight: FontWeight.bold,
-              fontFamily: 'NotoSansJP',
             ),
             headlineMedium: TextStyle(
               fontSize: 28,
               fontWeight: FontWeight.bold,
-              fontFamily: 'NotoSansJP',
             ),
             headlineSmall: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
-              fontFamily: 'NotoSansJP',
             ),
             bodyLarge: TextStyle(
               fontSize: 18,
-              fontFamily: 'NotoSansJP',
             ),
             bodyMedium: TextStyle(
               fontSize: 16,
-              fontFamily: 'NotoSansJP',
             ),
           ),
           // 子供向けのボタンスタイル（大きめのタッチターゲット）
@@ -69,7 +64,6 @@ class SyonanApp extends StatelessWidget {
               textStyle: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                fontFamily: 'NotoSansJP',
               ),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),

@@ -54,6 +54,10 @@
   "github.copilot.nextEditSuggestions.enabled": true,
   "github.copilot.nextEditSuggestions.fixes": true,
   "github.copilot.renameSuggestions.triggerAutomatically": true,
+  "github.copilot.inlineSuggest.enable": true,
+  "github.copilot.conversation.additionalInstructions": "プロジェクトは小学三年生向けの日本語算数練習アプリです。安全で教育的なコードを心がけてください。",
+  "github.copilot.editor.iterativeFixing": true,
+  "github.copilot.chat.editorFixing": true,
   "files.associations": {
     "*.dart": "dart"
   },

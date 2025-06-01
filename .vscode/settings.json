@@ -55,9 +55,15 @@
   "github.copilot.nextEditSuggestions.fixes": true,
   "github.copilot.renameSuggestions.triggerAutomatically": true,
   "github.copilot.inlineSuggest.enable": true,
-  "github.copilot.conversation.additionalInstructions": "プロジェクトは小学三年生向けの日本語算数練習アプリです。安全で教育的なコードを心がけてください。",
   "github.copilot.editor.iterativeFixing": true,
+  "github.copilot.nextEdit.enabled": true,
   "github.copilot.chat.editorFixing": true,
+  "github.copilot.chat.welcomeMessage": "always",
+  "github.copilot.chat.followUps": "always",
+  "github.copilot.chat.agent.autoFix": true,
+  "github.copilot.chat.codesearch.enabled": true,
+  "github.copilot.conversation.additionalInstructions": "このプロジェクトは小学三年生向けの日本語算数練習アプリ「syonan-app」です。安全で教育的なコードを心がけ、子供向けのアクセシブルなデザインを優先してください。コメントとドキュメントは日本語で記述してください。",
+  "github.copilot.chat.localeOverride": "ja",
   "files.associations": {
     "*.dart": "dart"
   },

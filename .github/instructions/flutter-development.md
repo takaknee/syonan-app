@@ -1,40 +1,41 @@
-# Flutter Development Instructions
+# Flutter開発指示書
 
-## Project Overview
-This is a Flutter app project for my daughter (syonan-app).
+## プロジェクト概要
+これは娘のためのFlutterアプリプロジェクト（syonan-app）です。
 
-## Development Guidelines
+## 開発ガイドライン
 
-### Code Style
-- Follow Dart official style guide
-- Use meaningful variable and function names
-- Keep functions small and focused
-- Use proper commenting for complex logic
+### コードスタイル
+- Dart公式スタイルガイドに従う
+- 意味のある変数名と関数名を使用
+- 関数は小さく、集中させる
+- 複雑なロジックには適切な日本語コメントを使用
 
-### Flutter Best Practices
-- Use const constructors where possible
-- Implement proper state management
-- Follow Material Design guidelines
-- Ensure responsive design for different screen sizes
+### Flutterベストプラクティス
+- 可能な場合はconstコンストラクタを使用
+- 適切な状態管理を実装
+- Material Designガイドラインに従う
+- 異なる画面サイズに対応するレスポンシブデザインを確保
 
-### GitHub Copilot Usage
-- Be specific in your comments when asking for code suggestions
-- Use descriptive function and variable names to get better suggestions
-- Break down complex tasks into smaller, well-defined functions
-- Use TODO comments to guide Copilot for implementation tasks
+### GitHub Copilot使用方法
+- コード提案を求める際は、コメントで具体的に指示
+- より良い提案を得るために説明的な関数名と変数名を使用
+- 複雑なタスクを小さく明確に定義された関数に分解
+- 実装タスクをガイドするためにTODOコメントを使用
+- **日本語でコメントを記述し、日本語での応答を求める**
 
-### Testing
-- Write unit tests for business logic
-- Write widget tests for UI components
-- Ensure tests are maintainable and readable
+### テスト
+- ビジネスロジックのユニットテストを作成
+- UIコンポーネントのウィジェットテストを作成
+- テストが保守可能で読みやすいことを確保
 
-### Performance
-- Avoid unnecessary rebuilds
-- Use appropriate widgets for the use case
-- Profile app performance regularly
-- Optimize images and assets
+### パフォーマンス
+- 不要な再構築を避ける
+- 用途に適したウィジェットを使用
+- アプリのパフォーマンスを定期的にプロファイル
+- 画像とアセットを最適化
 
-## File Structure
+## ファイル構造
 ```
 lib/
 ├── main.dart
@@ -45,11 +46,11 @@ lib/
 └── utils/
 ```
 
-## Commit Message Format
-- feat: new feature
-- fix: bug fix
-- docs: documentation changes
-- style: formatting changes
-- refactor: code refactoring
-- test: adding tests
-- chore: maintenance tasks
+## コミットメッセージ形式
+- feat: 新機能
+- fix: バグ修正
+- docs: ドキュメント変更
+- style: フォーマット変更
+- refactor: コードリファクタリング
+- test: テスト追加
+- chore: メンテナンスタスク

@@ -2,6 +2,20 @@ import 'math_problem.dart';
 
 /// スコア記録を表すモデルクラス
 class ScoreRecord {
+
+  /// JSONからScoreRecordを作成
+  factory ScoreRecord.fromJson(Map<String, dynamic> json) {
+    return ScoreRecord(
+      id: json['id'] as String,
+      date: DateTime.parse(json['date'] as String),
+      operation: MathOperationType.values.firstWhere(
+        (op) => op.name == json['operation'],
+      ),
+      correctAnswers: json['correctAnswers'] as int,
+      totalQuestions: json['totalQuestions'] as int,
+      timeSpent: Duration(seconds: json['timeSpentSeconds'] as int),
+    );
+  }
   const ScoreRecord({
     required this.id,
     required this.date,
@@ -36,20 +50,6 @@ class ScoreRecord {
     if (percentage >= 80) return ScoreLevel.good;
     if (percentage >= 70) return ScoreLevel.fair;
     return ScoreLevel.needsPractice;
-  }
-
-  /// JSONからScoreRecordを作成
-  factory ScoreRecord.fromJson(Map<String, dynamic> json) {
-    return ScoreRecord(
-      id: json['id'] as String,
-      date: DateTime.parse(json['date'] as String),
-      operation: MathOperationType.values.firstWhere(
-        (op) => op.name == json['operation'],
-      ),
-      correctAnswers: json['correctAnswers'] as int,
-      totalQuestions: json['totalQuestions'] as int,
-      timeSpent: Duration(seconds: json['timeSpentSeconds'] as int),
-    );
   }
 
   /// ScoreRecordをJSONに変換
@@ -90,7 +90,7 @@ class ScoreRecord {
 
   @override
   String toString() {
-    return 'ScoreRecord(${operation.displayName}: $correctAnswers/$totalQuestions, ${accuracyPercentage}%)';
+    return 'ScoreRecord(${operation.displayName}: $correctAnswers/$totalQuestions, $accuracyPercentage%)';
   }
 }
 

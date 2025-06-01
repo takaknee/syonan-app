@@ -2,15 +2,37 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Flutter: Web で起動",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main.dart",
+      "flutterMode": "debug",
+      "args": [
+        "-d",
+        "web-server",
+        "--web-hostname",
+        "0.0.0.0",
+        "--web-port",
+        "9100",
+        "--dart-define=ENVIRONMENT=development"
+      ],
+      "env": {
+        "PATH": "${workspaceFolder}/flutter/bin:${env:PATH}"
+      }
+    },
+    {
       "name": "Flutter: 開発環境で起動",
       "type": "dart",
       "request": "launch",
       "program": "lib/main.dart",
       "flutterMode": "debug",
-      "deviceId": "flutter-tester",
+      "deviceId": "linux",
       "args": [
         "--dart-define=ENVIRONMENT=development"
-      ]
+      ],
+      "env": {
+        "PATH": "${workspaceFolder}/flutter/bin:${env:PATH}"
+      }
     },
     {
       "name": "Flutter: プロファイルモードで起動",
@@ -20,20 +42,26 @@
       "flutterMode": "profile",
       "args": [
         "--dart-define=ENVIRONMENT=production"
-      ]
+      ],
+      "env": {
+        "PATH": "${workspaceFolder}/flutter/bin:${env:PATH}"
+      }
     },
     {
       "name": "Flutter: リリースモードで起動",
       "type": "dart",
       "request": "launch",
       "program": "lib/main.dart",
-      "flutterMode": "release"
+      "flutterMode": "release",
+      "env": {
+        "PATH": "${workspaceFolder}/flutter/bin:${env:PATH}"
+      }
     },
     {
       "name": "Flutter: デバイスにアタッチ",
       "type": "dart",
       "request": "attach",
-      "deviceId": "flutter-tester"
+      "deviceId": "linux"
     },
     {
       "name": "Dart: テストをデバッグ",
@@ -42,7 +70,10 @@
       "program": "test/",
       "args": [
         "--reporter=expanded"
-      ]
+      ],
+      "env": {
+        "PATH": "${workspaceFolder}/flutter/bin:${env:PATH}"
+      }
     },
     {
       "name": "Flutter: 統合テスト",
@@ -50,7 +81,10 @@
       "request": "launch",
       "program": "integration_test/app_test.dart",
       "flutterMode": "debug",
-      "deviceId": "flutter-tester"
+      "deviceId": "linux",
+      "env": {
+        "PATH": "${workspaceFolder}/flutter/bin:${env:PATH}"
+      }
     }
   ],
   "compounds": [

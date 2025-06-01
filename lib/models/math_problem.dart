@@ -11,6 +11,18 @@ enum MathOperationType {
 
 /// 算数問題を表すモデルクラス
 class MathProblem {
+
+  /// JSONからMathProblemを作成
+  factory MathProblem.fromJson(Map<String, dynamic> json) {
+    return MathProblem(
+      firstNumber: json['firstNumber'] as int,
+      secondNumber: json['secondNumber'] as int,
+      operation: MathOperationType.values.firstWhere(
+        (op) => op.name == json['operation'],
+      ),
+      correctAnswer: json['correctAnswer'] as int,
+    );
+  }
   const MathProblem({
     required this.firstNumber,
     required this.secondNumber,
@@ -31,18 +43,6 @@ class MathProblem {
   /// 答えが正しいかチェック
   bool isCorrectAnswer(int userAnswer) {
     return userAnswer == correctAnswer;
-  }
-
-  /// JSONからMathProblemを作成
-  factory MathProblem.fromJson(Map<String, dynamic> json) {
-    return MathProblem(
-      firstNumber: json['firstNumber'] as int,
-      secondNumber: json['secondNumber'] as int,
-      operation: MathOperationType.values.firstWhere(
-        (op) => op.name == json['operation'],
-      ),
-      correctAnswer: json['correctAnswer'] as int,
-    );
   }
 
   /// MathProblemをJSONに変換
@@ -72,6 +72,6 @@ class MathProblem {
 
   @override
   String toString() {
-    return 'MathProblem(${questionText} = $correctAnswer)';
+    return 'MathProblem($questionText = $correctAnswer)';
   }
 }

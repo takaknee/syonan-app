@@ -384,6 +384,6 @@ class _PracticeScreenState extends State<PracticeScreen>
   String _formatDuration(Duration duration) {
     final minutes = duration.inMinutes;
     final seconds = duration.inSeconds % 60;
-    return '${minutes}分${seconds}秒';
+    return '$minutes分$seconds秒';
   }
 }

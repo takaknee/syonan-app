@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import 'screens/home_screen.dart';
-import 'services/score_service.dart';
 import 'services/math_service.dart';
+import 'services/score_service.dart';
 
 void main() {
   runApp(const SyonanApp());
@@ -71,7 +72,7 @@ class SyonanApp extends StatelessWidget {
             ),
           ),
           // カードの角を丸くして子供向けの優しいデザイン
-          cardTheme: CardTheme(
+          cardTheme: CardThemeData(
             elevation: 4,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),

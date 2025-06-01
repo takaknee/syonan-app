@@ -267,9 +267,9 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _buildStatItem('連続練習', '${streakDays}日', Icons.local_fire_department),
-                _buildStatItem('今週の練習', '${weeklyCount}回', Icons.calendar_today),
-                _buildStatItem('総練習回数', '${totalPractices}回', Icons.emoji_events),
+                _buildStatItem('連続練習', '$streakDays日', Icons.local_fire_department),
+                _buildStatItem('今週の練習', '$weeklyCount回', Icons.calendar_today),
+                _buildStatItem('総練習回数', '$totalPractices回', Icons.emoji_events),
               ],
             ),
           ],
@@ -303,7 +303,7 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
                 Expanded(
                   child: Column(
                     children: [
-                      Icon(Icons.close, color: Colors.blue, size: 32),
+                      const Icon(Icons.close, color: Colors.blue, size: 32),
                       const SizedBox(height: 8),
                       Text(
                         '掛け算',
@@ -323,7 +323,7 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
                 Expanded(
                   child: Column(
                     children: [
-                      Icon(Icons.more_horiz, color: Colors.green, size: 32),
+                      const Icon(Icons.more_horiz, color: Colors.green, size: 32),
                       const SizedBox(height: 8),
                       Text(
                         '割り算',

@@ -4,7 +4,7 @@
     "source.fixAll": "explicit",
     "source.organizeImports": "explicit"
   },
-  "dart.flutterSdkPath": null,
+  "dart.flutterSdkPath": "${workspaceFolder}/flutter",
   "dart.lineLength": 80,
   "dart.insertArgumentPlaceholders": false,
   "dart.updateImportsOnRename": true,
@@ -13,14 +13,17 @@
     ".dart_tool",
     "build"
   ],
+  "terminal.integrated.env.linux": {
+    "PATH": "${workspaceFolder}/flutter/bin:${env:PATH}"
+  },
   "[dart]": {
     "editor.defaultFormatter": "Dart-Code.dart-code",
     "editor.tabSize": 2,
     "editor.insertSpaces": true,
-    "editor.rulers": [80]
+    "editor.rulers": [
+      80
+    ]
   },
-  "flutter.experimental.buildRunnerV2": true,
-  "flutter.showPreviewForBuildRunner": true,
   "github.copilot.enable": {
     "*": true,
     "dart": true,
@@ -37,14 +40,19 @@
     "length": 2000,
     "inlineSuggestCount": 3
   },
-  "github.copilot.chat.followUps": "on",
-  "github.copilot.chat.runCommand.enabled": true,
+  "github.copilot.chat.followUps": "always",
+  "github.copilot.chat.agent.autoFix": true,
+  "github.copilot.chat.agent.runTasks": true,
+  "github.copilot.chat.agent.thinkingTool": true,
+  "github.copilot.chat.codesearch.enabled": true,
   "github.copilot.chat.localeOverride": "ja",
-  "github.copilot.chat.welcomeMessage": "never",
-  "github.copilot.editor.enableAutoCompletions": true,
+  "github.copilot.chat.summarizeAgentConversationHistory.enabled": true,
+  "github.copilot.chat.scopeSelection": true,
+  "github.copilot.chat.editor.temporalContext.enabled": true,
+  "github.copilot.chat.edits.newNotebook.enabled": true,
   "github.copilot.editor.enableCodeActions": true,
-  "github.copilot.editor.iterativeFixing": true,
-  "github.copilot.preferences.includeCodeBlockLanguageInChatCodeBlocks": true,
+  "github.copilot.nextEditSuggestions.enabled": true,
+  "github.copilot.nextEditSuggestions.fixes": true,
   "github.copilot.renameSuggestions.triggerAutomatically": true,
   "files.associations": {
     "*.dart": "dart"

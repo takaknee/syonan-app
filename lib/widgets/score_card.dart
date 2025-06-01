@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import '../models/math_problem.dart';
 import '../models/score_record.dart';
 
 /// スコア記録を表示するカードウィジェット
@@ -39,7 +41,8 @@ class ScoreCard extends StatelessWidget {
                 )
               : null,
         ),
-        child: isCompact ? _buildCompactContent(theme) : _buildFullContent(theme),
+        child:
+            isCompact ? _buildCompactContent(theme) : _buildFullContent(theme),
       ),
     );
   }
@@ -211,7 +214,8 @@ class ScoreCard extends StatelessWidget {
     );
   }
 
-  Widget _buildScoreDetail(ThemeData theme, String label, String value, Color color) {
+  Widget _buildScoreDetail(
+      ThemeData theme, String label, String value, Color color) {
     return Column(
       children: [
         Text(
@@ -317,9 +321,9 @@ class ScoreCard extends StatelessWidget {
     final minutes = duration.inMinutes;
     final seconds = duration.inSeconds % 60;
     if (minutes > 0) {
-      return '${minutes}分${seconds}秒';
+      return '$minutes分$seconds秒';
     } else {
-      return '${seconds}秒';
+      return '$seconds秒';
     }
   }
 }

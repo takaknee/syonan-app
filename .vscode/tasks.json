@@ -42,7 +42,7 @@
         "panel": "shared"
       },
       "problemMatcher": [
-        "$dart-analyze"
+        "$tsc"
       ]
     },
     {
@@ -166,6 +166,26 @@
         "reveal": "always",
         "focus": true,
         "panel": "new"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Flutter: Webアプリ起動",
+      "type": "shell",
+      "command": "flutter",
+      "args": [
+        "run",
+        "-d", "web-server",
+        "--web-hostname", "0.0.0.0",
+        "--web-port", "9100"
+      ],
+      "group": "build",
+      "isBackground": true,
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "dedicated"
       },
       "problemMatcher": []
     }

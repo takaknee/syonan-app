@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 
 /// アプリ全体で使用する定数を定義
 class AppConstants {
+
+  // Private constructor to prevent instantiation
+  AppConstants._();
   // アプリ情報
   static const String appName = '算数れんしゅう';
   static const String appVersion = '1.0.0';
@@ -44,13 +47,13 @@ class AppConstants {
   static const String scoresKey = 'score_records';
   static const String lastScoreKey = 'last_score';
   static const String settingsKey = 'app_settings';
-
-  // Private constructor to prevent instantiation
-  AppConstants._();
 }
 
 /// アプリで使用する文字列定数
 class AppStrings {
+
+  // Private constructor to prevent instantiation
+  AppStrings._();
   // アプリ名とタイトル
   static const String appTitle = '算数れんしゅう';
   static const String homeTitle = 'ホーム';
@@ -92,13 +95,13 @@ class AppStrings {
   static const String loadError = 'データの読み込みに失敗しました';
   static const String saveError = 'データの保存に失敗しました';
   static const String unknownError = '予期しないエラーが発生しました';
-
-  // Private constructor to prevent instantiation
-  AppStrings._();
 }
 
 /// アプリで使用するスタイル定数
 class AppStyles {
+
+  // Private constructor to prevent instantiation
+  AppStyles._();
   // テキストスタイル
   static const TextStyle headingLarge = TextStyle(
     fontSize: 32,
@@ -163,7 +166,4 @@ class AppStyles {
       offset: Offset(0, 8),
     ),
   ];
-
-  // Private constructor to prevent instantiation
-  AppStyles._();
 }

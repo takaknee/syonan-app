@@ -12,7 +12,16 @@
     "streetsidesoftware.code-spell-checker",
     "gruntfuggly.todo-tree",
     "alefragnani.bookmarks",
-    "ms-vscode.hexeditor"
+    "ms-vscode.hexeditor",
+    "ms-vscode.test-adapter-converter",
+    "hbenl.vscode-test-explorer",
+    "formulahendry.code-runner",
+    "ms-vscode.vscode-github-issue-notebooks",
+    "github.vscode-github-actions",
+    "ms-vscode.vscode-markdown",
+    "davidanson.vscode-markdownlint",
+    "bierner.markdown-mermaid",
+    "shd101wyy.markdown-preview-enhanced"
   ],
   "unwantedRecommendations": [
     "ms-vscode.vscode-typescript"

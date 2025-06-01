@@ -1,0 +1,173 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Flutter: プロジェクト初期化",
+      "type": "shell",
+      "command": "flutter",
+      "args": ["create", "--project-name", "syonan_app", "--org", "com.syonan", "."],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Flutter: 依存関係取得",
+      "type": "shell",
+      "command": "flutter",
+      "args": ["pub", "get"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Flutter: コード解析",
+      "type": "shell",
+      "command": "flutter",
+      "args": ["analyze"],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": [
+        "$dart-analyze"
+      ]
+    },
+    {
+      "label": "Flutter: テスト実行",
+      "type": "shell",
+      "command": "flutter",
+      "args": ["test"],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Flutter: カバレッジ付きテスト",
+      "type": "shell",
+      "command": "flutter",
+      "args": ["test", "--coverage"],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Dart: フォーマット",
+      "type": "shell",
+      "command": "dart",
+      "args": ["format", "."],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Flutter: ビルド（Android）",
+      "type": "shell",
+      "command": "flutter",
+      "args": ["build", "apk", "--debug"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Flutter: ビルド（iOS）",
+      "type": "shell",
+      "command": "flutter",
+      "args": ["build", "ios", "--debug", "--no-codesign"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": [],
+      "options": {
+        "env": {
+          "FLUTTER_BUILD_MODE": "debug"
+        }
+      }
+    },
+    {
+      "label": "Copilot: ガイドライン確認",
+      "type": "shell",
+      "command": "echo",
+      "args": [
+        "🤖 GitHub Copilot開発ガイドライン:\n",
+        "📖 .github/instructions/copilot-guidelines.md\n",
+        "📝 .github/prompts/flutter-prompts.md\n",
+        "🔧 .vscode/settings.json（Copilot設定）\n",
+        "💡 効果的なプロンプト作成のヒント:\n",
+        "- 具体的で明確な要件を記述\n",
+        "- 子供向けアプリの特性を考慮\n",
+        "- セキュリティとプライバシーを重視\n",
+        "- アクセシビリティ要件を含める"
+      ],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "new"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "開発環境: セットアップ確認",
+      "type": "shell",
+      "command": "echo",
+      "args": [
+        "🔍 開発環境セットアップ状況:\n",
+        "Flutter: $(flutter --version | head -1)\n",
+        "Dart: $(dart --version)\n",
+        "VS Code拡張機能: .vscode/extensions.json を確認\n",
+        "GitHub Copilot: 有効化確認が必要\n",
+        "📋 次のステップ:\n",
+        "1. GitHub Copilotサブスクリプション確認\n",
+        "2. 推奨拡張機能のインストール\n",
+        "3. Flutter SDKのパス設定\n",
+        "4. プロジェクト初期化（必要な場合）"
+      ],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "new"
+      },
+      "problemMatcher": []
+    }
+  ]
+}

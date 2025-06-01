@@ -1,0 +1,131 @@
+---
+name: Copilot-Assisted Development Workflow
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  issue_comment:
+    types: [created]
+
+jobs:
+  code-quality-check:
+    name: Code Quality Check
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.x'
+          cache: true
+
+      - name: Get dependencies
+        run: |
+          if [ -f pubspec.yaml ]; then
+            flutter pub get
+          else
+            echo "pubspec.yaml not found. Flutter project may not be initialized yet."
+          fi
+
+      - name: Analyze code
+        run: |
+          if [ -f pubspec.yaml ]; then
+            flutter analyze
+          else
+            echo "Skipping Dart analysis."
+          fi
+
+      - name: Check formatting
+        run: |
+          if [ -f pubspec.yaml ]; then
+            dart format --set-exit-if-changed .
+          else
+            echo "Skipping format check."
+          fi
+
+  copilot-suggestions:
+    name: Copilot Development Suggestions
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v40
+        with:
+          files: |
+            **/*.dart
+            **/*.yaml
+            **/*.md
+
+      - name: Copilot development guidelines check
+        run: |
+          echo "Changed files: ${{ steps.changed-files.outputs.all_changed_files }}"
+          echo ""
+          echo "🤖 GitHub Copilot Development Suggestions:"
+          echo ""
+          echo "1. Review code according to .github/instructions/copilot-guidelines.md"
+          echo "2. Use effective prompt templates from .github/prompts/"
+          echo "3. Verify child-safe app security and privacy requirements"
+          echo "4. Check accessibility requirements are met"
+          echo "5. Evaluate performance impact"
+          echo ""
+          echo "📝 Recommended Actions:"
+          echo "- Request code review with GitHub Copilot Chat"
+          echo "- Verify security best practices"
+          echo "- Improve test coverage"
+          echo "- Update documentation"
+
+  auto-documentation:
+    name: Auto Documentation
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate documentation
+        run: |
+          echo "📚 Auto Documentation Generation"
+          echo ""
+          echo "Please ensure the following documentation is up to date:"
+          echo ""
+          echo "- README.md: Project overview and getting started"
+          echo "- .github/copilot-context.md: Copilot context information"
+          echo "- .github/instructions/: Development guidelines"
+          echo "- .github/prompts/: Prompt templates"
+          echo ""
+          echo "🔧 Use GitHub Copilot to update documentation:"
+          echo "1. '@github generate documentation for this PR'"
+          echo "2. '@github explain the changes in this PR'"
+          echo "3. '@github suggest improvements for code quality'"
+
+  issue-automation:
+    name: Issue Automation
+    runs-on: ubuntu-latest
+    if: >
+      github.event_name == 'issue_comment' &&
+      contains(github.event.comment.body, '@copilot-helper')
+
+    steps:
+      - name: Copilot helper response
+        run: |
+          echo "🤖 Copilot Helper activated"
+          echo ""
+          echo "Available commands:"
+          echo "- @copilot-helper analyze: Run code analysis"
+          echo "- @copilot-helper test: Suggest test execution"
+          echo "- @copilot-helper security: Run security checks"
+          echo "- @copilot-helper docs: Suggest documentation generation"
+          echo ""
+          echo "For detailed help, refer to .github/instructions/"

@@ -25,18 +25,27 @@
     "*": true,
     "dart": true,
     "yaml": true,
-    "markdown": true
+    "markdown": true,
+    "json": true,
+    "jsonc": true
   },
   "github.copilot.advanced": {
     "debug.overrideChatEngine": "",
     "debug.overrideProxyUrl": "",
     "debug.testOverrideProxyUrl": "",
-    "debug.overrideProxyStrictSSL": null
+    "debug.overrideProxyStrictSSL": null,
+    "length": 2000,
+    "inlineSuggestCount": 3
   },
   "github.copilot.chat.followUps": "on",
   "github.copilot.chat.runCommand.enabled": true,
+  "github.copilot.chat.localeOverride": "ja",
+  "github.copilot.chat.welcomeMessage": "never",
   "github.copilot.editor.enableAutoCompletions": true,
   "github.copilot.editor.enableCodeActions": true,
+  "github.copilot.editor.iterativeFixing": true,
+  "github.copilot.preferences.includeCodeBlockLanguageInChatCodeBlocks": true,
+  "github.copilot.renameSuggestions.triggerAutomatically": true,
   "files.associations": {
     "*.dart": "dart"
   },

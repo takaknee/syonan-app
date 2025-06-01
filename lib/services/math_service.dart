@@ -87,10 +87,10 @@ class MathService {
     int level,
   ) {
     final maxNumber = switch (level) {
-      1 => 5,  // 簡単
-      2 => 9,  // 普通（デフォルト）
+      1 => 5, // 簡単
+      2 => 9, // 普通（デフォルト）
       3 => 12, // 難しい
-      _ => 9,  // デフォルト
+      _ => 9, // デフォルト
     };
 
     switch (operation) {

@@ -2,7 +2,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Flutter: Launch Development",
+      "name": "Flutter: 開発環境で起動",
       "type": "dart",
       "request": "launch",
       "program": "lib/main.dart",
@@ -13,7 +13,7 @@
       ]
     },
     {
-      "name": "Flutter: Launch Profile",
+      "name": "Flutter: プロファイルモードで起動",
       "type": "dart",
       "request": "launch",
       "program": "lib/main.dart",
@@ -23,20 +23,20 @@
       ]
     },
     {
-      "name": "Flutter: Launch Release",
+      "name": "Flutter: リリースモードで起動",
       "type": "dart",
       "request": "launch",
       "program": "lib/main.dart",
       "flutterMode": "release"
     },
     {
-      "name": "Flutter: Attach to Device",
+      "name": "Flutter: デバイスにアタッチ",
       "type": "dart",
       "request": "attach",
       "deviceId": "flutter-tester"
     },
     {
-      "name": "Dart: Debug Tests",
+      "name": "Dart: テストをデバッグ",
       "type": "dart",
       "request": "launch",
       "program": "test/",
@@ -45,7 +45,7 @@
       ]
     },
     {
-      "name": "Flutter: Integration Tests",
+      "name": "Flutter: 統合テスト",
       "type": "dart",
       "request": "launch",
       "program": "integration_test/app_test.dart",
@@ -55,9 +55,9 @@
   ],
   "compounds": [
     {
-      "name": "Flutter: Launch All",
+      "name": "Flutter: すべて起動",
       "configurations": [
-        "Flutter: Launch Development"
+        "Flutter: 開発環境で起動"
       ]
     }
   ]

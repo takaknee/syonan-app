@@ -1,28 +1,28 @@
 # syonan-app
-Flutter app for my daughter
+娘のためのFlutterアプリ
 
-## Development Setup
+## 開発環境セットアップ
 
-This project is configured for optimal GitHub Copilot integration and Flutter development.
+このプロジェクトはGitHub CopilotとFlutter開発に最適化された設定になっています。
 
-### Prerequisites
+### 必要な環境
 - Flutter SDK
-- VS Code with recommended extensions
-- GitHub Copilot subscription
+- 推奨拡張機能を含むVS Code
+- GitHub Copilotサブスクリプション
 
-### Getting Started
-1. Clone the repository
-2. Open in VS Code - it will prompt to install recommended extensions
-3. Run `flutter pub get` to install dependencies
-4. Use the configured launch configurations for debugging
+### 始め方
+1. リポジトリをクローンする
+2. VS Codeで開く - 推奨拡張機能のインストールを促されます
+3. `flutter pub get`を実行して依存関係をインストールする
+4. 設定済みのlaunch configurationを使ってデバッグする
 
-### GitHub Copilot Integration
-- See `.github/instructions/` for development guidelines
-- Use `.github/prompts/` for effective Copilot prompts
-- Create issues using the provided templates for better Copilot assistance
+### GitHub Copilot連携
+- 開発ガイドラインについては`.github/instructions/`を参照
+- 効果的なCopilotプロンプトについては`.github/prompts/`を使用
+- より良いCopilotサポートのために提供されたテンプレートを使ってissueを作成
 
-### VS Code Configuration
-- `.vscode/settings.json` - Dart/Flutter and Copilot settings
-- `.vscode/launch.json` - Debug configurations
-- `.vscode/mcp.json` - Model Context Protocol settings
-- `.vscode/extensions.json` - Recommended extensions
+### VS Code設定
+- `.vscode/settings.json` - Dart/FlutterとCopilotの設定
+- `.vscode/launch.json` - デバッグ設定
+- `.vscode/mcp.json` - Model Context Protocolの設定
+- `.vscode/extensions.json` - 推奨拡張機能

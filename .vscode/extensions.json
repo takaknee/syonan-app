@@ -1,0 +1,16 @@
+{
+  "recommendations": [
+    "dart-code.dart-code",
+    "dart-code.flutter",
+    "github.copilot",
+    "github.copilot-chat",
+    "usernamehw.errorlens",
+    "ms-vscode.vscode-json",
+    "redhat.vscode-yaml",
+    "bradlc.vscode-tailwindcss",
+    "esbenp.prettier-vscode",
+    "ms-vscode.test-adapter-converter",
+    "hbenl.vscode-test-explorer",
+    "littlefoxteam.vscode-python-test-adapter"
+  ]
+}

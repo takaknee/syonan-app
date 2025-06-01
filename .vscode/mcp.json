@@ -1,0 +1,23 @@
+{
+  "mcpServers": {
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${env:GITHUB_TOKEN}"
+      }
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/home/runner/work/syonan-app/syonan-app"]
+    },
+    "flutter": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-everything"],
+      "env": {
+        "MCP_FLUTTER_SDK_PATH": "${env:FLUTTER_ROOT}",
+        "MCP_DART_SDK_PATH": "${env:DART_SDK}"
+      }
+    }
+  }
+}

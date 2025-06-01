@@ -1,0 +1,80 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Flutter: Debug",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main.dart",
+      "flutterMode": "debug",
+      "console": "debugConsole"
+    },
+    {
+      "name": "Flutter: Profile",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main.dart",
+      "flutterMode": "profile",
+      "console": "debugConsole"
+    },
+    {
+      "name": "Flutter: Release",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main.dart",
+      "flutterMode": "release",
+      "console": "debugConsole"
+    },
+    {
+      "name": "Flutter: Debug (Android)",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main.dart",
+      "flutterMode": "debug",
+      "deviceId": "android",
+      "console": "debugConsole"
+    },
+    {
+      "name": "Flutter: Debug (iOS)",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main.dart",
+      "flutterMode": "debug",
+      "deviceId": "ios",
+      "console": "debugConsole"
+    },
+    {
+      "name": "Flutter: Debug (Web)",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main.dart",
+      "flutterMode": "debug",
+      "deviceId": "web-server",
+      "console": "debugConsole",
+      "args": [
+        "--web-renderer",
+        "canvaskit"
+      ]
+    },
+    {
+      "name": "Flutter: Attach",
+      "type": "dart",
+      "request": "attach",
+      "console": "debugConsole"
+    },
+    {
+      "name": "Dart: Run Tests",
+      "type": "dart",
+      "request": "launch",
+      "program": "test/",
+      "console": "debugConsole"
+    },
+    {
+      "name": "Dart: Run Single Test",
+      "type": "dart",
+      "request": "launch",
+      "program": "${file}",
+      "console": "debugConsole"
+    }
+  ]
+}

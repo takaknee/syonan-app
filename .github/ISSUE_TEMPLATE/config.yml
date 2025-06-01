@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: GitHub Discussions
+    url: https://github.com/takaknee/syonan-app/discussions
+    about: 一般的な議論や質問はこちらで行ってください
+  - name: Flutter Documentation
+    url: https://docs.flutter.dev/
+    about: Flutterの公式ドキュメント
+  - name: Dart Documentation
+    url: https://dart.dev/guides
+    about: Dartの公式ドキュメント

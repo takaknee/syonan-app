@@ -1,0 +1,111 @@
+{
+  "editor.formatOnSave": true,
+  "editor.formatOnType": true,
+  "editor.rulers": [80],
+  "editor.selectionHighlight": false,
+  "editor.suggest.snippetsPreventQuickSuggestions": false,
+  "editor.suggestSelection": "first",
+  "editor.tabCompletion": "onlySnippets",
+  "editor.wordBasedSuggestions": false,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true,
+    "source.organizeImports": true
+  },
+
+  // Dart specific settings
+  "dart.enableSdkFormatter": true,
+  "dart.lineLength": 80,
+  "dart.insertArgumentPlaceholders": false,
+  "dart.showTodos": true,
+  "dart.completeFunctionCalls": true,
+  "dart.triggerSignatureHelpAutomatically": true,
+  "dart.analysisExcludedFolders": [
+    ".dart_tool",
+    "build"
+  ],
+
+  // Flutter specific settings
+  "dart.flutterSdkPath": null,
+  "dart.flutterHotReloadOnSave": "always",
+  "dart.flutterCreateAndroidLanguage": "kotlin",
+  "dart.flutterCreateIOSLanguage": "swift",
+  "dart.flutterCreatePlatforms": ["android", "ios"],
+  "dart.flutterOutline": true,
+  "dart.flutterTestAllTestFiles": true,
+
+  // GitHub Copilot settings
+  "github.copilot.enable": {
+    "*": true,
+    "yaml": true,
+    "plaintext": true,
+    "markdown": true,
+    "dart": true
+  },
+  "github.copilot.inlineSuggest.enable": true,
+  "github.copilot.chat.welcomeMessage": "never",
+
+  // File associations
+  "files.associations": {
+    "*.dart": "dart",
+    "pubspec.yaml": "yaml",
+    "analysis_options.yaml": "yaml"
+  },
+
+  // Emmet support for Flutter widgets
+  "emmet.includeLanguages": {
+    "dart": "html"
+  },
+
+  // Terminal settings
+  "terminal.integrated.defaultProfile.windows": "PowerShell",
+  "terminal.integrated.defaultProfile.osx": "zsh",
+  "terminal.integrated.defaultProfile.linux": "bash",
+
+  // File explorer settings
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/.dart_tool": true,
+    "**/build": true,
+    "**/.packages": true,
+    "**/.pub": true
+  },
+
+  // Debugging
+  "dart.debugExternalLibraries": false,
+  "dart.debugSdkLibraries": false,
+
+  // Language specific settings
+  "[dart]": {
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true,
+    "editor.selectionHighlight": false,
+    "editor.suggest.snippetsPreventQuickSuggestions": false,
+    "editor.suggestSelection": "first",
+    "editor.tabCompletion": "onlySnippets",
+    "editor.wordBasedSuggestions": false
+  },
+
+  "[yaml]": {
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "editor.autoIndent": "advanced"
+  },
+
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  // Extensions recommendations for better Flutter development
+  "extensions.recommendations": [
+    "dart-code.dart-code",
+    "dart-code.flutter",
+    "github.copilot",
+    "github.copilot-chat",
+    "ms-vscode.vscode-json",
+    "redhat.vscode-yaml"
+  ]
+}

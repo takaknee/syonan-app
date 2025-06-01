@@ -1,0 +1,22 @@
+include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    # エラーを避けるために必要な規則
+    avoid_print: false  # デバッグ時にprint文を許可
+    prefer_single_quotes: true
+    sort_child_properties_last: true
+    sort_constructors_first: true
+    avoid_unnecessary_containers: true
+    prefer_const_constructors: true
+    prefer_const_constructors_in_immutables: true
+    prefer_const_literals_to_create_immutables: true
+
+analyzer:
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+  
+  errors:
+    # 致命的でないエラーを警告に変更
+    invalid_annotation_target: ignore

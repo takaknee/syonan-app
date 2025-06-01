@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'dart:math' as math;
 import '../models/math_problem.dart';
 import '../models/score_record.dart';
 import '../services/math_service.dart';

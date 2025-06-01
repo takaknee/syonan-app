@@ -1,0 +1,64 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Flutter: Launch Development",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main.dart",
+      "flutterMode": "debug",
+      "deviceId": "flutter-tester",
+      "args": [
+        "--dart-define=ENVIRONMENT=development"
+      ]
+    },
+    {
+      "name": "Flutter: Launch Profile",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main.dart",
+      "flutterMode": "profile",
+      "args": [
+        "--dart-define=ENVIRONMENT=production"
+      ]
+    },
+    {
+      "name": "Flutter: Launch Release",
+      "type": "dart",
+      "request": "launch",
+      "program": "lib/main.dart",
+      "flutterMode": "release"
+    },
+    {
+      "name": "Flutter: Attach to Device",
+      "type": "dart",
+      "request": "attach",
+      "deviceId": "flutter-tester"
+    },
+    {
+      "name": "Dart: Debug Tests",
+      "type": "dart",
+      "request": "launch",
+      "program": "test/",
+      "args": [
+        "--reporter=expanded"
+      ]
+    },
+    {
+      "name": "Flutter: Integration Tests",
+      "type": "dart",
+      "request": "launch",
+      "program": "integration_test/app_test.dart",
+      "flutterMode": "debug",
+      "deviceId": "flutter-tester"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Flutter: Launch All",
+      "configurations": [
+        "Flutter: Launch Development"
+      ]
+    }
+  ]
+}

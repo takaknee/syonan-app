@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Flutter Documentation
+    url: https://docs.flutter.dev
+    about: Official Flutter documentation and guides
+  - name: Dart Language Tour
+    url: https://dart.dev/language
+    about: Learn about Dart language features
+  - name: GitHub Copilot Documentation
+    url: https://docs.github.com/en/copilot
+    about: Learn how to use GitHub Copilot effectively

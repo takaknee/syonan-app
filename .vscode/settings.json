@@ -1,0 +1,58 @@
+{
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit",
+    "source.organizeImports": "explicit"
+  },
+  "dart.flutterSdkPath": null,
+  "dart.lineLength": 80,
+  "dart.insertArgumentPlaceholders": false,
+  "dart.updateImportsOnRename": true,
+  "dart.warnWhenEditingFilesOutsideWorkspace": true,
+  "dart.analysisExcludedFolders": [
+    ".dart_tool",
+    "build"
+  ],
+  "[dart]": {
+    "editor.defaultFormatter": "Dart-Code.dart-code",
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "editor.rulers": [80]
+  },
+  "flutter.experimental.buildRunnerV2": true,
+  "flutter.showPreviewForBuildRunner": true,
+  "github.copilot.enable": {
+    "*": true,
+    "dart": true,
+    "yaml": true,
+    "markdown": true
+  },
+  "github.copilot.advanced": {
+    "debug.overrideChatEngine": "",
+    "debug.overrideProxyUrl": "",
+    "debug.testOverrideProxyUrl": "",
+    "debug.overrideProxyStrictSSL": null
+  },
+  "github.copilot.chat.followUps": "on",
+  "github.copilot.chat.runCommand.enabled": true,
+  "github.copilot.editor.enableAutoCompletions": true,
+  "github.copilot.editor.enableCodeActions": true,
+  "files.associations": {
+    "*.dart": "dart"
+  },
+  "files.exclude": {
+    "**/.dart_tool": true,
+    "**/build": true,
+    "**/.packages": true,
+    "**/.flutter-plugins": true,
+    "**/.flutter-plugins-dependencies": true
+  },
+  "search.exclude": {
+    "**/build": true,
+    "**/.dart_tool": true,
+    "**/.packages": true
+  },
+  "emmet.includeLanguages": {
+    "dart": "html"
+  }
+}

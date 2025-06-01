@@ -1,0 +1,53 @@
+{
+  "mcpServers": {
+    "flutter-context": {
+      "command": "node",
+      "args": [
+        "/path/to/flutter-mcp-server.js"
+      ],
+      "env": {
+        "FLUTTER_PROJECT_PATH": "${workspaceFolder}"
+      }
+    },
+    "dart-analyzer": {
+      "command": "dart",
+      "args": [
+        "analyze",
+        "--format=json"
+      ],
+      "env": {
+        "DART_PROJECT_PATH": "${workspaceFolder}"
+      }
+    }
+  },
+  "mcpSettings": {
+    "contextSources": [
+      {
+        "name": "flutter-docs",
+        "type": "documentation",
+        "url": "https://docs.flutter.dev",
+        "enabled": true
+      },
+      {
+        "name": "dart-docs",
+        "type": "documentation", 
+        "url": "https://dart.dev/guides",
+        "enabled": true
+      },
+      {
+        "name": "project-structure",
+        "type": "filesystem",
+        "paths": [
+          "lib/**/*.dart",
+          "test/**/*.dart",
+          "pubspec.yaml",
+          "analysis_options.yaml"
+        ],
+        "enabled": true
+      }
+    ],
+    "maxContextSize": 16384,
+    "autoRefresh": true,
+    "refreshInterval": 30
+  }
+}

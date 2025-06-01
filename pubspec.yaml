@@ -19,9 +19,6 @@ dependencies:
   
   # Local storage
   shared_preferences: ^2.2.2
-  
-  # Math utilities
-  math_expressions: ^2.4.0
 
 dev_dependencies:
   flutter_test:

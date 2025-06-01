@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final scoreService = context.watch<ScoreService>();
 
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
       body: SafeArea(
         child: scoreService.isLoading
             ? const Center(child: CircularProgressIndicator())
@@ -76,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
         Text(
           '今日も楽しく勉強しましょう！',
           style: theme.textTheme.bodyLarge?.copyWith(
-            color: theme.colorScheme.onBackground.withOpacity(0.7),
+            color: theme.colorScheme.onSurface.withOpacity(0.7),
           ),
         ),
       ],

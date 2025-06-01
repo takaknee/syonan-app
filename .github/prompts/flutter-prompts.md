@@ -1,107 +1,107 @@
-# Flutter Development Prompts for GitHub Copilot
+# GitHub Copilot用Flutter開発プロンプト
 
-## Widget Creation Prompts
+## ウィジェット作成プロンプト
 
-### Basic Widget
+### 基本ウィジェット
 ```
-// TODO: Create a [WidgetName] widget that [specific functionality]
-// Should include [specific requirements]
-// Handle [specific edge cases]
-```
-
-### Screen Creation
-```
-// TODO: Create a new screen for [feature name]
-// Include AppBar with title "[screen title]"
-// Add navigation to [other screens]
-// Implement [specific functionality]
+// TODO: [特定の機能]を持つ[ウィジェット名]ウィジェットを作成
+// [特定の要件]を含む必要があります
+// [特定のエッジケース]を処理してください
 ```
 
-### Form Creation
+### 画面作成
 ```
-// TODO: Create a form with the following fields: [field list]
-// Add validation for [validation rules]
-// Handle form submission with [submission logic]
-// Show loading state and error handling
-```
-
-## State Management Prompts
-
-### State Setup
-```
-// TODO: Set up state management for [feature]
-// State should include: [state properties]
-// Actions: [list of actions]
-// Handle [specific state transitions]
+// TODO: [機能名]用の新しい画面を作成
+// タイトル「[画面タイトル]」のAppBarを含める
+// [他の画面]へのナビゲーションを追加
+// [特定の機能]を実装
 ```
 
-### Provider Setup
+### フォーム作成
 ```
-// TODO: Create a provider for [data type]
-// Include methods: [method list]
-// Handle error states and loading
-// Implement caching if needed
-```
-
-## API Integration Prompts
-
-### Service Creation
-```
-// TODO: Create a service for [API endpoint]
-// Base URL: [URL]
-// Endpoints: [endpoint list]
-// Return models: [model types]
-// Handle authentication and errors
+// TODO: 次のフィールドを持つフォームを作成: [フィールドリスト]
+// [検証ルール]の検証を追加
+// [送信ロジック]でフォーム送信を処理
+// ローディング状態とエラーハンドリングを表示
 ```
 
-### HTTP Requests
+## 状態管理プロンプト
+
+### 状態セットアップ
 ```
-// TODO: Implement [HTTP method] request to [endpoint]
-// Request body: [body structure]
-// Response type: [response type]
-// Handle network errors and timeouts
+// TODO: [機能]の状態管理をセットアップ
+// 状態に含むべき内容: [状態プロパティ]
+// アクション: [アクションリスト]
+// [特定の状態遷移]を処理
 ```
 
-## Testing Prompts
-
-### Unit Tests
+### Providerセットアップ
 ```
-// TODO: Write unit tests for [class/function name]
-// Test cases: [test scenarios]
-// Mock dependencies: [dependency list]
-// Cover edge cases and error scenarios
+// TODO: [データタイプ]用のプロバイダーを作成
+// メソッドを含める: [メソッドリスト]
+// エラー状態とローディングを処理
+// 必要に応じてキャッシュを実装
 ```
 
-### Widget Tests
+## API統合プロンプト
+
+### サービス作成
 ```
-// TODO: Write widget tests for [widget name]
-// Test user interactions: [interaction list]
-// Verify UI elements: [element list]
-// Test different states: [state list]
+// TODO: [APIエンドポイント]用のサービスを作成
+// ベースURL: [URL]
+// エンドポイント: [エンドポイントリスト]
+// 戻りモデル: [モデルタイプ]
+// 認証とエラーを処理
 ```
 
-## Common Feature Prompts
-
-### Navigation
+### HTTPリクエスト
 ```
-// TODO: Implement navigation from [source] to [destination]
-// Pass parameters: [parameter list]
-// Handle back navigation
-// Add transition animation
+// TODO: [エンドポイント]への[HTTPメソッド]リクエストを実装
+// リクエストボディ: [ボディ構造]
+// レスポンスタイプ: [レスポンスタイプ]
+// ネットワークエラーとタイムアウトを処理
 ```
 
-### Data Display
+## テストプロンプト
+
+### ユニットテスト
 ```
-// TODO: Create a list view to display [data type]
-// Include: search, filter, sort functionality
-// Handle empty states and loading
-// Implement pull-to-refresh
+// TODO: [クラス/関数名]のユニットテストを作成
+// テストケース: [テストシナリオ]
+// 依存関係をモック化: [依存関係リスト]
+// エッジケースとエラーシナリオをカバー
 ```
 
-### User Input
+### ウィジェットテスト
 ```
-// TODO: Create input field for [data type]
-// Validation: [validation rules]
-// Error display: [error handling]
-// Accessibility: [a11y requirements]
+// TODO: [ウィジェット名]のウィジェットテストを作成
+// ユーザーインタラクションをテスト: [インタラクションリスト]
+// UI要素を検証: [要素リスト]
+// 異なる状態をテスト: [状態リスト]
+```
+
+## 共通機能プロンプト
+
+### ナビゲーション
+```
+// TODO: [ソース]から[デスティネーション]へのナビゲーションを実装
+// パラメータを渡す: [パラメータリスト]
+// 戻るナビゲーションを処理
+// 遷移アニメーションを追加
+```
+
+### データ表示
+```
+// TODO: [データタイプ]を表示するリストビューを作成
+// 検索、フィルター、ソート機能を含める
+// 空の状態とローディングを処理
+// プルリフレッシュを実装
+```
+
+### ユーザー入力
+```
+// TODO: [データタイプ]用の入力フィールドを作成
+// 検証: [検証ルール]
+// エラー表示: [エラーハンドリング]
+// アクセシビリティ: [a11y要件]
 ```

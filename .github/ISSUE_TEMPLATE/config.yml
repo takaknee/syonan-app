@@ -1,11 +1,11 @@
 blank_issues_enabled: false
 contact_links:
-  - name: Flutter Documentation
+  - name: Flutter ドキュメント
     url: https://docs.flutter.dev
-    about: Official Flutter documentation and guides
-  - name: Dart Language Tour
+    about: Flutter公式ドキュメントとガイド
+  - name: Dart言語ツアー
     url: https://dart.dev/language
-    about: Learn about Dart language features
-  - name: GitHub Copilot Documentation
+    about: Dart言語の機能について学ぶ
+  - name: GitHub Copilot ドキュメント
     url: https://docs.github.com/en/copilot
-    about: Learn how to use GitHub Copilot effectively
+    about: GitHub Copilotの効果的な使用方法を学ぶ

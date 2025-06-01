@@ -1,73 +1,73 @@
-# Issue Templates for GitHub Copilot
+# GitHub Copilot用イシューテンプレート
 
-## Bug Report Template
+## バグレポートテンプレート
 ```
-**Bug Description**
-A clear description of the bug
+**バグの説明**
+バグの明確な説明
 
-**Steps to Reproduce**
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+**再現手順**
+1. '...'へ移動
+2. '....'をクリック
+3. '....'まで下にスクロール
+4. エラーが発生
 
-**Expected Behavior**
-What you expected to happen
+**期待される動作**
+期待していた動作
 
-**Actual Behavior**
-What actually happened
+**実際の動作**
+実際に起こった動作
 
-**Copilot Task**
-- [ ] Identify the root cause
-- [ ] Implement fix with minimal changes
-- [ ] Add tests to prevent regression
-- [ ] Update documentation if needed
-```
-
-## Feature Request Template
-```
-**Feature Description**
-Clear description of the requested feature
-
-**User Story**
-As a [user type], I want [functionality] so that [benefit]
-
-**Acceptance Criteria**
-- [ ] Criterion 1
-- [ ] Criterion 2
-- [ ] Criterion 3
-
-**Design Requirements**
-- UI/UX considerations
-- Performance requirements
-- Accessibility needs
-
-**Implementation Guidelines**
-- Follow Flutter best practices
-- Use existing design system
-- Ensure proper testing
-- Maintain code quality
+**Copilotタスク**
+- [ ] 根本原因を特定
+- [ ] 最小限の変更で修正を実装
+- [ ] 回帰を防ぐためのテストを追加
+- [ ] 必要に応じてドキュメントを更新
 ```
 
-## Copilot Code Generation Template
+## 機能リクエストテンプレート
 ```
-**Code Generation Request**
-Specific description of code to generate
+**機能の説明**
+リクエストされた機能の明確な説明
 
-**Context**
-- File location: [path]
-- Related components: [list]
-- Dependencies: [list]
+**ユーザーストーリー**
+[ユーザータイプ]として、[利益]のために[機能]が欲しい
 
-**Requirements**
-- [ ] Functionality requirement 1
-- [ ] Functionality requirement 2
-- [ ] Performance requirement
-- [ ] Testing requirement
+**受け入れ基準**
+- [ ] 基準1
+- [ ] 基準2
+- [ ] 基準3
 
-**Code Style**
-- Follow project conventions
-- Include proper documentation
-- Add error handling
-- Use TypeScript/Dart best practices
+**デザイン要件**
+- UI/UXの考慮事項
+- パフォーマンス要件
+- アクセシビリティのニーズ
+
+**実装ガイドライン**
+- Flutterベストプラクティスに従う
+- 既存のデザインシステムを使用
+- 適切なテストを確保
+- コード品質を維持
+```
+
+## Copilotコード生成テンプレート
+```
+**コード生成リクエスト**
+生成するコードの具体的な説明
+
+**コンテキスト**
+- ファイルの場所: [パス]
+- 関連コンポーネント: [リスト]
+- 依存関係: [リスト]
+
+**要件**
+- [ ] 機能要件1
+- [ ] 機能要件2
+- [ ] パフォーマンス要件
+- [ ] テスト要件
+
+**コードスタイル**
+- プロジェクトの規則に従う
+- 適切なドキュメントを含める
+- エラーハンドリングを追加
+- TypeScript/Dartベストプラクティスを使用
 ```

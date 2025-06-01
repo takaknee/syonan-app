@@ -1,54 +1,54 @@
 ---
-name: Bug Report
-about: Create a report to help us improve the Flutter app
+name: バグレポート
+about: Flutterアプリの改善に役立つレポートを作成
 title: '[BUG] '
 labels: ['bug', 'needs-triage']
 assignees: ''
 
 ---
 
-## Bug Description
-A clear and concise description of what the bug is.
+## バグの説明
+何のバグかを明確かつ簡潔に説明してください。
 
-## Steps to Reproduce
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+## 再現手順
+1. '...'へ移動
+2. '....'をクリック
+3. '....'まで下にスクロール
+4. エラーが発生
 
-## Expected Behavior
-A clear and concise description of what you expected to happen.
+## 期待される動作
+期待していた動作を明確かつ簡潔に説明してください。
 
-## Actual Behavior
-A clear and concise description of what actually happened.
+## 実際の動作
+実際に起こった動作を明確かつ簡潔に説明してください。
 
-## Screenshots
-If applicable, add screenshots to help explain your problem.
+## スクリーンショット
+該当する場合は、問題の説明に役立つスクリーンショットを追加してください。
 
-## Environment
-- Device: [e.g. iPhone 12, Pixel 5]
-- OS: [e.g. iOS 15.0, Android 12]
-- Flutter Version: [e.g. 3.16.0]
-- App Version: [e.g. 1.0.0]
+## 環境
+- デバイス: [例: iPhone 12, Pixel 5]
+- OS: [例: iOS 15.0, Android 12]
+- Flutterバージョン: [例: 3.16.0]
+- アプリバージョン: [例: 1.0.0]
 
-## Additional Context
-Add any other context about the problem here.
+## 追加のコンテキスト
+問題に関するその他のコンテキストをここに追加してください。
 
-## Copilot Instructions
-**For GitHub Copilot to fix this bug:**
-- [ ] Analyze the code in the affected area
-- [ ] Identify the root cause of the issue
-- [ ] Implement a minimal fix that doesn't break existing functionality
-- [ ] Add unit tests to prevent regression
-- [ ] Update documentation if the fix changes public APIs
+## Copilot指示
+**GitHub Copilotがこのバグを修正するために:**
+- [ ] 影響を受けるエリアのコードを分析
+- [ ] 問題の根本原因を特定
+- [ ] 既存の機能を壊さない最小限の修正を実装
+- [ ] 回帰を防ぐためのユニットテストを追加
+- [ ] 修正がパブリックAPIを変更する場合はドキュメントを更新
 
-**Files likely involved:**
+**関連する可能性のあるファイル:**
 - [ ] lib/[specific_file].dart
 - [ ] test/[specific_test].dart
 
-**Debugging approach:**
-1. Reproduce the issue locally
-2. Add debug prints or breakpoints
-3. Trace the execution flow
-4. Identify where the unexpected behavior occurs
-5. Implement and test the fix
+**デバッグアプローチ:**
+1. ローカルで問題を再現
+2. デバッグプリントやブレークポイントを追加
+3. 実行フローを追跡
+4. 予期しない動作が発生する場所を特定
+5. 修正を実装してテスト

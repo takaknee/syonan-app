@@ -1,87 +1,87 @@
 ---
-name: Code Generation Request
-about: Request GitHub Copilot to generate specific code
+name: コード生成リクエスト
+about: GitHub Copilotに特定のコードの生成を依頼
 title: '[COPILOT] '
 labels: ['copilot', 'code-generation']
 assignees: ''
 
 ---
 
-## Code Generation Request
-A specific description of the code you want GitHub Copilot to generate.
+## コード生成リクエスト
+GitHub Copilotに生成してもらいたいコードの具体的な説明。
 
-## Context
-- **File location:** [path where the code should be added/created]
-- **Related components:** [list of existing components this code will interact with]
-- **Dependencies:** [existing packages, services, or models this code depends on]
+## コンテキスト
+- **ファイルの場所:** [コードを追加/作成すべきパス]
+- **関連コンポーネント:** [このコードが連携する既存コンポーネントのリスト]
+- **依存関係:** [このコードが依存する既存のパッケージ、サービス、モデル]
 
-## Functional Requirements
-- [ ] Requirement 1: [specific functionality]
-- [ ] Requirement 2: [specific functionality]
-- [ ] Requirement 3: [specific functionality]
+## 機能要件
+- [ ] 要件1: [具体的な機能]
+- [ ] 要件2: [具体的な機能]
+- [ ] 要件3: [具体的な機能]
 
-## Technical Requirements
-- [ ] Follow Flutter/Dart best practices
-- [ ] Include proper error handling
-- [ ] Add appropriate documentation/comments
-- [ ] Ensure type safety
-- [ ] Handle edge cases
+## 技術要件
+- [ ] Flutter/Dartベストプラクティスに従う
+- [ ] 適切なエラーハンドリングを含む
+- [ ] 適切なドキュメント/コメントを追加
+- [ ] 型安全性を確保
+- [ ] エッジケースを処理
 
-## Code Style Requirements
-- [ ] Use const constructors where possible
-- [ ] Follow project naming conventions
-- [ ] Include proper imports
-- [ ] Add null safety
-- [ ] Use meaningful variable names
+## コードスタイル要件
+- [ ] 可能な場合はconstコンストラクタを使用
+- [ ] プロジェクトの命名規則に従う
+- [ ] 適切なインポートを含む
+- [ ] Null安全性を追加
+- [ ] 意味のある変数名を使用
 
-## Testing Requirements
-- [ ] Unit tests for business logic
-- [ ] Widget tests for UI components
-- [ ] Integration tests if applicable
-- [ ] Mock dependencies appropriately
+## テスト要件
+- [ ] ビジネスロジックのユニットテスト
+- [ ] UIコンポーネントのウィジェットテスト
+- [ ] 該当する場合は統合テスト
+- [ ] 依存関係を適切にモック化
 
-## Example Usage (if applicable)
+## 使用例（該当する場合）
 ```dart
-// Example of how the generated code should be used
+// 生成されたコードの使用方法の例
 final myWidget = GeneratedWidget(
   parameter1: 'value1',
   parameter2: 42,
 );
 ```
 
-## Expected Output Structure
+## 期待される出力構造
 ```dart
-// Brief description of the expected code structure
+// 期待されるコード構造の簡単な説明
 class MyGeneratedClass {
-  // Properties
+  // プロパティ
   
-  // Constructor
+  // コンストラクタ
   
-  // Methods
+  // メソッド
 }
 ```
 
-## Additional Context
-Any additional information that would help Copilot generate better code.
+## 追加のコンテキスト
+Copilotがより良いコードを生成するのに役立つ追加情報。
 
-## Copilot Instructions
-**Generation Guidelines:**
-1. Start with the public interface/API
-2. Implement core functionality
-3. Add error handling and validation
-4. Include comprehensive documentation
-5. Generate corresponding tests
+## Copilot指示
+**生成ガイドライン:**
+1. パブリックインターフェース/APIから開始
+2. コア機能を実装
+3. エラーハンドリングと検証を追加
+4. 包括的なドキュメントを含める
+5. 対応するテストを生成
 
-**Code Quality Checklist:**
-- [ ] Code follows Dart style guide
-- [ ] All public APIs are documented
-- [ ] Error cases are handled gracefully
-- [ ] Code is testable and modular
-- [ ] Performance considerations are addressed
+**コード品質チェックリスト:**
+- [ ] コードがDartスタイルガイドに従っている
+- [ ] すべてのパブリックAPIがドキュメント化されている
+- [ ] エラーケースが適切に処理されている
+- [ ] コードがテスト可能でモジュラー
+- [ ] パフォーマンスの考慮事項が対処されている
 
-**Review Criteria:**
-- [ ] Code compiles without errors
-- [ ] All tests pass
-- [ ] Code meets functional requirements
-- [ ] Code follows project conventions
-- [ ] Documentation is complete and accurate
+**レビュー基準:**
+- [ ] コードがエラーなしでコンパイルされる
+- [ ] すべてのテストが合格
+- [ ] コードが機能要件を満たしている
+- [ ] コードがプロジェクトの規則に従っている
+- [ ] ドキュメントが完全で正確

@@ -1,63 +1,63 @@
 ---
-name: Feature Request
-about: Suggest an idea for the Flutter app
+name: 機能リクエスト
+about: Flutterアプリのアイデアを提案
 title: '[FEATURE] '
 labels: ['enhancement', 'needs-triage']
 assignees: ''
 
 ---
 
-## Feature Description
-A clear and concise description of what you want to happen.
+## 機能の説明
+実現したいことを明確かつ簡潔に説明してください。
 
-## User Story
-As a [type of user], I want [an action] so that [a benefit/a value].
+## ユーザーストーリー
+[ユーザータイプ]として、[利益/価値]のために[アクション]をしたい。
 
-## Problem Statement
-A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+## 問題の説明
+何の問題かを明確かつ簡潔に説明してください。例: いつも[...]に困っています
 
-## Proposed Solution
-A clear and concise description of what you want to happen.
+## 提案する解決策
+実現したいことを明確かつ簡潔に説明してください。
 
-## Alternative Solutions
-A clear and concise description of any alternative solutions or features you've considered.
+## 代替案
+検討した代替案や機能があれば明確かつ簡潔に説明してください。
 
-## Acceptance Criteria
-- [ ] Criterion 1: [specific, measurable requirement]
-- [ ] Criterion 2: [specific, measurable requirement]
-- [ ] Criterion 3: [specific, measurable requirement]
+## 受け入れ基準
+- [ ] 基準1: [具体的で測定可能な要件]
+- [ ] 基準2: [具体的で測定可能な要件]
+- [ ] 基準3: [具体的で測定可能な要件]
 
-## Design Requirements
-- **UI/UX:** [describe visual and interaction requirements]
-- **Performance:** [any performance considerations]
-- **Accessibility:** [accessibility requirements]
-- **Platform:** [iOS/Android specific requirements]
+## デザイン要件
+- **UI/UX:** [視覚的およびインタラクション要件を記述]
+- **パフォーマンス:** [パフォーマンスに関する考慮事項]
+- **アクセシビリティ:** [アクセシビリティ要件]
+- **プラットフォーム:** [iOS/Android固有の要件]
 
-## Technical Considerations
-- **Dependencies:** [any new packages or libraries needed]
-- **Breaking Changes:** [any potential breaking changes]
-- **Testing:** [testing strategy for this feature]
+## 技術的考慮事項
+- **依存関係:** [必要な新しいパッケージやライブラリ]
+- **破壊的変更:** [潜在的な破壊的変更]
+- **テスト:** [この機能のテスト戦略]
 
-## Additional Context
-Add any other context or screenshots about the feature request here.
+## 追加のコンテキスト
+機能リクエストに関するその他のコンテキストやスクリーンショットをここに追加してください。
 
-## Copilot Instructions
-**For GitHub Copilot to implement this feature:**
-- [ ] Create the necessary models/data structures
-- [ ] Implement the UI components
-- [ ] Add business logic and state management
-- [ ] Create comprehensive tests
-- [ ] Update documentation
+## Copilot指示
+**GitHub Copilotがこの機能を実装するために:**
+- [ ] 必要なモデル/データ構造を作成
+- [ ] UIコンポーネントを実装
+- [ ] ビジネスロジックと状態管理を追加
+- [ ] 包括的なテストを作成
+- [ ] ドキュメントを更新
 
-**Implementation approach:**
-1. Start with data models and services
-2. Create reusable UI components
-3. Implement the main feature screen/widget
-4. Add navigation and integration points
-5. Write tests for all components
-6. Update documentation and examples
+**実装アプローチ:**
+1. データモデルとサービスから開始
+2. 再利用可能なUIコンポーネントを作成
+3. メイン機能画面/ウィジェットを実装
+4. ナビゲーションと統合ポイントを追加
+5. すべてのコンポーネントのテストを作成
+6. ドキュメントと例を更新
 
-**Files to create/modify:**
+**作成/修正するファイル:**
 - [ ] lib/models/[feature_name].dart
 - [ ] lib/screens/[feature_name]_screen.dart
 - [ ] lib/widgets/[feature_name]_widget.dart

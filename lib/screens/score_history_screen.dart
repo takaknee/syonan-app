@@ -108,7 +108,8 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
             itemCount: scores.length,
             itemBuilder: (context, index) {
               final score = scores[index];
-              final isRecentBest = bestScore != null && score.id == bestScore.id;
+              final isRecentBest = bestScore != null && 
+                  score.id == bestScore.id;
 
               return Padding(
                 padding: const EdgeInsets.only(bottom: 12),
@@ -116,7 +117,9 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
                   scoreRecord: score,
                   isBest: isRecentBest,
                   showImprovement: index < scores.length - 1,
-                  previousScore: index < scores.length - 1 ? scores[index + 1] : null,
+                  previousScore: index < scores.length - 1 
+                      ? scores[index + 1] 
+                      : null,
                 ),
               );
             },
@@ -130,8 +133,12 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
     final allScores = scoreService.scores;
     final streakDays = scoreService.getStreakDays();
     final weeklyCount = scoreService.getWeeklyPracticeCount();
-    final multiplicationScores = scoreService.getScoresByOperation(MathOperationType.multiplication);
-    final divisionScores = scoreService.getScoresByOperation(MathOperationType.division);
+    final multiplicationScores = scoreService.getScoresByOperation(
+      MathOperationType.multiplication,
+    );
+    final divisionScores = scoreService.getScoresByOperation(
+      MathOperationType.division,
+    );
 
     if (allScores.isEmpty) {
       return _buildEmptyState(null);
@@ -148,7 +155,11 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
           const SizedBox(height: 16),
 
           // 操作別比較
-          _buildComparisonCard(multiplicationScores, divisionScores, scoreService),
+          _buildComparisonCard(
+            multiplicationScores, 
+            divisionScores, 
+            scoreService,
+          ),
 
           const SizedBox(height: 16),
 

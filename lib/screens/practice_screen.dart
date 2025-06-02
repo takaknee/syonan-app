@@ -43,7 +43,10 @@ class _PracticeScreenState extends State<PracticeScreen>
 
     // 問題を生成
     final mathService = context.read<MathService>();
-    _problems = mathService.generateProblems(widget.operation, widget.problemCount);
+    _problems = mathService.generateProblems(
+      widget.operation, 
+      widget.problemCount,
+    );
     _userAnswers = List.filled(widget.problemCount, null);
     _isCorrect = List.filled(widget.problemCount, false);
 
@@ -83,7 +86,9 @@ class _PracticeScreenState extends State<PracticeScreen>
 
           // メインコンテンツ
           Expanded(
-            child: _isCompleted ? _buildResultView(theme) : _buildProblemView(theme),
+            child: _isCompleted 
+                ? _buildResultView(theme) 
+                : _buildProblemView(theme),
           ),
         ],
       ),
@@ -120,8 +125,11 @@ class _PracticeScreenState extends State<PracticeScreen>
           const SizedBox(height: 8),
           LinearProgressIndicator(
             value: progress,
-            backgroundColor: theme.colorScheme.onPrimaryContainer.withOpacity(0.3),
-            valueColor: AlwaysStoppedAnimation<Color>(theme.colorScheme.primary),
+            backgroundColor: theme.colorScheme.onPrimaryContainer
+                .withOpacity(0.3),
+            valueColor: AlwaysStoppedAnimation<Color>(
+              theme.colorScheme.primary,
+            ),
           ),
         ],
       ),

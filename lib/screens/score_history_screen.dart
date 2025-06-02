@@ -55,7 +55,8 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
         bottom: TabBar(
           controller: _tabController,
           labelColor: theme.colorScheme.onPrimaryContainer,
-          unselectedLabelColor: theme.colorScheme.onPrimaryContainer.withOpacity(0.6),
+          unselectedLabelColor: theme.colorScheme.onPrimaryContainer
+              .withOpacity(0.6),
           indicatorColor: theme.colorScheme.primary,
           tabs: const [
             Tab(text: '掛け算', icon: Icon(Icons.close)),
@@ -69,15 +70,24 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
           : TabBarView(
               controller: _tabController,
               children: [
-                _buildOperationHistory(MathOperationType.multiplication, scoreService),
-                _buildOperationHistory(MathOperationType.division, scoreService),
+                _buildOperationHistory(
+                  MathOperationType.multiplication, 
+                  scoreService,
+                ),
+                _buildOperationHistory(
+                  MathOperationType.division, 
+                  scoreService,
+                ),
                 _buildOverallStats(scoreService),
               ],
             ),
     );
   }
 
-  Widget _buildOperationHistory(MathOperationType operation, ScoreService scoreService) {
+  Widget _buildOperationHistory(
+    MathOperationType operation, 
+    ScoreService scoreService,
+  ) {
     final scores = scoreService.getScoresByOperation(operation);
     final bestScore = scoreService.getBestScore(operation);
     final averageScore = scoreService.getAverageScore(operation);

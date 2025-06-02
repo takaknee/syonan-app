@@ -7,7 +7,9 @@ import 'package:syonan_app/services/math_service.dart';
 
 void main() {
   group('SyonanApp Widget Tests', () {
-    testWidgets('App should build and display home screen', (WidgetTester tester) async {
+    testWidgets(
+      'App should build and display home screen',
+      (WidgetTester tester) async {
       // Build our app and trigger a frame
       await tester.pumpWidget(const SyonanApp());
 
@@ -20,7 +22,9 @@ void main() {
       expect(find.text('割り算'), findsOneWidget);
     });
 
-    testWidgets('Practice buttons should be tappable', (WidgetTester tester) async {
+    testWidgets(
+      'Practice buttons should be tappable',
+      (WidgetTester tester) async {
       await tester.pumpWidget(const SyonanApp());
 
       // Find and tap the multiplication practice button
@@ -34,7 +38,9 @@ void main() {
       expect(find.text('掛け算の練習'), findsOneWidget);
     });
 
-    testWidgets('Score history button should work', (WidgetTester tester) async {
+    testWidgets(
+      'Score history button should work',
+      (WidgetTester tester) async {
       await tester.pumpWidget(const SyonanApp());
 
       // Find and tap the score history button
@@ -48,7 +54,9 @@ void main() {
       expect(find.text('スコア履歴'), findsOneWidget);
     });
 
-    testWidgets('App should provide required services', (WidgetTester tester) async {
+    testWidgets(
+      'App should provide required services',
+      (WidgetTester tester) async {
       await tester.pumpWidget(const SyonanApp());
 
       // Build the app to create the widget tree

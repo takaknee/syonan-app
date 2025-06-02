@@ -20,7 +20,10 @@ void main() {
           expect(problem.firstNumber, lessThanOrEqualTo(9));
           expect(problem.secondNumber, greaterThanOrEqualTo(1));
           expect(problem.secondNumber, lessThanOrEqualTo(9));
-          expect(problem.correctAnswer, problem.firstNumber * problem.secondNumber);
+          expect(
+            problem.correctAnswer, 
+            problem.firstNumber * problem.secondNumber,
+          );
         }
       });
     });
@@ -38,14 +41,19 @@ void main() {
 
           // 割り切れることを確認
           expect(problem.firstNumber % problem.secondNumber, 0);
-          expect(problem.firstNumber ~/ problem.secondNumber, problem.correctAnswer);
+          expect(
+            problem.firstNumber ~/ problem.secondNumber, 
+            problem.correctAnswer,
+          );
         }
       });
     });
 
     group('generateProblem', () {
       test('should generate multiplication problem when specified', () {
-        final problem = mathService.generateProblem(MathOperationType.multiplication);
+        final problem = mathService.generateProblem(
+          MathOperationType.multiplication,
+        );
         expect(problem.operation, MathOperationType.multiplication);
       });
 
@@ -57,7 +65,10 @@ void main() {
 
     group('generateProblems', () {
       test('should generate requested number of problems', () {
-        final problems = mathService.generateProblems(MathOperationType.multiplication, 5);
+        final problems = mathService.generateProblems(
+          MathOperationType.multiplication, 
+          5,
+        );
 
         expect(problems.length, 5);
         for (final problem in problems) {
@@ -66,7 +77,10 @@ void main() {
       });
 
       test('should not generate duplicate problems', () {
-        final problems = mathService.generateProblems(MathOperationType.multiplication, 10);
+        final problems = mathService.generateProblems(
+          MathOperationType.multiplication, 
+          10,
+        );
 
         final problemStrings = problems.map((p) =>
           '${p.firstNumber}_${p.secondNumber}_${p.operation.name}'
@@ -75,9 +89,14 @@ void main() {
         expect(problemStrings.length, problems.length);
       });
 
-      test('should handle requests for more problems than possible unique combinations', () {
+      test(
+        'should handle requests for more problems than possible unique combinations', 
+        () {
         // 81通りの九九があるので、100個要求しても81個以下になる
-        final problems = mathService.generateProblems(MathOperationType.multiplication, 100);
+        final problems = mathService.generateProblems(
+          MathOperationType.multiplication, 
+          100,
+        );
 
         expect(problems.length, lessThanOrEqualTo(81));
 

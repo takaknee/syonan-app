@@ -284,7 +284,9 @@ class _PracticeScreenState extends State<PracticeScreen>
         setState(() {
           _currentProblemIndex++;
         });
-        _progressController.animateTo((_currentProblemIndex + 1) / widget.problemCount);
+        _progressController.animateTo(
+          (_currentProblemIndex + 1) / widget.problemCount,
+        );
       } else {
         _completePractice();
       }

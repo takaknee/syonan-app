@@ -134,13 +134,23 @@ class AppStyles {
   static const EdgeInsets paddingSmall = EdgeInsets.all(8.0);
   static const EdgeInsets paddingMedium = EdgeInsets.all(16.0);
   static const EdgeInsets paddingLarge = EdgeInsets.all(24.0);
-  static const EdgeInsets paddingHorizontal = EdgeInsets.symmetric(horizontal: 16.0);
-  static const EdgeInsets paddingVertical = EdgeInsets.symmetric(vertical: 16.0);
+  static const EdgeInsets paddingHorizontal = EdgeInsets.symmetric(
+    horizontal: 16.0,
+  );
+  static const EdgeInsets paddingVertical = EdgeInsets.symmetric(
+    vertical: 16.0,
+  );
 
   // ボーダー半径
-  static const BorderRadius borderRadiusSmall = BorderRadius.all(Radius.circular(8.0));
-  static const BorderRadius borderRadiusMedium = BorderRadius.all(Radius.circular(12.0));
-  static const BorderRadius borderRadiusLarge = BorderRadius.all(Radius.circular(16.0));
+  static const BorderRadius borderRadiusSmall = BorderRadius.all(
+    Radius.circular(8.0),
+  );
+  static const BorderRadius borderRadiusMedium = BorderRadius.all(
+    Radius.circular(12.0),
+  );
+  static const BorderRadius borderRadiusLarge = BorderRadius.all(
+    Radius.circular(16.0),
+  );
 
   // シャドウ
   static const List<BoxShadow> shadowSmall = [

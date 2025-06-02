@@ -80,7 +80,8 @@ class ScoreCard extends StatelessWidget {
                 ),
               ),
               Text(
-                '${scoreRecord.accuracyPercentage}% (${scoreRecord.correctAnswers}/${scoreRecord.totalQuestions})',
+                '${scoreRecord.accuracyPercentage}% '
+                '(${scoreRecord.correctAnswers}/${scoreRecord.totalQuestions})',
                 style: theme.textTheme.bodySmall,
               ),
             ],
@@ -314,7 +315,8 @@ class ScoreCard extends StatelessWidget {
   }
 
   String _formatDateTime(DateTime date) {
-    return '${date.year}/${date.month}/${date.day} ${date.hour}:${date.minute.toString().padLeft(2, '0')}';
+    return '${date.year}/${date.month}/${date.day} '
+        '${date.hour}:${date.minute.toString().padLeft(2, '0')}';
   }
 
   String _formatDuration(Duration duration) {

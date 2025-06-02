@@ -106,7 +106,11 @@ class ScoreService extends ChangeNotifier {
   int getWeeklyPracticeCount() {
     final now = DateTime.now();
     final weekStart = now.subtract(Duration(days: now.weekday - 1));
-    final weekStartDate = DateTime(weekStart.year, weekStart.month, weekStart.day);
+    final weekStartDate = DateTime(
+      weekStart.year, 
+      weekStart.month, 
+      weekStart.day,
+    );
 
     return _scores.where((score) => score.date.isAfter(weekStartDate)).length;
   }
@@ -121,7 +125,11 @@ class ScoreService extends ChangeNotifier {
     var checkDate = today;
 
     final uniqueDates = _scores
-        .map((score) => DateTime(score.date.year, score.date.month, score.date.day))
+        .map((score) => DateTime(
+              score.date.year, 
+              score.date.month, 
+              score.date.day,
+            ))
         .toSet()
         .toList()
       ..sort((a, b) => b.compareTo(a)); // 新しい順
@@ -155,7 +163,9 @@ class ScoreService extends ChangeNotifier {
   /// スコアをローカルストレージに保存
   Future<void> _saveScores() async {
     final prefs = await SharedPreferences.getInstance();
-    final scoresJson = jsonEncode(_scores.map((score) => score.toJson()).toList());
+    final scoresJson = jsonEncode(
+      _scores.map((score) => score.toJson()).toList(),
+    );
     await prefs.setString(_scoresKey, scoresJson);
   }
 

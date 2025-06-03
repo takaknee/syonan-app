@@ -90,7 +90,8 @@ class ScoreRecord {
 
   @override
   String toString() {
-    return 'ScoreRecord(${operation.displayName}: $correctAnswers/$totalQuestions, $accuracyPercentage%)';
+    return 'ScoreRecord(${operation.displayName}: '
+        '$correctAnswers/$totalQuestions, $accuracyPercentage%)';
   }
 }
 

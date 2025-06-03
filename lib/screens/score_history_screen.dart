@@ -271,7 +271,11 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
     );
   }
 
-  Widget _buildOverallStatsCard(int streakDays, int weeklyCount, int totalPractices) {
+  Widget _buildOverallStatsCard(
+    int streakDays,
+    int weeklyCount,
+    int totalPractices,
+  ) {
     final theme = Theme.of(context);
 
     return Card(
@@ -288,7 +292,11 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _buildStatItem('連続練習', '$streakDays日', Icons.local_fire_department),
+                _buildStatItem(
+                  '連続練習',
+                  '$streakDays日',
+                  Icons.local_fire_department,
+                ),
                 _buildStatItem('今週の練習', '$weeklyCount回', Icons.calendar_today),
                 _buildStatItem('総練習回数', '$totalPractices回', Icons.emoji_events),
               ],
@@ -305,8 +313,12 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
     ScoreService scoreService,
   ) {
     final theme = Theme.of(context);
-    final multiplicationAvg = scoreService.getAverageScore(MathOperationType.multiplication);
-    final divisionAvg = scoreService.getAverageScore(MathOperationType.division);
+    final multiplicationAvg = scoreService.getAverageScore(
+      MathOperationType.multiplication,
+    );
+    final divisionAvg = scoreService.getAverageScore(
+      MathOperationType.division,
+    );
 
     return Card(
       child: Padding(
@@ -344,7 +356,11 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
                 Expanded(
                   child: Column(
                     children: [
-                      const Icon(Icons.more_horiz, color: Colors.green, size: 32),
+                      const Icon(
+                        Icons.more_horiz,
+                        color: Colors.green,
+                        size: 32,
+                      ),
                       const SizedBox(height: 8),
                       Text(
                         '割り算',

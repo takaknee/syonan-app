@@ -187,7 +187,9 @@ class _PracticeScreenState extends State<PracticeScreen>
                   Icon(
                     accuracy >= 0.8 ? Icons.star : Icons.thumb_up,
                     size: 64,
-                    color: accuracy >= 0.8 ? Colors.amber : theme.colorScheme.primary,
+                    color: accuracy >= 0.8
+                        ? Colors.amber
+                        : theme.colorScheme.primary,
                   ),
                   const SizedBox(height: 16),
                   Text(

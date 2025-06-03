@@ -49,7 +49,7 @@ Copilot Chatを使用したコードレビュー機能の活用方法です。
 # セキュリティレビュー
 @github このコードが子供向けアプリのセキュリティ要件を満たしているかレビューしてください。特に個人情報の取り扱いとデータ保護について確認してください。
 
-# パフォーマンスレビュー  
+# パフォーマンスレビュー
 @github このFlutterウィジェットのパフォーマンス問題を特定し、最適化案を提案してください。60FPSを維持する必要があります。
 
 # アクセシビリティレビュー
@@ -77,12 +77,12 @@ Copilot Chatを使用したコードレビュー機能の活用方法です。
 #### クラスドキュメント
 ```dart
 /// 小学三年生向けの算数練習問題を管理するクラス
-/// 
+///
 /// このクラスは以下の機能を提供します：
 /// - 年齢に適した問題の生成
 /// - 学習進捗の追跡
 /// - 適切なフィードバックの提供
-/// 
+///
 /// 使用例:
 /// ```dart
 /// final exercises = MathExerciseManager(level: 3);
@@ -96,14 +96,14 @@ class MathExerciseManager {
 #### 関数ドキュメント
 ```dart
 /// 学生の回答を検証し、適切なフィードバックを提供します
-/// 
+///
 /// [studentAnswer] 学生が入力した回答
 /// [correctAnswer] 正しい答え
 /// [timeSpent] 回答にかかった時間（秒）
-/// 
+///
 /// Returns: 詳細なフィードバック情報を含む[AnswerResult]
-/// 
-/// Throws: 
+///
+/// Throws:
 /// - [ArgumentError] 無効な引数が渡された場合
 /// - [ValidationError] 回答形式が正しくない場合
 Future<AnswerResult> validateAnswer({
@@ -134,13 +134,13 @@ Future<AnswerResult> validateAnswer({
 {
   // インライン提案を有効化
   "github.copilot.inlineSuggest.enable": true,
-  
+
   // コードアクションを有効化
   "github.copilot.editor.enableCodeActions": true,
-  
+
   // 反復的修正機能を有効化
   "github.copilot.editor.iterativeFixing": true,
-  
+
   // 次の編集提案を有効化
   "github.copilot.nextEdit.enabled": true
 }
@@ -151,16 +151,16 @@ Future<AnswerResult> validateAnswer({
 {
   // エディタ内修正機能
   "github.copilot.chat.editorFixing": true,
-  
+
   // ウェルカムメッセージを常に表示
   "github.copilot.chat.welcomeMessage": "always",
-  
+
   // フォローアップ質問を常に有効
   "github.copilot.chat.followUps": "always",
-  
+
   // 自動修正エージェント
   "github.copilot.chat.agent.autoFix": true,
-  
+
   // コード検索機能
   "github.copilot.chat.codesearch.enabled": true
 }
@@ -171,7 +171,7 @@ Future<AnswerResult> validateAnswer({
 {
   // 日本語でのやり取りを優先
   "github.copilot.chat.localeOverride": "ja",
-  
+
   // プロジェクト固有の指示
   "github.copilot.conversation.additionalInstructions": "このプロジェクトは小学三年生向けの日本語算数練習アプリ「syonan-app」です。安全で教育的なコードを心がけ、子供向けのアクセシブルなデザインを優先してください。コメントとドキュメントは日本語で記述してください。"
 }
@@ -206,7 +206,7 @@ Future<AnswerResult> validateAnswer({
 ### エラー処理パターン
 ```dart
 // TODO: 子供向けの分かりやすいエラーハンドリングを実装
-// 要件: 
+// 要件:
 // - 怖がらせない優しいメッセージ
 // - 再試行の促し
 // - 保護者への通知オプション

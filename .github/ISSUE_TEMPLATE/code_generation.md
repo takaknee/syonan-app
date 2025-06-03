@@ -54,9 +54,9 @@ final myWidget = GeneratedWidget(
 // 期待されるコード構造の簡単な説明
 class MyGeneratedClass {
   // プロパティ
-  
+
   // コンストラクタ
-  
+
   // メソッド
 }
 ```

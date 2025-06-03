@@ -49,7 +49,7 @@
 // クラス名: UpperCamelCase
 class MathExerciseWidget extends StatelessWidget {}
 
-// 変数名・関数名: lowerCamelCase  
+// 変数名・関数名: lowerCamelCase
 int studentAnswer = 0;
 void calculateScore() {}
 
@@ -66,10 +66,10 @@ const Duration answerTimeLimit = Duration(seconds: 30);
 ```dart
 // 機能の説明は日本語で記述
 /// 学生の回答を検証し、正誤判定を行う
-/// 
+///
 /// [studentAnswer] 学生が入力した回答
 /// [correctAnswer] 正しい回答
-/// 
+///
 /// Returns: 正解の場合true、不正解の場合false
 bool validateAnswer(int studentAnswer, int correctAnswer) {
   // 実装...
@@ -104,7 +104,7 @@ try {
 ```dart
 // 子供向けの親しみやすい色使い
 const primaryColor = Color(0xFF2196F3);    // 青
-const secondaryColor = Color(0xFF4CAF50);  // 緑  
+const secondaryColor = Color(0xFF4CAF50);  // 緑
 const errorColor = Color(0xFFFF5722);      // オレンジ（優しいエラー色）
 const successColor = Color(0xFF8BC34A);    // ライトグリーン
 ```
@@ -169,7 +169,7 @@ class LearningProgress {
   final Duration studyTime;
   final List<String> masteredTopics;
   final List<String> challengingTopics;
-  
+
   // 子供の自信を築く進捗表示
   String get encouragementMessage {
     if (accuracyRate >= 0.9) return 'すばらしい成績です！';

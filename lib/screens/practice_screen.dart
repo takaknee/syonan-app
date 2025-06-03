@@ -44,7 +44,7 @@ class _PracticeScreenState extends State<PracticeScreen>
     // 問題を生成
     final mathService = context.read<MathService>();
     _problems = mathService.generateProblems(
-      widget.operation, 
+      widget.operation,
       widget.problemCount,
     );
     _userAnswers = List.filled(widget.problemCount, null);
@@ -86,8 +86,8 @@ class _PracticeScreenState extends State<PracticeScreen>
 
           // メインコンテンツ
           Expanded(
-            child: _isCompleted 
-                ? _buildResultView(theme) 
+            child: _isCompleted
+                ? _buildResultView(theme)
                 : _buildProblemView(theme),
           ),
         ],

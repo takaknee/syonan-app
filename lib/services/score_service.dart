@@ -107,8 +107,8 @@ class ScoreService extends ChangeNotifier {
     final now = DateTime.now();
     final weekStart = now.subtract(Duration(days: now.weekday - 1));
     final weekStartDate = DateTime(
-      weekStart.year, 
-      weekStart.month, 
+      weekStart.year,
+      weekStart.month,
       weekStart.day,
     );
 
@@ -126,8 +126,8 @@ class ScoreService extends ChangeNotifier {
 
     final uniqueDates = _scores
         .map((score) => DateTime(
-              score.date.year, 
-              score.date.month, 
+              score.date.year,
+              score.date.month,
               score.date.day,
             ))
         .toSet()

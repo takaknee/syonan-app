@@ -71,11 +71,11 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
               controller: _tabController,
               children: [
                 _buildOperationHistory(
-                  MathOperationType.multiplication, 
+                  MathOperationType.multiplication,
                   scoreService,
                 ),
                 _buildOperationHistory(
-                  MathOperationType.division, 
+                  MathOperationType.division,
                   scoreService,
                 ),
                 _buildOverallStats(scoreService),
@@ -85,7 +85,7 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
   }
 
   Widget _buildOperationHistory(
-    MathOperationType operation, 
+    MathOperationType operation,
     ScoreService scoreService,
   ) {
     final scores = scoreService.getScoresByOperation(operation);
@@ -108,7 +108,7 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
             itemCount: scores.length,
             itemBuilder: (context, index) {
               final score = scores[index];
-              final isRecentBest = bestScore != null && 
+              final isRecentBest = bestScore != null &&
                   score.id == bestScore.id;
 
               return Padding(
@@ -117,8 +117,8 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
                   scoreRecord: score,
                   isBest: isRecentBest,
                   showImprovement: index < scores.length - 1,
-                  previousScore: index < scores.length - 1 
-                      ? scores[index + 1] 
+                  previousScore: index < scores.length - 1
+                      ? scores[index + 1]
                       : null,
                 ),
               );
@@ -156,8 +156,8 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
 
           // 操作別比較
           _buildComparisonCard(
-            multiplicationScores, 
-            divisionScores, 
+            multiplicationScores,
+            divisionScores,
             scoreService,
           ),
 

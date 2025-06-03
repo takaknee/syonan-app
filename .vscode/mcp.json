@@ -21,7 +21,7 @@
       },
       {
         "name": "dart-docs",
-        "type": "documentation", 
+        "type": "documentation",
         "url": "https://dart.dev/guides",
         "enabled": true
       },

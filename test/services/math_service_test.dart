@@ -21,7 +21,7 @@ void main() {
           expect(problem.secondNumber, greaterThanOrEqualTo(1));
           expect(problem.secondNumber, lessThanOrEqualTo(9));
           expect(
-            problem.correctAnswer, 
+            problem.correctAnswer,
             problem.firstNumber * problem.secondNumber,
           );
         }
@@ -42,7 +42,7 @@ void main() {
           // 割り切れることを確認
           expect(problem.firstNumber % problem.secondNumber, 0);
           expect(
-            problem.firstNumber ~/ problem.secondNumber, 
+            problem.firstNumber ~/ problem.secondNumber,
             problem.correctAnswer,
           );
         }
@@ -66,7 +66,7 @@ void main() {
     group('generateProblems', () {
       test('should generate requested number of problems', () {
         final problems = mathService.generateProblems(
-          MathOperationType.multiplication, 
+          MathOperationType.multiplication,
           5,
         );
 
@@ -78,7 +78,7 @@ void main() {
 
       test('should not generate duplicate problems', () {
         final problems = mathService.generateProblems(
-          MathOperationType.multiplication, 
+          MathOperationType.multiplication,
           10,
         );
 
@@ -95,7 +95,7 @@ void main() {
         () {
         // 81通りの九九があるので、100個要求しても81個以下になる
         final problems = mathService.generateProblems(
-          MathOperationType.multiplication, 
+          MathOperationType.multiplication,
           100,
         );
 

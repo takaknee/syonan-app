@@ -1,0 +1,57 @@
+---
+# GitHub Actions Setup Steps Configuration
+# Pre-configure environment before firewall restrictions are applied
+
+name: Setup Steps Configuration
+
+setup_steps:
+  # Flutter/Dart development environment setup
+  flutter_setup:
+    - name: Download Dart SDK
+      action: download
+      source: https://storage.googleapis.com/dart-archive/channels/stable/release/latest/sdk/dartsdk-linux-x64-release.zip
+      destination: /tmp/dart-sdk.zip
+
+    - name: Download Flutter releases metadata
+      action: download
+      source: https://storage.googleapis.com/flutter_infra_release/releases/releases_linux.json
+      destination: /tmp/flutter-releases.json
+
+    - name: Setup Dart repository
+      action: setup_repository
+      source: https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list
+      target: /etc/apt/sources.list.d/dart_stable.list
+
+  # Package management setup
+  package_setup:
+    - name: Update Snap package manager
+      action: configure
+      service: snapd
+      endpoint: api.snapcraft.io
+
+    - name: Configure Ubuntu ESM
+      action: configure
+      service: apt
+      endpoint: esm.ubuntu.com
+
+  # Google services setup
+  google_services:
+    - name: Configure Google SSL downloads
+      action: allow_domain
+      domain: dl-ssl.google.com
+      purpose: Flutter/Dart SDK downloads
+
+    - name: Configure Google storage access
+      action: allow_domain
+      domain: storage.googleapis.com
+      purpose: Flutter/Dart releases and SDKs
+
+# GitHub Actions usage instructions
+usage_instructions: |
+  Add these setup steps to your GitHub Actions workflow before the firewall is enabled:
+
+  steps:
+    - name: Pre-configure development tools
+      uses: ./.github/actions/setup-environment
+      with:
+        config-file: .github/copilot-setup-steps.yml

@@ -186,8 +186,8 @@ class _PracticeScreenState extends State<PracticeScreen>
               child: Column(
                 children: [
                   Icon(
-                    accuracy >= 0.8 
-                        ? Icons.star 
+                    accuracy >= 0.8
+                        ? Icons.star
                         : Icons.thumb_up,
                     size: 64,
                     color: accuracy >= 0.8

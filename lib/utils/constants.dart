@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 /// アプリ全体で使用する定数を定義
 class AppConstants {
-
   // Private constructor to prevent instantiation
   AppConstants._();
   // アプリ情報
@@ -51,7 +50,6 @@ class AppConstants {
 
 /// アプリで使用する文字列定数
 class AppStrings {
-
   // Private constructor to prevent instantiation
   AppStrings._();
   // アプリ名とタイトル
@@ -99,7 +97,6 @@ class AppStrings {
 
 /// アプリで使用するスタイル定数
 class AppStyles {
-
   // Private constructor to prevent instantiation
   AppStyles._();
   // テキストスタイル
@@ -118,17 +115,11 @@ class AppStyles {
     fontWeight: FontWeight.bold,
   );
 
-  static const TextStyle bodyLarge = TextStyle(
-    fontSize: 18,
-  );
+  static const TextStyle bodyLarge = TextStyle(fontSize: 18);
 
-  static const TextStyle bodyMedium = TextStyle(
-    fontSize: 16,
-  );
+  static const TextStyle bodyMedium = TextStyle(fontSize: 16);
 
-  static const TextStyle bodySmall = TextStyle(
-    fontSize: 14,
-  );
+  static const TextStyle bodySmall = TextStyle(fontSize: 14);
 
   // パディング
   static const EdgeInsets paddingSmall = EdgeInsets.all(8.0);
@@ -154,26 +145,14 @@ class AppStyles {
 
   // シャドウ
   static const List<BoxShadow> shadowSmall = [
-    BoxShadow(
-      color: Colors.black12,
-      blurRadius: 4,
-      offset: Offset(0, 2),
-    ),
+    BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 2)),
   ];
 
   static const List<BoxShadow> shadowMedium = [
-    BoxShadow(
-      color: Colors.black12,
-      blurRadius: 8,
-      offset: Offset(0, 4),
-    ),
+    BoxShadow(color: Colors.black12, blurRadius: 8, offset: Offset(0, 4)),
   ];
 
   static const List<BoxShadow> shadowLarge = [
-    BoxShadow(
-      color: Colors.black12,
-      blurRadius: 16,
-      offset: Offset(0, 8),
-    ),
+    BoxShadow(color: Colors.black12, blurRadius: 16, offset: Offset(0, 8)),
   ];
 }

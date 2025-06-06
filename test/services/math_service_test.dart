@@ -82,17 +82,17 @@ void main() {
           10,
         );
 
-        final problemStrings = problems.map((p) =>
-          '${p.firstNumber}_${p.secondNumber}_${p.operation.name}'
-        ).toSet();
+        final problemStrings = problems
+            .map(
+              (p) => '${p.firstNumber}_${p.secondNumber}_${p.operation.name}',
+            )
+            .toSet();
 
         expect(problemStrings.length, problems.length);
       });
 
-      test(
-        'should handle requests for more problems than possible unique '
-        'combinations',
-        () {
+      test('should handle requests for more problems than possible unique '
+          'combinations', () {
         // 81通りの九九があるので、100個要求しても81個以下になる
         final problems = mathService.generateProblems(
           MathOperationType.multiplication,
@@ -101,9 +101,11 @@ void main() {
 
         expect(problems.length, lessThanOrEqualTo(81));
 
-        final problemStrings = problems.map((p) =>
-          '${p.firstNumber}_${p.secondNumber}_${p.operation.name}'
-        ).toSet();
+        final problemStrings = problems
+            .map(
+              (p) => '${p.firstNumber}_${p.secondNumber}_${p.operation.name}',
+            )
+            .toSet();
 
         expect(problemStrings.length, problems.length);
       });
@@ -114,7 +116,7 @@ void main() {
         for (int i = 0; i < 10; i++) {
           final problem = mathService.generateProblemWithDifficulty(
             MathOperationType.multiplication,
-            1
+            1,
           );
 
           expect(problem.firstNumber, greaterThanOrEqualTo(1));
@@ -128,7 +130,7 @@ void main() {
         for (int i = 0; i < 10; i++) {
           final problem = mathService.generateProblemWithDifficulty(
             MathOperationType.multiplication,
-            2
+            2,
           );
 
           expect(problem.firstNumber, greaterThanOrEqualTo(1));
@@ -142,7 +144,7 @@ void main() {
         for (int i = 0; i < 10; i++) {
           final problem = mathService.generateProblemWithDifficulty(
             MathOperationType.multiplication,
-            3
+            3,
           );
 
           expect(problem.firstNumber, greaterThanOrEqualTo(1));
@@ -155,7 +157,7 @@ void main() {
       test('should handle invalid difficulty levels gracefully', () {
         final problem = mathService.generateProblemWithDifficulty(
           MathOperationType.multiplication,
-          999 // Invalid level
+          999, // Invalid level
         );
 
         // Should default to level 2 (1-9 range)

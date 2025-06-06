@@ -2,7 +2,6 @@ import 'math_problem.dart';
 
 /// スコア記録を表すモデルクラス
 class ScoreRecord {
-
   /// JSONからScoreRecordを作成
   factory ScoreRecord.fromJson(Map<String, dynamic> json) {
     return ScoreRecord(

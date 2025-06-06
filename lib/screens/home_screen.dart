@@ -194,9 +194,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: ElevatedButton.icon(
         onPressed: () {
           Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => const ScoreHistoryScreen(),
-            ),
+            MaterialPageRoute(builder: (context) => const ScoreHistoryScreen()),
           );
         },
         icon: const Icon(Icons.history),

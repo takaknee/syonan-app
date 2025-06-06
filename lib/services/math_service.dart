@@ -49,18 +49,16 @@ class MathService {
   }
 
   /// 複数の問題を生成
-  List<MathProblem> generateProblems(
-    MathOperationType operation,
-    int count,
-  ) {
+  List<MathProblem> generateProblems(MathOperationType operation, int count) {
     final problems = <MathProblem>[];
     final usedProblems = <String>{};
 
     // 同じ問題が重複しないようにする
     while (problems.length < count &&
-           usedProblems.length < _getMaxUniqueProblems(operation)) {
+        usedProblems.length < _getMaxUniqueProblems(operation)) {
       final problem = generateProblem(operation);
-      final problemKey = '${problem.firstNumber}_${problem.secondNumber}'
+      final problemKey =
+          '${problem.firstNumber}_${problem.secondNumber}'
           '_${problem.operation.name}';
 
       if (!usedProblems.contains(problemKey)) {

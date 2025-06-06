@@ -11,7 +11,6 @@ enum MathOperationType {
 
 /// 算数問題を表すモデルクラス
 class MathProblem {
-
   /// JSONからMathProblemを作成
   factory MathProblem.fromJson(Map<String, dynamic> json) {
     return MathProblem(

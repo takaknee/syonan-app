@@ -3,10 +3,7 @@ import '../models/math_problem.dart';
 
 /// 算数問題を表示するカードウィジェット
 class ProblemCard extends StatelessWidget {
-  const ProblemCard({
-    super.key,
-    required this.problem,
-  });
+  const ProblemCard({super.key, required this.problem});
 
   final MathProblem problem;
 

@@ -29,8 +29,8 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
           _selectedOperation = _tabController.index == 0
               ? MathOperationType.multiplication
               : _tabController.index == 1
-                  ? MathOperationType.division
-                  : MathOperationType.multiplication; // 全体表示では掛け算をデフォルト
+              ? MathOperationType.division
+              : MathOperationType.multiplication; // 全体表示では掛け算をデフォルト
         });
       }
     });
@@ -108,8 +108,8 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
             itemCount: scores.length,
             itemBuilder: (context, index) {
               final score = scores[index];
-              final isRecentBest = bestScore != null &&
-                  score.id == bestScore.id;
+              final isRecentBest =
+                  bestScore != null && score.id == bestScore.id;
 
               return Padding(
                 padding: const EdgeInsets.only(bottom: 12),
@@ -177,28 +177,16 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.history,
-            size: 64,
-            color: Colors.grey[400],
-          ),
+          Icon(Icons.history, size: 64, color: Colors.grey[400]),
           const SizedBox(height: 16),
           Text(
-            operation != null
-                ? '$operationNameの記録がありません'
-                : '記録がありません',
-            style: TextStyle(
-              fontSize: 18,
-              color: Colors.grey[600],
-            ),
+            operation != null ? '$operationNameの記録がありません' : '記録がありません',
+            style: TextStyle(fontSize: 18, color: Colors.grey[600]),
           ),
           const SizedBox(height: 8),
           Text(
             '練習を始めて記録を作りましょう！',
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey[500],
-            ),
+            style: TextStyle(fontSize: 14, color: Colors.grey[500]),
           ),
         ],
       ),
@@ -233,11 +221,7 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
             '${(averageScore * 100).round()}%',
             Icons.trending_up,
           ),
-          _buildStatItem(
-            '練習回数',
-            '$totalPractices回',
-            Icons.fitness_center,
-          ),
+          _buildStatItem('練習回数', '$totalPractices回', Icons.fitness_center),
         ],
       ),
     );
@@ -248,11 +232,7 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
 
     return Column(
       children: [
-        Icon(
-          icon,
-          color: theme.colorScheme.onPrimaryContainer,
-          size: 32,
-        ),
+        Icon(icon, color: theme.colorScheme.onPrimaryContainer, size: 32),
         const SizedBox(height: 8),
         Text(
           value,
@@ -284,10 +264,7 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              '全体統計',
-              style: theme.textTheme.headlineSmall,
-            ),
+            Text('全体統計', style: theme.textTheme.headlineSmall),
             const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -326,10 +303,7 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              '掛け算 vs 割り算',
-              style: theme.textTheme.headlineSmall,
-            ),
+            Text('掛け算 vs 割り算', style: theme.textTheme.headlineSmall),
             const SizedBox(height: 16),
             Row(
               children: [
@@ -394,10 +368,7 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              '最近の記録',
-              style: theme.textTheme.headlineSmall,
-            ),
+            Text('最近の記録', style: theme.textTheme.headlineSmall),
             const SizedBox(height: 16),
             ...recentScores.map(
               (score) => Padding(

@@ -33,10 +33,7 @@ class PracticeButton extends StatelessWidget {
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [
-                color.withOpacity(0.1),
-                color.withOpacity(0.05),
-              ],
+              colors: [color.withOpacity(0.1), color.withOpacity(0.05)],
             ),
           ),
           child: Column(
@@ -44,15 +41,8 @@ class PracticeButton extends StatelessWidget {
             children: [
               Container(
                 padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: color,
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  icon,
-                  size: 32,
-                  color: Colors.white,
-                ),
+                decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+                child: Icon(icon, size: 32, color: Colors.white),
               ),
               const SizedBox(height: 16),
               Text(

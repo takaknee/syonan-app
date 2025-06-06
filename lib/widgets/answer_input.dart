@@ -49,10 +49,7 @@ class _AnswerInputState extends State<AnswerInput> {
             decoration: BoxDecoration(
               color: theme.colorScheme.surface,
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: theme.colorScheme.outline,
-                width: 2,
-              ),
+              border: Border.all(color: theme.colorScheme.outline, width: 2),
               boxShadow: [
                 BoxShadow(
                   color: theme.colorScheme.shadow.withOpacity(0.1),

@@ -98,8 +98,9 @@ class ScoreService extends ChangeNotifier {
 
     if (operationScores.isEmpty) return null;
 
-    return operationScores.reduce((a, b) =>
-        a.accuracyPercentage > b.accuracyPercentage ? a : b);
+    return operationScores.reduce(
+      (a, b) => a.accuracyPercentage > b.accuracyPercentage ? a : b,
+    );
   }
 
   /// 今週の練習回数を取得
@@ -124,15 +125,15 @@ class ScoreService extends ChangeNotifier {
     var streakDays = 0;
     var checkDate = today;
 
-    final uniqueDates = _scores
-        .map((score) => DateTime(
-              score.date.year,
-              score.date.month,
-              score.date.day,
-            ))
-        .toSet()
-        .toList()
-      ..sort((a, b) => b.compareTo(a)); // 新しい順
+    final uniqueDates =
+        _scores
+            .map(
+              (score) =>
+                  DateTime(score.date.year, score.date.month, score.date.day),
+            )
+            .toSet()
+            .toList()
+          ..sort((a, b) => b.compareTo(a)); // 新しい順
 
     for (final scoreDate in uniqueDates) {
       if (scoreDate.isAtSameMomentAs(checkDate)) {

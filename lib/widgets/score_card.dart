@@ -41,8 +41,9 @@ class ScoreCard extends StatelessWidget {
                 )
               : null,
         ),
-        child:
-            isCompact ? _buildCompactContent(theme) : _buildFullContent(theme),
+        child: isCompact
+            ? _buildCompactContent(theme)
+            : _buildFullContent(theme),
       ),
     );
   }
@@ -129,11 +130,7 @@ class ScoreCard extends StatelessWidget {
                     ),
                     if (isBest) ...[
                       const SizedBox(width: 8),
-                      const Icon(
-                        Icons.star,
-                        color: Colors.amber,
-                        size: 20,
-                      ),
+                      const Icon(Icons.star, color: Colors.amber, size: 20),
                     ],
                   ],
                 ),
@@ -216,7 +213,11 @@ class ScoreCard extends StatelessWidget {
   }
 
   Widget _buildScoreDetail(
-      ThemeData theme, String label, String value, Color color) {
+    ThemeData theme,
+    String label,
+    String value,
+    Color color,
+  ) {
     return Column(
       children: [
         Text(

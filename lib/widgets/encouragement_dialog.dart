@@ -18,9 +18,7 @@ class EncouragementDialog extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       child: Container(
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(

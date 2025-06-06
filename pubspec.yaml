@@ -1,4 +1,3 @@
----
 name: syonan_app
 description: "娘のための学習アプリ - 小学三年生向け算数練習アプリ"
 publish_to: 'none'  # Remove this line if you wish to publish to pub.dev

@@ -34,7 +34,8 @@ dev_tools:
 
   dart:
     version: "stable"
-    sdk_source: "https://storage.googleapis.com/dart-archive/channels/stable/release/latest/sdk/dartsdk-linux-x64-release.zip"
+    sdk_source: >-
+      https://storage.googleapis.com/dart-archive/channels/stable/release/latest/sdk/dartsdk-linux-x64-release.zip
 
   github_copilot:
     features:

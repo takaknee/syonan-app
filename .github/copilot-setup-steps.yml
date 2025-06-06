@@ -9,17 +9,20 @@ setup_steps:
   flutter_setup:
     - name: Download Dart SDK
       action: download
-      source: https://storage.googleapis.com/dart-archive/channels/stable/release/latest/sdk/dartsdk-linux-x64-release.zip
+      source: >-
+        https://storage.googleapis.com/dart-archive/channels/stable/release/latest/sdk/dartsdk-linux-x64-release.zip
       destination: /tmp/dart-sdk.zip
 
     - name: Download Flutter releases metadata
       action: download
-      source: https://storage.googleapis.com/flutter_infra_release/releases/releases_linux.json
+      source: >-
+        https://storage.googleapis.com/flutter_infra_release/releases/releases_linux.json
       destination: /tmp/flutter-releases.json
 
     - name: Setup Dart repository
       action: setup_repository
-      source: https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list
+      source: >-
+        https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list
       target: /etc/apt/sources.list.d/dart_stable.list
 
   # Package management setup
@@ -48,7 +51,8 @@ setup_steps:
 
 # GitHub Actions usage instructions
 usage_instructions: |
-  Add these setup steps to your GitHub Actions workflow before the firewall is enabled:
+  Add these setup steps to your GitHub Actions workflow before the firewall is
+  enabled:
 
   steps:
     - name: Pre-configure development tools

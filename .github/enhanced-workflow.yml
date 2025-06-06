@@ -72,7 +72,7 @@ jobs:
           if [ -f pubspec.yaml ]; then
             flutter pub get
           else
-            echo "pubspec.yaml not found. Flutter project may not be initialized yet."
+            echo "pubspec.yaml not found. Flutter project not initialized."
           fi
 
       - name: Analyze code
@@ -141,7 +141,8 @@ jobs:
 
       - name: Copilot development guidelines check
         run: |
-          echo "Changed files: ${{ steps.changed-files.outputs.all_changed_files }}"
+          echo "Changed files:"
+          echo "${{ steps.changed-files.outputs.all_changed_files }}"
           echo ""
           echo "🤖 GitHub Copilot Development Suggestions:"
           echo ""

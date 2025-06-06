@@ -15,15 +15,25 @@ network_config:
 
   # Specific URLs that need access
   allowed_urls:
-    - https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list
-    - https://storage.googleapis.com/dart-archive/channels/stable/release/latest/sdk/dartsdk-linux-x64-release.zip
-    - https://storage.googleapis.com/flutter_infra_release/releases/releases_linux.json
+    - >-
+      https://storage.googleapis.com/download.dartlang.org/
+      linux/debian/dart_stable.list
+    - >-
+      https://storage.googleapis.com/dart-archive/channels/stable/
+      release/latest/sdk/dartsdk-linux-x64-release.zip
+    - >-
+      https://storage.googleapis.com/flutter_infra_release/
+      releases/releases_linux.json
     - http://168.63.129.16:80/machine/
 
   # Pattern-based URL allowlist for dynamic URLs
   url_patterns:
-    - "https://storage.googleapis.com/flutter_infra_release/flutter/*/dart-sdk-linux-x64.zip"
-    - "https://storage.googleapis.com/dart-archive/channels/*/release/*/sdk/*"
+    - >-
+      https://storage.googleapis.com/flutter_infra_release/
+      flutter/*/dart-sdk-linux-x64.zip
+    - >-
+      https://storage.googleapis.com/dart-archive/
+      channels/*/release/*/sdk/*
 
 # Development tools configuration
 dev_tools:
@@ -35,7 +45,8 @@ dev_tools:
   dart:
     version: "stable"
     sdk_source: >-
-      https://storage.googleapis.com/dart-archive/channels/stable/release/latest/sdk/dartsdk-linux-x64-release.zip
+      https://storage.googleapis.com/dart-archive/channels/stable/
+      release/latest/sdk/dartsdk-linux-x64-release.zip
 
   github_copilot:
     features:

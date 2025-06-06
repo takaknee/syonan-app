@@ -5,7 +5,14 @@
       "label": "Flutter: プロジェクト初期化",
       "type": "shell",
       "command": "flutter",
-      "args": ["create", "--project-name", "syonan_app", "--org", "com.syonan", "."],
+      "args": [
+        "create",
+        "--project-name",
+        "syonan_app",
+        "--org",
+        "com.syonan",
+        "."
+      ],
       "group": "build",
       "presentation": {
         "echo": true,

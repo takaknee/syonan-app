@@ -173,7 +173,8 @@ Future<AnswerResult> validateAnswer({
   "github.copilot.chat.localeOverride": "ja",
 
   // プロジェクト固有の指示
-  "github.copilot.conversation.additionalInstructions": "このプロジェクトは小学三年生向けの日本語算数練習アプリ「syonan-app」です。安全で教育的なコードを心がけ、子供向けのアクセシブルなデザインを優先してください。コメントとドキュメントは日本語で記述してください。"
+  "github.copilot.conversation.additionalInstructions":
+    "小学三年生向け算数アプリ「syonan-app」。教育的で安全なコード、日本語優先。"
 }
 ```
 

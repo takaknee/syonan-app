@@ -53,7 +53,9 @@ class ScoreService extends ChangeNotifier {
 
   /// 特定の操作タイプのスコア履歴を取得
   List<ScoreRecord> getScoresByOperation(MathOperationType operation) {
-    return _scores.where((score) => score.operation == operation).toList();
+    return _scores
+        .where((score) => score.operation == operation)
+        .toList();
   }
 
   /// 最新のスコアと前回のスコアを比較して改善度を取得
@@ -113,7 +115,9 @@ class ScoreService extends ChangeNotifier {
       weekStart.day,
     );
 
-    return _scores.where((score) => score.date.isAfter(weekStartDate)).length;
+    return _scores
+        .where((score) => score.date.isAfter(weekStartDate))
+        .length;
   }
 
   /// 連続練習日数を取得
@@ -128,8 +132,11 @@ class ScoreService extends ChangeNotifier {
     final uniqueDates =
         _scores
             .map(
-              (score) =>
-                  DateTime(score.date.year, score.date.month, score.date.day),
+              (score) => DateTime(
+                score.date.year,
+                score.date.month,
+                score.date.day,
+              ),
             )
             .toSet()
             .toList()
@@ -155,7 +162,9 @@ class ScoreService extends ChangeNotifier {
     if (scoresJson != null) {
       final scoresList = jsonDecode(scoresJson) as List;
       _scores = scoresList
-          .map((json) => ScoreRecord.fromJson(json as Map<String, dynamic>))
+          .map(
+            (json) => ScoreRecord.fromJson(json as Map<String, dynamic>),
+          )
           .toList();
       _scores.sort((a, b) => b.date.compareTo(a.date)); // 新しい順にソート
     }

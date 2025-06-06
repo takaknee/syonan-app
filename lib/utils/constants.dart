@@ -21,7 +21,8 @@ class AppConstants {
 
   // タイムアウト設定
   static const Duration maxPracticeTime = Duration(minutes: 30);
-  static const Duration encouragementDelay = Duration(milliseconds: 1500);
+  static const Duration encouragementDelay =
+      Duration(milliseconds: 1500);
 
   // アニメーション設定
   static const Duration fastAnimation = Duration(milliseconds: 300);
@@ -145,14 +146,26 @@ class AppStyles {
 
   // シャドウ
   static const List<BoxShadow> shadowSmall = [
-    BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 2)),
+    BoxShadow(
+      color: Colors.black12,
+      blurRadius: 4,
+      offset: Offset(0, 2),
+    ),
   ];
 
   static const List<BoxShadow> shadowMedium = [
-    BoxShadow(color: Colors.black12, blurRadius: 8, offset: Offset(0, 4)),
+    BoxShadow(
+      color: Colors.black12,
+      blurRadius: 8,
+      offset: Offset(0, 4),
+    ),
   ];
 
   static const List<BoxShadow> shadowLarge = [
-    BoxShadow(color: Colors.black12, blurRadius: 16, offset: Offset(0, 8)),
+    BoxShadow(
+      color: Colors.black12,
+      blurRadius: 16,
+      offset: Offset(0, 8),
+    ),
   ];
 }

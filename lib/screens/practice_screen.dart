@@ -108,7 +108,8 @@ class _PracticeScreenState extends State<PracticeScreen>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '問題 ${_currentProblemIndex + 1} / ${widget.problemCount}',
+                '問題 ${_currentProblemIndex + 1} / '
+                '${widget.problemCount}',
                 style: theme.textTheme.bodyLarge?.copyWith(
                   color: theme.colorScheme.onPrimaryContainer,
                 ),
@@ -125,9 +126,8 @@ class _PracticeScreenState extends State<PracticeScreen>
           const SizedBox(height: 8),
           LinearProgressIndicator(
             value: progress,
-            backgroundColor: theme.colorScheme.onPrimaryContainer.withOpacity(
-              0.3,
-            ),
+            backgroundColor: theme.colorScheme.onPrimaryContainer
+                .withOpacity(0.3),
             valueColor: AlwaysStoppedAnimation<Color>(
               theme.colorScheme.primary,
             ),
@@ -193,7 +193,10 @@ class _PracticeScreenState extends State<PracticeScreen>
                         : theme.colorScheme.primary,
                   ),
                   const SizedBox(height: 16),
-                  Text('お疲れ様でした！', style: theme.textTheme.headlineMedium),
+                  Text(
+                    'お疲れ様でした！',
+                    style: theme.textTheme.headlineMedium,
+                  ),
                   const SizedBox(height: 16),
                   Text(
                     '$correctCount問正解 / ${widget.problemCount}問',
@@ -250,7 +253,9 @@ class _PracticeScreenState extends State<PracticeScreen>
       onPressed: () => _showHint(problem),
       icon: const Icon(Icons.lightbulb_outline),
       label: const Text('ヒント'),
-      style: TextButton.styleFrom(foregroundColor: theme.colorScheme.secondary),
+      style: TextButton.styleFrom(
+        foregroundColor: theme.colorScheme.secondary,
+      ),
     );
   }
 
@@ -299,7 +304,10 @@ class _PracticeScreenState extends State<PracticeScreen>
       SnackBar(
         content: Text(
           message,
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         backgroundColor: color,
         duration: const Duration(milliseconds: 1200),

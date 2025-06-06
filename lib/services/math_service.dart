@@ -49,7 +49,10 @@ class MathService {
   }
 
   /// 複数の問題を生成
-  List<MathProblem> generateProblems(MathOperationType operation, int count) {
+  List<MathProblem> generateProblems(
+    MathOperationType operation,
+    int count,
+  ) {
     final problems = <MathProblem>[];
     final usedProblems = <String>{};
 

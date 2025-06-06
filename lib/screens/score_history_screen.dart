@@ -17,7 +17,8 @@ class ScoreHistoryScreen extends StatefulWidget {
 class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  MathOperationType _selectedOperation = MathOperationType.multiplication;
+  MathOperationType _selectedOperation =
+      MathOperationType.multiplication;
 
   @override
   void initState() {
@@ -99,7 +100,12 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
     return Column(
       children: [
         // 統計サマリー
-        _buildStatsSummary(operation, bestScore, averageScore, scores.length),
+        _buildStatsSummary(
+          operation,
+          bestScore,
+          averageScore,
+          scores.length,
+        ),
 
         // スコア一覧
         Expanded(
@@ -150,7 +156,11 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // 全体統計
-          _buildOverallStatsCard(streakDays, weeklyCount, allScores.length),
+          _buildOverallStatsCard(
+            streakDays,
+            weeklyCount,
+            allScores.length,
+          ),
 
           const SizedBox(height: 16),
 
@@ -221,7 +231,11 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
             '${(averageScore * 100).round()}%',
             Icons.trending_up,
           ),
-          _buildStatItem('練習回数', '$totalPractices回', Icons.fitness_center),
+          _buildStatItem(
+            '練習回数',
+            '$totalPractices回',
+            Icons.fitness_center,
+          ),
         ],
       ),
     );
@@ -232,7 +246,11 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
 
     return Column(
       children: [
-        Icon(icon, color: theme.colorScheme.onPrimaryContainer, size: 32),
+        Icon(
+          icon,
+          color: theme.colorScheme.onPrimaryContainer,
+          size: 32,
+        ),
         const SizedBox(height: 8),
         Text(
           value,
@@ -274,8 +292,16 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
                   '$streakDays日',
                   Icons.local_fire_department,
                 ),
-                _buildStatItem('今週の練習', '$weeklyCount回', Icons.calendar_today),
-                _buildStatItem('総練習回数', '$totalPractices回', Icons.emoji_events),
+                _buildStatItem(
+                  '今週の練習',
+                  '$weeklyCount回',
+                  Icons.calendar_today,
+                ),
+                _buildStatItem(
+                  '総練習回数',
+                  '$totalPractices回',
+                  Icons.emoji_events,
+                ),
               ],
             ),
           ],
@@ -310,7 +336,11 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
                 Expanded(
                   child: Column(
                     children: [
-                      const Icon(Icons.close, color: Colors.blue, size: 32),
+                      const Icon(
+                        Icons.close,
+                        color: Colors.blue,
+                        size: 32,
+                      ),
                       const SizedBox(height: 8),
                       Text(
                         '掛け算',
@@ -321,7 +351,9 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
                       Text('${multiplicationScores.length}回練習'),
                       Text(
                         '平均 ${(multiplicationAvg * 100).round()}%',
-                        style: const TextStyle(fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ],
                   ),
@@ -345,7 +377,9 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
                       Text('${divisionScores.length}回練習'),
                       Text(
                         '平均 ${(divisionAvg * 100).round()}%',
-                        style: const TextStyle(fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ],
                   ),

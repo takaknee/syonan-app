@@ -41,8 +41,9 @@ class ScoreCard extends StatelessWidget {
                 )
               : null,
         ),
-        child:
-            isCompact ? _buildCompactContent(theme) : _buildFullContent(theme),
+        child: isCompact
+            ? _buildCompactContent(theme)
+            : _buildFullContent(theme),
       ),
     );
   }
@@ -80,7 +81,8 @@ class ScoreCard extends StatelessWidget {
                 ),
               ),
               Text(
-                '${scoreRecord.accuracyPercentage}% (${scoreRecord.correctAnswers}/${scoreRecord.totalQuestions})',
+                '${scoreRecord.accuracyPercentage}% '
+                '(${scoreRecord.correctAnswers}/${scoreRecord.totalQuestions})',
                 style: theme.textTheme.bodySmall,
               ),
             ],
@@ -128,11 +130,7 @@ class ScoreCard extends StatelessWidget {
                     ),
                     if (isBest) ...[
                       const SizedBox(width: 8),
-                      const Icon(
-                        Icons.star,
-                        color: Colors.amber,
-                        size: 20,
-                      ),
+                      const Icon(Icons.star, color: Colors.amber, size: 20),
                     ],
                   ],
                 ),
@@ -215,7 +213,11 @@ class ScoreCard extends StatelessWidget {
   }
 
   Widget _buildScoreDetail(
-      ThemeData theme, String label, String value, Color color) {
+    ThemeData theme,
+    String label,
+    String value,
+    Color color,
+  ) {
     return Column(
       children: [
         Text(
@@ -314,7 +316,8 @@ class ScoreCard extends StatelessWidget {
   }
 
   String _formatDateTime(DateTime date) {
-    return '${date.year}/${date.month}/${date.day} ${date.hour}:${date.minute.toString().padLeft(2, '0')}';
+    return '${date.year}/${date.month}/${date.day} '
+        '${date.hour}:${date.minute.toString().padLeft(2, '0')}';
   }
 
   String _formatDuration(Duration duration) {

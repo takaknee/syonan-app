@@ -1,0 +1,42 @@
+---
+# GitHub Copilot Firewall Configuration
+# This file configures firewall rules to allow necessary domains
+
+name: Copilot Firewall Configuration
+
+# Allow list for domains required by development tools
+firewall:
+  allow_domains:
+    # Google services for Flutter/Dart downloads
+    - dl-ssl.google.com
+    - storage.googleapis.com
+
+    # Ubuntu/Canonical services
+    - api.snapcraft.io
+    - esm.ubuntu.com
+
+    # Azure services (if needed for GitHub Actions runners)
+    - 168.63.129.16
+
+  allow_urls:
+    # Dart SDK downloads
+    - >-
+      https://storage.googleapis.com/download.dartlang.org/
+      linux/debian/dart_stable.list
+    - >-
+      https://storage.googleapis.com/dart-archive/channels/stable/
+      release/latest/sdk/dartsdk-linux-x64-release.zip
+
+    # Flutter SDK downloads
+    - >-
+      https://storage.googleapis.com/flutter_infra_release/
+      flutter/*/dart-sdk-linux-x64.zip
+    - >-
+      https://storage.googleapis.com/flutter_infra_release/
+      releases/releases_linux.json
+
+    # Azure metadata service (for GitHub Actions runners)
+    - http://168.63.129.16:80/machine/
+
+# Note: This configuration should be applied to GitHub Copilot environment
+# to prevent firewall blocking during development tool setup

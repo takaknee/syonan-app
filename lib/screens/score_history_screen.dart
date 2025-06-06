@@ -17,7 +17,8 @@ class ScoreHistoryScreen extends StatefulWidget {
 class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  MathOperationType _selectedOperation = MathOperationType.multiplication;
+  MathOperationType _selectedOperation =
+      MathOperationType.multiplication;
 
   @override
   void initState() {
@@ -29,8 +30,8 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
           _selectedOperation = _tabController.index == 0
               ? MathOperationType.multiplication
               : _tabController.index == 1
-                  ? MathOperationType.division
-                  : MathOperationType.multiplication; // 全体表示では掛け算をデフォルト
+              ? MathOperationType.division
+              : MathOperationType.multiplication; // 全体表示では掛け算をデフォルト
         });
       }
     });
@@ -55,7 +56,8 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
         bottom: TabBar(
           controller: _tabController,
           labelColor: theme.colorScheme.onPrimaryContainer,
-          unselectedLabelColor: theme.colorScheme.onPrimaryContainer.withOpacity(0.6),
+          unselectedLabelColor: theme.colorScheme.onPrimaryContainer
+              .withOpacity(0.6),
           indicatorColor: theme.colorScheme.primary,
           tabs: const [
             Tab(text: '掛け算', icon: Icon(Icons.close)),
@@ -69,15 +71,24 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
           : TabBarView(
               controller: _tabController,
               children: [
-                _buildOperationHistory(MathOperationType.multiplication, scoreService),
-                _buildOperationHistory(MathOperationType.division, scoreService),
+                _buildOperationHistory(
+                  MathOperationType.multiplication,
+                  scoreService,
+                ),
+                _buildOperationHistory(
+                  MathOperationType.division,
+                  scoreService,
+                ),
                 _buildOverallStats(scoreService),
               ],
             ),
     );
   }
 
-  Widget _buildOperationHistory(MathOperationType operation, ScoreService scoreService) {
+  Widget _buildOperationHistory(
+    MathOperationType operation,
+    ScoreService scoreService,
+  ) {
     final scores = scoreService.getScoresByOperation(operation);
     final bestScore = scoreService.getBestScore(operation);
     final averageScore = scoreService.getAverageScore(operation);
@@ -89,7 +100,12 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
     return Column(
       children: [
         // 統計サマリー
-        _buildStatsSummary(operation, bestScore, averageScore, scores.length),
+        _buildStatsSummary(
+          operation,
+          bestScore,
+          averageScore,
+          scores.length,
+        ),
 
         // スコア一覧
         Expanded(
@@ -98,7 +114,8 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
             itemCount: scores.length,
             itemBuilder: (context, index) {
               final score = scores[index];
-              final isRecentBest = bestScore != null && score.id == bestScore.id;
+              final isRecentBest =
+                  bestScore != null && score.id == bestScore.id;
 
               return Padding(
                 padding: const EdgeInsets.only(bottom: 12),
@@ -106,7 +123,9 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
                   scoreRecord: score,
                   isBest: isRecentBest,
                   showImprovement: index < scores.length - 1,
-                  previousScore: index < scores.length - 1 ? scores[index + 1] : null,
+                  previousScore: index < scores.length - 1
+                      ? scores[index + 1]
+                      : null,
                 ),
               );
             },
@@ -120,8 +139,12 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
     final allScores = scoreService.scores;
     final streakDays = scoreService.getStreakDays();
     final weeklyCount = scoreService.getWeeklyPracticeCount();
-    final multiplicationScores = scoreService.getScoresByOperation(MathOperationType.multiplication);
-    final divisionScores = scoreService.getScoresByOperation(MathOperationType.division);
+    final multiplicationScores = scoreService.getScoresByOperation(
+      MathOperationType.multiplication,
+    );
+    final divisionScores = scoreService.getScoresByOperation(
+      MathOperationType.division,
+    );
 
     if (allScores.isEmpty) {
       return _buildEmptyState(null);
@@ -133,12 +156,20 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // 全体統計
-          _buildOverallStatsCard(streakDays, weeklyCount, allScores.length),
+          _buildOverallStatsCard(
+            streakDays,
+            weeklyCount,
+            allScores.length,
+          ),
 
           const SizedBox(height: 16),
 
           // 操作別比較
-          _buildComparisonCard(multiplicationScores, divisionScores, scoreService),
+          _buildComparisonCard(
+            multiplicationScores,
+            divisionScores,
+            scoreService,
+          ),
 
           const SizedBox(height: 16),
 
@@ -156,28 +187,16 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.history,
-            size: 64,
-            color: Colors.grey[400],
-          ),
+          Icon(Icons.history, size: 64, color: Colors.grey[400]),
           const SizedBox(height: 16),
           Text(
-            operation != null
-                ? '$operationNameの記録がありません'
-                : '記録がありません',
-            style: TextStyle(
-              fontSize: 18,
-              color: Colors.grey[600],
-            ),
+            operation != null ? '$operationNameの記録がありません' : '記録がありません',
+            style: TextStyle(fontSize: 18, color: Colors.grey[600]),
           ),
           const SizedBox(height: 8),
           Text(
             '練習を始めて記録を作りましょう！',
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey[500],
-            ),
+            style: TextStyle(fontSize: 14, color: Colors.grey[500]),
           ),
         ],
       ),
@@ -250,7 +269,11 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
     );
   }
 
-  Widget _buildOverallStatsCard(int streakDays, int weeklyCount, int totalPractices) {
+  Widget _buildOverallStatsCard(
+    int streakDays,
+    int weeklyCount,
+    int totalPractices,
+  ) {
     final theme = Theme.of(context);
 
     return Card(
@@ -259,17 +282,26 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              '全体統計',
-              style: theme.textTheme.headlineSmall,
-            ),
+            Text('全体統計', style: theme.textTheme.headlineSmall),
             const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _buildStatItem('連続練習', '$streakDays日', Icons.local_fire_department),
-                _buildStatItem('今週の練習', '$weeklyCount回', Icons.calendar_today),
-                _buildStatItem('総練習回数', '$totalPractices回', Icons.emoji_events),
+                _buildStatItem(
+                  '連続練習',
+                  '$streakDays日',
+                  Icons.local_fire_department,
+                ),
+                _buildStatItem(
+                  '今週の練習',
+                  '$weeklyCount回',
+                  Icons.calendar_today,
+                ),
+                _buildStatItem(
+                  '総練習回数',
+                  '$totalPractices回',
+                  Icons.emoji_events,
+                ),
               ],
             ),
           ],
@@ -284,8 +316,12 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
     ScoreService scoreService,
   ) {
     final theme = Theme.of(context);
-    final multiplicationAvg = scoreService.getAverageScore(MathOperationType.multiplication);
-    final divisionAvg = scoreService.getAverageScore(MathOperationType.division);
+    final multiplicationAvg = scoreService.getAverageScore(
+      MathOperationType.multiplication,
+    );
+    final divisionAvg = scoreService.getAverageScore(
+      MathOperationType.division,
+    );
 
     return Card(
       child: Padding(
@@ -293,17 +329,18 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              '掛け算 vs 割り算',
-              style: theme.textTheme.headlineSmall,
-            ),
+            Text('掛け算 vs 割り算', style: theme.textTheme.headlineSmall),
             const SizedBox(height: 16),
             Row(
               children: [
                 Expanded(
                   child: Column(
                     children: [
-                      const Icon(Icons.close, color: Colors.blue, size: 32),
+                      const Icon(
+                        Icons.close,
+                        color: Colors.blue,
+                        size: 32,
+                      ),
                       const SizedBox(height: 8),
                       Text(
                         '掛け算',
@@ -314,7 +351,9 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
                       Text('${multiplicationScores.length}回練習'),
                       Text(
                         '平均 ${(multiplicationAvg * 100).round()}%',
-                        style: const TextStyle(fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ],
                   ),
@@ -323,7 +362,11 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
                 Expanded(
                   child: Column(
                     children: [
-                      const Icon(Icons.more_horiz, color: Colors.green, size: 32),
+                      const Icon(
+                        Icons.more_horiz,
+                        color: Colors.green,
+                        size: 32,
+                      ),
                       const SizedBox(height: 8),
                       Text(
                         '割り算',
@@ -334,7 +377,9 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
                       Text('${divisionScores.length}回練習'),
                       Text(
                         '平均 ${(divisionAvg * 100).round()}%',
-                        style: const TextStyle(fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ],
                   ),
@@ -357,10 +402,7 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              '最近の記録',
-              style: theme.textTheme.headlineSmall,
-            ),
+            Text('最近の記録', style: theme.textTheme.headlineSmall),
             const SizedBox(height: 16),
             ...recentScores.map(
               (score) => Padding(

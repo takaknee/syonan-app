@@ -1,8 +1,8 @@
 /// 時間のフォーマットを行うユーティリティクラス
 class TimeFormatter {
-
   // Private constructor to prevent instantiation
   TimeFormatter._();
+
   /// 期間を「○分○秒」の形式でフォーマット
   static String formatDuration(Duration duration) {
     final minutes = duration.inMinutes;

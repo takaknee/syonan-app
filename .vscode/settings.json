@@ -33,27 +33,15 @@
     "jsonc": true
   },
   "github.copilot.advanced": {
-    "debug.overrideChatEngine": "",
-    "debug.overrideProxyUrl": "",
-    "debug.testOverrideProxyUrl": "",
-    "debug.overrideProxyStrictSSL": null,
     "length": 2000,
     "inlineSuggestCount": 3
   },
   "github.copilot.chat.followUps": "always",
-  "github.copilot.chat.agent.autoFix": true,
-  "github.copilot.chat.agent.runTasks": true,
-  "github.copilot.chat.agent.thinkingTool": true,
-  "github.copilot.chat.codesearch.enabled": true,
   "github.copilot.chat.localeOverride": "ja",
-  "github.copilot.chat.summarizeAgentConversationHistory.enabled": true,
-  "github.copilot.chat.scopeSelection": true,
-  "github.copilot.chat.editor.temporalContext.enabled": true,
-  "github.copilot.chat.edits.newNotebook.enabled": true,
   "github.copilot.editor.enableCodeActions": true,
-  "github.copilot.nextEditSuggestions.enabled": true,
-  "github.copilot.nextEditSuggestions.fixes": true,
-  "github.copilot.renameSuggestions.triggerAutomatically": true,
+  "github.copilot.inlineSuggest.enable": true,
+  "github.copilot.conversation.additionalInstructions":
+    "小学三年生向け算数アプリ「syonan-app」。教育的で安全なコード、日本語優先。",
   "files.associations": {
     "*.dart": "dart"
   },

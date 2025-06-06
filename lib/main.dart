@@ -19,9 +19,7 @@ class SyonanApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         // 算数問題生成サービス
-        Provider<MathService>(
-          create: (context) => MathService(),
-        ),
+        Provider<MathService>(create: (context) => MathService()),
         // スコア管理サービス
         ChangeNotifierProvider<ScoreService>(
           create: (context) => ScoreService(),
@@ -39,24 +37,14 @@ class SyonanApp extends StatelessWidget {
           ),
           // 子供向けの大きめのフォントサイズ
           textTheme: const TextTheme(
-            headlineLarge: TextStyle(
-              fontSize: 32,
-              fontWeight: FontWeight.bold,
-            ),
+            headlineLarge: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
             headlineMedium: TextStyle(
               fontSize: 28,
               fontWeight: FontWeight.bold,
             ),
-            headlineSmall: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-            bodyLarge: TextStyle(
-              fontSize: 18,
-            ),
-            bodyMedium: TextStyle(
-              fontSize: 16,
-            ),
+            headlineSmall: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            bodyLarge: TextStyle(fontSize: 18),
+            bodyMedium: TextStyle(fontSize: 16),
           ),
           // 子供向けのボタンスタイル（大きめのタッチターゲット）
           elevatedButtonTheme: ElevatedButtonThemeData(

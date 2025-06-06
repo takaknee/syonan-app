@@ -124,8 +124,12 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildStatsSection(ThemeData theme, ScoreService scoreService) {
     final streakDays = scoreService.getStreakDays();
     final weeklyCount = scoreService.getWeeklyPracticeCount();
-    final multiplicationAvg = scoreService.getAverageScore(MathOperationType.multiplication);
-    final divisionAvg = scoreService.getAverageScore(MathOperationType.division);
+    final multiplicationAvg = scoreService.getAverageScore(
+      MathOperationType.multiplication,
+    );
+    final divisionAvg = scoreService.getAverageScore(
+      MathOperationType.division,
+    );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -190,9 +194,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: ElevatedButton.icon(
         onPressed: () {
           Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => const ScoreHistoryScreen(),
-            ),
+            MaterialPageRoute(builder: (context) => const ScoreHistoryScreen()),
           );
         },
         icon: const Icon(Icons.history),

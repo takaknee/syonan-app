@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 /// アプリ全体で使用する定数を定義
 class AppConstants {
-
   // Private constructor to prevent instantiation
   AppConstants._();
   // アプリ情報
@@ -22,7 +21,8 @@ class AppConstants {
 
   // タイムアウト設定
   static const Duration maxPracticeTime = Duration(minutes: 30);
-  static const Duration encouragementDelay = Duration(milliseconds: 1500);
+  static const Duration encouragementDelay =
+      Duration(milliseconds: 1500);
 
   // アニメーション設定
   static const Duration fastAnimation = Duration(milliseconds: 300);
@@ -51,7 +51,6 @@ class AppConstants {
 
 /// アプリで使用する文字列定数
 class AppStrings {
-
   // Private constructor to prevent instantiation
   AppStrings._();
   // アプリ名とタイトル
@@ -99,7 +98,6 @@ class AppStrings {
 
 /// アプリで使用するスタイル定数
 class AppStyles {
-
   // Private constructor to prevent instantiation
   AppStyles._();
   // テキストスタイル
@@ -118,29 +116,33 @@ class AppStyles {
     fontWeight: FontWeight.bold,
   );
 
-  static const TextStyle bodyLarge = TextStyle(
-    fontSize: 18,
-  );
+  static const TextStyle bodyLarge = TextStyle(fontSize: 18);
 
-  static const TextStyle bodyMedium = TextStyle(
-    fontSize: 16,
-  );
+  static const TextStyle bodyMedium = TextStyle(fontSize: 16);
 
-  static const TextStyle bodySmall = TextStyle(
-    fontSize: 14,
-  );
+  static const TextStyle bodySmall = TextStyle(fontSize: 14);
 
   // パディング
   static const EdgeInsets paddingSmall = EdgeInsets.all(8.0);
   static const EdgeInsets paddingMedium = EdgeInsets.all(16.0);
   static const EdgeInsets paddingLarge = EdgeInsets.all(24.0);
-  static const EdgeInsets paddingHorizontal = EdgeInsets.symmetric(horizontal: 16.0);
-  static const EdgeInsets paddingVertical = EdgeInsets.symmetric(vertical: 16.0);
+  static const EdgeInsets paddingHorizontal = EdgeInsets.symmetric(
+    horizontal: 16.0,
+  );
+  static const EdgeInsets paddingVertical = EdgeInsets.symmetric(
+    vertical: 16.0,
+  );
 
   // ボーダー半径
-  static const BorderRadius borderRadiusSmall = BorderRadius.all(Radius.circular(8.0));
-  static const BorderRadius borderRadiusMedium = BorderRadius.all(Radius.circular(12.0));
-  static const BorderRadius borderRadiusLarge = BorderRadius.all(Radius.circular(16.0));
+  static const BorderRadius borderRadiusSmall = BorderRadius.all(
+    Radius.circular(8.0),
+  );
+  static const BorderRadius borderRadiusMedium = BorderRadius.all(
+    Radius.circular(12.0),
+  );
+  static const BorderRadius borderRadiusLarge = BorderRadius.all(
+    Radius.circular(16.0),
+  );
 
   // シャドウ
   static const List<BoxShadow> shadowSmall = [

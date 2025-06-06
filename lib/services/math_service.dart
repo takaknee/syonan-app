@@ -57,9 +57,12 @@ class MathService {
     final usedProblems = <String>{};
 
     // 同じ問題が重複しないようにする
-    while (problems.length < count && usedProblems.length < _getMaxUniqueProblems(operation)) {
+    while (problems.length < count &&
+        usedProblems.length < _getMaxUniqueProblems(operation)) {
       final problem = generateProblem(operation);
-      final problemKey = '${problem.firstNumber}_${problem.secondNumber}_${problem.operation.name}';
+      final problemKey =
+          '${problem.firstNumber}_${problem.secondNumber}'
+          '_${problem.operation.name}';
 
       if (!usedProblems.contains(problemKey)) {
         problems.add(problem);

@@ -1,7 +1,9 @@
 # Flutter開発のためのGitHub Copilot指示書
 
 ## コンテキスト
-あなたは「syonan-app」という名前の娘のために設計されたFlutterモバイルアプリケーションで作業しています。このアプリは家族向け、教育的で、魅力的なものである必要があります。
+あなたは「syonan-app」という名前の娘のために設計されたFlutterモバイル
+アプリケーションで作業しています。このアプリは家族向け、教育的で、
+魅力的なものである必要があります。
 
 **プロジェクトの特徴:**
 - 子供向けの安全で教育的なコンテンツ
@@ -185,16 +187,16 @@ class SafeChildCard extends StatelessWidget {
     this.onTap,
     this.backgroundColor,
   });
-  
+
   final String title;
   final String content;
   final VoidCallback? onTap;
   final Color? backgroundColor;
-  
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    
+
     // 子供向けの大きめのタッチターゲット
     return Card(
       color: backgroundColor ?? theme.colorScheme.surface,
@@ -235,7 +237,7 @@ class SafeChildCard extends StatelessWidget {
 // 安全なAPIサービス実装 - エラーを適切に処理するサービス
 class SafeApiService {
   static const Duration _timeout = Duration(seconds: 10);
-  
+
   Future<Result<T>> safeApiCall<T>(
     Future<T> Function() apiCall,
     T Function(Map<String, dynamic>) fromJson,
@@ -271,7 +273,7 @@ class SafeApiService {
 // 結果型パターン
 sealed class Result<T> {
   const Result();
-  
+
   factory Result.success(T data) => Success(data);
   factory Result.failure(ApiError error) => Failure(error);
 }
@@ -303,27 +305,27 @@ class ChildContentServiceImpl implements ChildContentService {
     required this.contentFilter,
     required this.logger,
   });
-  
+
   final ApiClient apiClient;
   final ContentFilter contentFilter;
   final Logger logger;
-  
+
   @override
   Future<Result<List<SafeContent>>> getSafeContent() async {
     try {
       logger.info('安全なコンテンツを取得中...');
-      
+
       final response = await apiClient.get('/safe-content');
       final contentList = (response.data as List)
           .map((json) => SafeContent.fromJson(json))
           .toList();
-      
+
       // 追加的な安全性フィルタリング
       final filteredContent = await contentFilter.filterContent(contentList);
-      
+
       logger.info('${filteredContent.length}件の安全なコンテンツを取得');
       return Result.success(filteredContent);
-      
+
     } catch (e, stackTrace) {
       logger.error('コンテンツ取得エラー', error: e, stackTrace: stackTrace);
       return Result.failure(
@@ -340,11 +342,11 @@ class ContentRepository {
     required this.remoteDataSource,
     required this.cacheManager,
   });
-  
+
   final LocalContentDataSource localDataSource;
   final RemoteContentDataSource remoteDataSource;
   final CacheManager cacheManager;
-  
+
   Future<Result<List<SafeContent>>> getContent({
     bool forceRefresh = false,
   }) async {
@@ -355,7 +357,7 @@ class ContentRepository {
         return Result.success(cachedContent);
       }
     }
-    
+
     // リモートからデータを取得
     final remoteResult = await remoteDataSource.fetchContent();
     return remoteResult.when(
@@ -380,7 +382,7 @@ class SafeContentNotifier extends _$SafeContentNotifier {
     // 初期化時にコンテンツを読み込み
     final repository = ref.read(contentRepositoryProvider);
     final result = await repository.getContent();
-    
+
     return result.when(
       success: (content) => content,
       failure: (error) {
@@ -390,25 +392,25 @@ class SafeContentNotifier extends _$SafeContentNotifier {
       },
     );
   }
-  
+
   // コンテンツの更新
   Future<void> refreshContent() async {
     state = const AsyncLoading();
-    
+
     final repository = ref.read(contentRepositoryProvider);
     final result = await repository.getContent(forceRefresh: true);
-    
+
     state = result.when(
       success: (content) => AsyncData(content),
       failure: (error) => AsyncError(error, StackTrace.current),
     );
   }
-  
+
   // 安全でないコンテンツの報告
   Future<void> reportContent(String contentId) async {
     final service = ref.read(childContentServiceProvider);
     final result = await service.reportInappropriateContent(contentId);
-    
+
     result.when(
       success: (_) {
         // 成功時の処理（コンテンツリストから除去など）

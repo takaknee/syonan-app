@@ -43,7 +43,10 @@ class _PracticeScreenState extends State<PracticeScreen>
 
     // 問題を生成
     final mathService = context.read<MathService>();
-    _problems = mathService.generateProblems(widget.operation, widget.problemCount);
+    _problems = mathService.generateProblems(
+      widget.operation,
+      widget.problemCount,
+    );
     _userAnswers = List.filled(widget.problemCount, null);
     _isCorrect = List.filled(widget.problemCount, false);
 
@@ -83,7 +86,9 @@ class _PracticeScreenState extends State<PracticeScreen>
 
           // メインコンテンツ
           Expanded(
-            child: _isCompleted ? _buildResultView(theme) : _buildProblemView(theme),
+            child: _isCompleted
+                ? _buildResultView(theme)
+                : _buildProblemView(theme),
           ),
         ],
       ),
@@ -103,7 +108,8 @@ class _PracticeScreenState extends State<PracticeScreen>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '問題 ${_currentProblemIndex + 1} / ${widget.problemCount}',
+                '問題 ${_currentProblemIndex + 1} / '
+                '${widget.problemCount}',
                 style: theme.textTheme.bodyLarge?.copyWith(
                   color: theme.colorScheme.onPrimaryContainer,
                 ),
@@ -120,8 +126,11 @@ class _PracticeScreenState extends State<PracticeScreen>
           const SizedBox(height: 8),
           LinearProgressIndicator(
             value: progress,
-            backgroundColor: theme.colorScheme.onPrimaryContainer.withOpacity(0.3),
-            valueColor: AlwaysStoppedAnimation<Color>(theme.colorScheme.primary),
+            backgroundColor: theme.colorScheme.onPrimaryContainer
+                .withOpacity(0.3),
+            valueColor: AlwaysStoppedAnimation<Color>(
+              theme.colorScheme.primary,
+            ),
           ),
         ],
       ),
@@ -179,7 +188,9 @@ class _PracticeScreenState extends State<PracticeScreen>
                   Icon(
                     accuracy >= 0.8 ? Icons.star : Icons.thumb_up,
                     size: 64,
-                    color: accuracy >= 0.8 ? Colors.amber : theme.colorScheme.primary,
+                    color: accuracy >= 0.8
+                        ? Colors.amber
+                        : theme.colorScheme.primary,
                   ),
                   const SizedBox(height: 16),
                   Text(
@@ -276,7 +287,9 @@ class _PracticeScreenState extends State<PracticeScreen>
         setState(() {
           _currentProblemIndex++;
         });
-        _progressController.animateTo((_currentProblemIndex + 1) / widget.problemCount);
+        _progressController.animateTo(
+          (_currentProblemIndex + 1) / widget.problemCount,
+        );
       } else {
         _completePractice();
       }

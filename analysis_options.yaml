@@ -1,3 +1,4 @@
+---
 include: package:flutter_lints/flutter.yaml
 
 linter:
@@ -16,7 +17,7 @@ analyzer:
   exclude:
     - "**/*.g.dart"
     - "**/*.freezed.dart"
-  
+
   errors:
     # 致命的でないエラーを警告に変更
     invalid_annotation_target: ignore

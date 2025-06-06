@@ -1,0 +1,96 @@
+---
+# GitHub Copilot Environment Configuration
+# Comprehensive configuration for Copilot development environment
+
+name: Copilot Environment Configuration
+
+# Firewall and network configuration
+network_config:
+  # Domains that should be allowed through firewall
+  allowed_domains:
+    - dl-ssl.google.com
+    - storage.googleapis.com
+    - api.snapcraft.io
+    - esm.ubuntu.com
+
+  # Specific URLs that need access
+  allowed_urls:
+    - >-
+      https://storage.googleapis.com/download.dartlang.org/
+      linux/debian/dart_stable.list
+    - >-
+      https://storage.googleapis.com/dart-archive/channels/stable/
+      release/latest/sdk/dartsdk-linux-x64-release.zip
+    - >-
+      https://storage.googleapis.com/flutter_infra_release/
+      releases/releases_linux.json
+    - http://168.63.129.16:80/machine/
+
+  # Pattern-based URL allowlist for dynamic URLs
+  url_patterns:
+    - >-
+      https://storage.googleapis.com/flutter_infra_release/
+      flutter/*/dart-sdk-linux-x64.zip
+    - >-
+      https://storage.googleapis.com/dart-archive/
+      channels/*/release/*/sdk/*
+
+# Development tools configuration
+dev_tools:
+  flutter:
+    version: "3.x"
+    channel: "stable"
+    cache_enabled: true
+
+  dart:
+    version: "stable"
+    sdk_source: >-
+      https://storage.googleapis.com/dart-archive/channels/stable/
+      release/latest/sdk/dartsdk-linux-x64-release.zip
+
+  github_copilot:
+    features:
+      - code_generation
+      - code_review
+      - comment_generation
+    settings_path: ".vscode/settings.json"
+    instructions_path: ".github/instructions/"
+
+# Environment setup instructions
+setup_instructions:
+  pre_firewall_steps:
+    - "Configure allowed domains before firewall activation"
+    - "Download required SDKs and dependencies"
+    - "Setup package repositories"
+
+  post_setup_verification:
+    - "Verify Flutter installation"
+    - "Check Dart SDK availability"
+    - "Test GitHub Copilot functionality"
+
+# Security considerations
+security:
+  safe_domains:
+    - storage.googleapis.com  # Google's official storage for Flutter/Dart
+    - dl-ssl.google.com       # Google's secure download service
+    - api.snapcraft.io        # Canonical's Snap package manager
+    - esm.ubuntu.com          # Ubuntu Extended Security Maintenance
+
+  notes:
+    - "All URLs are official repositories for development tools"
+    - "Azure metadata service (168.63.129.16) is used by GitHub Actions runners"
+    - "No sensitive data is transmitted through these connections"
+
+# Usage guidelines
+usage:
+  github_actions:
+    workflow_file: ".github/enhanced-workflow.yml"
+    setup_steps: ".github/copilot-setup-steps.yml"
+
+  local_development:
+    firewall_config: ".github/copilot-firewall-config.yml"
+    vscode_settings: ".vscode/settings.json"
+
+  documentation:
+    context_file: ".github/copilot-context.md"
+    instructions_dir: ".github/instructions/"

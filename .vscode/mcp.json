@@ -1,14 +1,5 @@
 {
   "mcpServers": {
-    "flutter-context": {
-      "command": "node",
-      "args": [
-        "/path/to/flutter-mcp-server.js"
-      ],
-      "env": {
-        "FLUTTER_PROJECT_PATH": "${workspaceFolder}"
-      }
-    },
     "dart-analyzer": {
       "command": "dart",
       "args": [
@@ -30,7 +21,7 @@
       },
       {
         "name": "dart-docs",
-        "type": "documentation", 
+        "type": "documentation",
         "url": "https://dart.dev/guides",
         "enabled": true
       },

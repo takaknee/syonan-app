@@ -53,7 +53,9 @@ class ScoreService extends ChangeNotifier {
 
   /// 特定の操作タイプのスコア履歴を取得
   List<ScoreRecord> getScoresByOperation(MathOperationType operation) {
-    return _scores.where((score) => score.operation == operation).toList();
+    return _scores
+        .where((score) => score.operation == operation)
+        .toList();
   }
 
   /// 最新のスコアと前回のスコアを比較して改善度を取得
@@ -98,17 +100,24 @@ class ScoreService extends ChangeNotifier {
 
     if (operationScores.isEmpty) return null;
 
-    return operationScores.reduce((a, b) =>
-        a.accuracyPercentage > b.accuracyPercentage ? a : b);
+    return operationScores.reduce(
+      (a, b) => a.accuracyPercentage > b.accuracyPercentage ? a : b,
+    );
   }
 
   /// 今週の練習回数を取得
   int getWeeklyPracticeCount() {
     final now = DateTime.now();
     final weekStart = now.subtract(Duration(days: now.weekday - 1));
-    final weekStartDate = DateTime(weekStart.year, weekStart.month, weekStart.day);
+    final weekStartDate = DateTime(
+      weekStart.year,
+      weekStart.month,
+      weekStart.day,
+    );
 
-    return _scores.where((score) => score.date.isAfter(weekStartDate)).length;
+    return _scores
+        .where((score) => score.date.isAfter(weekStartDate))
+        .length;
   }
 
   /// 連続練習日数を取得
@@ -120,11 +129,18 @@ class ScoreService extends ChangeNotifier {
     var streakDays = 0;
     var checkDate = today;
 
-    final uniqueDates = _scores
-        .map((score) => DateTime(score.date.year, score.date.month, score.date.day))
-        .toSet()
-        .toList()
-      ..sort((a, b) => b.compareTo(a)); // 新しい順
+    final uniqueDates =
+        _scores
+            .map(
+              (score) => DateTime(
+                score.date.year,
+                score.date.month,
+                score.date.day,
+              ),
+            )
+            .toSet()
+            .toList()
+          ..sort((a, b) => b.compareTo(a)); // 新しい順
 
     for (final scoreDate in uniqueDates) {
       if (scoreDate.isAtSameMomentAs(checkDate)) {
@@ -146,7 +162,9 @@ class ScoreService extends ChangeNotifier {
     if (scoresJson != null) {
       final scoresList = jsonDecode(scoresJson) as List;
       _scores = scoresList
-          .map((json) => ScoreRecord.fromJson(json as Map<String, dynamic>))
+          .map(
+            (json) => ScoreRecord.fromJson(json as Map<String, dynamic>),
+          )
           .toList();
       _scores.sort((a, b) => b.date.compareTo(a.date)); // 新しい順にソート
     }
@@ -155,7 +173,9 @@ class ScoreService extends ChangeNotifier {
   /// スコアをローカルストレージに保存
   Future<void> _saveScores() async {
     final prefs = await SharedPreferences.getInstance();
-    final scoresJson = jsonEncode(_scores.map((score) => score.toJson()).toList());
+    final scoresJson = jsonEncode(
+      _scores.map((score) => score.toJson()).toList(),
+    );
     await prefs.setString(_scoresKey, scoresJson);
   }
 

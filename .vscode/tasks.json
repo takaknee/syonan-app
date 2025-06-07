@@ -1,32 +1,15 @@
 {
   "version": "2.0.0",
   "tasks": [
-    {
-      "label": "Flutter: プロジェクト初期化",
-      "type": "shell",
-      "command": "flutter",
-      "args": [
-        "create",
-        "--project-name",
-        "syonan_app",
-        "--org",
-        "com.syonan",
-        "."
-      ],
-      "group": "build",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": false,
-        "panel": "shared"
-      },
-      "problemMatcher": []
-    },
+    // === 基本開発タスク ===
     {
       "label": "Flutter: 依存関係取得",
       "type": "shell",
       "command": "flutter",
-      "args": ["pub", "get"],
+      "args": [
+        "pub",
+        "get"
+      ],
       "group": "build",
       "presentation": {
         "echo": true,
@@ -40,7 +23,9 @@
       "label": "Flutter: コード解析",
       "type": "shell",
       "command": "flutter",
-      "args": ["analyze"],
+      "args": [
+        "analyze"
+      ],
       "group": "test",
       "presentation": {
         "echo": true,
@@ -48,15 +33,15 @@
         "focus": false,
         "panel": "shared"
       },
-      "problemMatcher": [
-        "$tsc"
-      ]
+      "problemMatcher": []
     },
     {
       "label": "Flutter: テスト実行",
       "type": "shell",
       "command": "flutter",
-      "args": ["test"],
+      "args": [
+        "test"
+      ],
       "group": "test",
       "presentation": {
         "echo": true,
@@ -70,7 +55,10 @@
       "label": "Flutter: カバレッジ付きテスト",
       "type": "shell",
       "command": "flutter",
-      "args": ["test", "--coverage"],
+      "args": [
+        "test",
+        "--coverage"
+      ],
       "group": "test",
       "presentation": {
         "echo": true,
@@ -80,161 +68,70 @@
       },
       "problemMatcher": []
     },
+    // === コードフォーマット ===
     {
-      "label": "Dart: フォーマット",
+      "label": "Dart: フォーマット実行",
       "type": "shell",
       "command": "dart",
-      "args": ["format", "."],
-      "group": "build",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": false,
-        "panel": "shared"
-      },
-      "problemMatcher": []
-    },
-    {
-      "label": "Dart: フォーマット確認",
-      "type": "shell",
-      "command": "./scripts/format.sh",
-      "args": ["check"],
-      "group": "test",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": false,
-        "panel": "shared"
-      },
-      "problemMatcher": []
-    },
-    {
-      "label": "Dart: フォーマット修正",
-      "type": "shell",
-      "command": "./scripts/format.sh",
-      "args": ["fix"],
-      "group": "build",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": false,
-        "panel": "shared"
-      },
-      "problemMatcher": []
-    },
-    {
-      "label": "Flutter: ビルド（Android）",
-      "type": "shell",
-      "command": "flutter",
-      "args": ["build", "apk", "--debug"],
-      "group": "build",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": false,
-        "panel": "shared"
-      },
-      "problemMatcher": []
-    },
-    {
-      "label": "Flutter: ビルド（iOS）",
-      "type": "shell",
-      "command": "flutter",
-      "args": ["build", "ios", "--debug", "--no-codesign"],
-      "group": "build",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": false,
-        "panel": "shared"
-      },
-      "problemMatcher": [],
-      "options": {
-        "env": {
-          "FLUTTER_BUILD_MODE": "debug"
-        }
-      }
-    },
-    {
-      "label": "Copilot: ガイドライン確認",
-      "type": "shell",
-      "command": "echo",
       "args": [
-        "🤖 GitHub Copilot開発ガイドライン:\n",
-        "📖 .github/instructions/copilot-guidelines.md\n",
-        "📝 .github/prompts/flutter-prompts.md\n",
-        "🔧 .vscode/settings.json（Copilot設定）\n",
-        "💡 効果的なプロンプト作成のヒント:\n",
-        "- 具体的で明確な要件を記述\n",
-        "- 子供向けアプリの特性を考慮\n",
-        "- セキュリティとプライバシーを重視\n",
-        "- アクセシビリティ要件を含める"
+        "format",
+        "."
       ],
       "group": "build",
       "presentation": {
         "echo": true,
         "reveal": "always",
-        "focus": true,
-        "panel": "new"
+        "focus": false,
+        "panel": "shared"
       },
       "problemMatcher": []
     },
     {
-      "label": "開発環境: セットアップ確認",
+      "label": "Dart: フォーマットチェック",
       "type": "shell",
-      "command": "echo",
+      "command": "dart",
       "args": [
-        "🔍 開発環境セットアップ状況:\n",
-        "Flutter: $(flutter --version | head -1)\n",
-        "Dart: $(dart --version)\n",
-        "VS Code拡張機能: .vscode/extensions.json を確認\n",
-        "GitHub Copilot: 有効化確認が必要\n",
-        "📋 次のステップ:\n",
-        "1. GitHub Copilotサブスクリプション確認\n",
-        "2. 推奨拡張機能のインストール\n",
-        "3. Flutter SDKのパス設定\n",
-        "4. プロジェクト初期化（必要な場合）"
+        "format",
+        "--set-exit-if-changed",
+        "."
+      ],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    // === ビルドタスク ===
+    {
+      "label": "Flutter: Webビルド",
+      "type": "shell",
+      "command": "flutter",
+      "args": [
+        "build",
+        "web",
+        "--release"
       ],
       "group": "build",
       "presentation": {
         "echo": true,
         "reveal": "always",
-        "focus": true,
-        "panel": "new"
-      },
-      "problemMatcher": []
-    },
-    {
-      "label": "開発環境: 完全セットアップ",
-      "type": "shell",
-      "command": "./scripts/setup-dev.sh",
-      "group": "build",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": true,
-        "panel": "new"
-      },
-      "problemMatcher": []
-    },
-    {
-      "label": "品質保証: 全チェック（PR前推奨）",
-      "type": "shell",
-      "command": "make",
-      "args": ["qa"],
-      "group": "test",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": true,
+        "focus": false,
         "panel": "shared"
       },
       "problemMatcher": []
     },
     {
-      "label": "プリコミットフック: インストール",
+      "label": "Flutter: ビルド（Android Debug）",
       "type": "shell",
-      "command": "./scripts/install-hooks.sh",
+      "command": "flutter",
+      "args": [
+        "build",
+        "apk",
+        "--debug"
+      ],
       "group": "build",
       "presentation": {
         "echo": true,
@@ -244,29 +141,19 @@
       },
       "problemMatcher": []
     },
-    {
-      "label": "CI/CDエラー防止: フォーマットチェック",
-      "type": "shell",
-      "command": "make",
-      "args": ["format-check"],
-      "group": "test",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": false,
-        "panel": "shared"
-      },
-      "problemMatcher": []
-    },
+    // === Web開発 ===
     {
       "label": "Flutter: Webアプリ起動",
       "type": "shell",
       "command": "flutter",
       "args": [
         "run",
-        "-d", "web-server",
-        "--web-hostname", "0.0.0.0",
-        "--web-port", "9100"
+        "-d",
+        "web-server",
+        "--web-hostname",
+        "0.0.0.0",
+        "--web-port",
+        "9100"
       ],
       "group": "build",
       "isBackground": true,
@@ -275,6 +162,106 @@
         "reveal": "always",
         "focus": false,
         "panel": "dedicated"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Flutter: Webアプリ停止",
+      "type": "shell",
+      "command": "pkill",
+      "args": [
+        "-f",
+        "flutter run.*web-server"
+      ],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "システム: ポート9100解放",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-c",
+        "lsof -ti :9100 | xargs -r kill"
+      ],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    // === 品質保証（組み合わせタスク） ===
+    {
+      "label": "QA: 全チェック",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "Dart: フォーマットチェック",
+        "Flutter: コード解析",
+        "Flutter: テスト実行"
+      ],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "QA: 修正して再チェック",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "Dart: フォーマット実行",
+        "Flutter: コード解析",
+        "Flutter: テスト実行"
+      ],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "開発環境: セットアップ確認",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-c",
+        "echo '🔍 開発環境セットアップ状況:' && echo 'Flutter:' && flutter --version | head -1 && echo 'Dart:' && dart --version && echo '✅ セットアップ完了'"
+      ],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "new"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "プロジェクト: クリーン",
+      "type": "shell",
+      "command": "flutter",
+      "args": [
+        "clean"
+      ],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
       },
       "problemMatcher": []
     }

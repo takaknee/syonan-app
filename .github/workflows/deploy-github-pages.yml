@@ -1,6 +1,7 @@
+---
 name: Deploy Flutter Web to GitHub Pages
 
-on:
+"on":
   push:
     branches: [main]
   pull_request:
@@ -11,9 +12,10 @@ permissions:
   contents: read
   pages: write
   id-token: write
+  actions: read
 
 concurrency:
-  group: "pages"
+  group: "pages-${{ github.ref }}"
   cancel-in-progress: false
 
 jobs:
@@ -22,6 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       flutter_available: ${{ steps.flutter_check.outputs.flutter_available }}
+      build_successful: ${{ steps.build_status.outputs.build_successful }}
 
     steps:
       - name: Checkout
@@ -34,6 +37,7 @@ jobs:
           flutter-version: '3.x'
           cache: true
         continue-on-error: true
+        timeout-minutes: 10
 
       - name: Check Flutter availability
         id: flutter_check
@@ -50,30 +54,68 @@ jobs:
       - name: Get dependencies
         if: steps.flutter_check.outputs.flutter_available == 'true'
         run: flutter pub get
+        continue-on-error: false
+        timeout-minutes: 5
 
       - name: Analyze code
         if: steps.flutter_check.outputs.flutter_available == 'true'
         run: flutter analyze
+        continue-on-error: false
+        timeout-minutes: 10
 
       - name: Build for web
+        id: build_web
         if: steps.flutter_check.outputs.flutter_available == 'true'
         run: flutter build web --release --base-href /syonan-app/
+        continue-on-error: false
+        timeout-minutes: 15
+
+      - name: Set build status
+        id: build_status
+        run: |
+          flutter_available="${{ steps.flutter_check.outputs.flutter_available }}"
+          build_outcome="${{ steps.build_web.outcome }}"
+          if [ "$flutter_available" == "true" ] && [ "$build_outcome" == "success" ]; then
+            echo "build_successful=true" >> $GITHUB_OUTPUT
+          else
+            echo "build_successful=false" >> $GITHUB_OUTPUT
+          fi
 
       - name: Upload artifact
-        if: steps.flutter_check.outputs.flutter_available == 'true'
+        if: >-
+          steps.flutter_check.outputs.flutter_available == 'true' &&
+          steps.build_web.outcome == 'success'
         uses: actions/upload-pages-artifact@v3
         with:
           path: build/web
+        continue-on-error: false
+
+      - name: Verify build output
+        if: steps.flutter_check.outputs.flutter_available == 'true'
+        run: |
+          if [ -d "build/web" ]; then
+            echo "✓ Build output directory exists"
+            ls -la build/web/
+            if [ -f "build/web/index.html" ]; then
+              echo "✓ index.html found"
+            else
+              echo "✗ index.html not found"
+              exit 1
+            fi
+          else
+            echo "✗ Build output directory not found"
+            exit 1
+          fi
 
       - name: Skip build (due to firewall)
         if: steps.flutter_check.outputs.flutter_available == 'false'
         run: |
           echo "⚠️ Flutter build skipped due to firewall restrictions"
-          echo "To enable GitHub Pages deployment, the firewall must allow access to:"
+          echo "To enable GitHub Pages deployment, firewall must allow:"
           echo "- storage.googleapis.com (Flutter SDK downloads)"
           echo "- dl-ssl.google.com (Google services)"
           echo ""
-          echo "Please configure firewall rules or use alternative deployment method"
+          echo "Please configure firewall rules or use alternative method"
 
   deploy:
     name: Deploy to GitHub Pages
@@ -82,26 +124,45 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     needs: build
-    if: github.ref == 'refs/heads/main' && needs.build.outputs.flutter_available == 'true'
+    if: >-
+      github.ref == 'refs/heads/main' &&
+      needs.build.outputs.flutter_available == 'true' &&
+      needs.build.outputs.build_successful == 'true'
 
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
 
-  deployment-skipped:
-    name: Deployment Skipped
+  status-report:
+    name: Workflow Status Report
     runs-on: ubuntu-latest
-    needs: build
-    if: github.ref == 'refs/heads/main' && needs.build.outputs.flutter_available == 'false'
+    needs: [build]
+    if: always()
 
     steps:
-      - name: Deployment skipped notice
+      - name: Report workflow status
         run: |
-          echo "🚫 GitHub Pages deployment skipped"
-          echo "Reason: Flutter SDK not available due to firewall restrictions"
+          echo "🔍 Workflow Status Report"
+          echo "========================"
           echo ""
-          echo "To enable deployment:"
-          echo "1. Configure firewall to allow Flutter SDK downloads"
-          echo "2. Or use a different deployment strategy"
-          echo "3. Or manually build and deploy the web assets"
+          echo "Build job status: ${{ needs.build.result }}"
+          echo "Flutter available: ${{ needs.build.outputs.flutter_available }}"
+          echo "Build successful: ${{ needs.build.outputs.build_successful }}"
+          echo ""
+          if [ "${{ needs.build.result }}" == "success" ]; then
+            if [ "${{ needs.build.outputs.flutter_available }}" == "true" ]; then
+              echo "✅ Flutter build completed successfully"
+              if [ "${{ github.ref }}" == "refs/heads/main" ]; then
+                echo "🚀 GitHub Pages deployment should proceed"
+              else
+                echo "ℹ️ Deployment skipped (not main branch)"
+              fi
+            else
+              echo "⚠️ Flutter not available due to firewall restrictions"
+              echo "📋 This is expected in restricted environments"
+            fi
+          else
+            echo "❌ Build job failed"
+            echo "🔧 Check build logs for details"
+          fi

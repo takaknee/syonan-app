@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../models/math_problem.dart';
 import '../services/score_service.dart';
+import '../utils/build_info.dart';
 import '../widgets/practice_button.dart';
 import '../widgets/stat_card.dart';
 import 'practice_screen.dart';
@@ -56,6 +57,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
                     // スコア履歴ボタン
                     _buildScoreHistoryButton(theme),
+                    const SizedBox(height: 24),
+
+                    // ビルド情報
+                    _buildBuildInfo(theme),
                   ],
                 ),
               ),
@@ -206,6 +211,127 @@ class _HomeScreenState extends State<HomeScreen> {
           backgroundColor: theme.colorScheme.secondary,
           foregroundColor: theme.colorScheme.onSecondary,
         ),
+      ),
+    );
+  }
+
+  Widget _buildBuildInfo(ThemeData theme) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surfaceContainer,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: theme.colorScheme.outline.withValues(alpha: 0.2),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                Icons.info_outline,
+                size: 16,
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+              const SizedBox(width: 6),
+              Text(
+                'アプリ情報',
+                style: theme.textTheme.labelMedium?.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const Spacer(),
+              // タップで詳細表示
+              GestureDetector(
+                onTap: () => _showBuildDetails(theme),
+                child: Icon(
+                  Icons.help_outline,
+                  size: 16,
+                  color: theme.colorScheme.primary,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(
+            '最終更新: ${BuildInfo.getBuildDateTime()}',
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            'バージョン: ${BuildInfo.getBuildNumber()}',
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showBuildDetails(ThemeData theme) {
+    final buildInfo = BuildInfo.getAllInfo();
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Row(
+          children: [
+            Icon(Icons.code),
+            SizedBox(width: 8),
+            Text('詳細ビルド情報'),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildInfoRow('最終更新', buildInfo['buildDateTime']!),
+            _buildInfoRow('ビルド番号', buildInfo['buildNumber']!),
+            _buildInfoRow('コミット', buildInfo['commitHash']!),
+            const SizedBox(height: 16),
+            Text(
+              'この情報は、GitHub Pagesが正しく更新されているかを確認するために表示されています。',
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+                fontStyle: FontStyle.italic,
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('閉じる'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInfoRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            width: 80,
+            child: Text(
+              '$label:',
+              style: const TextStyle(fontWeight: FontWeight.w500),
+            ),
+          ),
+          Expanded(
+            child: SelectableText(value),
+          ),
+        ],
       ),
     );
   }

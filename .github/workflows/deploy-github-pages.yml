@@ -78,9 +78,28 @@ jobs:
         id: build_web
         if: steps.flutter_check.outputs.flutter_available == 'true'
         run: |
-          flutter build web --release --base-href /syonan-app/
+          # ビルド時刻とコミット情報を環境変数として設定
+          BUILD_TIME=$(date -u +"%Y-%m-%dT%H:%M:%S.000Z")
+          BUILD_NUMBER="build-${{ github.run_number }}"
+          COMMIT_HASH="${{ github.sha }}"
+          
+          echo "Building with:"
+          echo "  BUILD_TIME=$BUILD_TIME"
+          echo "  BUILD_NUMBER=$BUILD_NUMBER"
+          echo "  COMMIT_HASH=$COMMIT_HASH"
+          
+          flutter build web --release --base-href /syonan-app/ \
+            --dart-define=BUILD_TIME="$BUILD_TIME" \
+            --dart-define=BUILD_NUMBER="$BUILD_NUMBER" \
+            --dart-define=COMMIT_HASH="$COMMIT_HASH"
+          
           # Ensure .nojekyll file exists in build output to disable Jekyll
           touch build/web/.nojekyll
+          
+          # ビルド情報をファイルに保存（デバッグ用）
+          echo "Build completed at: $BUILD_TIME" > build/web/build-info.txt
+          echo "Build number: $BUILD_NUMBER" >> build/web/build-info.txt
+          echo "Commit: $COMMIT_HASH" >> build/web/build-info.txt
         continue-on-error: false
         timeout-minutes: 15
 

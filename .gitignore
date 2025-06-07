@@ -7,6 +7,9 @@
 .buildlog/
 .history
 
+# Build info files (generated during CI/CD)
+build-info.txt
+
 
 
 # Flutter repo-specific

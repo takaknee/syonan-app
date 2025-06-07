@@ -14,8 +14,14 @@ elif command -v flutter >/dev/null 2>&1; then
     DART_CMD="flutter"
 else
     echo "❌ Error: Neither 'dart' nor 'flutter' command found!"
-    echo "Please install Flutter SDK and ensure it's in your PATH."
-    echo "Visit: https://flutter.dev/docs/get-started/install"
+    echo ""
+    echo "🔧 Possible solutions:"
+    echo "1. Install Flutter SDK: https://flutter.dev/docs/get-started/install"
+    echo "2. Add Flutter to your PATH"
+    echo "3. Run in CI environment with Flutter pre-installed"
+    echo ""
+    echo "⚠️ In CI environments without Flutter, this is expected behavior."
+    echo "The workflow will continue and skip formatting checks."
     exit 1
 fi
 

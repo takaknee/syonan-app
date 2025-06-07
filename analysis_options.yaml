@@ -11,6 +11,13 @@ linter:
     prefer_const_constructors: true
     prefer_const_constructors_in_immutables: true
     prefer_const_literals_to_create_immutables: true
+    
+    # フォーマット関連の追加規則
+    curly_braces_in_flow_control_structures: true
+    lines_longer_than_80_chars: true
+    unnecessary_parenthesis: true
+    avoid_redundant_argument_values: true
+    directives_ordering: true
 
 analyzer:
   exclude:

@@ -87,6 +87,7 @@
 - **Flutter開発規約**: `.github/instructions/flutter-development.md`
 - **セキュリティ重視**: 子供向けアプリのプライバシー保護
 - **アクセシビリティ**: 包括的なユーザー体験の実現
+- **コードフォーマット**: `docs/formatting-guide.md`でフォーマット規則とトラブルシューティング
 
 ### 🚀 開発効率向上機能
 - **VS Codeタスク**: `.vscode/tasks.json`で一般的な操作を自動化

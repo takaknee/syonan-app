@@ -24,11 +24,15 @@ class ScoreCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Card(elevation : isBest ? 8 : 2,
-      child: Container(padding: EdgeInsets.all(isCompact ? 12  : 16),
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(12),
+    return Card(
+      elevation: isBest ? 8 : 2,
+      child: Container(
+        padding: EdgeInsets.all(isCompact ? 12 : 16),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
           gradient: isBest
-              ? LinearGradient(begin : Alignment.topLeft,
+              ? LinearGradient(
+                  begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
                     Colors.amber.withValues(alpha: 0.1),
@@ -39,21 +43,25 @@ class ScoreCard extends StatelessWidget {
         ),
         child: isCompact
             ? _buildCompactContent(theme)
-             : _buildFullContent(theme),
+            : _buildFullContent(theme),
       ),
     );
   }
 
   Widget _buildCompactContent(ThemeData theme) {
-    return Row(children: [
+    return Row(
+      children: [
         // 操作アイコン
-        Container(padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(color: _getOperationColor().withValues(alpha: 0.2),
+        Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: _getOperationColor().withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Icon(scoreRecord.operation == MathOperationType.multiplication
+          child: Icon(
+            scoreRecord.operation == MathOperationType.multiplication
                 ? Icons.close
-                 : Icons.more_horiz,
+                : Icons.more_horiz,
             color: _getOperationColor(),
             size: 20,
           ),
@@ -62,13 +70,18 @@ class ScoreCard extends StatelessWidget {
         const SizedBox(width: 12),
 
         // スコア情報
-        Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(scoreRecord.operation.displayName,
-                style: theme.textTheme.bodyMedium? .copyWith(fontWeight : FontWeight.bold,
+              Text(
+                scoreRecord.operation.displayName,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-              Text('${scoreRecord.accuracyPercentage}% '
+              Text(
+                '${scoreRecord.accuracyPercentage}% '
                 '(${scoreRecord.correctAnswers}/${scoreRecord.totalQuestions})',
                 style: theme.textTheme.bodySmall,
               ),
@@ -77,8 +90,10 @@ class ScoreCard extends StatelessWidget {
         ),
 
         // 日付
-        Text(_formatDate(scoreRecord.date),
-          style: theme.textTheme.bodySmall? .copyWith(color : theme.colorScheme.onSurface.withValues(alpha: 0.6),
+        Text(
+          _formatDate(scoreRecord.date),
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
           ),
         ),
       ],
@@ -86,7 +101,8 @@ class ScoreCard extends StatelessWidget {
   }
 
   Widget _buildFullContent(ThemeData theme) {
-    return Column(crossAxisAlignment: CrossAxisAlignment.start,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // ヘッダー行
         Row(
@@ -112,32 +128,39 @@ class ScoreCard extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    if(isBest) ...[
+                    if (isBest) ...[
                       const SizedBox(width: 8),
                       const Icon(Icons.star, color: Colors.amber, size: 20),
                     ],
                   ],
                 ),
-                Text(_formatDateTime(scoreRecord.date),
-                  style: theme.textTheme.bodySmall? .copyWith(color : theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                Text(
+                  _formatDateTime(scoreRecord.date),
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                   ),
                 ),
               ],
             ),
 
             // レベルバッジ
-            Container(padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              decoration: BoxDecoration(color: _getLevelColor(),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: _getLevelColor(),
                 borderRadius: BorderRadius.circular(16),
               ),
-              child: Row(mainAxisSize: MainAxisSize.min,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(scoreRecord.level.emoji,
                     style: const TextStyle(fontSize: 16),
                   ),
                   const SizedBox(width: 4),
-                  Text(scoreRecord.level.message,
-                    style: theme.textTheme.bodySmall? .copyWith(color : Colors.white,
+                  Text(
+                    scoreRecord.level.message,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: Colors.white,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -173,7 +196,7 @@ class ScoreCard extends StatelessWidget {
         ),
 
         // 改善度表示
-        if(showImprovement && previousScore != null) ...[
+        if (showImprovement && previousScore != null) ...[
           const SizedBox(height: 8),
           _buildImprovementIndicator(theme),
         ],
@@ -186,22 +209,28 @@ class ScoreCard extends StatelessWidget {
     String value,
     Color color,
   ) {
-    return Column(children: [
-        Text(value,
-          style: theme.textTheme.bodyLarge? .copyWith(fontWeight : FontWeight.bold,
+    return Column(
+      children: [
+        Text(
+          value,
+          style: theme.textTheme.bodyLarge?.copyWith(
+            fontWeight: FontWeight.bold,
             color: color,
           ),
         ),
-        Text(label,
-          style: theme.textTheme.bodySmall? .copyWith(color : theme.colorScheme.onSurface.withValues(alpha: 0.6),
+        Text(
+          label,
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
           ),
+        ),
         ),
       ],
     );
   }
 
   Widget _buildImprovementIndicator(ThemeData theme) {
-    if(previousScore == null) return const SizedBox.shrink();
+    if (previousScore == null) return const SizedBox.shrink();
 
     final currentPercentage = scoreRecord.accuracyPercentage;
     final previousPercentage = previousScore!.accuracyPercentage;
@@ -211,11 +240,11 @@ class ScoreCard extends StatelessWidget {
     final Color color;
     final String text;
 
-    if(difference > 0) {
+    if (difference > 0) {
       icon = Icons.arrow_upward;
       color = Colors.green;
       text = '+$difference%';
-    } else if(difference < 0) {
+    } else if (difference < 0) {
       icon = Icons.arrow_downward;
       color = Colors.red;
       text = '$difference%';
@@ -225,16 +254,21 @@ class ScoreCard extends StatelessWidget {
       text = '変化なし';
     }
 
-    return Container(padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(color: color.withValues(alpha: 0.1),
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8),
       ),
-      child: Row(mainAxisSize: MainAxisSize.min,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Icon(icon, size: 16, color: color),
           const SizedBox(width: 4),
-          Text(text,
-            style: theme.textTheme.bodySmall? .copyWith(color : color,
+          Text(
+            text,
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: color,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -263,9 +297,9 @@ class ScoreCard extends StatelessWidget {
   }
 
   Color _getAccuracyColor(int percentage) {
-    if(percentage >= 90) return Colors.green;
-    if(percentage >= 80) return Colors.blue;
-    if(percentage >= 70) return Colors.orange;
+    if (percentage >= 90) return Colors.green;
+    if (percentage >= 80) return Colors.blue;
+    if (percentage >= 70) return Colors.orange;
     return Colors.red;
   }
 
@@ -281,7 +315,7 @@ class ScoreCard extends StatelessWidget {
   String _formatDuration(Duration duration) {
     final minutes = duration.inMinutes;
     final seconds = duration.inSeconds % 60;
-    if(minutes > 0) {
+    if (minutes > 0) {
       return '$minutes分$seconds秒';
     } else {
       return '$seconds秒';

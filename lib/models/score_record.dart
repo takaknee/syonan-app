@@ -31,7 +31,7 @@ class ScoreRecord {
 
   /// 正答率を計算（0.0 〜 1.0）
   double get accuracy {
-    if(totalQuestions == 0) return 0.0;
+    if (totalQuestions == 0) return 0.0;
     return correctAnswers / totalQuestions;
   }
 
@@ -43,9 +43,9 @@ class ScoreRecord {
   /// 評価レベルを取得
   ScoreLevel get level {
     final percentage = accuracyPercentage;
-    if(percentage >= 90) return ScoreLevel.excellent;
-    if(percentage >= 80) return ScoreLevel.good;
-    if(percentage >= 70) return ScoreLevel.fair;
+    if (percentage >= 90) return ScoreLevel.excellent;
+    if (percentage >= 80) return ScoreLevel.good;
+    if (percentage >= 70) return ScoreLevel.fair;
     return ScoreLevel.needsPractice;
   }
 
@@ -63,7 +63,7 @@ class ScoreRecord {
 
   @override
   bool operator ==(Object other) {
-    if(identical(this, other)) return true;
+    if (identical(this, other)) return true;
     return other is ScoreRecord &&
         other.id == id &&
         other.date == date &&

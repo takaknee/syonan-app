@@ -60,7 +60,7 @@ class ScoreService extends ChangeNotifier {
   ScoreImprovement getImprovement(MathOperationType operation) {
     final operationScores = getScoresByOperation(operation);
 
-    if(operationScores.length < 2) {
+    if (operationScores.length < 2) {
       return ScoreImprovement.noData;
     }
 
@@ -70,9 +70,9 @@ class ScoreService extends ChangeNotifier {
     final latestPercentage = latest.accuracyPercentage;
     final previousPercentage = previous.accuracyPercentage;
 
-    if(latestPercentage > previousPercentage) {
+    if (latestPercentage > previousPercentage) {
       return ScoreImprovement.improved;
-    } else if(latestPercentage == previousPercentage) {
+    } else if (latestPercentage == previousPercentage) {
       return ScoreImprovement.same;
     } else {
       return ScoreImprovement.declined;

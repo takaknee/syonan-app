@@ -72,7 +72,7 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen> with SingleTick
     final bestScore = scoreService.getBestScore(operation);
     final averageScore = scoreService.getAverageScore(operation);
 
-    if(scores.isEmpty) {
+    if (scores.isEmpty) {
       return _buildEmptyState(operation);
     }
 
@@ -118,7 +118,7 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen> with SingleTick
     final divisionScores = scoreService.getScoresByOperation(MathOperationType.division,
     );
 
-    if(allScores.isEmpty) {
+    if (allScores.isEmpty) {
       return _buildEmptyState(null);
     }
 

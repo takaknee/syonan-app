@@ -60,7 +60,7 @@ class MathService {
       final problemKey = '${problem.firstNumber}_${problem.secondNumber}'
           '_${problem.operation.name}';
 
-      if(!usedProblems.contains(problemKey)) {
+      if (!usedProblems.contains(problemKey)) {
         problems.add(problem);
         usedProblems.add(problemKey);
       }

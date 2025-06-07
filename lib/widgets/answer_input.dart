@@ -124,18 +124,18 @@ class _AnswerInputState extends State<AnswerInput> {
 
   void _submitAnswer() {
     final text = _controller.text.trim();
-    if(text.isEmpty) {
+    if (text.isEmpty) {
       _showError('答えを入力してください');
       return;
     }
 
     final answer = int.tryParse(text);
-    if(answer == null) {
+    if (answer == null) {
       _showError('正しい数字を入力してください');
       return;
     }
 
-    if(answer < 0) {
+    if (answer < 0) {
       _showError('正の数を入力してください');
       return;
     }

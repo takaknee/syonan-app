@@ -147,7 +147,7 @@ class _PracticeScreenState extends State<PracticeScreen> with TickerProviderStat
           const SizedBox(height: 24),
 
           // ヒントボタン（必要に応じて）
-          if(_shouldShowHint()) _buildHintButton(theme, currentProblem),
+          if (_shouldShowHint()) _buildHintButton(theme, currentProblem),
         ],
       ),
     );
@@ -248,7 +248,7 @@ class _PracticeScreenState extends State<PracticeScreen> with TickerProviderStat
 
     // 次の問題に進むか完了する
     Future.delayed(const Duration(milliseconds: 1500), () {
-      if(_currentProblemIndex < widget.problemCount - 1) {
+      if (_currentProblemIndex < widget.problemCount - 1) {
         setState(() {
           _currentProblemIndex++;
         });
@@ -279,7 +279,7 @@ class _PracticeScreenState extends State<PracticeScreen> with TickerProviderStat
   void _showHint(MathProblem problem) {
     String hint = '';
 
-    if(problem.operation == MathOperationType.multiplication) {
+    if (problem.operation == MathOperationType.multiplication) {
       hint = '${problem.firstNumber}を${problem.secondNumber}回足してみましょう';
     } else {
       hint = '${problem.firstNumber}を${problem.secondNumber}個に分けてみましょう';
@@ -319,9 +319,9 @@ class _PracticeScreenState extends State<PracticeScreen> with TickerProviderStat
 
     // 改善度をチェックして励ましのメッセージを表示
     final improvement = scoreService.getImprovement(widget.operation);
-    if(improvement == ScoreImprovement.improved) {
+    if (improvement == ScoreImprovement.improved) {
       Future.delayed(const Duration(milliseconds: 500), () {
-        if(mounted) {
+        if (mounted) {
           showDialog(context: context,
             builder: (context) => EncouragementDialog(scoreRecord: scoreRecord,
               improvement: improvement,

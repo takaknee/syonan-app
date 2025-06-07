@@ -132,9 +132,9 @@ class EncouragementDialog extends StatelessWidget {
   }
 
   Color _getColorForScore(int percentage) {
-    if(percentage >= 90) return Colors.green;
-    if(percentage >= 80) return Colors.blue;
-    if(percentage >= 70) return Colors.orange;
+    if (percentage >= 90) return Colors.green;
+    if (percentage >= 80) return Colors.blue;
+    if (percentage >= 70) return Colors.orange;
     return Colors.red;
   }
 }

@@ -8,7 +8,7 @@ class TimeFormatter {
     final minutes = duration.inMinutes;
     final seconds = duration.inSeconds % 60;
 
-    if(minutes > 0) {
+    if (minutes > 0) {
       return '$minutes分$seconds秒';
     } else {
       return '$seconds秒';
@@ -50,16 +50,16 @@ class TimeFormatter {
     final now = DateTime.now();
     final difference = now.difference(date);
 
-    if(difference.inDays == 0) {
+    if (difference.inDays == 0) {
       return '今日';
-    } else if(difference.inDays == 1) {
+    } else if (difference.inDays == 1) {
       return '昨日';
-    } else if(difference.inDays < 7) {
+    } else if (difference.inDays < 7) {
       return '${difference.inDays}日前';
-    } else if(difference.inDays < 30) {
+    } else if (difference.inDays < 30) {
       final weeks = (difference.inDays / 7).floor();
       return '$weeks週間前';
-    } else if(difference.inDays < 365) {
+    } else if (difference.inDays < 365) {
       final months = (difference.inDays / 30).floor();
       return '$monthsヶ月前';
     } else {

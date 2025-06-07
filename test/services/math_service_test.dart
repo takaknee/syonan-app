@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:syonan_app / services/math_service.dart';
-import 'package:syonan_app / models/math_problem.dart';
+import 'package:syonan_app/services/math_service.dart';
+import 'package:syonan_app/models/math_problem.dart';
 
 void main() {
   group('MathService', () {
@@ -12,7 +12,7 @@ void main() {
 
     group('generateMultiplicationProblem', () {
       test('should generate valid multiplication problems', () {
-        for(int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10; i++) {
           final problem = mathService.generateMultiplicationProblem();
 
           expect(problem.operation, MathOperationType.multiplication);
@@ -29,7 +29,7 @@ void main() {
 
     group('generateDivisionProblem', () {
       test('should generate valid division problems', () {
-        for(int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10; i++) {
           final problem = mathService.generateDivisionProblem();
 
           expect(problem.operation, MathOperationType.division);
@@ -67,7 +67,7 @@ void main() {
         );
 
         expect(problems.length, 5);
-        for(final problem in problems) {
+        for (final problem in problems) {
           expect(problem.operation, MathOperationType.multiplication);
         }
       });
@@ -109,7 +109,7 @@ void main() {
 
     group('generateProblemWithDifficulty', () {
       test('should generate easier problems for level 1', () {
-        for(int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10; i++) {
           final problem = mathService.generateProblemWithDifficulty(MathOperationType.multiplication,
             1,
           );
@@ -122,7 +122,7 @@ void main() {
       });
 
       test('should generate normal problems for level 2', () {
-        for(int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10; i++) {
           final problem = mathService.generateProblemWithDifficulty(MathOperationType.multiplication,
             2,
           );
@@ -135,7 +135,7 @@ void main() {
       });
 
       test('should generate harder problems for level 3', () {
-        for(int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10; i++) {
           final problem = mathService.generateProblemWithDifficulty(MathOperationType.multiplication,
             3,
           );

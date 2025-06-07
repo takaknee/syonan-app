@@ -14,8 +14,8 @@ permissions:
   actions: read
 
 concurrency:
-  group: "pages-${{ github.ref }}"
-  cancel-in-progress: false
+  group: "flutter-pages-${{ github.ref }}"
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -77,7 +77,10 @@ jobs:
       - name: Build for web
         id: build_web
         if: steps.flutter_check.outputs.flutter_available == 'true'
-        run: flutter build web --release --base-href /syonan-app/
+        run: |
+          flutter build web --release --base-href /syonan-app/
+          # Ensure .nojekyll file exists in build output to disable Jekyll
+          touch build/web/.nojekyll
         continue-on-error: false
         timeout-minutes: 15
 

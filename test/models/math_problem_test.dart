@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:syonan_app / models/math_problem.dart';
+import 'package:syonan_app/models/math_problem.dart';
 
 void main() {
   group('MathProblem', () {

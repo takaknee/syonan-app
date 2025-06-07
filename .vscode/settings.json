@@ -39,7 +39,11 @@
   },
   "github.copilot.chat.followUps": "always",
   "github.copilot.chat.localeOverride": "ja",
-  "github.copilot.inlineSuggest.enable": true,
+  "github.copilot.nextEditSuggestions.enabled": true,
+  "github.copilot.nextEditSuggestions.fixes": true,
+  "github.copilot.chat.agent.autoFix": true,
+  "github.copilot.chat.codesearch.enabled": true,
+  "github.copilot.chat.search.keywordSuggestions": true,
   "files.associations": {
     "*.dart": "dart"
   },

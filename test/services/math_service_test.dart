@@ -91,8 +91,10 @@ void main() {
         expect(problemStrings.length, problems.length);
       });
 
-      test('should handle requests for more problems than possible unique '
-          'combinations', () {
+      test(
+        'should handle requests for more problems than possible unique '
+        'combinations',
+        () {
         // 81通りの九九があるので、100個要求しても81個以下になる
         final problems = mathService.generateProblems(
           MathOperationType.multiplication,

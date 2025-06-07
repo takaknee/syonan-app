@@ -1,27 +1,36 @@
 # Makefile for syonan-app development tasks
 # Provides convenient commands for common development operations
 
-.PHONY: help format format-check lint test build clean setup
+.PHONY: help format format-check lint test build clean setup setup-quick qa
 
 # Default target
 help:
 	@echo "🔧 Syonan App - Development Commands"
 	@echo "=================================="
 	@echo ""
-	@echo "Available commands:"
+	@echo "Setup commands:"
+	@echo "  setup         Complete development environment setup (recommended)"
+	@echo "  setup-quick   Quick setup (dependencies only)"
+	@echo ""
+	@echo "Quality assurance:"
+	@echo "  qa            Run all quality checks (format + lint + test)"
 	@echo "  format        Format all Dart code"
 	@echo "  format-check  Check if code needs formatting"
 	@echo "  lint          Run Dart/Flutter analysis"
+	@echo ""
+	@echo "Development:"
 	@echo "  test          Run all tests"
 	@echo "  build         Build the app (web)"
 	@echo "  clean         Clean build artifacts"
-	@echo "  setup         Set up development environment"
 	@echo "  help          Show this help message"
 	@echo ""
+	@echo "🚨 Before creating PRs:"
+	@echo "  make qa       # Prevents CI/CD formatting errors"
+	@echo ""
 	@echo "Examples:"
-	@echo "  make format       # Format all code"
-	@echo "  make lint         # Check code quality"
-	@echo "  make test         # Run tests"
+	@echo "  make setup        # Initial setup with pre-commit hooks"
+	@echo "  make qa           # Check code quality before PR"
+	@echo "  make format       # Fix formatting issues"
 
 # Formatting commands
 format:
@@ -90,10 +99,18 @@ clean:
 # Development setup
 setup:
 	@echo "⚙️ Setting up development environment..."
+	@./scripts/setup-dev.sh
+
+# Quick setup (just dependencies)
+setup-quick:
+	@echo "⚙️ Quick setup - installing dependencies only..."
 	@if command -v flutter >/dev/null 2>&1; then \
 		flutter doctor; \
 		flutter pub get; \
-		echo "✅ Setup completed!"; \
+		echo "✅ Quick setup completed!"; \
+		echo ""; \
+		echo "💡 For full setup including pre-commit hooks, run:"; \
+		echo "  make setup"; \
 	else \
 		echo "❌ Error: Flutter command not found!"; \
 		echo "Please install Flutter SDK first:"; \

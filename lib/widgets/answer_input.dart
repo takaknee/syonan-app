@@ -52,7 +52,7 @@ class _AnswerInputState extends State<AnswerInput> {
               border: Border.all(color: theme.colorScheme.outline, width: 2),
               boxShadow: [
                 BoxShadow(
-                  color: theme.colorScheme.shadow.withOpacity(0.1),
+                  color: theme.colorScheme.shadow.withValues(alpha: 0.1),
                   blurRadius: 8,
                   offset: const Offset(0, 2),
                 ),
@@ -77,7 +77,7 @@ class _AnswerInputState extends State<AnswerInput> {
                 hintStyle: theme.textTheme.headlineLarge?.copyWith(
                   fontSize: 36,
                   fontWeight: FontWeight.bold,
-                  color: theme.colorScheme.onSurface.withOpacity(0.3),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
                 ),
                 border: InputBorder.none,
                 contentPadding: const EdgeInsets.symmetric(
@@ -132,7 +132,7 @@ class _AnswerInputState extends State<AnswerInput> {
           Text(
             '数字を入力して「こたえる」を押してください',
             style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.onSurface.withOpacity(0.6),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
             ),
             textAlign: TextAlign.center,
           ),

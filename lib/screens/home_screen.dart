@@ -76,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
         Text(
           '今日も楽しく勉強しましょう！',
           style: theme.textTheme.bodyLarge?.copyWith(
-            color: theme.colorScheme.onSurface.withOpacity(0.7),
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
           ),
         ),
       ],

@@ -35,8 +35,8 @@ class ScoreCard extends StatelessWidget {
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                    Colors.amber.withOpacity(0.1),
-                    Colors.amber.withOpacity(0.05),
+                    Colors.amber.withValues(alpha: 0.1),
+                    Colors.amber.withValues(alpha: 0.05),
                   ],
                 )
               : null,
@@ -55,7 +55,7 @@ class ScoreCard extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: _getOperationColor().withOpacity(0.2),
+            color: _getOperationColor().withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Icon(
@@ -93,7 +93,7 @@ class ScoreCard extends StatelessWidget {
         Text(
           _formatDate(scoreRecord.date),
           style: theme.textTheme.bodySmall?.copyWith(
-            color: theme.colorScheme.onSurface.withOpacity(0.6),
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
           ),
         ),
       ],
@@ -137,7 +137,7 @@ class ScoreCard extends StatelessWidget {
                 Text(
                   _formatDateTime(scoreRecord.date),
                   style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.colorScheme.onSurface.withOpacity(0.6),
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                   ),
                 ),
               ],
@@ -230,7 +230,7 @@ class ScoreCard extends StatelessWidget {
         Text(
           label,
           style: theme.textTheme.bodySmall?.copyWith(
-            color: theme.colorScheme.onSurface.withOpacity(0.6),
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
           ),
         ),
       ],
@@ -265,7 +265,7 @@ class ScoreCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(

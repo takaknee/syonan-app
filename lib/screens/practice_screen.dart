@@ -320,10 +320,19 @@ class _PracticeScreenState extends State<PracticeScreen>
   void _showHint(MathProblem problem) {
     String hint = '';
 
-    if (problem.operation == MathOperationType.multiplication) {
-      hint = '${problem.firstNumber}を${problem.secondNumber}回足してみましょう';
-    } else {
-      hint = '${problem.firstNumber}を${problem.secondNumber}個に分けてみましょう';
+    switch (problem.operation) {
+      case MathOperationType.multiplication:
+        hint = '${problem.firstNumber}を${problem.secondNumber}回足してみましょう';
+        break;
+      case MathOperationType.division:
+        hint = '${problem.firstNumber}を${problem.secondNumber}個に分けてみましょう';
+        break;
+      case MathOperationType.addition:
+        hint = '${problem.firstNumber}に${problem.secondNumber}を足してみましょう';
+        break;
+      case MathOperationType.subtraction:
+        hint = '${problem.firstNumber}から${problem.secondNumber}を引いてみましょう';
+        break;
     }
 
     showDialog(

@@ -21,6 +21,71 @@ class ProblemCard extends StatelessWidget {
     }
   }
 
+  /// 視覚的補助が必要かどうかを判定
+  bool _shouldShowVisualAid(MathProblem problem) {
+    // 小さい数（10以下）の足し算と引き算のみ視覚的補助を表示
+    return (problem.operation == MathOperationType.addition ||
+            problem.operation == MathOperationType.subtraction) &&
+        problem.firstNumber <= 10 &&
+        problem.secondNumber <= 10;
+  }
+
+  /// 視覚的補助を構築
+  Widget _buildVisualAid(MathProblem problem, ThemeData theme) {
+    const String itemEmoji = '🟦'; // 青い四角を使用
+    
+    List<Widget> visual = [];
+
+    if (problem.operation == MathOperationType.addition) {
+      // 足し算の視覚的表現
+      visual.add(
+        Text(
+          itemEmoji * problem.firstNumber,
+          style: const TextStyle(fontSize: 16),
+        ),
+      );
+      visual.add(
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: Text(
+            '+',
+            style: theme.textTheme.bodyLarge?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: theme.colorScheme.primary,
+            ),
+          ),
+        ),
+      );
+      visual.add(
+        Text(
+          itemEmoji * problem.secondNumber,
+          style: const TextStyle(fontSize: 16),
+        ),
+      );
+    } else if (problem.operation == MathOperationType.subtraction) {
+      // 引き算の視覚的表現
+      final remaining = problem.firstNumber - problem.secondNumber;
+      visual.add(
+        Text(
+          itemEmoji * remaining + '❌' * problem.secondNumber,
+          style: const TextStyle(fontSize: 16),
+        ),
+      );
+    }
+
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface.withValues(alpha: 0.5),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: visual,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -140,6 +205,15 @@ class ProblemCard extends StatelessWidget {
                 ),
               ],
             ),
+
+            // Visual aid for small numbers
+            if (_shouldShowVisualAid(problem))
+              Column(
+                children: [
+                  const SizedBox(height: 24),
+                  _buildVisualAid(problem, theme),
+                ],
+              ),
           ],
         ),
       ),

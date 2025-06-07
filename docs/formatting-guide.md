@@ -32,7 +32,23 @@
 # またはキーボードショートカット: Shift+Alt+F
 ```
 
-### 2. スクリプト実行
+### 2. Makeコマンド（簡単）
+
+```bash
+# フォーマット確認
+make format-check
+
+# フォーマット修正
+make format
+
+# コード解析も実行
+make lint
+
+# すべての品質チェック
+make qa
+```
+
+### 3. スクリプト実行
 
 ```bash
 # フォーマット確認
@@ -42,7 +58,7 @@
 ./scripts/format.sh fix
 ```
 
-### 3. 手動実行
+### 4. 手動実行
 
 ```bash
 # 全ファイルフォーマット
@@ -55,7 +71,7 @@ dart format lib/main.dart
 dart format --dry-run .
 ```
 
-### 4. VS Codeタスク
+### 5. VS Codeタスク
 
 1. `Ctrl+Shift+P` でコマンドパレットを開く
 2. "Tasks: Run Task" を選択
@@ -141,14 +157,22 @@ linter:
 将来的にプリコミットフックを追加する場合：
 
 ```bash
-# .git/hooks/pre-commit
-#!/bin/bash
-./scripts/format.sh check
-if [ $? -ne 0 ]; then
-    echo "フォーマットエラーが検出されました。"
-    echo "./scripts/format.sh fix を実行してください。"
-    exit 1
-fi
+# プリコミットフックのインストール
+./scripts/install-hooks.sh
+
+# 手動でインストールする場合
+cp .githooks/pre-commit .git/hooks/pre-commit
+chmod +x .git/hooks/pre-commit
+```
+
+インストール後、コミット時に自動でフォーマットチェックが実行されます：
+
+```bash
+git commit -m "Update feature"
+# 🔍 Pre-commit checks...
+# 🎨 Checking code formatting...
+# ✅ Code formatting check passed!
+# ✅ Pre-commit checks completed!
 ```
 
 ## 🆘 トラブルシューティング
@@ -187,3 +211,5 @@ dart format .
 - `.vscode/settings.json` - VS Code設定
 - `analysis_options.yaml` - 解析設定
 - `scripts/format.sh` - フォーマッティングスクリプト
+- `Makefile` - 開発コマンド集
+- `.githooks/pre-commit` - プリコミットフック template

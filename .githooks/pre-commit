@@ -1,0 +1,41 @@
+#!/bin/bash
+# Pre-commit hook for syonan-app
+# This hook checks code formatting before allowing commits
+
+echo "🔍 Pre-commit checks..."
+
+# Check if format script exists
+if [ ! -f "./scripts/format.sh" ]; then
+    echo "❌ Format script not found: ./scripts/format.sh"
+    exit 1
+fi
+
+# Check code formatting
+echo "🎨 Checking code formatting..."
+if ! ./scripts/format.sh check >/dev/null 2>&1; then
+    echo "❌ Code formatting check failed!"
+    echo ""
+    echo "Please run one of the following to fix formatting:"
+    echo "  make format"
+    echo "  ./scripts/format.sh fix"
+    echo "  dart format ."
+    echo ""
+    echo "Then commit again."
+    exit 1
+fi
+
+echo "✅ Code formatting check passed!"
+
+# Optional: Run linter
+if command -v flutter >/dev/null 2>&1; then
+    echo "🔍 Running code analysis..."
+    if ! flutter analyze --no-fatal-infos >/dev/null 2>&1; then
+        echo "⚠️ Code analysis found issues (not blocking commit)"
+        echo "Consider running: flutter analyze"
+    else
+        echo "✅ Code analysis passed!"
+    fi
+fi
+
+echo "✅ Pre-commit checks completed!"
+exit 0

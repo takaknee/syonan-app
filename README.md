@@ -68,8 +68,17 @@
 ### 始め方
 1. リポジトリをクローンする
 2. VS Codeで開く - 推奨拡張機能のインストールを促されます
-3. `flutter pub get`を実行して依存関係をインストールする
+3. `flutter pub get`を実行して依存関係をインストールする（または `make setup`）
 4. 設定済みのlaunch configurationを使ってデバッグする
+
+### 開発コマンド
+```bash
+make help       # 利用可能なコマンドを表示
+make format     # コードフォーマット
+make lint       # コード解析
+make test       # テスト実行
+make build      # Webアプリビルド
+```
 
 ## GitHub Copilot効率化機能
 

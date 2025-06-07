@@ -138,8 +138,8 @@ class ScoreService extends ChangeNotifier {
           ),
         )
         .toSet()
-        .toList();
-    uniqueDates.sort((a, b) => b.compareTo(a)); // 新しい順
+        .toList()
+      ..sort((a, b) => b.compareTo(a)); // 新しい順
 
     for (final scoreDate in uniqueDates) {
       if (scoreDate.isAtSameMomentAs(checkDate)) {

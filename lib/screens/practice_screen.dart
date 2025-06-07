@@ -126,8 +126,8 @@ class _PracticeScreenState extends State<PracticeScreen>
           const SizedBox(height: 8),
           LinearProgressIndicator(
             value: progress,
-            backgroundColor:
-                theme.colorScheme.onPrimaryContainer.withValues(alpha: 0.3),
+            backgroundColor: theme.colorScheme.onPrimaryContainer
+                .withValues(alpha: 0.3),
             valueColor: AlwaysStoppedAnimation<Color>(
               theme.colorScheme.primary,
             ),

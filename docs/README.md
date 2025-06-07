@@ -7,6 +7,7 @@
 
 ### 開発者・管理者向け
 - **[GitHub Pages セットアップ手順](setup-github-pages.md)** - リポジトリオーナー向け初期設定手順
+- **[GitHub Actions ファイアウォール設定](github-actions-firewall.md)** - CI/CDワークフローのファイアウォール問題と解決方法
 - **[メインREADME](../README.md)** - プロジェクト概要と開発環境設定
 - **[GitHub Copilot設定](../.github/)** - 開発効率化のための設定とガイドライン
 

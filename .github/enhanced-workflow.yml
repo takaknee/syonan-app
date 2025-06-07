@@ -1,4 +1,3 @@
----
 # GitHub Actions Enhanced Workflow with Firewall Configuration
 # Addresses firewall blocking issues for Flutter/Dart development
 
@@ -44,6 +43,8 @@ jobs:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           cache: true
           cache-key: flutter-${{ env.FLUTTER_VERSION }}
+        continue-on-error: true
+        timeout-minutes: 10
 
       - name: Verify Flutter installation
         run: |
@@ -66,6 +67,8 @@ jobs:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           cache: true
           cache-key: flutter-${{ env.FLUTTER_VERSION }}
+        continue-on-error: true
+        timeout-minutes: 10
 
       - name: Get dependencies
         run: |
@@ -74,6 +77,8 @@ jobs:
           else
             echo "pubspec.yaml not found. Flutter project not initialized."
           fi
+        continue-on-error: false
+        timeout-minutes: 5
 
       - name: Analyze code
         run: |
@@ -82,6 +87,8 @@ jobs:
           else
             echo "Skipping Dart analysis."
           fi
+        continue-on-error: false
+        timeout-minutes: 10
 
       - name: Check formatting
         run: |
@@ -90,6 +97,8 @@ jobs:
           else
             echo "Skipping format check."
           fi
+        continue-on-error: false
+        timeout-minutes: 5
 
   test-execution:
     name: Run Tests
@@ -107,9 +116,13 @@ jobs:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           cache: true
           cache-key: flutter-${{ env.FLUTTER_VERSION }}
+        continue-on-error: true
+        timeout-minutes: 10
 
       - name: Get dependencies
         run: flutter pub get
+        continue-on-error: false
+        timeout-minutes: 5
 
       - name: Run tests
         run: |
@@ -118,6 +131,8 @@ jobs:
           else
             echo "No tests found. Skipping test execution."
           fi
+        continue-on-error: false
+        timeout-minutes: 15
 
   copilot-suggestions:
     name: Copilot Development Suggestions

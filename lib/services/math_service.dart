@@ -14,7 +14,8 @@ class MathService {
     final secondNumber = _random.nextInt(9) + 1; // 1 - 9
     final answer = firstNumber * secondNumber;
 
-    return MathProblem(firstNumber: firstNumber,
+    return MathProblem(
+      firstNumber: firstNumber,
       secondNumber: secondNumber,
       operation: MathOperationType.multiplication,
       correctAnswer: answer,
@@ -29,7 +30,8 @@ class MathService {
     final quotient = _random.nextInt(9) + 1; // 1 - 9（商）
     final dividend = divisor * quotient; // 割られる数
 
-    return MathProblem(firstNumber: dividend,
+    return MathProblem(
+      firstNumber: dividend,
       secondNumber: divisor,
       operation: MathOperationType.division,
       correctAnswer: quotient,
@@ -38,7 +40,7 @@ class MathService {
 
   /// 指定された操作タイプの問題を生成
   MathProblem generateProblem(MathOperationType operation) {
-    switch(operation) {
+    switch (operation) {
       case MathOperationType.multiplication:
         return generateMultiplicationProblem();
       case MathOperationType.division:
@@ -47,14 +49,15 @@ class MathService {
   }
 
   /// 複数の問題を生成
-  List<MathProblem> generateProblems(MathOperationType operation,
+  List<MathProblem> generateProblems(
+    MathOperationType operation,
     int count,
   ) {
     final problems = <MathProblem>[];
     final usedProblems = <String>{};
 
     // 同じ問題が重複しないようにする
-    while(problems.length < count &&
+    while (problems.length < count &&
         usedProblems.length < _getMaxUniqueProblems(operation)) {
       final problem = generateProblem(operation);
       final problemKey = '${problem.firstNumber}_${problem.secondNumber}'
@@ -71,7 +74,7 @@ class MathService {
 
   /// 操作タイプごとの最大ユニーク問題数を取得
   int _getMaxUniqueProblems(MathOperationType operation) {
-    switch(operation) {
+    switch (operation) {
       case MathOperationType.multiplication:
         return 81; // 9 × 9 = 81通り
       case MathOperationType.division:
@@ -81,21 +84,23 @@ class MathService {
 
   /// 問題の難易度を調整（将来の拡張用）
   /// [level] 1: 簡単（1 - 5の範囲）, 2: 普通（1 - 9の範囲）, 3: 難しい（1 - 12の範囲）
-  MathProblem generateProblemWithDifficulty(MathOperationType operation,
+  MathProblem generateProblemWithDifficulty(
+    MathOperationType operation,
     int level,
   ) {
-    final maxNumber = switch(level) {
+    final maxNumber = switch (level) {
       1 => 5, // 簡単
       2 => 9, // 普通（デフォルト）
       3 => 12, // 難しい
       _ => 9, // デフォルト
     };
 
-    switch(operation) {
+    switch (operation) {
       case MathOperationType.multiplication:
         final firstNumber = _random.nextInt(maxNumber) + 1;
         final secondNumber = _random.nextInt(maxNumber) + 1;
-        return MathProblem(firstNumber: firstNumber,
+        return MathProblem(
+          firstNumber: firstNumber,
           secondNumber: secondNumber,
           operation: MathOperationType.multiplication,
           correctAnswer: firstNumber * secondNumber,
@@ -105,7 +110,8 @@ class MathService {
         final divisor = _random.nextInt(maxNumber) + 1;
         final quotient = _random.nextInt(maxNumber) + 1;
         final dividend = divisor * quotient;
-        return MathProblem(firstNumber: dividend,
+        return MathProblem(
+          firstNumber: dividend,
           secondNumber: divisor,
           operation: MathOperationType.division,
           correctAnswer: quotient,

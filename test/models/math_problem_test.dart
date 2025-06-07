@@ -4,7 +4,8 @@ import 'package:syonan_app / models/math_problem.dart';
 void main() {
   group('MathProblem', () {
     test('should create multiplication problem correctly', () {
-      const problem = MathProblem(firstNumber: 3,
+      const problem = MathProblem(
+        firstNumber: 3,
         secondNumber: 4,
         operation: MathOperationType.multiplication,
         correctAnswer: 12,
@@ -18,7 +19,8 @@ void main() {
     });
 
     test('should create division problem correctly', () {
-      const problem = MathProblem(firstNumber : 12,
+      const problem = MathProblem(
+        firstNumber: 12,
         secondNumber: 3,
         operation: MathOperationType.division,
         correctAnswer: 4,
@@ -32,7 +34,8 @@ void main() {
     });
 
     test('should validate correct answer', () {
-      const problem = MathProblem(firstNumber : 5,
+      const problem = MathProblem(
+        firstNumber: 5,
         secondNumber: 6,
         operation: MathOperationType.multiplication,
         correctAnswer: 30,
@@ -44,7 +47,8 @@ void main() {
     });
 
     test('should convert to and from JSON', () {
-      const originalProblem = MathProblem(firstNumber: 7,
+      const originalProblem = MathProblem(
+        firstNumber: 7,
         secondNumber: 8,
         operation: MathOperationType.multiplication,
         correctAnswer: 56,
@@ -60,19 +64,22 @@ void main() {
     });
 
     test('should implement equality correctly', () {
-      const problem1 = MathProblem(firstNumber: 2,
+      const problem1 = MathProblem(
+        firstNumber: 2,
         secondNumber: 3,
         operation: MathOperationType.multiplication,
         correctAnswer: 6,
       );
 
-      const problem2 = MathProblem(firstNumber: 2,
+      const problem2 = MathProblem(
+        firstNumber: 2,
         secondNumber: 3,
         operation: MathOperationType.multiplication,
         correctAnswer: 6,
       );
 
-      const problem3 = MathProblem(firstNumber: 2,
+      const problem3 = MathProblem(
+        firstNumber: 2,
         secondNumber: 4,
         operation: MathOperationType.multiplication,
         correctAnswer: 8,

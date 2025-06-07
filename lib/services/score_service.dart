@@ -28,7 +28,7 @@ class ScoreService extends ChangeNotifier {
     try {
       await _loadScores();
       await _loadLastScore();
-    } catch(e) {
+    } catch (e) {
       debugPrint('スコアの初期化に失敗しました : $e');
     } finally {
       _isLoading = false;
@@ -47,7 +47,7 @@ class ScoreService extends ChangeNotifier {
 
       _lastScore = score;
       notifyListeners();
-    } catch(e) {
+    } catch (e) {
       debugPrint('スコアの保存に失敗しました: $e');
       rethrow;
     }
@@ -85,11 +85,10 @@ class ScoreService extends ChangeNotifier {
   double getAverageScore(MathOperationType operation) {
     final operationScores = getScoresByOperation(operation);
 
-    if(operationScores.isEmpty) return 0.0;
+    if (operationScores.isEmpty) return 0.0;
 
-    final totalAccuracy = operationScores
-        .map((score) => score.accuracy)
-        .reduce((a, b) => a + b);
+    final totalAccuracy =
+        operationScores.map((score) => score.accuracy).reduce((a, b) => a + b);
 
     return totalAccuracy / operationScores.length;
   }
@@ -98,9 +97,10 @@ class ScoreService extends ChangeNotifier {
   ScoreRecord? getBestScore(MathOperationType operation) {
     final operationScores = getScoresByOperation(operation);
 
-    if(operationScores.isEmpty) return null;
+    if (operationScores.isEmpty) return null;
 
-    return operationScores.reduce((a, b) => a.accuracyPercentage > b.accuracyPercentage ? a  : b,
+    return operationScores.reduce(
+      (a, b) => a.accuracyPercentage > b.accuracyPercentage ? a : b,
     );
   }
 
@@ -108,19 +108,18 @@ class ScoreService extends ChangeNotifier {
   int getWeeklyPracticeCount() {
     final now = DateTime.now();
     final weekStart = now.subtract(Duration(days: now.weekday - 1));
-    final weekStartDate = DateTime(weekStart.year,
+    final weekStartDate = DateTime(
+      weekStart.year,
       weekStart.month,
       weekStart.day,
     );
 
-    return _scores
-        .where((score) => score.date.isAfter(weekStartDate))
-        .length;
+    return _scores.where((score) => score.date.isAfter(weekStartDate)).length;
   }
 
   /// 連続練習日数を取得
   int getStreakDays() {
-    if(_scores.isEmpty) return 0;
+    if (_scores.isEmpty) return 0;
 
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
@@ -128,7 +127,9 @@ class ScoreService extends ChangeNotifier {
     var checkDate = today;
 
     final uniqueDates = _scores
-        .map((score) => DateTime(score.date.year,
+        .map(
+          (score) => DateTime(
+            score.date.year,
             score.date.month,
             score.date.day,
           ),
@@ -137,8 +138,8 @@ class ScoreService extends ChangeNotifier {
         .toList()
       ..sort((a, b) => b.compareTo(a)); // 新しい順
 
-    for(final scoreDate in uniqueDates) {
-      if(scoreDate.isAtSameMomentAs(checkDate)) {
+    for (final scoreDate in uniqueDates) {
+      if (scoreDate.isAtSameMomentAs(checkDate)) {
         streakDays++;
         checkDate = checkDate.subtract(const Duration(days: 1));
       } else {
@@ -154,10 +155,11 @@ class ScoreService extends ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     final scoresJson = prefs.getString(_scoresKey);
 
-    if(scoresJson != null) {
+    if (scoresJson != null) {
       final scoresList = jsonDecode(scoresJson) as List;
       _scores = scoresList
-          .map((json) => ScoreRecord.fromJson(json as Map<String, dynamic>),
+          .map(
+            (json) => ScoreRecord.fromJson(json as Map<String, dynamic>),
           )
           .toList();
       _scores.sort((a, b) => b.date.compareTo(a.date)); // 新しい順にソート
@@ -167,7 +169,8 @@ class ScoreService extends ChangeNotifier {
   /// スコアをローカルストレージに保存
   Future<void> _saveScores() async {
     final prefs = await SharedPreferences.getInstance();
-    final scoresJson = jsonEncode(_scores.map((score) => score.toJson()).toList(),
+    final scoresJson = jsonEncode(
+      _scores.map((score) => score.toJson()).toList(),
     );
     await prefs.setString(_scoresKey, scoresJson);
   }
@@ -177,7 +180,7 @@ class ScoreService extends ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     final lastScoreJson = prefs.getString(_lastScoreKey);
 
-    if(lastScoreJson != null) {
+    if (lastScoreJson != null) {
       final json = jsonDecode(lastScoreJson) as Map<String, dynamic>;
       _lastScore = ScoreRecord.fromJson(json);
     }

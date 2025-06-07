@@ -25,7 +25,8 @@ class PracticeScreen extends StatefulWidget {
   State<PracticeScreen> createState() => _PracticeScreenState();
 }
 
-class _PracticeScreenState extends State<PracticeScreen> with TickerProviderStateMixin {
+class _PracticeScreenState extends State<PracticeScreen>
+    with TickerProviderStateMixin {
   late final List<MathProblem> _problems;
   late final List<int?> _userAnswers;
   late final List<bool> _isCorrect;
@@ -43,17 +44,20 @@ class _PracticeScreenState extends State<PracticeScreen> with TickerProviderStat
 
     // 問題を生成
     final mathService = context.read<MathService>();
-    _problems = mathService.generateProblems(widget.operation,
+    _problems = mathService.generateProblems(
+      widget.operation,
       widget.problemCount,
     );
     _userAnswers = List.filled(widget.problemCount, null);
     _isCorrect = List.filled(widget.problemCount, false);
 
     // アニメーションコントローラーの初期化
-    _progressController = AnimationController(duration : const Duration(milliseconds: 300),
+    _progressController = AnimationController(
+      duration: const Duration(milliseconds: 300),
       vsync: this,
     );
-    _feedbackController = AnimationController(duration: const Duration(milliseconds: 500),
+    _feedbackController = AnimationController(
+      duration: const Duration(milliseconds: 500),
       vsync: this,
     );
   }
@@ -69,19 +73,23 @@ class _PracticeScreenState extends State<PracticeScreen> with TickerProviderStat
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Scaffold(appBar: AppBar(title: Text('${widget.operation.displayName}の練習'),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('${widget.operation.displayName}の練習'),
         backgroundColor: theme.colorScheme.primaryContainer,
         foregroundColor: theme.colorScheme.onPrimaryContainer,
         elevation: 0,
       ),
-      body: Column(children: [
+      body: Column(
+        children: [
           // プログレスバー
           _buildProgressBar(theme),
 
           // メインコンテンツ
-          Expanded(child: _isCompleted
+          Expanded(
+            child: _isCompleted
                 ? _buildResultView(theme)
-                 : _buildProblemView(theme),
+                : _buildProblemView(theme),
           ),
         ],
       ),
@@ -91,7 +99,8 @@ class _PracticeScreenState extends State<PracticeScreen> with TickerProviderStat
   Widget _buildProgressBar(ThemeData theme) {
     final progress = (_currentProblemIndex + 1) / widget.problemCount;
 
-    return Container(padding: const EdgeInsets.all(16),
+    return Container(
+      padding: const EdgeInsets.all(16),
       color: theme.colorScheme.primaryContainer,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -166,20 +175,27 @@ class _PracticeScreenState extends State<PracticeScreen> with TickerProviderStat
     final accuracy = correctCount / widget.problemCount;
     final timeSpent = DateTime.now().difference(_startTime);
 
-    return Padding(padding: const EdgeInsets.all(20),
-      child: Column(mainAxisAlignment: MainAxisAlignment.center,
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           // 結果カード
-          Card(child: Padding(padding: const EdgeInsets.all(24),
-              child: Column(children: [
-                  Icon(accuracy >= 0.8 ? Icons.star  : Icons.thumb_up,
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                children: [
+                  Icon(
+                    accuracy >= 0.8 ? Icons.star : Icons.thumb_up,
                     size: 64,
                     color: accuracy >= 0.8
                         ? Colors.amber
-                         : theme.colorScheme.primary,
+                        : theme.colorScheme.primary,
                   ),
                   const SizedBox(height: 16),
-                  Text('お疲れ様でした！',
+                  Text(
+                    'お疲れ様でした！',
                     style: theme.textTheme.headlineMedium,
                   ),
                   const SizedBox(height: 16),
@@ -191,11 +207,13 @@ class _PracticeScreenState extends State<PracticeScreen> with TickerProviderStat
                     ),
                   ),
                   const SizedBox(height: 8),
-                  Text('正答率: ${(accuracy * 100).round()}%',
+                  Text(
+                    '正答率: ${(accuracy * 100).round()}%',
                     style: theme.textTheme.bodyLarge,
                   ),
                   const SizedBox(height: 8),
-                  Text('時間: ${_formatDuration(timeSpent)}',
+                  Text(
+                    '時間: ${_formatDuration(timeSpent)}',
                     style: theme.textTheme.bodyMedium,
                   ),
                 ],
@@ -206,14 +224,20 @@ class _PracticeScreenState extends State<PracticeScreen> with TickerProviderStat
           const SizedBox(height: 32),
 
           // ボタン
-          Row(children: [
-              Expanded(child: ElevatedButton(onPressed: _retryPractice,
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: _retryPractice,
                   child: const Text('もう一度'),
                 ),
               ),
               const SizedBox(width: 16),
-              Expanded(child: ElevatedButton(onPressed: _goHome,
-                  style: ElevatedButton.styleFrom(backgroundColor: theme.colorScheme.primary,
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: _goHome,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: theme.colorScheme.primary,
                   ),
                   child: const Text('ホームに戻る'),
                 ),
@@ -226,10 +250,12 @@ class _PracticeScreenState extends State<PracticeScreen> with TickerProviderStat
   }
 
   Widget _buildHintButton(ThemeData theme, MathProblem problem) {
-    return TextButton.icon(onPressed: () => _showHint(problem),
+    return TextButton.icon(
+      onPressed: () => _showHint(problem),
       icon: const Icon(Icons.lightbulb_outline),
       label: const Text('ヒント'),
-      style: TextButton.styleFrom(foregroundColor: theme.colorScheme.secondary,
+      style: TextButton.styleFrom(
+        foregroundColor: theme.colorScheme.secondary,
       ),
     );
   }
@@ -262,7 +288,8 @@ class _PracticeScreenState extends State<PracticeScreen> with TickerProviderStat
         setState(() {
           _currentProblemIndex++;
         });
-        _progressController.animateTo((_currentProblemIndex + 1) / widget.problemCount,
+        _progressController.animateTo(
+          (_currentProblemIndex + 1) / widget.problemCount,
         );
       } else {
         _completePractice();
@@ -271,11 +298,15 @@ class _PracticeScreenState extends State<PracticeScreen> with TickerProviderStat
   }
 
   void _showAnswerFeedback(bool isCorrect, int correctAnswer) {
-    final message = isCorrect ? 'せいかい！'  : '答えは $correctAnswer です';
-    final color = isCorrect ? Colors.green  : Colors.orange;
+    final message = isCorrect ? 'せいかい！' : '答えは $correctAnswer です';
+    final color = isCorrect ? Colors.green : Colors.orange;
 
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message,
-          style: const TextStyle(fontSize: 18,
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          message,
+          style: const TextStyle(
+            fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -295,11 +326,14 @@ class _PracticeScreenState extends State<PracticeScreen> with TickerProviderStat
       hint = '${problem.firstNumber}を${problem.secondNumber}個に分けてみましょう';
     }
 
-    showDialog(context: context,
-      builder: (context) => AlertDialog(title: const Text('ヒント'),
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('ヒント'),
         content: Text(hint),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context),
+          TextButton(
+            onPressed: () => Navigator.pop(context),
             child: const Text('わかりました'),
           ),
         ],
@@ -316,7 +350,8 @@ class _PracticeScreenState extends State<PracticeScreen> with TickerProviderStat
     final correctCount = _isCorrect.where((correct) => correct).length;
     final timeSpent = DateTime.now().difference(_startTime);
 
-    final scoreRecord = ScoreRecord(id: DateTime.now().millisecondsSinceEpoch.toString(),
+    final scoreRecord = ScoreRecord(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
       date: DateTime.now(),
       operation: widget.operation,
       correctAnswers: correctCount,
@@ -332,8 +367,10 @@ class _PracticeScreenState extends State<PracticeScreen> with TickerProviderStat
     if (improvement == ScoreImprovement.improved) {
       Future.delayed(const Duration(milliseconds: 500), () {
         if (mounted) {
-          showDialog(context: context,
-            builder: (context) => EncouragementDialog(scoreRecord: scoreRecord,
+          showDialog(
+            context: context,
+            builder: (context) => EncouragementDialog(
+              scoreRecord: scoreRecord,
               improvement: improvement,
             ),
           );
@@ -344,7 +381,10 @@ class _PracticeScreenState extends State<PracticeScreen> with TickerProviderStat
 
   void _retryPractice() {
     // 同じ操作タイプで新しい練習を開始
-    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => PracticeScreen(operation: widget.operation,
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => PracticeScreen(
+          operation: widget.operation,
           problemCount: widget.problemCount,
         ),
       ),

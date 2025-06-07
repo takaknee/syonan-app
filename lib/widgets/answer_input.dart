@@ -10,7 +10,7 @@ class AnswerInput extends StatefulWidget {
   });
 
   final Function(int) onAnswerSubmitted;
-  final Function(int? )? onAnswerChanged;
+  final Function(int?)? onAnswerChanged;
 
   @override
   State<AnswerInput> createState() => _AnswerInputState();
@@ -40,20 +40,26 @@ class _AnswerInputState extends State<AnswerInput> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Container(constraints : const BoxConstraints(maxWidth: 200),
-      child: Column(children: [
+    return Container(
+      constraints: const BoxConstraints(maxWidth: 200),
+      child: Column(
+        children: [
           // 入力フィールド
-          Container(decoration: BoxDecoration(color: theme.colorScheme.surface,
+          Container(
+            decoration: BoxDecoration(
+              color: theme.colorScheme.surface,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(color: theme.colorScheme.outline, width: 2),
               boxShadow: [
-                BoxShadow(color: theme.colorScheme.shadow.withValues(alpha: 0.1),
+                BoxShadow(
+                  color: theme.colorScheme.shadow.withValues(alpha: 0.1),
                   blurRadius: 8,
                   offset: const Offset(0, 2),
                 ),
               ],
             ),
-            child: TextField(controller: _controller,
+            child: TextField(
+              controller: _controller,
               focusNode: _focusNode,
               keyboardType: TextInputType.number,
               inputFormatters: [
@@ -159,7 +165,9 @@ class _AnswerInputState extends State<AnswerInput> {
   }
 
   void _showError(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message),
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
         backgroundColor: Colors.orange,
         duration: const Duration(seconds: 2),
         behavior: SnackBarBehavior.floating,

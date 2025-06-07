@@ -51,8 +51,10 @@ class EncouragementDialog extends StatelessWidget {
             const SizedBox(height: 24),
 
             // タイトル
-            Text(improvement.title,
-              style: theme.textTheme.headlineMedium? .copyWith(fontWeight : FontWeight.bold,
+            Text(
+              improvement.title,
+              style: theme.textTheme.headlineMedium?.copyWith(
+                fontWeight: FontWeight.bold,
                 color: theme.colorScheme.onPrimaryContainer,
               ),
               textAlign: TextAlign.center,
@@ -61,22 +63,30 @@ class EncouragementDialog extends StatelessWidget {
             const SizedBox(height: 16),
 
             // スコア情報
-            Container(padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.8),
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.8),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Column(children: [
-                  Text('${scoreRecord.operation.displayName}の結果',
-                    style: theme.textTheme.bodyLarge? .copyWith(fontWeight : FontWeight.bold,
+              child: Column(
+                children: [
+                  Text(
+                    '${scoreRecord.operation.displayName}の結果',
+                    style: theme.textTheme.bodyLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                   const SizedBox(height: 8),
-                  Text('${scoreRecord.correctAnswers}問正解 / '
+                  Text(
+                    '${scoreRecord.correctAnswers}問正解 / '
                     '${scoreRecord.totalQuestions}問',
                     style: theme.textTheme.bodyLarge,
                   ),
-                  Text('正答率: ${scoreRecord.accuracyPercentage}%',
-                    style: theme.textTheme.bodyLarge? .copyWith(fontWeight : FontWeight.bold,
+                  Text(
+                    '正答率: ${scoreRecord.accuracyPercentage}%',
+                    style: theme.textTheme.bodyLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
                       color: _getColorForScore(scoreRecord.accuracyPercentage),
                     ),
                   ),
@@ -87,8 +97,10 @@ class EncouragementDialog extends StatelessWidget {
             const SizedBox(height: 16),
 
             // 励ましのメッセージ
-            Text(improvement.message,
-              style: theme.textTheme.bodyLarge? .copyWith(color : theme.colorScheme.onPrimaryContainer,
+            Text(
+              improvement.message,
+              style: theme.textTheme.bodyLarge?.copyWith(
+                color: theme.colorScheme.onPrimaryContainer,
               ),
               textAlign: TextAlign.center,
             ),

@@ -32,10 +32,13 @@ class _HomeScreenState extends State<HomeScreen> {
     final scoreService = context.watch<ScoreService>();
 
     return Scaffold(backgroundColor: theme.colorScheme.surface,
-      body: SafeArea(child: scoreService.isLoading
-            ? const Center(child : CircularProgressIndicator())
-            : SingleChildScrollView(padding: const EdgeInsets.all(20),
-                child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+      body: SafeArea(
+        child: scoreService.isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : SingleChildScrollView(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // ヘッダー
                     _buildHeader(theme),
@@ -54,20 +57,24 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               ),
+        ),
       ),
     );
   }
 
   Widget _buildHeader(ThemeData theme) {
-    return Column(crossAxisAlignment: CrossAxisAlignment.start,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('算数れんしゅう',
-          style: theme.textTheme.headlineLarge? .copyWith(color : theme.colorScheme.primary,
+          style: theme.textTheme.headlineLarge?.copyWith(
+            color: theme.colorScheme.primary,
           ),
         ),
         const SizedBox(height: 8),
         Text('今日も楽しく勉強しましょう！',
-          style: theme.textTheme.bodyLarge? .copyWith(color : theme.colorScheme.onSurface.withValues(alpha: 0.7),
+          style: theme.textTheme.bodyLarge?.copyWith(
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
           ),
         ),
       ],
@@ -75,15 +82,20 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildPracticeSection(ThemeData theme) {
-    return Column(crossAxisAlignment: CrossAxisAlignment.start,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('練習する',
-          style: theme.textTheme.headlineMedium? .copyWith(color : theme.colorScheme.primary,
+          style: theme.textTheme.headlineMedium?.copyWith(
+            color: theme.colorScheme.primary,
           ),
         ),
         const SizedBox(height: 16),
-        Row(children: [
-            Expanded(child: PracticeButton(title: '掛け算',
+        Row(
+          children: [
+            Expanded(
+              child: PracticeButton(
+                title: '掛け算',
                 subtitle: '九九の練習',
                 icon: Icons.close,
                 color: Colors.blue,
@@ -91,7 +103,9 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             const SizedBox(width: 16),
-            Expanded(child: PracticeButton(title: '割り算',
+            Expanded(
+              child: PracticeButton(
+                title: '割り算',
                 subtitle: '割り算の練習',
                 icon: Icons.more_horiz,
                 color: Colors.green,
@@ -107,27 +121,36 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildStatsSection(ThemeData theme, ScoreService scoreService) {
     final streakDays = scoreService.getStreakDays();
     final weeklyCount = scoreService.getWeeklyPracticeCount();
-    final multiplicationAvg = scoreService.getAverageScore(MathOperationType.multiplication,
+    final multiplicationAvg = scoreService.getAverageScore(
+      MathOperationType.multiplication,
     );
-    final divisionAvg = scoreService.getAverageScore(MathOperationType.division,
+    final divisionAvg = scoreService.getAverageScore(
+      MathOperationType.division,
     );
 
-    return Column(crossAxisAlignment: CrossAxisAlignment.start,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('あなたの記録',
-          style: theme.textTheme.headlineMedium? .copyWith(color : theme.colorScheme.primary,
+          style: theme.textTheme.headlineMedium?.copyWith(
+            color: theme.colorScheme.primary,
           ),
         ),
         const SizedBox(height: 16),
-        Row(children: [
-            Expanded(child: StatCard(title: '連続練習',
+        Row(
+          children: [
+            Expanded(
+              child: StatCard(
+                title: '連続練習',
                 value: '$streakDays日',
                 icon: Icons.local_fire_department,
                 color: Colors.orange,
               ),
             ),
             const SizedBox(width: 16),
-            Expanded(child: StatCard(title: '今週の練習',
+            Expanded(
+              child: StatCard(
+                title: '今週の練習',
                 value: '$weeklyCount回',
                 icon: Icons.calendar_today,
                 color: Colors.purple,
@@ -136,15 +159,20 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
         const SizedBox(height: 16),
-        Row(children: [
-            Expanded(child: StatCard(title: '掛け算平均',
+        Row(
+          children: [
+            Expanded(
+              child: StatCard(
+                title: '掛け算平均',
                 value: '${(multiplicationAvg * 100).round()}%',
                 icon: Icons.close,
                 color: Colors.blue,
               ),
             ),
             const SizedBox(width: 16),
-            Expanded(child: StatCard(title: '割り算平均',
+            Expanded(
+              child: StatCard(
+                title: '割り算平均',
                 value: '${(divisionAvg * 100).round()}%',
                 icon: Icons.more_horiz,
                 color: Colors.green,
@@ -157,14 +185,20 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildScoreHistoryButton(ThemeData theme) {
-    return SizedBox(width: double.infinity,
-      child: ElevatedButton.icon(onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => const ScoreHistoryScreen()),
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton.icon(
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const ScoreHistoryScreen(),
+            ),
           );
         },
         icon: const Icon(Icons.history),
         label: const Text('スコア履歴を見る'),
-        style: ElevatedButton.styleFrom(backgroundColor: theme.colorScheme.secondary,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: theme.colorScheme.secondary,
           foregroundColor: theme.colorScheme.onSecondary,
         ),
       ),
@@ -172,7 +206,9 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _startPractice(MathOperationType operation) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => PracticeScreen(operation: operation),
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => PracticeScreen(operation: operation),
       ),
     );
   }

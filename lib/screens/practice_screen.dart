@@ -92,24 +92,31 @@ class _PracticeScreenState extends State<PracticeScreen> with TickerProviderStat
 
     return Container(padding: const EdgeInsets.all(16),
       color: theme.colorScheme.primaryContainer,
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('問題 ${_currentProblemIndex + 1} / '
+              Text(
+                '問題 ${_currentProblemIndex + 1} / '
                 '${widget.problemCount}',
-                style: theme.textTheme.bodyLarge? .copyWith(color : theme.colorScheme.onPrimaryContainer,
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  color: theme.colorScheme.onPrimaryContainer,
                 ),
               ),
-              Text('${(progress * 100).round()}%',
-                style: theme.textTheme.bodyLarge? .copyWith(color : theme.colorScheme.onPrimaryContainer,
+              Text(
+                '${(progress * 100).round()}%',
+                style: theme.textTheme.bodyLarge?.copyWith(
+                  color: theme.colorScheme.onPrimaryContainer,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ],
           ),
           const SizedBox(height: 8),
-          LinearProgressIndicator(value: progress,
+          LinearProgressIndicator(
+            value: progress,
             backgroundColor:
                 theme.colorScheme.onPrimaryContainer.withValues(alpha: 0.3),
             valueColor: AlwaysStoppedAnimation<Color>(
@@ -175,8 +182,10 @@ class _PracticeScreenState extends State<PracticeScreen> with TickerProviderStat
                     style: theme.textTheme.headlineMedium,
                   ),
                   const SizedBox(height: 16),
-                  Text('$correctCount問正解 / ${widget.problemCount}問',
-                    style: theme.textTheme.headlineSmall? .copyWith(color : theme.colorScheme.primary,
+                  Text(
+                    '$correctCount問正解 / ${widget.problemCount}問',
+                    style: theme.textTheme.headlineSmall?.copyWith(
+                      color: theme.colorScheme.primary,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

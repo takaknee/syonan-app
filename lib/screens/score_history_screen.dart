@@ -202,18 +202,23 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen> with SingleTick
     final theme = Theme.of(context);
 
     return Column(children: [
-        Icon(icon,
+        Icon(
+          icon,
           color: theme.colorScheme.onPrimaryContainer,
           size: 32,
         ),
         const SizedBox(height: 8),
-        Text(value,
-          style: theme.textTheme.bodyLarge? .copyWith(fontWeight : FontWeight.bold,
+        Text(
+          value,
+          style: theme.textTheme.bodyLarge?.copyWith(
+            fontWeight: FontWeight.bold,
             color: theme.colorScheme.onPrimaryContainer,
           ),
         ),
-        Text(label,
-          style: theme.textTheme.bodySmall? .copyWith(color : theme.colorScheme.onPrimaryContainer.withValues(alpha: 0.7),
+        Text(
+          label,
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: theme.colorScheme.onPrimaryContainer.withValues(alpha: 0.7),
           ),
         ),
       ],
@@ -275,32 +280,43 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen> with SingleTick
                         size: 32,
                       ),
                       const SizedBox(height: 8),
-                      Text('掛け算',
-                        style: theme.textTheme.bodyLarge? .copyWith(fontWeight : FontWeight.bold,
+                      Text(
+                        '掛け算',
+                        style: theme.textTheme.bodyLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text('${multiplicationScores.length}回練習'),
-                      Text('平均 ${(multiplicationAvg * 100).round()}%',
-                        style: const TextStyle(fontWeight: FontWeight.bold,
+                      Text(
+                        '平均 ${(multiplicationAvg * 100).round()}%',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ],
                   ),
                 ),
                 const SizedBox(width: 16),
-                Expanded(child: Column(children: [
-                      const Icon(Icons.more_horiz,
+                Expanded(
+                  child: Column(
+                    children: [
+                      const Icon(
+                        Icons.more_horiz,
                         color: Colors.green,
                         size: 32,
                       ),
                       const SizedBox(height: 8),
-                      Text('割り算',
-                        style: theme.textTheme.bodyLarge? .copyWith(fontWeight : FontWeight.bold,
+                      Text(
+                        '割り算',
+                        style: theme.textTheme.bodyLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text('${divisionScores.length}回練習'),
-                      Text('平均 ${(divisionAvg * 100).round()}%',
-                        style: const TextStyle(fontWeight: FontWeight.bold,
+                      Text(
+                        '平均 ${(divisionAvg * 100).round()}%',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ],

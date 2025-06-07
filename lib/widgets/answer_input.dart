@@ -61,25 +61,29 @@ class _AnswerInputState extends State<AnswerInput> {
                 LengthLimitingTextInputFormatter(3), // 最大3桁
               ],
               textAlign: TextAlign.center,
-              style: theme.textTheme.headlineLarge? .copyWith(fontSize : 36,
+              style: theme.textTheme.headlineLarge?.copyWith(
+                fontSize: 36,
                 fontWeight: FontWeight.bold,
                 color: theme.colorScheme.onSurface,
               ),
-              decoration: InputDecoration(hintText: '? ',
-                hintStyle : theme.textTheme.headlineLarge?.copyWith(fontSize: 36,
+              decoration: InputDecoration(
+                hintText: '?',
+                hintStyle: theme.textTheme.headlineLarge?.copyWith(
+                  fontSize: 36,
                   fontWeight: FontWeight.bold,
                   color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
                 ),
                 border: InputBorder.none,
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
                   vertical: 20,
                 ),
               ),
               onChanged: (value) {
                 final intValue = int.tryParse(value);
-                widget.onAnswerChanged? .call(intValue);
+                widget.onAnswerChanged?.call(intValue);
               },
-              onSubmitted : (value) {
+              onSubmitted: (value) {
                 _submitAnswer();
               },
             ),
@@ -88,20 +92,27 @@ class _AnswerInputState extends State<AnswerInput> {
           const SizedBox(height: 16),
 
           // 送信ボタン
-          SizedBox(width: double.infinity,
-            child: ElevatedButton(onPressed: _submitAnswer,
-              style: ElevatedButton.styleFrom(backgroundColor: theme.colorScheme.primary,
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: _submitAnswer,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: theme.colorScheme.primary,
                 foregroundColor: theme.colorScheme.onPrimary,
                 padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              child: Row(mainAxisAlignment: MainAxisAlignment.center,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Icon(Icons.check),
                   const SizedBox(width: 8),
-                  Text('こたえる',
-                    style: theme.textTheme.bodyLarge? .copyWith(fontWeight : FontWeight.bold,
+                  Text(
+                    'こたえる',
+                    style: theme.textTheme.bodyLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ],
@@ -112,8 +123,10 @@ class _AnswerInputState extends State<AnswerInput> {
           const SizedBox(height: 16),
 
           // ヒントテキスト
-          Text('数字を入力して「こたえる」を押してください',
-            style: theme.textTheme.bodySmall? .copyWith(color : theme.colorScheme.onSurface.withValues(alpha: 0.6),
+          Text(
+            '数字を入力して「こたえる」を押してください',
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
             ),
             textAlign: TextAlign.center,
           ),

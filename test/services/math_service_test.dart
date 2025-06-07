@@ -83,9 +83,8 @@ void main() {
         );
 
         final problemStrings = problems
-            .map(
-              (p) => '${p.firstNumber}_${p.secondNumber}_${p.operation.name}',
-            )
+            .map((p) =>
+                '${p.firstNumber}_${p.secondNumber}_${p.operation.name}')
             .toSet();
 
         expect(problemStrings.length, problems.length);
@@ -95,22 +94,22 @@ void main() {
         'should handle requests for more problems than possible unique '
         'combinations',
         () {
-        // 81通りの九九があるので、100個要求しても81個以下になる
-        final problems = mathService.generateProblems(
-          MathOperationType.multiplication,
-          100,
-        );
+          // 81通りの九九があるので、100個要求しても81個以下になる
+          final problems = mathService.generateProblems(
+            MathOperationType.multiplication,
+            100,
+          );
 
-        expect(problems.length, lessThanOrEqualTo(81));
+          expect(problems.length, lessThanOrEqualTo(81));
 
-        final problemStrings = problems
-            .map(
-              (p) => '${p.firstNumber}_${p.secondNumber}_${p.operation.name}',
-            )
-            .toSet();
+          final problemStrings = problems
+              .map((p) =>
+                  '${p.firstNumber}_${p.secondNumber}_${p.operation.name}')
+              .toSet();
 
-        expect(problemStrings.length, problems.length);
-      });
+          expect(problemStrings.length, problems.length);
+        },
+      );
     });
 
     group('generateProblemWithDifficulty', () {

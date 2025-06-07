@@ -53,9 +53,7 @@ class ScoreService extends ChangeNotifier {
 
   /// 特定の操作タイプのスコア履歴を取得
   List<ScoreRecord> getScoresByOperation(MathOperationType operation) {
-    return _scores
-        .where((score) => score.operation == operation)
-        .toList();
+    return _scores.where((score) => score.operation == operation).toList();
   }
 
   /// 最新のスコアと前回のスコアを比較して改善度を取得

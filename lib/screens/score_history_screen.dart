@@ -17,24 +17,11 @@ class ScoreHistoryScreen extends StatefulWidget {
 class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  MathOperationType _selectedOperation =
-      MathOperationType.multiplication;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
-    _tabController.addListener(() {
-      if (_tabController.indexIsChanging) {
-        setState(() {
-          _selectedOperation = _tabController.index == 0
-              ? MathOperationType.multiplication
-              : _tabController.index == 1
-              ? MathOperationType.division
-              : MathOperationType.multiplication; // 全体表示では掛け算をデフォルト
-        });
-      }
-    });
   }
 
   @override

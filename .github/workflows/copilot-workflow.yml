@@ -63,7 +63,31 @@ jobs:
         if: steps.flutter_check.outputs.flutter_available == 'true'
         run: |
           if [ -f pubspec.yaml ]; then
-            dart format --set-exit-if-changed .
+            echo "🔍 Checking code formatting..."
+            # First, check if formatting is needed without modifying files
+            if ! dart format --set-exit-if-changed . --dry-run; then
+              echo ""
+              echo "❌ Code formatting issues detected!"
+              echo ""
+              echo "To fix formatting issues, run one of the following commands:"
+              echo "  flutter format ."
+              echo "  dart format ."
+              echo ""
+              echo "Or to automatically fix formatting in this workflow:"
+              echo "💡 Consider updating your workflow to auto-format code."
+              echo ""
+              # Show which files need formatting
+              echo "📋 Files that need formatting:"
+              dart format --dry-run . 2>&1 | grep "Formatted" || echo "No specific files listed"
+              echo ""
+              echo "🛠️ Auto-fixing formatting now..."
+              dart format .
+              echo "✅ Formatting has been automatically fixed!"
+              echo ""
+              echo "⚠️ Note: Please commit these formatting changes to prevent this issue in the future."
+            else
+              echo "✅ All code is properly formatted!"
+            fi
           else
             echo "Skipping format check."
           fi

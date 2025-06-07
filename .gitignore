@@ -46,6 +46,9 @@ linked_*.ds
 unlinked.ds
 unlinked_spec.ds
 
+# Keep formatting config but ignore other .dart_tool contents
+!.dart_tool/formatting_config.yaml
+
 # Android related
 **/android/**/gradle-wrapper.jar
 .gradle/

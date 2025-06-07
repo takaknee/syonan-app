@@ -68,8 +68,38 @@
 ### 始め方
 1. リポジトリをクローンする
 2. VS Codeで開く - 推奨拡張機能のインストールを促されます
-3. `flutter pub get`を実行して依存関係をインストールする
-4. 設定済みのlaunch configurationを使ってデバッグする
+3. 開発環境をセットアップする:
+   ```bash
+   make setup      # Flutter依存関係をインストール
+   ```
+4. **🚨 重要**: コード品質チェックを有効にする（PR前エラー防止）:
+   ```bash
+   ./scripts/install-hooks.sh    # プリコミットフックをインストール
+   ```
+5. 設定済みのlaunch configurationを使ってデバッグする
+
+### 開発コマンド
+```bash
+make help          # 利用可能なコマンドを表示
+make format        # コードフォーマット
+make format-check  # フォーマット確認（PR前チェック推奨）
+make lint          # コード解析
+make test          # テスト実行
+make build         # Webアプリビルド
+make qa            # 全品質チェック（PR前推奨）
+```
+
+### 🛡️ CI/CDエラー防止
+PR作成前のチェックを自動化するため、以下のコマンドを実行することを強く推奨します：
+```bash
+# プリコミットフックのインストール（一度だけ）
+./scripts/install-hooks.sh
+
+# または手動でPR前チェック
+make qa    # フォーマット + 解析 + テスト
+```
+
+**📋 詳細ガイド**: [CI/CDエラー防止クイックガイド](docs/ci-prevention-guide.md)
 
 ## GitHub Copilot効率化機能
 
@@ -87,6 +117,7 @@
 - **Flutter開発規約**: `.github/instructions/flutter-development.md`
 - **セキュリティ重視**: 子供向けアプリのプライバシー保護
 - **アクセシビリティ**: 包括的なユーザー体験の実現
+- **コードフォーマット**: `docs/formatting-guide.md`でフォーマット規則とトラブルシューティング
 
 ### 🚀 開発効率向上機能
 - **VS Codeタスク**: `.vscode/tasks.json`で一般的な操作を自動化

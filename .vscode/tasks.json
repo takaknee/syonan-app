@@ -95,6 +95,34 @@
       "problemMatcher": []
     },
     {
+      "label": "Dart: フォーマット確認",
+      "type": "shell",
+      "command": "./scripts/format.sh",
+      "args": ["check"],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Dart: フォーマット修正",
+      "type": "shell",
+      "command": "./scripts/format.sh",
+      "args": ["fix"],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
       "label": "Flutter: ビルド（Android）",
       "type": "shell",
       "command": "flutter",
@@ -173,6 +201,60 @@
         "reveal": "always",
         "focus": true,
         "panel": "new"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "開発環境: 完全セットアップ",
+      "type": "shell",
+      "command": "./scripts/setup-dev.sh",
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "new"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "品質保証: 全チェック（PR前推奨）",
+      "type": "shell",
+      "command": "make",
+      "args": ["qa"],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "プリコミットフック: インストール",
+      "type": "shell",
+      "command": "./scripts/install-hooks.sh",
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "CI/CDエラー防止: フォーマットチェック",
+      "type": "shell",
+      "command": "make",
+      "args": ["format-check"],
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
       },
       "problemMatcher": []
     },

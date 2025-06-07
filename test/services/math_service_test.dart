@@ -1,6 +1,6 @@
-import 'package:flutter_test/flutter_test.dart';
-import 'package:syonan_app/services/math_service.dart';
-import 'package:syonan_app/models/math_problem.dart';
+import 'package:flutter_test / flutter_test.dart';
+import 'package:syonan_app / services / math_service.dart';
+import 'package:syonan_app / models / math_problem.dart';
 
 void main() {
   group('MathService', () {
@@ -12,7 +12,7 @@ void main() {
 
     group('generateMultiplicationProblem', () {
       test('should generate valid multiplication problems', () {
-        for (int i = 0; i < 10; i++) {
+        for(int i = 0; i < 10; i++) {
           final problem = mathService.generateMultiplicationProblem();
 
           expect(problem.operation, MathOperationType.multiplication);
@@ -20,8 +20,7 @@ void main() {
           expect(problem.firstNumber, lessThanOrEqualTo(9));
           expect(problem.secondNumber, greaterThanOrEqualTo(1));
           expect(problem.secondNumber, lessThanOrEqualTo(9));
-          expect(
-            problem.correctAnswer,
+          expect(problem.correctAnswer,
             problem.firstNumber * problem.secondNumber,
           );
         }
@@ -30,7 +29,7 @@ void main() {
 
     group('generateDivisionProblem', () {
       test('should generate valid division problems', () {
-        for (int i = 0; i < 10; i++) {
+        for(int i = 0; i < 10; i++) {
           final problem = mathService.generateDivisionProblem();
 
           expect(problem.operation, MathOperationType.division);
@@ -41,8 +40,7 @@ void main() {
 
           // 割り切れることを確認
           expect(problem.firstNumber % problem.secondNumber, 0);
-          expect(
-            problem.firstNumber ~/ problem.secondNumber,
+          expect(problem.firstNumber ~/ problem.secondNumber,
             problem.correctAnswer,
           );
         }
@@ -51,8 +49,7 @@ void main() {
 
     group('generateProblem', () {
       test('should generate multiplication problem when specified', () {
-        final problem = mathService.generateProblem(
-          MathOperationType.multiplication,
+        final problem = mathService.generateProblem(MathOperationType.multiplication,
         );
         expect(problem.operation, MathOperationType.multiplication);
       });
@@ -65,13 +62,12 @@ void main() {
 
     group('generateProblems', () {
       test('should generate requested number of problems', () {
-        final problems = mathService.generateProblems(
-          MathOperationType.multiplication,
+        final problems = mathService.generateProblems(MathOperationType.multiplication,
           5,
         );
 
         expect(problems.length, 5);
-        for (final problem in problems) {
+        for(final problem in problems) {
           expect(problem.operation, MathOperationType.multiplication);
         }
       });
@@ -95,8 +91,7 @@ void main() {
         'combinations',
         () {
           // 81通りの九九があるので、100個要求しても81個以下になる
-          final problems = mathService.generateProblems(
-            MathOperationType.multiplication,
+          final problems = mathService.generateProblems(MathOperationType.multiplication,
             100,
           );
 
@@ -114,9 +109,8 @@ void main() {
 
     group('generateProblemWithDifficulty', () {
       test('should generate easier problems for level 1', () {
-        for (int i = 0; i < 10; i++) {
-          final problem = mathService.generateProblemWithDifficulty(
-            MathOperationType.multiplication,
+        for(int i = 0; i < 10; i++) {
+          final problem = mathService.generateProblemWithDifficulty(MathOperationType.multiplication,
             1,
           );
 
@@ -128,9 +122,8 @@ void main() {
       });
 
       test('should generate normal problems for level 2', () {
-        for (int i = 0; i < 10; i++) {
-          final problem = mathService.generateProblemWithDifficulty(
-            MathOperationType.multiplication,
+        for(int i = 0; i < 10; i++) {
+          final problem = mathService.generateProblemWithDifficulty(MathOperationType.multiplication,
             2,
           );
 
@@ -142,9 +135,8 @@ void main() {
       });
 
       test('should generate harder problems for level 3', () {
-        for (int i = 0; i < 10; i++) {
-          final problem = mathService.generateProblemWithDifficulty(
-            MathOperationType.multiplication,
+        for(int i = 0; i < 10; i++) {
+          final problem = mathService.generateProblemWithDifficulty(MathOperationType.multiplication,
             3,
           );
 
@@ -156,12 +148,11 @@ void main() {
       });
 
       test('should handle invalid difficulty levels gracefully', () {
-        final problem = mathService.generateProblemWithDifficulty(
-          MathOperationType.multiplication,
+        final problem = mathService.generateProblemWithDifficulty(MathOperationType.multiplication,
           999, // Invalid level
         );
 
-        // Should default to level 2 (1-9 range)
+        // Should default to level 2(1 - 9 range)
         expect(problem.firstNumber, greaterThanOrEqualTo(1));
         expect(problem.firstNumber, lessThanOrEqualTo(9));
         expect(problem.secondNumber, greaterThanOrEqualTo(1));

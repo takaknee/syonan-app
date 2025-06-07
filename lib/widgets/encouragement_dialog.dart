@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import '../models/score_record.dart';
-import '../services/score_service.dart';
+import 'package:flutter / material.dart';
+import '../models / score_record.dart';
+import '../services / score_service.dart';
 
 /// 励ましのダイアログウィジェット
 class EncouragementDialog extends StatelessWidget {
@@ -17,14 +17,10 @@ class EncouragementDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      child: Container(
-        padding: const EdgeInsets.all(24),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
+    return Dialog(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      child: Container(padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(20),
+          gradient: LinearGradient(begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
               theme.colorScheme.primaryContainer,
@@ -32,24 +28,19 @@ class EncouragementDialog extends StatelessWidget {
             ],
           ),
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
+        child: Column(mainAxisSize: MainAxisSize.min,
           children: [
             // アイコンとアニメーション
-            TweenAnimationBuilder<double>(
+            TweenAnimationBuilder < double>(
               duration: const Duration(milliseconds: 1000),
-              tween: Tween<double>(begin: 0.0, end: 1.0),
+              tween: Tween < double>(begin: 0.0, end: 1.0),
               builder: (context, value, child) {
-                return Transform.scale(
-                  scale: value,
-                  child: Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: _getColorForImprovement(improvement),
+                return Transform.scale(scale: value,
+                  child: Container(padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(color: _getColorForImprovement(improvement),
                       shape: BoxShape.circle,
                     ),
-                    child: Text(
-                      improvement.emoji,
+                    child: Text(improvement.emoji,
                       style: const TextStyle(fontSize: 48),
                     ),
                   ),
@@ -60,10 +51,8 @@ class EncouragementDialog extends StatelessWidget {
             const SizedBox(height: 24),
 
             // タイトル
-            Text(
-              improvement.title,
-              style: theme.textTheme.headlineMedium?.copyWith(
-                fontWeight: FontWeight.bold,
+            Text(improvement.title,
+              style: theme.textTheme.headlineMedium? .copyWith(fontWeight : FontWeight.bold,
                 color: theme.colorScheme.onPrimaryContainer,
               ),
               textAlign: TextAlign.center,
@@ -72,30 +61,22 @@ class EncouragementDialog extends StatelessWidget {
             const SizedBox(height: 16),
 
             // スコア情報
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.8),
+            Container(padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(color: Colors.white.withValues(alpha: 0.8),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Column(
-                children: [
-                  Text(
-                    '${scoreRecord.operation.displayName}の結果',
-                    style: theme.textTheme.bodyLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
+              child: Column(children: [
+                  Text('${scoreRecord.operation.displayName}の結果',
+                    style: theme.textTheme.bodyLarge? .copyWith(fontWeight : FontWeight.bold,
                     ),
                   ),
                   const SizedBox(height: 8),
-                  Text(
-                    '${scoreRecord.correctAnswers}問正解 / '
+                  Text('${scoreRecord.correctAnswers}問正解 / '
                     '${scoreRecord.totalQuestions}問',
                     style: theme.textTheme.bodyLarge,
                   ),
-                  Text(
-                    '正答率: ${scoreRecord.accuracyPercentage}%',
-                    style: theme.textTheme.bodyLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
+                  Text('正答率: ${scoreRecord.accuracyPercentage}%',
+                    style: theme.textTheme.bodyLarge? .copyWith(fontWeight : FontWeight.bold,
                       color: _getColorForScore(scoreRecord.accuracyPercentage),
                     ),
                   ),
@@ -106,10 +87,8 @@ class EncouragementDialog extends StatelessWidget {
             const SizedBox(height: 16),
 
             // 励ましのメッセージ
-            Text(
-              improvement.message,
-              style: theme.textTheme.bodyLarge?.copyWith(
-                color: theme.colorScheme.onPrimaryContainer,
+            Text(improvement.message,
+              style: theme.textTheme.bodyLarge? .copyWith(color : theme.colorScheme.onPrimaryContainer,
               ),
               textAlign: TextAlign.center,
             ),
@@ -117,21 +96,17 @@ class EncouragementDialog extends StatelessWidget {
             const SizedBox(height: 24),
 
             // ボタン
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
+                TextButton(onPressed: () => Navigator.of(context).pop(),
                   child: const Text('閉じる'),
                 ),
-                ElevatedButton(
-                  onPressed: () {
+                ElevatedButton(onPressed: () {
                     Navigator.of(context).pop();
                     // ホーム画面に戻る
                     Navigator.of(context).popUntil((route) => route.isFirst);
                   },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: theme.colorScheme.primary,
+                  style: ElevatedButton.styleFrom(backgroundColor: theme.colorScheme.primary,
                   ),
                   child: const Text('ホームに戻る'),
                 ),
@@ -144,7 +119,7 @@ class EncouragementDialog extends StatelessWidget {
   }
 
   Color _getColorForImprovement(ScoreImprovement improvement) {
-    switch (improvement) {
+    switch(improvement) {
       case ScoreImprovement.improved:
         return Colors.green;
       case ScoreImprovement.same:
@@ -157,9 +132,9 @@ class EncouragementDialog extends StatelessWidget {
   }
 
   Color _getColorForScore(int percentage) {
-    if (percentage >= 90) return Colors.green;
-    if (percentage >= 80) return Colors.blue;
-    if (percentage >= 70) return Colors.orange;
+    if(percentage >= 90) return Colors.green;
+    if(percentage >= 80) return Colors.blue;
+    if(percentage >= 70) return Colors.orange;
     return Colors.red;
   }
 }

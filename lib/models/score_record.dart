@@ -3,12 +3,10 @@ import 'math_problem.dart';
 /// スコア記録を表すモデルクラス
 class ScoreRecord {
   /// JSONからScoreRecordを作成
-  factory ScoreRecord.fromJson(Map<String, dynamic> json) {
-    return ScoreRecord(
-      id: json['id'] as String,
+  factory ScoreRecord.fromJson(Map < String, dynamic > json) {
+    return ScoreRecord(id: json['id'] as String,
       date: DateTime.parse(json['date'] as String),
-      operation: MathOperationType.values.firstWhere(
-        (op) => op.name == json['operation'],
+      operation: MathOperationType.values.firstWhere((op) => op.name == json['operation'],
       ),
       correctAnswers: json['correctAnswers'] as int,
       totalQuestions: json['totalQuestions'] as int,
@@ -33,26 +31,26 @@ class ScoreRecord {
 
   /// 正答率を計算（0.0 〜 1.0）
   double get accuracy {
-    if (totalQuestions == 0) return 0.0;
+    if(totalQuestions == 0) return 0.0;
     return correctAnswers / totalQuestions;
   }
 
   /// 正答率をパーセンテージで取得（0 〜 100）
   int get accuracyPercentage {
-    return (accuracy * 100).round();
+    return(accuracy * 100).round();
   }
 
   /// 評価レベルを取得
   ScoreLevel get level {
     final percentage = accuracyPercentage;
-    if (percentage >= 90) return ScoreLevel.excellent;
-    if (percentage >= 80) return ScoreLevel.good;
-    if (percentage >= 70) return ScoreLevel.fair;
+    if(percentage >= 90) return ScoreLevel.excellent;
+    if(percentage >= 80) return ScoreLevel.good;
+    if(percentage >= 70) return ScoreLevel.fair;
     return ScoreLevel.needsPractice;
   }
 
   /// ScoreRecordをJSONに変換
-  Map<String, dynamic> toJson() {
+  Map < String, dynamic > toJson() {
     return {
       'id': id,
       'date': date.toIso8601String(),
@@ -65,7 +63,7 @@ class ScoreRecord {
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
+    if(identical(this, other)) return true;
     return other is ScoreRecord &&
         other.id == id &&
         other.date == date &&
@@ -77,8 +75,7 @@ class ScoreRecord {
 
   @override
   int get hashCode {
-    return Object.hash(
-      id,
+    return Object.hash(id,
       date,
       operation,
       correctAnswers,

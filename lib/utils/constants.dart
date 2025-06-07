@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter / material.dart';
 
 /// アプリ全体で使用する定数を定義
 class AppConstants {
@@ -100,18 +100,15 @@ class AppStyles {
   // Private constructor to prevent instantiation
   AppStyles._();
   // テキストスタイル
-  static const TextStyle headingLarge = TextStyle(
-    fontSize: 32,
+  static const TextStyle headingLarge = TextStyle(fontSize: 32,
     fontWeight: FontWeight.bold,
   );
 
-  static const TextStyle headingMedium = TextStyle(
-    fontSize: 28,
+  static const TextStyle headingMedium = TextStyle(fontSize: 28,
     fontWeight: FontWeight.bold,
   );
 
-  static const TextStyle headingSmall = TextStyle(
-    fontSize: 24,
+  static const TextStyle headingSmall = TextStyle(fontSize: 24,
     fontWeight: FontWeight.bold,
   );
 
@@ -125,44 +122,36 @@ class AppStyles {
   static const EdgeInsets paddingSmall = EdgeInsets.all(8.0);
   static const EdgeInsets paddingMedium = EdgeInsets.all(16.0);
   static const EdgeInsets paddingLarge = EdgeInsets.all(24.0);
-  static const EdgeInsets paddingHorizontal = EdgeInsets.symmetric(
-    horizontal: 16.0,
+  static const EdgeInsets paddingHorizontal = EdgeInsets.symmetric(horizontal: 16.0,
   );
-  static const EdgeInsets paddingVertical = EdgeInsets.symmetric(
-    vertical: 16.0,
+  static const EdgeInsets paddingVertical = EdgeInsets.symmetric(vertical: 16.0,
   );
 
   // ボーダー半径
-  static const BorderRadius borderRadiusSmall = BorderRadius.all(
-    Radius.circular(8.0),
+  static const BorderRadius borderRadiusSmall = BorderRadius.all(Radius.circular(8.0),
   );
-  static const BorderRadius borderRadiusMedium = BorderRadius.all(
-    Radius.circular(12.0),
+  static const BorderRadius borderRadiusMedium = BorderRadius.all(Radius.circular(12.0),
   );
-  static const BorderRadius borderRadiusLarge = BorderRadius.all(
-    Radius.circular(16.0),
+  static const BorderRadius borderRadiusLarge = BorderRadius.all(Radius.circular(16.0),
   );
 
   // シャドウ
-  static const List<BoxShadow> shadowSmall = [
-    BoxShadow(
-      color: Colors.black12,
+  static const List < BoxShadow > shadowSmall = [
+    BoxShadow(color: Colors.black12,
       blurRadius: 4,
       offset: Offset(0, 2),
     ),
   ];
 
-  static const List<BoxShadow> shadowMedium = [
-    BoxShadow(
-      color: Colors.black12,
+  static const List < BoxShadow > shadowMedium = [
+    BoxShadow(color: Colors.black12,
       blurRadius: 8,
       offset: Offset(0, 4),
     ),
   ];
 
-  static const List<BoxShadow> shadowLarge = [
-    BoxShadow(
-      color: Colors.black12,
+  static const List < BoxShadow > shadowLarge = [
+    BoxShadow(color: Colors.black12,
       blurRadius: 16,
       offset: Offset(0, 8),
     ),

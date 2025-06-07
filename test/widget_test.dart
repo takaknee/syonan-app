@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:provider/provider.dart';
-import 'package:syonan_app/main.dart';
-import 'package:syonan_app/services/score_service.dart';
-import 'package:syonan_app/services/math_service.dart';
+import 'package:flutter / material.dart';
+import 'package:flutter_test / flutter_test.dart';
+import 'package:provider / provider.dart';
+import 'package:syonan_app / main.dart';
+import 'package:syonan_app / services / score_service.dart';
+import 'package:syonan_app / services / math_service.dart';
 
 void main() {
   group('SyonanApp Widget Tests', () {
@@ -64,12 +64,12 @@ void main() {
 
       // Get the providers from the widget tree
       final element = tester.element(find.byType(MaterialApp));
-      final mathService = Provider.of<MathService>(element, listen: false);
-      final scoreService = Provider.of<ScoreService>(element, listen: false);
+      final mathService = Provider.of < MathService>(element, listen: false);
+      final scoreService = Provider.of < ScoreService>(element, listen: false);
 
       // Verify services are provided
-      expect(mathService, isA<MathService>());
-      expect(scoreService, isA<ScoreService>());
+      expect(mathService, isA < MathService>());
+      expect(scoreService, isA < ScoreService>());
     });
   });
 }

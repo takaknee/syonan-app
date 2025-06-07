@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter / material.dart';
+import 'package:flutter / services.dart';
 
 /// 答え入力ウィジェット
 class AnswerInput extends StatefulWidget {
@@ -10,13 +10,13 @@ class AnswerInput extends StatefulWidget {
   });
 
   final Function(int) onAnswerSubmitted;
-  final Function(int?)? onAnswerChanged;
+  final Function(int? )? onAnswerChanged;
 
   @override
-  State<AnswerInput> createState() => _AnswerInputState();
+  State < AnswerInput > createState() => _AnswerInputState();
 }
 
-class _AnswerInputState extends State<AnswerInput> {
+class _AnswerInputState extends State < AnswerInput> {
   final TextEditingController _controller = TextEditingController();
   final FocusNode _focusNode = FocusNode();
 
@@ -40,26 +40,20 @@ class _AnswerInputState extends State<AnswerInput> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Container(
-      constraints: const BoxConstraints(maxWidth: 200),
-      child: Column(
-        children: [
+    return Container(constraints : const BoxConstraints(maxWidth: 200),
+      child: Column(children: [
           // 入力フィールド
-          Container(
-            decoration: BoxDecoration(
-              color: theme.colorScheme.surface,
+          Container(decoration: BoxDecoration(color: theme.colorScheme.surface,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(color: theme.colorScheme.outline, width: 2),
               boxShadow: [
-                BoxShadow(
-                  color: theme.colorScheme.shadow.withValues(alpha: 0.1),
+                BoxShadow(color: theme.colorScheme.shadow.withValues(alpha: 0.1),
                   blurRadius: 8,
                   offset: const Offset(0, 2),
                 ),
               ],
             ),
-            child: TextField(
-              controller: _controller,
+            child: TextField(controller: _controller,
               focusNode: _focusNode,
               keyboardType: TextInputType.number,
               inputFormatters: [
@@ -67,29 +61,25 @@ class _AnswerInputState extends State<AnswerInput> {
                 LengthLimitingTextInputFormatter(3), // 最大3桁
               ],
               textAlign: TextAlign.center,
-              style: theme.textTheme.headlineLarge?.copyWith(
-                fontSize: 36,
+              style: theme.textTheme.headlineLarge? .copyWith(fontSize : 36,
                 fontWeight: FontWeight.bold,
                 color: theme.colorScheme.onSurface,
               ),
-              decoration: InputDecoration(
-                hintText: '?',
-                hintStyle: theme.textTheme.headlineLarge?.copyWith(
-                  fontSize: 36,
+              decoration: InputDecoration(hintText: '? ',
+                hintStyle : theme.textTheme.headlineLarge?.copyWith(fontSize: 36,
                   fontWeight: FontWeight.bold,
                   color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
                 ),
                 border: InputBorder.none,
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 16,
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16,
                   vertical: 20,
                 ),
               ),
               onChanged: (value) {
                 final intValue = int.tryParse(value);
-                widget.onAnswerChanged?.call(intValue);
+                widget.onAnswerChanged? .call(intValue);
               },
-              onSubmitted: (value) {
+              onSubmitted : (value) {
                 _submitAnswer();
               },
             ),
@@ -98,27 +88,20 @@ class _AnswerInputState extends State<AnswerInput> {
           const SizedBox(height: 16),
 
           // 送信ボタン
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: _submitAnswer,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: theme.colorScheme.primary,
+          SizedBox(width: double.infinity,
+            child: ElevatedButton(onPressed: _submitAnswer,
+              style: ElevatedButton.styleFrom(backgroundColor: theme.colorScheme.primary,
                 foregroundColor: theme.colorScheme.onPrimary,
                 padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+              child: Row(mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Icon(Icons.check),
                   const SizedBox(width: 8),
-                  Text(
-                    'こたえる',
-                    style: theme.textTheme.bodyLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
+                  Text('こたえる',
+                    style: theme.textTheme.bodyLarge? .copyWith(fontWeight : FontWeight.bold,
                     ),
                   ),
                 ],
@@ -129,10 +112,8 @@ class _AnswerInputState extends State<AnswerInput> {
           const SizedBox(height: 16),
 
           // ヒントテキスト
-          Text(
-            '数字を入力して「こたえる」を押してください',
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+          Text('数字を入力して「こたえる」を押してください',
+            style: theme.textTheme.bodySmall? .copyWith(color : theme.colorScheme.onSurface.withValues(alpha: 0.6),
             ),
             textAlign: TextAlign.center,
           ),
@@ -143,18 +124,18 @@ class _AnswerInputState extends State<AnswerInput> {
 
   void _submitAnswer() {
     final text = _controller.text.trim();
-    if (text.isEmpty) {
+    if(text.isEmpty) {
       _showError('答えを入力してください');
       return;
     }
 
     final answer = int.tryParse(text);
-    if (answer == null) {
+    if(answer == null) {
       _showError('正しい数字を入力してください');
       return;
     }
 
-    if (answer < 0) {
+    if(answer < 0) {
       _showError('正の数を入力してください');
       return;
     }
@@ -165,9 +146,7 @@ class _AnswerInputState extends State<AnswerInput> {
   }
 
   void _showError(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message),
         backgroundColor: Colors.orange,
         duration: const Duration(seconds: 2),
         behavior: SnackBarBehavior.floating,

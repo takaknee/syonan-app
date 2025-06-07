@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter / material.dart';
+import 'package:provider / provider.dart';
 
-import 'screens/home_screen.dart';
-import 'services/math_service.dart';
-import 'services/score_service.dart';
+import 'screens / home_screen.dart';
+import 'services / math_service.dart';
+import 'services / score_service.dart';
 
 void main() {
   runApp(const SyonanApp());
@@ -16,30 +16,24 @@ class SyonanApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
+    return MultiProvider(providers: [
         // 算数問題生成サービス
-        Provider<MathService>(create: (context) => MathService()),
+        Provider < MathService>(create: (context) => MathService()),
         // スコア管理サービス
-        ChangeNotifierProvider<ScoreService>(
+        ChangeNotifierProvider < ScoreService>(
           create: (context) => ScoreService(),
         ),
       ],
-      child: MaterialApp(
-        title: '算数れんしゅう',
+      child: MaterialApp(title: '算数れんしゅう',
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          // Material Design 3を使用した子供向けのカラフルなテーマ
+        theme: ThemeData(// Material Design 3を使用した子供向けのカラフルなテーマ
           useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: Colors.blue,
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue,
             brightness: Brightness.light,
           ),
           // 子供向けの大きめのフォントサイズ
-          textTheme: const TextTheme(
-            headlineLarge: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-            headlineMedium: TextStyle(
-              fontSize: 28,
+          textTheme: const TextTheme(headlineLarge: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+            headlineMedium: TextStyle(fontSize: 28,
               fontWeight: FontWeight.bold,
             ),
             headlineSmall: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
@@ -47,23 +41,17 @@ class SyonanApp extends StatelessWidget {
             bodyMedium: TextStyle(fontSize: 16),
           ),
           // 子供向けのボタンスタイル（大きめのタッチターゲット）
-          elevatedButtonTheme: ElevatedButtonThemeData(
-            style: ElevatedButton.styleFrom(
-              minimumSize: const Size(120, 56), // 大きめのタッチターゲット
-              textStyle: const TextStyle(
-                fontSize: 18,
+          elevatedButtonTheme: ElevatedButtonThemeData(style: ElevatedButton.styleFrom(minimumSize: const Size(120, 56), // 大きめのタッチターゲット
+              textStyle: const TextStyle(fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16),
               ),
             ),
           ),
           // カードの角を丸くして子供向けの優しいデザイン
-          cardTheme: CardThemeData(
-            elevation: 4,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
+          cardTheme: CardThemeData(elevation: 4,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16),
             ),
           ),
         ),

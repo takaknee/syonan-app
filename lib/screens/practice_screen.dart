@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../models/math_problem.dart';
 import '../models/score_record.dart';
 import '../services/math_service.dart';
 import '../services/score_service.dart';
-import '../widgets/problem_card.dart';
 import '../widgets/answer_input.dart';
 import '../widgets/encouragement_dialog.dart';
+import '../widgets/problem_card.dart';
 
 /// 練習画面
 /// 算数問題を出題して答えを入力する画面

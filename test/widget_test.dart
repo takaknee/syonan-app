@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:syonan_app/main.dart';
-import 'package:syonan_app/services/score_service.dart';
 import 'package:syonan_app/services/math_service.dart';
+import 'package:syonan_app/services/score_service.dart';
 
 void main() {
   group('SyonanApp Widget Tests', () {

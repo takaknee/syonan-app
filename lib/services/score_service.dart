@@ -1,8 +1,10 @@
 import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../models/score_record.dart';
+
 import '../models/math_problem.dart';
+import '../models/score_record.dart';
 
 /// スコア管理サービス
 /// スコアの保存、読み込み、統計情報の提供を行う

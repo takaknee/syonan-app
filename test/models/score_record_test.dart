@@ -91,7 +91,7 @@ void main() {
 
     test('should implement equality correctly', () {
       final score1 = ScoreRecord(id: '1',
-        date: DateTime(2024, 1, 1),
+        date: DateTime(2024, 1),
         operation: MathOperationType.multiplication,
         correctAnswers: 8,
         totalQuestions: 10,
@@ -99,7 +99,7 @@ void main() {
       );
 
       final score2 = ScoreRecord(id: '1',
-        date: DateTime(2024, 1, 1),
+        date: DateTime(2024, 1),
         operation: MathOperationType.multiplication,
         correctAnswers: 8,
         totalQuestions: 10,
@@ -107,7 +107,7 @@ void main() {
       );
 
       final score3 = ScoreRecord(id: '2',
-        date: DateTime(2024, 1, 1),
+        date: DateTime(2024, 1),
         operation: MathOperationType.multiplication,
         correctAnswers: 8,
         totalQuestions: 10,

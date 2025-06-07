@@ -51,7 +51,6 @@ class ProblemCard extends StatelessWidget {
             // 問題文
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 // 第一数値
                 Text(

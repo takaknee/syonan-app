@@ -341,8 +341,6 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen> with SingleTick
             const SizedBox(height: 16),
             ...recentScores.map((score) => Padding(padding: const EdgeInsets.only(bottom: 8),
                 child: ScoreCard(scoreRecord: score,
-                  isBest: false,
-                  showImprovement: false,
                   isCompact: true,
                 ),
               ),

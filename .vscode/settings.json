@@ -5,6 +5,7 @@
     "source.organizeImports": "explicit"
   },
   "dart.flutterSdkPath": "${workspaceFolder}/flutter",
+  "dart.sdkPath": "${workspaceFolder}/flutter/bin/cache/dart-sdk",
   "dart.lineLength": 80,
   "dart.insertArgumentPlaceholders": false,
   "dart.updateImportsOnRename": true,
@@ -38,10 +39,7 @@
   },
   "github.copilot.chat.followUps": "always",
   "github.copilot.chat.localeOverride": "ja",
-  "github.copilot.editor.enableCodeActions": true,
   "github.copilot.inlineSuggest.enable": true,
-  "github.copilot.conversation.additionalInstructions":
-    "小学三年生向け算数アプリ「syonan-app」。教育的で安全なコード、日本語優先。",
   "files.associations": {
     "*.dart": "dart"
   },

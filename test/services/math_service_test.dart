@@ -49,6 +49,42 @@ void main() {
       });
     });
 
+    group('generateAdditionProblem', () {
+      test('should generate valid addition problems', () {
+        for (int i = 0; i < 10; i++) {
+          final problem = mathService.generateAdditionProblem();
+
+          expect(problem.operation, MathOperationType.addition);
+          expect(problem.firstNumber, greaterThanOrEqualTo(1));
+          expect(problem.firstNumber, lessThanOrEqualTo(50));
+          expect(problem.secondNumber, greaterThanOrEqualTo(1));
+          expect(problem.correctAnswer, lessThanOrEqualTo(100));
+          expect(
+            problem.correctAnswer,
+            problem.firstNumber + problem.secondNumber,
+          );
+        }
+      });
+    });
+
+    group('generateSubtractionProblem', () {
+      test('should generate valid subtraction problems', () {
+        for (int i = 0; i < 10; i++) {
+          final problem = mathService.generateSubtractionProblem();
+
+          expect(problem.operation, MathOperationType.subtraction);
+          expect(problem.secondNumber, greaterThanOrEqualTo(1));
+          expect(problem.secondNumber, lessThanOrEqualTo(50));
+          expect(problem.firstNumber, greaterThan(problem.secondNumber));
+          expect(problem.correctAnswer, greaterThan(0));
+          expect(
+            problem.correctAnswer,
+            problem.firstNumber - problem.secondNumber,
+          );
+        }
+      });
+    });
+
     group('generateProblem', () {
       test('should generate multiplication problem when specified', () {
         final problem = mathService.generateProblem(
@@ -60,6 +96,16 @@ void main() {
       test('should generate division problem when specified', () {
         final problem = mathService.generateProblem(MathOperationType.division);
         expect(problem.operation, MathOperationType.division);
+      });
+
+      test('should generate addition problem when specified', () {
+        final problem = mathService.generateProblem(MathOperationType.addition);
+        expect(problem.operation, MathOperationType.addition);
+      });
+
+      test('should generate subtraction problem when specified', () {
+        final problem = mathService.generateProblem(MathOperationType.subtraction);
+        expect(problem.operation, MathOperationType.subtraction);
       });
     });
 
@@ -166,6 +212,38 @@ void main() {
         expect(problem.firstNumber, lessThanOrEqualTo(9));
         expect(problem.secondNumber, greaterThanOrEqualTo(1));
         expect(problem.secondNumber, lessThanOrEqualTo(9));
+      });
+
+      test('should generate addition problems with difficulty levels', () {
+        for (int level = 1; level <= 3; level++) {
+          final problem = mathService.generateProblemWithDifficulty(
+            MathOperationType.addition,
+            level,
+          );
+
+          expect(problem.operation, MathOperationType.addition);
+          expect(problem.correctAnswer, greaterThan(0));
+          expect(
+            problem.correctAnswer,
+            problem.firstNumber + problem.secondNumber,
+          );
+        }
+      });
+
+      test('should generate subtraction problems with difficulty levels', () {
+        for (int level = 1; level <= 3; level++) {
+          final problem = mathService.generateProblemWithDifficulty(
+            MathOperationType.subtraction,
+            level,
+          );
+
+          expect(problem.operation, MathOperationType.subtraction);
+          expect(problem.correctAnswer, greaterThan(0));
+          expect(
+            problem.correctAnswer,
+            problem.firstNumber - problem.secondNumber,
+          );
+        }
       });
     });
   });

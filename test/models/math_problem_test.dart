@@ -33,6 +33,36 @@ void main() {
       expect(problem.questionText, '12 ÷ 3 = ? ');
     });
 
+    test('should create addition problem correctly', () {
+      const problem = MathProblem(
+        firstNumber: 15,
+        secondNumber: 27,
+        operation: MathOperationType.addition,
+        correctAnswer: 42,
+      );
+
+      expect(problem.firstNumber, 15);
+      expect(problem.secondNumber, 27);
+      expect(problem.operation, MathOperationType.addition);
+      expect(problem.correctAnswer, 42);
+      expect(problem.questionText, '15 + 27 = ? ');
+    });
+
+    test('should create subtraction problem correctly', () {
+      const problem = MathProblem(
+        firstNumber: 50,
+        secondNumber: 18,
+        operation: MathOperationType.subtraction,
+        correctAnswer: 32,
+      );
+
+      expect(problem.firstNumber, 50);
+      expect(problem.secondNumber, 18);
+      expect(problem.operation, MathOperationType.subtraction);
+      expect(problem.correctAnswer, 32);
+      expect(problem.questionText, '50 - 18 = ? ');
+    });
+
     test('should validate correct answer', () {
       const problem = MathProblem(
         firstNumber: 5,
@@ -97,6 +127,12 @@ void main() {
 
       expect(MathOperationType.division.symbol, '÷');
       expect(MathOperationType.division.displayName, '割り算');
+
+      expect(MathOperationType.addition.symbol, '+');
+      expect(MathOperationType.addition.displayName, '足し算');
+
+      expect(MathOperationType.subtraction.symbol, '-');
+      expect(MathOperationType.subtraction.displayName, '引き算');
     });
   });
 }

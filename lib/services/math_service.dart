@@ -2,7 +2,7 @@ import 'dart:math';
 import '../models/math_problem.dart';
 
 /// 算数問題生成サービス
-/// 小学三年生向けの掛け算・割り算問題を生成する
+/// 小学三年生〜四年生向けの掛け算・割り算・足し算・引き算問題を生成する
 class MathService {
   final Random _random = Random();
 
@@ -38,6 +38,39 @@ class MathService {
     );
   }
 
+  /// 足し算問題を生成
+  /// 小学三年生レベル（1〜99の範囲、答えが100以下）
+  MathProblem generateAdditionProblem() {
+    // 答えが100以下になるように調整
+    final firstNumber = _random.nextInt(50) + 1; // 1 - 50
+    final maxSecond = min(99 - firstNumber, 99); // 答えが100以下になるように
+    final secondNumber = _random.nextInt(maxSecond) + 1;
+    final answer = firstNumber + secondNumber;
+
+    return MathProblem(
+      firstNumber: firstNumber,
+      secondNumber: secondNumber,
+      operation: MathOperationType.addition,
+      correctAnswer: answer,
+    );
+  }
+
+  /// 引き算問題を生成
+  /// 小学三年生レベル（答えが正の数になるように調整）
+  MathProblem generateSubtractionProblem() {
+    // 引く数より引かれる数が大きくなるように調整
+    final secondNumber = _random.nextInt(50) + 1; // 1 - 50（引く数）
+    final firstNumber = secondNumber + _random.nextInt(50) + 1; // 51 - 100の範囲
+    final answer = firstNumber - secondNumber;
+
+    return MathProblem(
+      firstNumber: firstNumber,
+      secondNumber: secondNumber,
+      operation: MathOperationType.subtraction,
+      correctAnswer: answer,
+    );
+  }
+
   /// 指定された操作タイプの問題を生成
   MathProblem generateProblem(MathOperationType operation) {
     switch (operation) {
@@ -45,6 +78,10 @@ class MathService {
         return generateMultiplicationProblem();
       case MathOperationType.division:
         return generateDivisionProblem();
+      case MathOperationType.addition:
+        return generateAdditionProblem();
+      case MathOperationType.subtraction:
+        return generateSubtractionProblem();
     }
   }
 
@@ -79,6 +116,10 @@ class MathService {
         return 81; // 9 × 9 = 81通り
       case MathOperationType.division:
         return 81; // 理論上は掛け算と同じ数だけ作れる
+      case MathOperationType.addition:
+        return 2450; // 概算: 50 × 49（重複を除く組み合わせ）
+      case MathOperationType.subtraction:
+        return 2450; // 概算: 50 × 49（重複を除く組み合わせ）
     }
   }
 
@@ -115,6 +156,29 @@ class MathService {
           secondNumber: divisor,
           operation: MathOperationType.division,
           correctAnswer: quotient,
+        );
+
+      case MathOperationType.addition:
+        final maxRange = maxNumber * 10; // 難易度に応じて範囲を調整
+        final firstNumber = _random.nextInt(maxRange) + 1;
+        final maxSecond = min(99, maxRange - firstNumber);
+        final secondNumber = _random.nextInt(maxSecond) + 1;
+        return MathProblem(
+          firstNumber: firstNumber,
+          secondNumber: secondNumber,
+          operation: MathOperationType.addition,
+          correctAnswer: firstNumber + secondNumber,
+        );
+
+      case MathOperationType.subtraction:
+        final maxRange = maxNumber * 10; // 難易度に応じて範囲を調整
+        final secondNumber = _random.nextInt(maxRange) + 1;
+        final firstNumber = secondNumber + _random.nextInt(maxRange) + 1;
+        return MathProblem(
+          firstNumber: firstNumber,
+          secondNumber: secondNumber,
+          operation: MathOperationType.subtraction,
+          correctAnswer: firstNumber - secondNumber,
         );
     }
   }

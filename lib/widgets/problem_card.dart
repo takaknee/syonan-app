@@ -7,6 +7,20 @@ class ProblemCard extends StatelessWidget {
 
   final MathProblem problem;
 
+  /// 操作タイプに応じたアイコンを取得
+  IconData _getOperationIcon(MathOperationType operation) {
+    switch (operation) {
+      case MathOperationType.multiplication:
+        return Icons.close;
+      case MathOperationType.division:
+        return Icons.more_horiz;
+      case MathOperationType.addition:
+        return Icons.add;
+      case MathOperationType.subtraction:
+        return Icons.remove;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -38,9 +52,7 @@ class ProblemCard extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
               child: Icon(
-                problem.operation == MathOperationType.multiplication
-                    ? Icons.close
-                    : Icons.more_horiz,
+                _getOperationIcon(problem.operation),
                 color: Colors.white,
                 size: 24,
               ),

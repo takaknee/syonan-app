@@ -75,8 +75,12 @@
       "command": "dart",
       "args": [
         "format",
-        "."
+        "/workspaces/syonan-app/lib/",
+        "/workspaces/syonan-app/test/"
       ],
+      "options": {
+        "cwd": "/workspaces/syonan-app"
+      },
       "group": "build",
       "presentation": {
         "echo": true,
@@ -87,15 +91,39 @@
       "problemMatcher": []
     },
     {
-      "label": "Dart: フォーマットチェック",
+      "label": "Dart: フォーマットチェック（修正なし）",
       "type": "shell",
       "command": "dart",
       "args": [
         "format",
         "--set-exit-if-changed",
-        "."
+        "/workspaces/syonan-app/lib/",
+        "/workspaces/syonan-app/test/"
       ],
+      "options": {
+        "cwd": "/workspaces/syonan-app"
+      },
       "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Dart: フォーマットチェック（自動修正）",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-c",
+        "echo '📝 フォーマットをチェックして自動修正します...' && dart format --set-exit-if-changed /workspaces/syonan-app/lib/ /workspaces/syonan-app/test/ || (echo '⚠️  フォーマット問題を発見しました。自動修正を実行します...' && dart format /workspaces/syonan-app/lib/ /workspaces/syonan-app/test/ && echo '✅ フォーマットを修正しました！')"
+      ],
+      "options": {
+        "cwd": "/workspaces/syonan-app"
+      },
+      "group": "build",
       "presentation": {
         "echo": true,
         "reveal": "always",
@@ -201,14 +229,30 @@
     },
     // === 品質保証（組み合わせタスク） ===
     {
-      "label": "QA: 全チェック",
+      "label": "QA: 全チェック（修正なし）",
       "dependsOrder": "sequence",
       "dependsOn": [
-        "Dart: フォーマットチェック",
+        "Dart: フォーマットチェック（修正なし）",
         "Flutter: コード解析",
         "Flutter: テスト実行"
       ],
       "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "QA: 全チェック（自動修正）",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "Dart: フォーマットチェック（自動修正）",
+        "Flutter: コード解析",
+        "Flutter: テスト実行"
+      ],
+      "group": "build",
       "presentation": {
         "echo": true,
         "reveal": "always",

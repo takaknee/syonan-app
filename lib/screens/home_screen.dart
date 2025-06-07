@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../models/math_problem.dart';
 import '../services/score_service.dart';
+import '../widgets/practice_button.dart';
+import '../widgets/stat_card.dart';
 import 'practice_screen.dart';
 import 'score_history_screen.dart';
-import '../widgets/stat_card.dart';
-import '../widgets/practice_button.dart';
 
 /// ホーム画面
 /// アプリのメイン画面で、練習選択とスコア概要を表示
@@ -31,7 +32,8 @@ class _HomeScreenState extends State<HomeScreen> {
     final theme = Theme.of(context);
     final scoreService = context.watch<ScoreService>();
 
-    return Scaffold(backgroundColor: theme.colorScheme.surface,
+    return Scaffold(
+      backgroundColor: theme.colorScheme.surface,
       body: SafeArea(
         child: scoreService.isLoading
             ? const Center(child: CircularProgressIndicator())
@@ -57,7 +59,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               ),
-        ),
       ),
     );
   }

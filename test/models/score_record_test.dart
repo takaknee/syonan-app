@@ -1,12 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:syonan_app/models/score_record.dart';
-import 'package:syonan_app/models/math_problem.dart';
+import 'package:syonan_app / models/score_record.dart';
+import 'package:syonan_app / models/math_problem.dart';
 
 void main() {
   group('ScoreRecord', () {
     test('should calculate accuracy correctly', () {
-      final scoreRecord = ScoreRecord(
-        id: '1',
+      final scoreRecord = ScoreRecord(id: '1',
         date: DateTime.now(),
         operation: MathOperationType.multiplication,
         correctAnswers: 8,
@@ -19,8 +18,7 @@ void main() {
     });
 
     test('should handle zero questions correctly', () {
-      final scoreRecord = ScoreRecord(
-        id: '1',
+      final scoreRecord = ScoreRecord(id: '1',
         date: DateTime.now(),
         operation: MathOperationType.multiplication,
         correctAnswers: 0,
@@ -33,8 +31,7 @@ void main() {
     });
 
     test('should determine correct score level', () {
-      final excellentScore = ScoreRecord(
-        id: '1',
+      final excellentScore = ScoreRecord(id: '1',
         date: DateTime.now(),
         operation: MathOperationType.multiplication,
         correctAnswers: 9,
@@ -42,8 +39,7 @@ void main() {
         timeSpent: const Duration(minutes: 5),
       );
 
-      final goodScore = ScoreRecord(
-        id: '2',
+      final goodScore = ScoreRecord(id: '2',
         date: DateTime.now(),
         operation: MathOperationType.multiplication,
         correctAnswers: 8,
@@ -51,8 +47,7 @@ void main() {
         timeSpent: const Duration(minutes: 5),
       );
 
-      final fairScore = ScoreRecord(
-        id: '3',
+      final fairScore = ScoreRecord(id: '3',
         date: DateTime.now(),
         operation: MathOperationType.multiplication,
         correctAnswers: 7,
@@ -60,8 +55,7 @@ void main() {
         timeSpent: const Duration(minutes: 5),
       );
 
-      final needsPracticeScore = ScoreRecord(
-        id: '4',
+      final needsPracticeScore = ScoreRecord(id: '4',
         date: DateTime.now(),
         operation: MathOperationType.multiplication,
         correctAnswers: 6,
@@ -76,8 +70,7 @@ void main() {
     });
 
     test('should convert to and from JSON', () {
-      final originalScore = ScoreRecord(
-        id: 'test_123',
+      final originalScore = ScoreRecord(id: 'test_123',
         date: DateTime(2024, 1, 15, 10, 30),
         operation: MathOperationType.division,
         correctAnswers: 7,
@@ -97,8 +90,7 @@ void main() {
     });
 
     test('should implement equality correctly', () {
-      final score1 = ScoreRecord(
-        id: '1',
+      final score1 = ScoreRecord(id: '1',
         date: DateTime(2024, 1, 1),
         operation: MathOperationType.multiplication,
         correctAnswers: 8,
@@ -106,8 +98,7 @@ void main() {
         timeSpent: const Duration(minutes: 5),
       );
 
-      final score2 = ScoreRecord(
-        id: '1',
+      final score2 = ScoreRecord(id: '1',
         date: DateTime(2024, 1, 1),
         operation: MathOperationType.multiplication,
         correctAnswers: 8,
@@ -115,8 +106,7 @@ void main() {
         timeSpent: const Duration(minutes: 5),
       );
 
-      final score3 = ScoreRecord(
-        id: '2',
+      final score3 = ScoreRecord(id: '2',
         date: DateTime(2024, 1, 1),
         operation: MathOperationType.multiplication,
         correctAnswers: 8,

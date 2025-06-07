@@ -35,8 +35,8 @@ class ScoreCard extends StatelessWidget {
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                    Colors.amber.withOpacity(0.1),
-                    Colors.amber.withOpacity(0.05),
+                    Colors.amber.withValues(alpha: 0.1),
+                    Colors.amber.withValues(alpha: 0.05),
                   ],
                 )
               : null,
@@ -55,7 +55,7 @@ class ScoreCard extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: _getOperationColor().withOpacity(0.2),
+            color: _getOperationColor().withValues(alpha: 0.2),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Icon(
@@ -93,7 +93,7 @@ class ScoreCard extends StatelessWidget {
         Text(
           _formatDate(scoreRecord.date),
           style: theme.textTheme.bodySmall?.copyWith(
-            color: theme.colorScheme.onSurface.withOpacity(0.6),
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
           ),
         ),
       ],
@@ -137,7 +137,7 @@ class ScoreCard extends StatelessWidget {
                 Text(
                   _formatDateTime(scoreRecord.date),
                   style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.colorScheme.onSurface.withOpacity(0.6),
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                   ),
                 ),
               ],
@@ -153,8 +153,7 @@ class ScoreCard extends StatelessWidget {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    scoreRecord.level.emoji,
+                  Text(scoreRecord.level.emoji,
                     style: const TextStyle(fontSize: 16),
                   ),
                   const SizedBox(width: 4),
@@ -174,27 +173,20 @@ class ScoreCard extends StatelessWidget {
         const SizedBox(height: 12),
 
         // スコア詳細
-        Row(
-          children: [
-            Expanded(
-              child: _buildScoreDetail(
-                theme,
+        Row(children: [
+            Expanded(child: _buildScoreDetail(theme,
                 '正答率',
                 '${scoreRecord.accuracyPercentage}%',
                 _getAccuracyColor(scoreRecord.accuracyPercentage),
               ),
             ),
-            Expanded(
-              child: _buildScoreDetail(
-                theme,
+            Expanded(child: _buildScoreDetail(theme,
                 '正解数',
                 '${scoreRecord.correctAnswers}/${scoreRecord.totalQuestions}',
                 theme.colorScheme.primary,
               ),
             ),
-            Expanded(
-              child: _buildScoreDetail(
-                theme,
+            Expanded(child: _buildScoreDetail(theme,
                 '所要時間',
                 _formatDuration(scoreRecord.timeSpent),
                 theme.colorScheme.secondary,
@@ -212,8 +204,7 @@ class ScoreCard extends StatelessWidget {
     );
   }
 
-  Widget _buildScoreDetail(
-    ThemeData theme,
+  Widget _buildScoreDetail(ThemeData theme,
     String label,
     String value,
     Color color,
@@ -230,8 +221,9 @@ class ScoreCard extends StatelessWidget {
         Text(
           label,
           style: theme.textTheme.bodySmall?.copyWith(
-            color: theme.colorScheme.onSurface.withOpacity(0.6),
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
           ),
+        ),
         ),
       ],
     );
@@ -265,7 +257,7 @@ class ScoreCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
@@ -288,11 +280,11 @@ class ScoreCard extends StatelessWidget {
   Color _getOperationColor() {
     return scoreRecord.operation == MathOperationType.multiplication
         ? Colors.blue
-        : Colors.green;
+         : Colors.green;
   }
 
   Color _getLevelColor() {
-    switch (scoreRecord.level) {
+    switch(scoreRecord.level) {
       case ScoreLevel.excellent:
         return Colors.green;
       case ScoreLevel.good:

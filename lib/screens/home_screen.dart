@@ -31,8 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final theme = Theme.of(context);
     final scoreService = context.watch<ScoreService>();
 
-    return Scaffold(
-      backgroundColor: theme.colorScheme.surface,
+    return Scaffold(backgroundColor: theme.colorScheme.surface,
       body: SafeArea(
         child: scoreService.isLoading
             ? const Center(child: CircularProgressIndicator())
@@ -58,6 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               ),
+        ),
       ),
     );
   }
@@ -66,17 +66,15 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          '算数れんしゅう',
+        Text('算数れんしゅう',
           style: theme.textTheme.headlineLarge?.copyWith(
             color: theme.colorScheme.primary,
           ),
         ),
         const SizedBox(height: 8),
-        Text(
-          '今日も楽しく勉強しましょう！',
+        Text('今日も楽しく勉強しましょう！',
           style: theme.textTheme.bodyLarge?.copyWith(
-            color: theme.colorScheme.onSurface.withOpacity(0.7),
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
           ),
         ),
       ],
@@ -87,8 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          '練習する',
+        Text('練習する',
           style: theme.textTheme.headlineMedium?.copyWith(
             color: theme.colorScheme.primary,
           ),
@@ -134,8 +131,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'あなたの記録',
+        Text('あなたの記録',
           style: theme.textTheme.headlineMedium?.copyWith(
             color: theme.colorScheme.primary,
           ),
@@ -194,7 +190,9 @@ class _HomeScreenState extends State<HomeScreen> {
       child: ElevatedButton.icon(
         onPressed: () {
           Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => const ScoreHistoryScreen()),
+            MaterialPageRoute(
+              builder: (context) => const ScoreHistoryScreen(),
+            ),
           );
         },
         icon: const Icon(Icons.history),

@@ -17,14 +17,10 @@ class EncouragementDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      child: Container(
-        padding: const EdgeInsets.all(24),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
+    return Dialog(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      child: Container(padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(20),
+          gradient: LinearGradient(begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
               theme.colorScheme.primaryContainer,
@@ -32,24 +28,19 @@ class EncouragementDialog extends StatelessWidget {
             ],
           ),
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
+        child: Column(mainAxisSize: MainAxisSize.min,
           children: [
             // アイコンとアニメーション
             TweenAnimationBuilder<double>(
               duration: const Duration(milliseconds: 1000),
               tween: Tween<double>(begin: 0.0, end: 1.0),
               builder: (context, value, child) {
-                return Transform.scale(
-                  scale: value,
-                  child: Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: _getColorForImprovement(improvement),
+                return Transform.scale(scale: value,
+                  child: Container(padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(color: _getColorForImprovement(improvement),
                       shape: BoxShape.circle,
                     ),
-                    child: Text(
-                      improvement.emoji,
+                    child: Text(improvement.emoji,
                       style: const TextStyle(fontSize: 48),
                     ),
                   ),
@@ -75,7 +66,7 @@ class EncouragementDialog extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.8),
+                color: Colors.white.withValues(alpha: 0.8),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Column(
@@ -117,21 +108,17 @@ class EncouragementDialog extends StatelessWidget {
             const SizedBox(height: 24),
 
             // ボタン
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
+                TextButton(onPressed: () => Navigator.of(context).pop(),
                   child: const Text('閉じる'),
                 ),
-                ElevatedButton(
-                  onPressed: () {
+                ElevatedButton(onPressed: () {
                     Navigator.of(context).pop();
                     // ホーム画面に戻る
                     Navigator.of(context).popUntil((route) => route.isFirst);
                   },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: theme.colorScheme.primary,
+                  style: ElevatedButton.styleFrom(backgroundColor: theme.colorScheme.primary,
                   ),
                   child: const Text('ホームに戻る'),
                 ),
@@ -144,7 +131,7 @@ class EncouragementDialog extends StatelessWidget {
   }
 
   Color _getColorForImprovement(ScoreImprovement improvement) {
-    switch (improvement) {
+    switch(improvement) {
       case ScoreImprovement.improved:
         return Colors.green;
       case ScoreImprovement.same:

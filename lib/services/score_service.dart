@@ -129,18 +129,17 @@ class ScoreService extends ChangeNotifier {
     var streakDays = 0;
     var checkDate = today;
 
-    final uniqueDates =
-        _scores
-            .map(
-              (score) => DateTime(
-                score.date.year,
-                score.date.month,
-                score.date.day,
-              ),
-            )
-            .toSet()
-            .toList()
-          ..sort((a, b) => b.compareTo(a)); // 新しい順
+    final uniqueDates = _scores
+        .map(
+          (score) => DateTime(
+            score.date.year,
+            score.date.month,
+            score.date.day,
+          ),
+        )
+        .toSet()
+        .toList()
+      ..sort((a, b) => b.compareTo(a)); // 新しい順
 
     for (final scoreDate in uniqueDates) {
       if (scoreDate.isAtSameMomentAs(checkDate)) {

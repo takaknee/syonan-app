@@ -43,8 +43,8 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
         bottom: TabBar(
           controller: _tabController,
           labelColor: theme.colorScheme.onPrimaryContainer,
-          unselectedLabelColor: theme.colorScheme.onPrimaryContainer
-              .withValues(alpha: 0.6),
+          unselectedLabelColor:
+              theme.colorScheme.onPrimaryContainer.withValues(alpha: 0.6),
           indicatorColor: theme.colorScheme.primary,
           tabs: const [
             Tab(text: '掛け算', icon: Icon(Icons.close)),

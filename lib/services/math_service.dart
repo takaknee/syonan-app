@@ -60,8 +60,7 @@ class MathService {
     while (problems.length < count &&
         usedProblems.length < _getMaxUniqueProblems(operation)) {
       final problem = generateProblem(operation);
-      final problemKey =
-          '${problem.firstNumber}_${problem.secondNumber}'
+      final problemKey = '${problem.firstNumber}_${problem.secondNumber}'
           '_${problem.operation.name}';
 
       if (!usedProblems.contains(problemKey)) {

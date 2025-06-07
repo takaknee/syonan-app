@@ -21,8 +21,7 @@ class AppConstants {
 
   // タイムアウト設定
   static const Duration maxPracticeTime = Duration(minutes: 30);
-  static const Duration encouragementDelay =
-      Duration(milliseconds: 1500);
+  static const Duration encouragementDelay = Duration(milliseconds: 1500);
 
   // アニメーション設定
   static const Duration fastAnimation = Duration(milliseconds: 300);

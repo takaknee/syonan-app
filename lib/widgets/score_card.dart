@@ -1,7 +1,7 @@
-import 'package:flutter / material.dart';
+import 'package:flutter/material.dart';
 
-import '../models / math_problem.dart';
-import '../models / score_record.dart';
+import '../models/math_problem.dart';
+import '../models/score_record.dart';
 
 /// スコア記録を表示するカードウィジェット
 class ScoreCard extends StatelessWidget {

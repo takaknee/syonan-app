@@ -1,6 +1,6 @@
-import 'package:flutter / material.dart';
-import '../models / score_record.dart';
-import '../services / score_service.dart';
+import 'package:flutter/material.dart';
+import '../models/score_record.dart';
+import '../services/score_service.dart';
 
 /// 励ましのダイアログウィジェット
 class EncouragementDialog extends StatelessWidget {
@@ -31,9 +31,9 @@ class EncouragementDialog extends StatelessWidget {
         child: Column(mainAxisSize: MainAxisSize.min,
           children: [
             // アイコンとアニメーション
-            TweenAnimationBuilder < double>(
+            TweenAnimationBuilder<double>(
               duration: const Duration(milliseconds: 1000),
-              tween: Tween < double>(begin: 0.0, end: 1.0),
+              tween: Tween<double>(begin: 0.0, end: 1.0),
               builder: (context, value, child) {
                 return Transform.scale(scale: value,
                   child: Container(padding: const EdgeInsets.all(16),

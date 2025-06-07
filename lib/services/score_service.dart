@@ -1,8 +1,8 @@
 import 'dart:convert';
-import 'package:flutter / foundation.dart';
-import 'package:shared_preferences / shared_preferences.dart';
-import '../models / score_record.dart';
-import '../models / math_problem.dart';
+import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../models/score_record.dart';
+import '../models/math_problem.dart';
 
 /// スコア管理サービス
 /// スコアの保存、読み込み、統計情報の提供を行う
@@ -10,16 +10,16 @@ class ScoreService extends ChangeNotifier {
   static const String _scoresKey = 'score_records';
   static const String _lastScoreKey = 'last_score';
 
-  List < ScoreRecord > _scores = [];
+  List<ScoreRecord> _scores = [];
   ScoreRecord? _lastScore;
   bool _isLoading = false;
 
-  List < ScoreRecord > get scores => List.unmodifiable(_scores);
+  List<ScoreRecord> get scores => List.unmodifiable(_scores);
   ScoreRecord? get lastScore => _lastScore;
   bool get isLoading => _isLoading;
 
   /// サービス初期化（アプリ起動時に呼び出す）
-  Future < void > initialize() async {
+  Future<void> initialize() async {
     _isLoading = true;
     notifyListeners();
 
@@ -35,7 +35,7 @@ class ScoreService extends ChangeNotifier {
   }
 
   /// 新しいスコアを保存
-  Future < void > saveScore(ScoreRecord score) async {
+  Future<void> saveScore(ScoreRecord score) async {
     try {
       _scores.add(score);
       _scores.sort((a, b) => b.date.compareTo(a.date)); // 新しい順にソート
@@ -52,7 +52,7 @@ class ScoreService extends ChangeNotifier {
   }
 
   /// 特定の操作タイプのスコア履歴を取得
-  List < ScoreRecord > getScoresByOperation(MathOperationType operation) {
+  List<ScoreRecord> getScoresByOperation(MathOperationType operation) {
     return _scores.where((score) => score.operation == operation).toList();
   }
 
@@ -148,14 +148,14 @@ class ScoreService extends ChangeNotifier {
   }
 
   /// スコアをローカルストレージから読み込み
-  Future < void > _loadScores() async {
+  Future<void> _loadScores() async {
     final prefs = await SharedPreferences.getInstance();
     final scoresJson = prefs.getString(_scoresKey);
 
     if(scoresJson != null) {
       final scoresList = jsonDecode(scoresJson) as List;
       _scores = scoresList
-          .map((json) => ScoreRecord.fromJson(json as Map < String, dynamic>),
+          .map((json) => ScoreRecord.fromJson(json as Map<String, dynamic>),
           )
           .toList();
       _scores.sort((a, b) => b.date.compareTo(a.date)); // 新しい順にソート
@@ -163,7 +163,7 @@ class ScoreService extends ChangeNotifier {
   }
 
   /// スコアをローカルストレージに保存
-  Future < void > _saveScores() async {
+  Future<void> _saveScores() async {
     final prefs = await SharedPreferences.getInstance();
     final scoresJson = jsonEncode(_scores.map((score) => score.toJson()).toList(),
     );
@@ -171,25 +171,25 @@ class ScoreService extends ChangeNotifier {
   }
 
   /// 最後のスコアを読み込み
-  Future < void > _loadLastScore() async {
+  Future<void> _loadLastScore() async {
     final prefs = await SharedPreferences.getInstance();
     final lastScoreJson = prefs.getString(_lastScoreKey);
 
     if(lastScoreJson != null) {
-      final json = jsonDecode(lastScoreJson) as Map < String, dynamic>;
+      final json = jsonDecode(lastScoreJson) as Map<String, dynamic>;
       _lastScore = ScoreRecord.fromJson(json);
     }
   }
 
   /// 最後のスコアを保存
-  Future < void > _saveLastScore(ScoreRecord score) async {
+  Future<void> _saveLastScore(ScoreRecord score) async {
     final prefs = await SharedPreferences.getInstance();
     final scoreJson = jsonEncode(score.toJson());
     await prefs.setString(_lastScoreKey, scoreJson);
   }
 
   /// 全てのスコアをクリア（デバッグ用）
-  Future < void > clearAllScores() async {
+  Future<void> clearAllScores() async {
     _scores.clear();
     _lastScore = null;
 

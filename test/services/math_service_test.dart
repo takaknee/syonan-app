@@ -1,6 +1,6 @@
-import 'package:flutter_test / flutter_test.dart';
-import 'package:syonan_app / services / math_service.dart';
-import 'package:syonan_app / models / math_problem.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:syonan_app / services/math_service.dart';
+import 'package:syonan_app / models/math_problem.dart';
 
 void main() {
   group('MathService', () {

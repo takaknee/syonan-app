@@ -1,12 +1,12 @@
-import 'package:flutter / material.dart';
-import 'package:provider / provider.dart';
-import '../models / math_problem.dart';
-import '../models / score_record.dart';
-import '../services / math_service.dart';
-import '../services / score_service.dart';
-import '../widgets / problem_card.dart';
-import '../widgets / answer_input.dart';
-import '../widgets / encouragement_dialog.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../models/math_problem.dart';
+import '../models/score_record.dart';
+import '../services/math_service.dart';
+import '../services/score_service.dart';
+import '../widgets/problem_card.dart';
+import '../widgets/answer_input.dart';
+import '../widgets/encouragement_dialog.dart';
 
 /// 練習画面
 /// 算数問題を出題して答えを入力する画面
@@ -21,13 +21,13 @@ class PracticeScreen extends StatefulWidget {
   final int problemCount;
 
   @override
-  State < PracticeScreen > createState() => _PracticeScreenState();
+  State<PracticeScreen> createState() => _PracticeScreenState();
 }
 
-class _PracticeScreenState extends State < PracticeScreen > with TickerProviderStateMixin {
-  late final List < MathProblem > _problems;
-  late final List < int? > _userAnswers;
-  late final List < bool > _isCorrect;
+class _PracticeScreenState extends State<PracticeScreen> with TickerProviderStateMixin {
+  late final List<MathProblem> _problems;
+  late final List<int?> _userAnswers;
+  late final List<bool> _isCorrect;
   late final DateTime _startTime;
 
   int _currentProblemIndex = 0;
@@ -41,7 +41,7 @@ class _PracticeScreenState extends State < PracticeScreen > with TickerProviderS
     _startTime = DateTime.now();
 
     // 問題を生成
-    final mathService = context.read < MathService>();
+    final mathService = context.read<MathService>();
     _problems = mathService.generateProblems(widget.operation,
       widget.problemCount,
     );
@@ -112,7 +112,7 @@ class _PracticeScreenState extends State < PracticeScreen > with TickerProviderS
           LinearProgressIndicator(value: progress,
             backgroundColor:
                 theme.colorScheme.onPrimaryContainer.withValues(alpha: 0.3),
-            valueColor: AlwaysStoppedAnimation < Color>(
+            valueColor: AlwaysStoppedAnimation<Color>(
               theme.colorScheme.primary,
             ),
           ),
@@ -314,7 +314,7 @@ class _PracticeScreenState extends State < PracticeScreen > with TickerProviderS
       timeSpent: timeSpent,
     );
 
-    final scoreService = context.read < ScoreService>();
+    final scoreService = context.read<ScoreService>();
     await scoreService.saveScore(scoreRecord);
 
     // 改善度をチェックして励ましのメッセージを表示

@@ -1,6 +1,6 @@
-import 'package:flutter_test / flutter_test.dart';
-import 'package:syonan_app / models / score_record.dart';
-import 'package:syonan_app / models / math_problem.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:syonan_app / models/score_record.dart';
+import 'package:syonan_app / models/math_problem.dart';
 
 void main() {
   group('ScoreRecord', () {

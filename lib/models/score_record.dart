@@ -3,7 +3,7 @@ import 'math_problem.dart';
 /// スコア記録を表すモデルクラス
 class ScoreRecord {
   /// JSONからScoreRecordを作成
-  factory ScoreRecord.fromJson(Map < String, dynamic > json) {
+  factory ScoreRecord.fromJson(Map<String, dynamic > json) {
     return ScoreRecord(id: json['id'] as String,
       date: DateTime.parse(json['date'] as String),
       operation: MathOperationType.values.firstWhere((op) => op.name == json['operation'],
@@ -50,7 +50,7 @@ class ScoreRecord {
   }
 
   /// ScoreRecordをJSONに変換
-  Map < String, dynamic > toJson() {
+  Map<String, dynamic > toJson() {
     return {
       'id': id,
       'date': date.toIso8601String(),

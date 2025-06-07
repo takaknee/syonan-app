@@ -1,9 +1,9 @@
-import 'package:flutter / material.dart';
-import 'package:provider / provider.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import 'screens / home_screen.dart';
-import 'services / math_service.dart';
-import 'services / score_service.dart';
+import 'screens/home_screen.dart';
+import 'services/math_service.dart';
+import 'services/score_service.dart';
 
 void main() {
   runApp(const SyonanApp());
@@ -18,9 +18,9 @@ class SyonanApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(providers: [
         // 算数問題生成サービス
-        Provider < MathService>(create: (context) => MathService()),
+        Provider<MathService>(create: (context) => MathService()),
         // スコア管理サービス
-        ChangeNotifierProvider < ScoreService>(
+        ChangeNotifierProvider<ScoreService>(
           create: (context) => ScoreService(),
         ),
       ],

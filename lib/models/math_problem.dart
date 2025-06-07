@@ -12,7 +12,7 @@ enum MathOperationType {
 /// 算数問題を表すモデルクラス
 class MathProblem {
   /// JSONからMathProblemを作成
-  factory MathProblem.fromJson(Map < String, dynamic > json) {
+  factory MathProblem.fromJson(Map<String, dynamic > json) {
     return MathProblem(firstNumber: json['firstNumber'] as int,
       secondNumber: json['secondNumber'] as int,
       operation: MathOperationType.values.firstWhere((op) => op.name == json['operation'],
@@ -43,7 +43,7 @@ class MathProblem {
   }
 
   /// MathProblemをJSONに変換
-  Map < String, dynamic > toJson() {
+  Map<String, dynamic > toJson() {
     return {
       'firstNumber' : firstNumber,
       'secondNumber': secondNumber,

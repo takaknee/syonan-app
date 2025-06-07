@@ -1,9 +1,9 @@
-import 'package:flutter / material.dart';
-import 'package:provider / provider.dart';
-import '../models / math_problem.dart';
-import '../models / score_record.dart';
-import '../services / score_service.dart';
-import '../widgets / score_card.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../models/math_problem.dart';
+import '../models/score_record.dart';
+import '../services/score_service.dart';
+import '../widgets/score_card.dart';
 
 /// スコア履歴画面
 /// 過去の練習結果を一覧表示し、統計情報を提供
@@ -11,10 +11,10 @@ class ScoreHistoryScreen extends StatefulWidget {
   const ScoreHistoryScreen({super.key});
 
   @override
-  State < ScoreHistoryScreen > createState() => _ScoreHistoryScreenState();
+  State<ScoreHistoryScreen> createState() => _ScoreHistoryScreenState();
 }
 
-class _ScoreHistoryScreenState extends State < ScoreHistoryScreen > with SingleTickerProviderStateMixin {
+class _ScoreHistoryScreenState extends State<ScoreHistoryScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override
@@ -32,7 +32,7 @@ class _ScoreHistoryScreenState extends State < ScoreHistoryScreen > with SingleT
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final scoreService = context.watch < ScoreService>();
+    final scoreService = context.watch<ScoreService>();
 
     return Scaffold(appBar: AppBar(title: const Text('スコア履歴'),
         backgroundColor: theme.colorScheme.primaryContainer,
@@ -253,8 +253,8 @@ class _ScoreHistoryScreenState extends State < ScoreHistoryScreen > with SingleT
     );
   }
 
-  Widget _buildComparisonCard(List < ScoreRecord > multiplicationScores,
-    List < ScoreRecord > divisionScores,
+  Widget _buildComparisonCard(List<ScoreRecord> multiplicationScores,
+    List<ScoreRecord> divisionScores,
     ScoreService scoreService,
   ) {
     final theme = Theme.of(context);
@@ -314,7 +314,7 @@ class _ScoreHistoryScreenState extends State < ScoreHistoryScreen > with SingleT
     );
   }
 
-  Widget _buildRecentScores(List < ScoreRecord > allScores) {
+  Widget _buildRecentScores(List<ScoreRecord> allScores) {
     final theme = Theme.of(context);
     final recentScores = allScores.take(5).toList();
 

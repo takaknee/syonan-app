@@ -1,5 +1,5 @@
 import 'dart:math';
-import '../models / math_problem.dart';
+import '../models/math_problem.dart';
 
 /// 算数問題生成サービス
 /// 小学三年生向けの掛け算・割り算問題を生成する
@@ -47,7 +47,7 @@ class MathService {
   }
 
   /// 複数の問題を生成
-  List < MathProblem > generateProblems(MathOperationType operation,
+  List<MathProblem> generateProblems(MathOperationType operation,
     int count,
   ) {
     final problems = <MathProblem>[];

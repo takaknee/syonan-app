@@ -1,4 +1,4 @@
-import 'package:flutter / material.dart';
+import 'package:flutter/material.dart';
 
 /// アプリ全体で使用する定数を定義
 class AppConstants {
@@ -136,21 +136,21 @@ class AppStyles {
   );
 
   // シャドウ
-  static const List < BoxShadow > shadowSmall = [
+  static const List<BoxShadow> shadowSmall = [
     BoxShadow(color: Colors.black12,
       blurRadius: 4,
       offset: Offset(0, 2),
     ),
   ];
 
-  static const List < BoxShadow > shadowMedium = [
+  static const List<BoxShadow> shadowMedium = [
     BoxShadow(color: Colors.black12,
       blurRadius: 8,
       offset: Offset(0, 4),
     ),
   ];
 
-  static const List < BoxShadow > shadowLarge = [
+  static const List<BoxShadow> shadowLarge = [
     BoxShadow(color: Colors.black12,
       blurRadius: 16,
       offset: Offset(0, 8),

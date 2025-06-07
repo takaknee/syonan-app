@@ -1,4 +1,4 @@
-import 'package:flutter / material.dart';
+import 'package:flutter/material.dart';
 
 /// 統計情報を表示するカードウィジェット
 class StatCard extends StatelessWidget {

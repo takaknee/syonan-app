@@ -1,5 +1,5 @@
-import 'package:flutter / material.dart';
-import '../models / math_problem.dart';
+import 'package:flutter/material.dart';
+import '../models/math_problem.dart';
 
 /// 算数問題を表示するカードウィジェット
 class ProblemCard extends StatelessWidget {

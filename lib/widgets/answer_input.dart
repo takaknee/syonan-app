@@ -1,5 +1,5 @@
-import 'package:flutter / material.dart';
-import 'package:flutter / services.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 /// 答え入力ウィジェット
 class AnswerInput extends StatefulWidget {
@@ -13,10 +13,10 @@ class AnswerInput extends StatefulWidget {
   final Function(int? )? onAnswerChanged;
 
   @override
-  State < AnswerInput > createState() => _AnswerInputState();
+  State<AnswerInput> createState() => _AnswerInputState();
 }
 
-class _AnswerInputState extends State < AnswerInput> {
+class _AnswerInputState extends State<AnswerInput> {
   final TextEditingController _controller = TextEditingController();
   final FocusNode _focusNode = FocusNode();
 

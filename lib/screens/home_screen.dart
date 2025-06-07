@@ -1,11 +1,11 @@
-import 'package:flutter / material.dart';
-import 'package:provider / provider.dart';
-import '../models / math_problem.dart';
-import '../services / score_service.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../models/math_problem.dart';
+import '../services/score_service.dart';
 import 'practice_screen.dart';
 import 'score_history_screen.dart';
-import '../widgets / stat_card.dart';
-import '../widgets / practice_button.dart';
+import '../widgets/stat_card.dart';
+import '../widgets/practice_button.dart';
 
 /// ホーム画面
 /// アプリのメイン画面で、練習選択とスコア概要を表示
@@ -13,23 +13,23 @@ class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  State < HomeScreen > createState() => _HomeScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State < HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
     // アプリ起動時にスコアサービスを初期化
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read < ScoreService>().initialize();
+      context.read<ScoreService>().initialize();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final scoreService = context.watch < ScoreService>();
+    final scoreService = context.watch<ScoreService>();
 
     return Scaffold(backgroundColor: theme.colorScheme.surface,
       body: SafeArea(child: scoreService.isLoading

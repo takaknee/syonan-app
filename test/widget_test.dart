@@ -25,6 +25,9 @@ void main() {
     testWidgets('Practice buttons should be tappable', (
       WidgetTester tester,
     ) async {
+      // Set up a larger test viewport
+      await tester.binding.setSurfaceSize(const Size(1200, 800));
+      
       await tester.pumpWidget(const SyonanApp());
 
       // Find and tap the multiplication practice button
@@ -41,16 +44,29 @@ void main() {
     testWidgets('Score history button should work', (
       WidgetTester tester,
     ) async {
+      // Set up a larger test viewport
+      await tester.binding.setSurfaceSize(const Size(1200, 800));
+      
       await tester.pumpWidget(const SyonanApp());
 
-      // Find and tap the score history button
+      // Find and tap the score history button using scrolling to reach it
+      final scrollable = find.byType(Scrollable);
+      if (scrollable.evaluate().isNotEmpty) {
+        await tester.scrollUntilVisible(
+          find.text('スコア履歴を見る'),
+          300.0,
+          scrollable: scrollable.first,
+        );
+      }
+
       final historyButton = find.text('スコア履歴を見る');
       expect(historyButton, findsOneWidget);
 
       await tester.tap(historyButton);
-      await tester.pumpAndSettle();
+      await tester.pump(); // Initial pump
+      await tester.pump(const Duration(milliseconds: 300)); // Animation pump
 
-      // Should navigate to score history screen
+      // Should navigate to score history screen - look for the AppBar title
       expect(find.text('スコア履歴'), findsOneWidget);
     });
 

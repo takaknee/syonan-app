@@ -45,7 +45,7 @@ void main() {
 
       expect(find.text('5'), findsOneWidget);
       expect(find.text('7'), findsOneWidget);
-      expect(find.text('+'), findsOneWidget);
+      expect(find.text('+'), findsAtLeastNWidgets(1)); // + symbol appears multiple times (icon + visual aid)
       expect(find.text('?'), findsOneWidget);
     });
 

@@ -61,22 +61,89 @@
 このプロジェクトはGitHub CopilotとFlutter開発に最適化された設定になっています。
 
 ### 必要な環境
-- Flutter SDK
+- Flutter SDK（自動セットアップ可能）
 - 推奨拡張機能を含むVS Code
 - GitHub Copilotサブスクリプション
 
-### 始め方
-1. リポジトリをクローンする
-2. VS Codeで開く - 推奨拡張機能のインストールを促されます
-3. 開発環境をセットアップする:
+### 🚀 クイックスタート（推奨）
+
+1. **リポジトリをクローン**
+   ```bash
+   git clone https://github.com/takaknee/syonan-app.git
+   cd syonan-app
+   ```
+
+2. **Flutter SDKを自動セットアップ**
+   ```bash
+   make setup-flutter  # Flutter SDKを自動ダウンロード・展開
+   ```
+   
+   または手動実行：
+   ```bash
+   ./scripts/setup-flutter.sh
+   ```
+
+3. **PATHにFlutterを追加**
+   ```bash
+   export PATH="$PWD/flutter/bin:$PATH"
+   
+   # 永続化する場合（推奨）:
+   echo 'export PATH="$PWD/flutter/bin:$PATH"' >> ~/.bashrc
+   source ~/.bashrc
+   ```
+
+4. **VS Codeで開く**
+   ```bash
+   code .  # 推奨拡張機能のインストールを促されます
+   ```
+
+5. **開発環境をセットアップ**
    ```bash
    make setup      # Flutter依存関係をインストール
    ```
-4. **🚨 重要**: コード品質チェックを有効にする（PR前エラー防止）:
+
+6. **🚨 重要**: コード品質チェックを有効化（PR前エラー防止）
    ```bash
    ./scripts/install-hooks.sh    # プリコミットフックをインストール
    ```
-5. 設定済みのlaunch configurationを使ってデバッグする
+
+7. **アプリを起動**
+   - VS Codeで `F5` を押す
+   - または設定済みのlaunch configurationを使用
+
+### 🔧 Flutter SDKセットアップ方法
+
+Flutter SDKがない場合、以下の方法で自動セットアップできます：
+
+#### 方法1: Makefileを使用（推奨）
+```bash
+make setup-flutter
+```
+
+#### 方法2: セットアップスクリプト直接実行
+```bash
+./scripts/setup-flutter.sh
+```
+
+#### 方法3: CI/CD環境での自動セットアップ
+GitHub ActionsやDocker環境では、以下のワークフローが自動的にFlutterをセットアップします：
+- `.github/workflows/deploy-github-pages.yml`
+- `.github/workflows/setup-flutter.yml`
+
+### ✅ セットアップ確認
+
+セットアップが完了したら、以下で確認できます：
+
+```bash
+# Flutter バージョン確認
+flutter --version
+
+# 開発環境チェック
+flutter doctor -v
+
+# Make経由での確認
+make check-env
+```
 
 ### 開発コマンド
 ```bash

@@ -11,6 +11,49 @@
 - **対象**: 一般ユーザー、テスター、フィードバック提供者
 - **更新頻度**: mainブランチへのコミット時に自動更新
 
+## 🛠️ Flutter SDK自動セットアップ
+
+GitHub PagesのCI/CDパイプラインでは、Flutter SDKが自動的にセットアップされます。
+
+### デプロイメント時のFlutter設定
+
+デプロイワークフローは複数の方法でFlutterをセットアップします：
+
+1. **公式Flutter Action**: `subosito/flutter-action@v2`を使用
+2. **フォールバック方法**: 手動ダウンロード・展開
+3. **キャッシュ機能**: ビルド時間短縮のためSDKをキャッシュ
+
+### CI/CD環境でのFlutterセットアップ詳細
+
+```yaml
+# GitHub Actionsでの自動Flutter設定例
+- name: Setup Flutter (Primary Method)
+  uses: subosito/flutter-action@v2
+  with:
+    flutter-version: '3.24.3'
+    channel: 'stable'
+    cache: true
+
+# フォールバック: 手動セットアップ
+- name: Manual Flutter Setup
+  if: failure()
+  run: |
+    FLUTTER_VERSION="3.24.3"
+    wget -O flutter.tar.xz "https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_${FLUTTER_VERSION}-stable.tar.xz"
+    tar -xf flutter.tar.xz
+    echo "$PWD/flutter/bin" >> $GITHUB_PATH
+```
+
+### ファイアウォール問題への対処
+
+企業環境などでファイアウォールによりFlutterのダウンロードが制限される場合：
+
+1. **事前準備**: ローカルでFlutter SDKを準備
+2. **手動アップロード**: アーティファクトとしてSDKをアップロード
+3. **プライベートアクション**: 組織内でFlutterセットアップアクションを作成
+
+詳細は [GitHub Actions Firewall Guide](github-actions-firewall.md) を参照してください。
+
 ## 🚀 デプロイメント
 
 ### 自動デプロイメント

@@ -1,0 +1,123 @@
+# Flutter自動セットアップ用のワークフロー
+name: Setup Flutter Environment
+
+on:
+  workflow_call:
+    outputs:
+      flutter-version:
+        description: "Installed Flutter version"
+        value: ${{ jobs.setup.outputs.flutter-version }}
+      flutter-available:
+        description: "Whether Flutter is available"
+        value: ${{ jobs.setup.outputs.flutter-available }}
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      flutter-version: ${{ steps.flutter-info.outputs.version }}
+      flutter-available: ${{ steps.flutter-check.outputs.available }}
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 方法1: 公式のFlutter Actionを試す
+      - name: Setup Flutter (Official Action)
+        id: flutter-official
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.x'
+          cache: true
+          channel: 'stable'
+        continue-on-error: true
+        timeout-minutes: 10
+
+      # 方法2: 手動でFlutterをダウンロード・展開
+      - name: Manual Flutter Setup (Fallback)
+        if: steps.flutter-official.outcome == 'failure'
+        run: |
+          echo "公式Actionが失敗したため、手動セットアップを実行します"
+          
+          # Flutter SDKをダウンロード
+          FLUTTER_VERSION="3.24.3"
+          FLUTTER_URL="https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_${FLUTTER_VERSION}-stable.tar.xz"
+          
+          echo "Downloading Flutter ${FLUTTER_VERSION}..."
+          wget -q --tries=3 --timeout=30 -O flutter.tar.xz "$FLUTTER_URL" || {
+            echo "ダウンロード失敗: $FLUTTER_URL"
+            
+            # バックアップURL（GitHubのミラー）を試す
+            echo "GitHubミラーを試します..."
+            GITHUB_URL="https://github.com/flutter/flutter/releases/download/${FLUTTER_VERSION}/flutter_linux_${FLUTTER_VERSION}-stable.tar.xz"
+            wget -q --tries=3 --timeout=30 -O flutter.tar.xz "$GITHUB_URL" || {
+              echo "すべてのダウンロードに失敗しました"
+              exit 1
+            }
+          }
+          
+          # 展開
+          echo "Extracting Flutter..."
+          tar -xf flutter.tar.xz
+          
+          # PATHに追加
+          echo "$PWD/flutter/bin" >> $GITHUB_PATH
+          
+          # 権限設定
+          chmod +x flutter/bin/flutter
+          chmod +x flutter/bin/dart
+
+      # 方法3: Gitからクローン（最後の手段）
+      - name: Git Clone Flutter (Last Resort)
+        if: steps.flutter-official.outcome == 'failure'
+        run: |
+          if ! command -v flutter >/dev/null 2>&1; then
+            echo "手動ダウンロードも失敗。Gitクローンを試します..."
+            
+            # 既存のflutterディレクトリがあれば削除
+            rm -rf flutter
+            
+            # Flutter SDKをクローン（shallow clone）
+            git clone --depth 1 --branch stable https://github.com/flutter/flutter.git
+            
+            # PATHに追加
+            echo "$PWD/flutter/bin" >> $GITHUB_PATH
+            
+            # 権限設定
+            chmod +x flutter/bin/flutter
+            chmod +x flutter/bin/dart
+          fi
+
+      - name: Flutter Doctor
+        run: |
+          flutter doctor -v
+          flutter --version
+
+      - name: Cache Flutter Dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+            ${{ runner.tool_cache }}/flutter
+          key: ${{ runner.os }}-flutter-${{ hashFiles('**/pubspec.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-flutter-
+
+      - name: Check Flutter Status
+        id: flutter-check
+        run: |
+          if command -v flutter >/dev/null 2>&1; then
+            echo "available=true" >> $GITHUB_OUTPUT
+            echo "✅ Flutter is available"
+          else
+            echo "available=false" >> $GITHUB_OUTPUT
+            echo "❌ Flutter is not available"
+            exit 1
+          fi
+
+      - name: Get Flutter Version Info
+        id: flutter-info
+        run: |
+          VERSION=$(flutter --version | head -n1 | cut -d' ' -f2)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Flutter version: $VERSION"

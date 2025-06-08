@@ -1,7 +1,7 @@
 # Makefile for syonan-app development tasks
 # Provides convenient commands for common development operations
 
-.PHONY: help format format-check lint test build clean setup setup-quick qa check-env
+.PHONY: help format format-check lint test build clean setup setup-quick qa check-env setup-flutter
 
 # Default target
 help:
@@ -11,6 +11,7 @@ help:
 	@echo "Setup commands:"
 	@echo "  setup         Complete development environment setup (recommended)"
 	@echo "  setup-quick   Quick setup (dependencies only)"
+	@echo "  setup-flutter Auto-download and setup Flutter SDK"
 	@echo ""
 	@echo "Quality assurance:"
 	@echo "  qa            Run all quality checks (format + lint + test)"
@@ -30,6 +31,7 @@ help:
 	@echo ""
 	@echo "Examples:"
 	@echo "  make setup        # Initial setup with pre-commit hooks"
+	@echo "  make setup-flutter # Download and setup Flutter SDK"
 	@echo "  make qa           # Check code quality before PR"
 	@echo "  make format       # Fix formatting issues"
 
@@ -141,6 +143,18 @@ setup-quick:
 		echo "  https://flutter.dev/docs/get-started/install"; \
 		exit 1; \
 	fi
+
+# Flutter Setup (新しく追加)
+setup-flutter:
+	@echo "🚀 Setting up Flutter SDK..."
+	@if [ -f "scripts/setup-flutter.sh" ]; then \
+		./scripts/setup-flutter.sh; \
+	else \
+		echo "❌ Error: scripts/setup-flutter.sh not found!"; \
+		exit 1; \
+	fi
+	@echo "💡 Don't forget to add Flutter to your PATH:"
+	@echo "   export PATH=\"\$$PWD/flutter/bin:\$$PATH\""
 
 # Quality assurance - run all checks
 qa: format-check lint test

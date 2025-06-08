@@ -29,14 +29,43 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Try to setup Flutter (may fail due to firewall)
-        id: flutter_setup
+      # 複数の方法でFlutterをセットアップ
+      - name: Setup Flutter (Primary Method)
+        id: flutter_setup_primary
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.x'
+          flutter-version: '3.24.3'
+          channel: 'stable'
           cache: true
         continue-on-error: true
         timeout-minutes: 10
+
+      # バックアップ方法: 手動ダウンロード
+      - name: Setup Flutter (Fallback Method)
+        if: steps.flutter_setup_primary.outcome == 'failure'
+        id: flutter_setup_fallback
+        run: |
+          echo "🔄 公式Actionが失敗したため、手動セットアップを実行します"
+          
+          # Flutter SDKをダウンロード
+          FLUTTER_VERSION="3.24.3"
+          FLUTTER_URL="https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_${FLUTTER_VERSION}-stable.tar.xz"
+          
+          echo "📥 Flutter ${FLUTTER_VERSION} をダウンロード中..."
+          wget -q --tries=3 --timeout=30 -O flutter.tar.xz "$FLUTTER_URL" || {
+            echo "❌ ダウンロード失敗"
+            exit 1
+          }
+          
+          echo "📦 Flutter SDK を展開中..."
+          tar -xf flutter.tar.xz
+          
+          echo "🔧 PATH に追加中..."
+          echo "$PWD/flutter/bin" >> $GITHUB_PATH
+          
+          echo "✅ Flutter セットアップ完了"
+        continue-on-error: true
+        timeout-minutes: 15
 
       - name: Check Flutter availability
         id: flutter_check

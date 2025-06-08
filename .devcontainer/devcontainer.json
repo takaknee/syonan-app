@@ -1,0 +1,35 @@
+{
+  "name": "Flutter Development",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  
+  // Features to add to the dev container
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+
+  // Use 'postCreateCommand' to run commands after the container is created
+  "postCreateCommand": "bash scripts/setup-flutter.sh",
+
+  // Configure tool-specific properties
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "Dart-Code.flutter",
+        "Dart-Code.dart-code",
+        "ms-vscode.vscode-json"
+      ],
+      "settings": {
+        "dart.flutterSdkPath": "/workspaces/syonan-app/flutter"
+      }
+    }
+  },
+
+  // Use 'forwardPorts' to make a list of ports available locally
+  "forwardPorts": [9100],
+
+  // Environment variables
+  "containerEnv": {
+    "PATH": "/workspaces/syonan-app/flutter/bin:${PATH}"
+  }
+}

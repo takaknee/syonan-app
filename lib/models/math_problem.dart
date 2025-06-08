@@ -1,7 +1,9 @@
 /// 算数問題の種類を表す列挙型
 enum MathOperationType {
   multiplication('×', '掛け算'),
-  division('÷', '割り算');
+  division('÷', '割り算'),
+  addition('+', '足し算'),
+  subtraction('-', '引き算');
 
   const MathOperationType(this.symbol, this.displayName);
 

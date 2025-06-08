@@ -123,6 +123,30 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
+        const SizedBox(height: 16),
+        Row(
+          children: [
+            Expanded(
+              child: PracticeButton(
+                title: '足し算',
+                subtitle: '足し算の練習',
+                icon: Icons.add,
+                color: Colors.orange,
+                onTap: () => _startPractice(MathOperationType.addition),
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: PracticeButton(
+                title: '引き算',
+                subtitle: '引き算の練習',
+                icon: Icons.remove,
+                color: Colors.purple,
+                onTap: () => _startPractice(MathOperationType.subtraction),
+              ),
+            ),
+          ],
+        ),
       ],
     );
   }
@@ -135,6 +159,12 @@ class _HomeScreenState extends State<HomeScreen> {
     );
     final divisionAvg = scoreService.getAverageScore(
       MathOperationType.division,
+    );
+    final additionAvg = scoreService.getAverageScore(
+      MathOperationType.addition,
+    );
+    final subtractionAvg = scoreService.getAverageScore(
+      MathOperationType.subtraction,
     );
 
     return Column(
@@ -186,6 +216,28 @@ class _HomeScreenState extends State<HomeScreen> {
                 value: '${(divisionAvg * 100).round()}%',
                 icon: Icons.more_horiz,
                 color: Colors.green,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        Row(
+          children: [
+            Expanded(
+              child: StatCard(
+                title: '足し算平均',
+                value: '${(additionAvg * 100).round()}%',
+                icon: Icons.add,
+                color: Colors.orange,
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: StatCard(
+                title: '引き算平均',
+                value: '${(subtractionAvg * 100).round()}%',
+                icon: Icons.remove,
+                color: Colors.purple,
               ),
             ),
           ],

@@ -5,7 +5,8 @@ import 'package:syonan_app/widgets/problem_card.dart';
 
 void main() {
   group('ProblemCard', () {
-    testWidgets('should display multiplication problem correctly', (tester) async {
+    testWidgets('should display multiplication problem correctly',
+        (tester) async {
       const problem = MathProblem(
         firstNumber: 3,
         secondNumber: 4,
@@ -45,7 +46,10 @@ void main() {
 
       expect(find.text('5'), findsOneWidget);
       expect(find.text('7'), findsOneWidget);
-      expect(find.text('+'), findsAtLeastNWidgets(1)); // + symbol appears multiple times (icon + visual aid)
+      expect(
+          find.text('+'),
+          findsAtLeastNWidgets(
+              1)); // + symbol appears multiple times (icon + visual aid)
       expect(find.text('?'), findsOneWidget);
     });
 
@@ -71,7 +75,8 @@ void main() {
       expect(find.text('?'), findsOneWidget);
     });
 
-    testWidgets('should show visual aid for small addition problems', (tester) async {
+    testWidgets('should show visual aid for small addition problems',
+        (tester) async {
       const problem = MathProblem(
         firstNumber: 3,
         secondNumber: 2,

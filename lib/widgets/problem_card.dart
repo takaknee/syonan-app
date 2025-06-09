@@ -33,7 +33,7 @@ class ProblemCard extends StatelessWidget {
   /// 視覚的補助を構築
   Widget _buildVisualAid(MathProblem problem, ThemeData theme) {
     const String itemEmoji = '🟦'; // 青い四角を使用
-    
+
     List<Widget> visual = [];
 
     if (problem.operation == MathOperationType.addition) {

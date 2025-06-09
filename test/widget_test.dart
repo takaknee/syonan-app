@@ -27,7 +27,7 @@ void main() {
     ) async {
       // Set up a larger test viewport
       await tester.binding.setSurfaceSize(const Size(1200, 800));
-      
+
       await tester.pumpWidget(const SyonanApp());
 
       // Find and tap the multiplication practice button
@@ -46,7 +46,7 @@ void main() {
     ) async {
       // Set up a larger test viewport
       await tester.binding.setSurfaceSize(const Size(1200, 800));
-      
+
       await tester.pumpWidget(const SyonanApp());
 
       // Find and tap the score history button using scrolling to reach it

@@ -104,7 +104,8 @@ void main() {
       });
 
       test('should generate subtraction problem when specified', () {
-        final problem = mathService.generateProblem(MathOperationType.subtraction);
+        final problem =
+            mathService.generateProblem(MathOperationType.subtraction);
         expect(problem.operation, MathOperationType.subtraction);
       });
     });

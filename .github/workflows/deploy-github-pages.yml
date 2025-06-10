@@ -34,7 +34,7 @@ jobs:
         id: flutter_setup_primary
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24.3'
+          flutter-version: '3.27.1'
           channel: 'stable'
           cache: true
         continue-on-error: true
@@ -48,7 +48,7 @@ jobs:
           echo "🔄 公式Actionが失敗したため、手動セットアップを実行します"
           
           # Flutter SDKをダウンロード
-          FLUTTER_VERSION="3.24.3"
+          FLUTTER_VERSION="3.27.1"
           FLUTTER_URL="https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_${FLUTTER_VERSION}-stable.tar.xz"
           
           echo "📥 Flutter ${FLUTTER_VERSION} をダウンロード中..."

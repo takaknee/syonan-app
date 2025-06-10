@@ -66,10 +66,10 @@ class SyonanApp extends StatelessWidget {
             ),
           ),
           // カードの角を丸くして子供向けの優しいデザイン
-          cardTheme: CardThemeData(
+          cardTheme: const CardTheme(
             elevation: 4,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.all(Radius.circular(16)),
             ),
           ),
         ),

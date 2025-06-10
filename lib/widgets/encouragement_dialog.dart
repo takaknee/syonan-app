@@ -8,10 +8,12 @@ class EncouragementDialog extends StatelessWidget {
     super.key,
     required this.scoreRecord,
     required this.improvement,
+    this.earnedPoints,
   });
 
   final ScoreRecord scoreRecord;
   final ScoreImprovement improvement;
+  final int? earnedPoints;
 
   @override
   Widget build(BuildContext context) {
@@ -102,6 +104,40 @@ class EncouragementDialog extends StatelessWidget {
                 ],
               ),
             ),
+
+            // ポイント表示
+            if (earnedPoints != null && earnedPoints! > 0) ...[
+              const SizedBox(height: 16),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.amber.withValues(alpha: 0.2),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: Colors.amber,
+                    width: 2,
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.stars,
+                      color: Colors.amber,
+                      size: 20,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      '+$earnedPoints ポイントゲット！',
+                      style: theme.textTheme.bodyLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.amber.shade700,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
 
             const SizedBox(height: 16),
 

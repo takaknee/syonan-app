@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'screens/home_screen.dart';
 import 'services/math_service.dart';
+import 'services/points_service.dart';
 import 'services/score_service.dart';
 
 void main() {
@@ -23,6 +24,10 @@ class SyonanApp extends StatelessWidget {
         // スコア管理サービス
         ChangeNotifierProvider<ScoreService>(
           create: (context) => ScoreService(),
+        ),
+        // ポイントシステム管理サービス
+        ChangeNotifierProvider<PointsService>(
+          create: (context) => PointsService(),
         ),
       ],
       child: MaterialApp(

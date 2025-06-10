@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../models/math_problem.dart';
+import '../services/points_service.dart';
 import '../services/score_service.dart';
 import '../utils/build_info.dart';
+import '../widgets/points_card.dart';
 import '../widgets/practice_button.dart';
 import '../widgets/stat_card.dart';
+import 'achievements_screen.dart';
 import 'practice_screen.dart';
 import 'score_history_screen.dart';
 
@@ -22,9 +25,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    // アプリ起動時にスコアサービスを初期化
+    // アプリ起動時にサービスを初期化
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<ScoreService>().initialize();
+      context.read<PointsService>().initialize();
     });
   }
 
@@ -32,11 +36,12 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final scoreService = context.watch<ScoreService>();
+    final pointsService = context.watch<PointsService>();
 
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
       body: SafeArea(
-        child: scoreService.isLoading
+        child: scoreService.isLoading || pointsService.isLoading
             ? const Center(child: CircularProgressIndicator())
             : SingleChildScrollView(
                 padding: const EdgeInsets.all(20),
@@ -45,7 +50,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     // ヘッダー
                     _buildHeader(theme),
-                    const SizedBox(height: 32),
+                    const SizedBox(height: 24),
+
+                    // ポイント表示
+                    _buildPointsSection(pointsService),
+                    const SizedBox(height: 24),
 
                     // 練習ボタン
                     _buildPracticeSection(theme),
@@ -86,6 +95,19 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildPointsSection(PointsService pointsService) {
+    return PointsCard(
+      points: pointsService.totalPoints,
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => const AchievementsScreen(),
+          ),
+        );
+      },
     );
   }
 

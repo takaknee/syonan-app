@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../models/math_problem.dart';
 import '../models/score_record.dart';
 import '../services/math_service.dart';
+import '../services/points_service.dart';
 import '../services/score_service.dart';
 import '../widgets/answer_input.dart';
 import '../widgets/encouragement_dialog.dart';
@@ -371,9 +372,15 @@ class _PracticeScreenState extends State<PracticeScreen>
     final scoreService = context.read<ScoreService>();
     await scoreService.saveScore(scoreRecord);
 
+    // ポイントを追加
+    final pointsService = context.read<PointsService>();
+    final earnedPoints = await pointsService.addPointsFromScore(scoreRecord);
+
     // 改善度をチェックして励ましのメッセージを表示
     final improvement = scoreService.getImprovement(widget.operation);
-    if (improvement == ScoreImprovement.improved) {
+    
+    // 改善があった場合、または高いスコアの場合にダイアログを表示
+    if (improvement == ScoreImprovement.improved || scoreRecord.level == ScoreLevel.excellent) {
       Future.delayed(const Duration(milliseconds: 500), () {
         if (mounted) {
           showDialog(
@@ -381,6 +388,7 @@ class _PracticeScreenState extends State<PracticeScreen>
             builder: (context) => EncouragementDialog(
               scoreRecord: scoreRecord,
               improvement: improvement,
+              earnedPoints: earnedPoints,
             ),
           );
         }

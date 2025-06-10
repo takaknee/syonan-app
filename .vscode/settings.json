@@ -13,7 +13,8 @@
   "dart.analysisExcludedFolders": [
     ".dart_tool",
     "build",
-    "flutter"
+    "flutter",
+    "${workspaceFolder}/flutter"
   ],
   "terminal.integrated.env.linux": {
     "PATH": "${workspaceFolder}/flutter/bin:${env:PATH}"
@@ -54,16 +55,24 @@
     "**/.packages": true,
     "**/.flutter-plugins": true,
     "**/.flutter-plugins-dependencies": true,
-    "flutter": true
+    "flutter": true,
+    "flutter/**": true
   },
   "search.exclude": {
     "**/build": true,
     "**/.dart_tool": true,
     "**/.packages": true,
-    "flutter": true
+    "flutter": true,
+    "flutter/**": true
   },
   "emmet.includeLanguages": {
     "dart": "html"
   },
-  "dart.showTodos": false
+  "dart.showTodos": false,
+  "dart.analysisServerFolderFilter": [
+    "!flutter"
+  ],
+  "dart.analyzeAngularTemplates": false,
+  "dart.triggerSignatureHelpAutomatically": false,
+  "dart.enableSdkFormatter": true
 }

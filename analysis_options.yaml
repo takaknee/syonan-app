@@ -26,6 +26,10 @@ analyzer:
     - "flutter/**"
     - "build/**"
     - ".dart_tool/**"
+    - "**/flutter/**"
+    - "**/flutter/dev/**"
+    - "**/flutter/packages/**"
+    - "**/flutter/examples/**"
 
   errors:
     # 致命的でないエラーを警告に変更

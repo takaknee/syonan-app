@@ -1,0 +1,15 @@
+{
+  "folders": [
+    {
+      "name": "syonan-app",
+      "path": ".."
+    }
+  ],
+  "settings": {},
+  "extensions": {
+    "recommendations": [
+      "dart-code.dart-code",
+      "dart-code.flutter"
+    ]
+  }
+}

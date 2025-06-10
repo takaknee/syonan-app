@@ -64,5 +64,6 @@
   },
   "emmet.includeLanguages": {
     "dart": "html"
-  }
+  },
+  "dart.showTodos": false
 }

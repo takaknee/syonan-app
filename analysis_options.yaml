@@ -23,6 +23,9 @@ analyzer:
   exclude:
     - "**/*.g.dart"
     - "**/*.freezed.dart"
+    - "flutter/**"
+    - "build/**"
+    - ".dart_tool/**"
 
   errors:
     # 致命的でないエラーを警告に変更

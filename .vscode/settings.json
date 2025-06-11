@@ -4,8 +4,12 @@
     "source.fixAll": "explicit",
     "source.organizeImports": "explicit"
   },
+  "chat.mcp.discovery.enabled": true,
+  "chat.mcp.enabled": true,
+  "chat.agent.enabled": true,
   "dart.flutterSdkPath": "${workspaceFolder}/flutter",
   "dart.sdkPath": "${workspaceFolder}/flutter/bin/cache/dart-sdk",
+  "dart.analysisServerPath": "${workspaceFolder}/flutter/bin/cache/dart-sdk/bin/dart",
   "dart.lineLength": 80,
   "dart.insertArgumentPlaceholders": false,
   "dart.updateImportsOnRename": true,
@@ -17,7 +21,7 @@
     "${workspaceFolder}/flutter"
   ],
   "terminal.integrated.env.linux": {
-    "PATH": "${workspaceFolder}/flutter/bin:${env:PATH}"
+    "PATH": "${workspaceFolder}/flutter/bin:${workspaceFolder}/flutter/bin/cache/dart-sdk/bin:${env:PATH}"
   },
   "[dart]": {
     "editor.defaultFormatter": "Dart-Code.dart-code",

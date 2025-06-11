@@ -378,9 +378,10 @@ class _PracticeScreenState extends State<PracticeScreen>
 
     // 改善度をチェックして励ましのメッセージを表示
     final improvement = scoreService.getImprovement(widget.operation);
-    
+
     // 改善があった場合、または高いスコアの場合にダイアログを表示
-    if (improvement == ScoreImprovement.improved || scoreRecord.level == ScoreLevel.excellent) {
+    if (improvement == ScoreImprovement.improved ||
+        scoreRecord.level == ScoreLevel.excellent) {
       Future.delayed(const Duration(milliseconds: 500), () {
         if (mounted) {
           showDialog(

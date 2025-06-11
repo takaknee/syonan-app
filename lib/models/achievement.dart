@@ -237,6 +237,8 @@ class AvailableAchievements {
 
   /// カテゴリー別に実績を取得
   static List<Achievement> getByCategory(AchievementCategory category) {
-    return all.where((achievement) => achievement.category == category).toList();
+    return all
+        .where((achievement) => achievement.category == category)
+        .toList();
   }
 }

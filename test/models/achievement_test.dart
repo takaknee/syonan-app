@@ -86,7 +86,8 @@ void main() {
       final userAchievement = UserAchievement.fromJson(json);
 
       expect(userAchievement.achievementId, 'test_badge');
-      expect(userAchievement.unlockedAt, DateTime.parse('2024-01-15T10:30:00.000Z'));
+      expect(userAchievement.unlockedAt,
+          DateTime.parse('2024-01-15T10:30:00.000Z'));
     });
 
     test('should convert user achievement to JSON correctly', () {

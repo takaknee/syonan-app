@@ -110,16 +110,16 @@ class _AchievementsScreenState extends State<AchievementsScreen>
             Text(
               'まだバッジがありません',
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: Colors.grey.withValues(alpha: 0.7),
-              ),
+                    color: Colors.grey.withValues(alpha: 0.7),
+                  ),
             ),
             const SizedBox(height: 8),
             Text(
               'れんしゅうしてポイントをためて\nバッジをかいましょう！',
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Colors.grey.withValues(alpha: 0.6),
-              ),
+                    color: Colors.grey.withValues(alpha: 0.6),
+                  ),
             ),
           ],
         ),
@@ -217,7 +217,8 @@ class _AchievementsScreenState extends State<AchievementsScreen>
                 const SizedBox(height: 8),
                 // ポイントコストとボタン
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
                     color: canAfford
                         ? theme.colorScheme.primaryContainer
@@ -251,7 +252,8 @@ class _AchievementsScreenState extends State<AchievementsScreen>
                 const SizedBox(height: 8),
                 // 取得済みマーク
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
                     color: theme.colorScheme.primary,
                     borderRadius: BorderRadius.circular(8),

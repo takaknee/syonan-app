@@ -7,7 +7,7 @@ set -e
 
 # 設定
 FLUTTER_VERSION="3.27.1"  # より新しいバージョンを指定
-FLUTTER_DIR="$(pwd)/flutter"
+FLUTTER_DIR="/opt/flutter"
 FLUTTER_URL="https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_${FLUTTER_VERSION}-stable.tar.xz"
 FLUTTER_ARCHIVE="flutter_linux_${FLUTTER_VERSION}-stable.tar.xz"
 
@@ -22,7 +22,7 @@ if [ -d "$FLUTTER_DIR" ]; then
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         echo "🗑️  既存のFlutterディレクトリを削除します..."
-        rm -rf "$FLUTTER_DIR"
+        sudo rm -rf "$FLUTTER_DIR"
     else
         echo "✅ 既存のFlutterディレクトリを使用します"
         
@@ -114,7 +114,9 @@ cd - >/dev/null
 # Flutterディレクトリを移動
 if [ -d "$TEMP_DIR/flutter" ]; then
     echo "📁 Flutterディレクトリを移動しています..."
-    mv "$TEMP_DIR/flutter" "$FLUTTER_DIR"
+    sudo mkdir -p "$(dirname "$FLUTTER_DIR")"
+    sudo mv "$TEMP_DIR/flutter" "$FLUTTER_DIR"
+    sudo chmod -R 755 "$FLUTTER_DIR"
     echo "✅ Flutter SDKが $FLUTTER_DIR にインストールされました"
 else
     echo "❌ 展開されたFlutterディレクトリが見つかりません"

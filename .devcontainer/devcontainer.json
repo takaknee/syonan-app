@@ -17,7 +17,7 @@
         "ms-vscode.vscode-json"
       ],
       "settings": {
-        "dart.flutterSdkPath": "/workspaces/syonan-app/flutter"
+        "dart.flutterSdkPath": "/opt/flutter"
       }
     }
   },
@@ -27,6 +27,6 @@
   ],
   // Environment variables
   "containerEnv": {
-    "PATH": "/workspaces/syonan-app/flutter/bin:${PATH}"
+    "PATH": "/opt/flutter/bin:${PATH}"
   }
 }

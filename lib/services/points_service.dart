@@ -157,7 +157,42 @@ class PointsService extends ChangeNotifier {
       perfectBonus = 20;
     }
 
-    return basePoints + accuracyBonus + levelBonus + perfectBonus;
+    // 演算種別に基づくボーナス
+    int operationBonus = 0;
+    switch (score.operation) {
+      case MathOperationType.addition:
+        operationBonus = 2; // たし算は基本的なので少なめ
+        break;
+      case MathOperationType.subtraction:
+        operationBonus = 3; // ひき算は少し難しいので多め
+        break;
+      case MathOperationType.multiplication:
+        operationBonus = 5; // かけ算は九九なので多め
+        break;
+      case MathOperationType.division:
+        operationBonus = 5; // わり算は一番難しいので多め
+        break;
+    }
+
+    // 時間に基づくボーナス（早くできたらボーナス）
+    int timeBonus = 0;
+    final avgTimePerQuestion = score.timeSpent.inSeconds / score.totalQuestions;
+    if (avgTimePerQuestion <= 10) {
+      timeBonus = 10; // 1問10秒以下なら10ポイント
+    } else if (avgTimePerQuestion <= 20) {
+      timeBonus = 5; // 1問20秒以下なら5ポイント
+    }
+
+    // 問題数に基づくボーナス（多くの問題をやったらボーナス）
+    int volumeBonus = 0;
+    if (score.totalQuestions >= 20) {
+      volumeBonus = 10;
+    } else if (score.totalQuestions >= 15) {
+      volumeBonus = 5;
+    }
+
+    return basePoints + accuracyBonus + levelBonus + perfectBonus + 
+           operationBonus + timeBonus + volumeBonus;
   }
 
   /// ポイントをローカルストレージから読み込み

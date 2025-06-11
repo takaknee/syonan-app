@@ -247,5 +247,73 @@ void main() {
         }
       });
     });
+
+    group('Enhanced difficulty generation', () {
+      test('should generate problems with digit-based difficulty', () {
+        // 1桁問題のテスト
+        for (int i = 0; i < 10; i++) {
+          final problem = mathService.generateProblemWithDigits(
+            MathOperationType.addition,
+            1,
+          );
+          expect(problem.firstNumber, greaterThanOrEqualTo(1));
+          expect(problem.firstNumber, lessThanOrEqualTo(9));
+          expect(problem.operation, MathOperationType.addition);
+          expect(problem.correctAnswer, greaterThan(0));
+        }
+
+        // 2桁問題のテスト
+        for (int i = 0; i < 10; i++) {
+          final problem = mathService.generateProblemWithDigits(
+            MathOperationType.addition,
+            2,
+          );
+          expect(problem.firstNumber, greaterThanOrEqualTo(10));
+          expect(problem.firstNumber, lessThanOrEqualTo(99));
+          expect(problem.operation, MathOperationType.addition);
+          expect(problem.correctAnswer, greaterThan(0));
+        }
+      });
+
+      test('should generate advanced problems with different difficulty levels', () {
+        for (int level = 1; level <= 5; level++) {
+          final problem = mathService.generateAdvancedProblem(
+            MathOperationType.multiplication,
+            level,
+          );
+          expect(problem.operation, MathOperationType.multiplication);
+          expect(problem.correctAnswer, greaterThan(0));
+          expect(
+            problem.correctAnswer,
+            problem.firstNumber * problem.secondNumber,
+          );
+        }
+      });
+
+      test('should handle edge cases in digit generation', () {
+        // 0桁（無効）は1桁として扱われる
+        final problem = mathService.generateProblemWithDigits(
+          MathOperationType.addition,
+          0,
+        );
+        expect(problem.firstNumber, greaterThanOrEqualTo(1));
+        expect(problem.firstNumber, lessThanOrEqualTo(9));
+      });
+
+      test('should generate valid division problems with digits', () {
+        for (int digits = 1; digits <= 2; digits++) {
+          final problem = mathService.generateProblemWithDigits(
+            MathOperationType.division,
+            digits,
+          );
+          expect(problem.operation, MathOperationType.division);
+          expect(problem.correctAnswer, greaterThan(0));
+          expect(
+            problem.firstNumber,
+            problem.secondNumber * problem.correctAnswer,
+          );
+        }
+      });
+    });
   });
 }

@@ -7,7 +7,7 @@ set -e
 
 # 設定
 FLUTTER_VERSION="3.27.1"  # より新しいバージョンを指定
-FLUTTER_DIR="/opt/flutter"
+FLUTTER_DIR="$HOME/flutter"
 FLUTTER_URL="https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_${FLUTTER_VERSION}-stable.tar.xz"
 FLUTTER_ARCHIVE="flutter_linux_${FLUTTER_VERSION}-stable.tar.xz"
 
@@ -15,25 +15,38 @@ echo "🚀 Flutter自動セットアップを開始します..."
 echo "バージョン: ${FLUTTER_VERSION}"
 echo "インストール先: ${FLUTTER_DIR}"
 
+# コマンドライン引数のチェック
+AUTO_INSTALL=false
+if [ "$1" = "--auto" ] || [ "$1" = "-y" ]; then
+    AUTO_INSTALL=true
+    echo "🤖 自動インストールモード"
+fi
+
 # 既存のFlutterディレクトリをチェック
 if [ -d "$FLUTTER_DIR" ]; then
     echo "⚠️  既存のFlutterディレクトリが見つかりました: $FLUTTER_DIR"
-    read -p "削除して再インストールしますか？ (y/N): " -n 1 -r
-    echo
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
-        echo "🗑️  既存のFlutterディレクトリを削除します..."
-        sudo rm -rf "$FLUTTER_DIR"
+    
+    if [ "$AUTO_INSTALL" = true ]; then
+        echo "🤖 自動モード: 既存のディレクトリを削除して再インストールします..."
+        rm -rf "$FLUTTER_DIR"
     else
-        echo "✅ 既存のFlutterディレクトリを使用します"
-        
-        # Flutter バージョンを確認
-        if [ -x "$FLUTTER_DIR/bin/flutter" ]; then
-            echo "📋 現在のFlutterバージョン:"
-            "$FLUTTER_DIR/bin/flutter" --version
-            exit 0
-        else
-            echo "❌ Flutterの実行ファイルが見つかりません。再インストールします..."
+        read -p "削除して再インストールしますか？ (y/N): " -n 1 -r
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+            echo "🗑️  既存のFlutterディレクトリを削除します..."
             rm -rf "$FLUTTER_DIR"
+        else
+            echo "✅ 既存のFlutterディレクトリを使用します"
+            
+            # Flutter バージョンを確認
+            if [ -x "$FLUTTER_DIR/bin/flutter" ]; then
+                echo "📋 現在のFlutterバージョン:"
+                "$FLUTTER_DIR/bin/flutter" --version
+                exit 0
+            else
+                echo "❌ Flutterの実行ファイルが見つかりません。再インストールします..."
+                rm -rf "$FLUTTER_DIR"
+            fi
         fi
     fi
 fi
@@ -114,9 +127,9 @@ cd - >/dev/null
 # Flutterディレクトリを移動
 if [ -d "$TEMP_DIR/flutter" ]; then
     echo "📁 Flutterディレクトリを移動しています..."
-    sudo mkdir -p "$(dirname "$FLUTTER_DIR")"
-    sudo mv "$TEMP_DIR/flutter" "$FLUTTER_DIR"
-    sudo chmod -R 755 "$FLUTTER_DIR"
+    mkdir -p "$(dirname "$FLUTTER_DIR")"
+    mv "$TEMP_DIR/flutter"/* "$FLUTTER_DIR/" 2>/dev/null || mv "$TEMP_DIR/flutter" "$(dirname "$FLUTTER_DIR")/"
+    chmod -R 755 "$FLUTTER_DIR"
     echo "✅ Flutter SDKが $FLUTTER_DIR にインストールされました"
 else
     echo "❌ 展開されたFlutterディレクトリが見つかりません"

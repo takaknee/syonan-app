@@ -75,8 +75,8 @@
       "command": "dart",
       "args": [
         "format",
-        "/workspaces/syonan-app/lib/",
-        "/workspaces/syonan-app/test/"
+        "lib",
+        "test"
       ],
       "options": {
         "cwd": "/workspaces/syonan-app"
@@ -97,8 +97,8 @@
       "args": [
         "format",
         "--set-exit-if-changed",
-        "/workspaces/syonan-app/lib/",
-        "/workspaces/syonan-app/test/"
+        "lib",
+        "test"
       ],
       "options": {
         "cwd": "/workspaces/syonan-app"
@@ -118,7 +118,7 @@
       "command": "bash",
       "args": [
         "-c",
-        "echo '📝 フォーマットをチェックして自動修正します...' && dart format --set-exit-if-changed /workspaces/syonan-app/lib/ /workspaces/syonan-app/test/ || (echo '⚠️  フォーマット問題を発見しました。自動修正を実行します...' && dart format /workspaces/syonan-app/lib/ /workspaces/syonan-app/test/ && echo '✅ フォーマットを修正しました！')"
+        "echo '📝 フォーマットをチェックして自動修正します...' && dart format --set-exit-if-changed lib test || (echo '⚠️  フォーマット問題を発見しました。自動修正を実行します...' && dart format lib test && echo '✅ フォーマットを修正しました！')"
       ],
       "options": {
         "cwd": "/workspaces/syonan-app"

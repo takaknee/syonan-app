@@ -17,7 +17,7 @@
         "ms-vscode.vscode-json"
       ],
       "settings": {
-        "dart.flutterSdkPath": "/opt/flutter"
+        "dart.flutterSdkPath": "/home/vscode/flutter"
       }
     }
   },
@@ -27,6 +27,6 @@
   ],
   // Environment variables
   "containerEnv": {
-    "PATH": "/opt/flutter/bin:${PATH}"
+    "PATH": "/home/vscode/flutter/bin:${PATH}"
   }
 }

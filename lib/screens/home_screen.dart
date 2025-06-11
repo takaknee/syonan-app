@@ -269,7 +269,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildScoreHistoryButton(ThemeData theme) {
-    return SizedBox(
+    return const SizedBox(
       width: double.infinity,
       child: ElevatedButton.icon(
         onPressed: () {
@@ -397,7 +397,7 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           SizedBox(
             width: 80,
-            child: Text(
+            child: const Text(
               '$label:',
               style: const TextStyle(fontWeight: FontWeight.w500),
             ),

@@ -258,7 +258,7 @@ class _AchievementsScreenState extends State<AchievementsScreen>
                     color: theme.colorScheme.primary,
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Text(
+                  child: const Text(
                     'GET!',
                     style: theme.textTheme.bodySmall?.copyWith(
                       color: theme.colorScheme.onPrimary,

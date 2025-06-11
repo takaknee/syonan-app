@@ -30,7 +30,9 @@ void main() {
         final earnedPoints =
             await pointsService.addPointsFromScore(scoreRecord);
 
-        // 基本ポイント(10) + 正答率ボーナス(10) + excellentボーナス(15) + パーフェクトボーナス(20) + 演算ボーナス(5) + 問題数ボーナス(0) + 時間ボーナス(0) = 60
+        // 基本ポイント(10) + 正答率ボーナス(10) + excellentボーナス(15) + 
+        // パーフェクトボーナス(20) + 演算ボーナス(5) + 問題数ボーナス(0) + 
+        // 時間ボーナス(0) = 60
         expect(earnedPoints, 60);
         expect(pointsService.totalPoints, 60);
       });
@@ -161,7 +163,8 @@ void main() {
           timeSpent: const Duration(minutes: 5),
         );
 
-        final additionPoints = await pointsService.addPointsFromScore(additionScore);
+        final additionPoints =
+            await pointsService.addPointsFromScore(additionScore);
         await pointsService.addPoints(-additionPoints); // リセット
 
         // ひき算のテスト
@@ -174,7 +177,8 @@ void main() {
           timeSpent: const Duration(minutes: 5),
         );
 
-        final subtractionPoints = await pointsService.addPointsFromScore(subtractionScore);
+        final subtractionPoints =
+            await pointsService.addPointsFromScore(subtractionScore);
 
         // ひき算の方がたし算より1ポイント多い（3 vs 2）
         expect(subtractionPoints, additionPoints + 1);

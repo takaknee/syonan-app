@@ -137,7 +137,8 @@ void main() {
   group('AvailableAchievements', () {
     test('should have all predefined achievements', () {
       expect(AvailableAchievements.all.isNotEmpty, true);
-      expect(AvailableAchievements.all.length, greaterThan(20)); // 新しいバッジが追加されたので数を増やす
+      // 新しいバッジが追加されたので数を増やす
+      expect(AvailableAchievements.all.length, greaterThan(20));
     });
 
     test('should find achievement by ID correctly', () {

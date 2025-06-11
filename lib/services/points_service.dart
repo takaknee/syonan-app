@@ -191,8 +191,13 @@ class PointsService extends ChangeNotifier {
       volumeBonus = 5;
     }
 
-    return basePoints + accuracyBonus + levelBonus + perfectBonus + 
-           operationBonus + timeBonus + volumeBonus;
+    return basePoints +
+        accuracyBonus +
+        levelBonus +
+        perfectBonus +
+        operationBonus +
+        timeBonus +
+        volumeBonus;
   }
 
   /// ポイントをローカルストレージから読み込み

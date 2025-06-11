@@ -130,7 +130,7 @@ enum AchievementCategory {
 class AvailableAchievements {
   static const List<Achievement> all = [
     // 練習関連の実績
-    Achievement(
+    const Achievement(
       id: 'practice_badge_bronze',
       title: 'れんしゅうビギナー',
       description: '5回練習しました！',
@@ -138,7 +138,7 @@ class AvailableAchievements {
       pointsCost: 50,
       category: AchievementCategory.practice,
     ),
-    Achievement(
+    const Achievement(
       id: 'practice_badge_silver',
       title: 'れんしゅうエキスパート',
       description: '20回練習しました！',
@@ -146,7 +146,7 @@ class AvailableAchievements {
       pointsCost: 100,
       category: AchievementCategory.practice,
     ),
-    Achievement(
+    const Achievement(
       id: 'practice_badge_gold',
       title: 'れんしゅうマスター',
       description: '50回練習しました！',
@@ -156,7 +156,7 @@ class AvailableAchievements {
     ),
 
     // 連続練習関連の実績
-    Achievement(
+    const Achievement(
       id: 'streak_badge_3',
       title: '3日連続',
       description: '3日連続で練習しました！',
@@ -164,7 +164,7 @@ class AvailableAchievements {
       pointsCost: 30,
       category: AchievementCategory.streak,
     ),
-    Achievement(
+    const Achievement(
       id: 'streak_badge_7',
       title: '1週間連続',
       description: '7日連続で練習しました！',
@@ -172,7 +172,7 @@ class AvailableAchievements {
       pointsCost: 70,
       category: AchievementCategory.streak,
     ),
-    Achievement(
+    const Achievement(
       id: 'streak_badge_30',
       title: '1ヶ月連続',
       description: '30日連続で練習しました！',
@@ -182,7 +182,7 @@ class AvailableAchievements {
     ),
 
     // 正確性関連の実績
-    Achievement(
+    const Achievement(
       id: 'accuracy_badge_90',
       title: 'パーフェクト90',
       description: '90%以上の正答率を達成！',
@@ -190,7 +190,7 @@ class AvailableAchievements {
       pointsCost: 80,
       category: AchievementCategory.accuracy,
     ),
-    Achievement(
+    const Achievement(
       id: 'accuracy_badge_100',
       title: 'パーフェクト100',
       description: '100%の正答率を達成！',
@@ -200,7 +200,7 @@ class AvailableAchievements {
     ),
 
     // 楽しさ関連の実績
-    Achievement(
+    const Achievement(
       id: 'fun_badge_rainbow',
       title: 'にじいろバッジ',
       description: 'とてもきれいなバッジです！',
@@ -208,7 +208,7 @@ class AvailableAchievements {
       pointsCost: 25,
       category: AchievementCategory.fun,
     ),
-    Achievement(
+    const Achievement(
       id: 'fun_badge_star',
       title: 'きらきらバッジ',
       description: 'きらきら光るバッジです！',
@@ -216,7 +216,7 @@ class AvailableAchievements {
       pointsCost: 40,
       category: AchievementCategory.fun,
     ),
-    Achievement(
+    const Achievement(
       id: 'fun_badge_crown',
       title: 'おうかんバッジ',
       description: 'おうさまのおうかんです！',
@@ -226,7 +226,7 @@ class AvailableAchievements {
     ),
 
     // 新しい楽しさ関連の実績
-    Achievement(
+    const Achievement(
       id: 'fun_badge_rocket',
       title: 'ロケットバッジ',
       description: 'うちゅうに向かって出発！',
@@ -234,7 +234,7 @@ class AvailableAchievements {
       pointsCost: 60,
       category: AchievementCategory.fun,
     ),
-    Achievement(
+    const Achievement(
       id: 'fun_badge_trophy',
       title: 'トロフィーバッジ',
       description: 'ゆうしょうトロフィーです！',
@@ -242,7 +242,7 @@ class AvailableAchievements {
       pointsCost: 150,
       category: AchievementCategory.fun,
     ),
-    Achievement(
+    const Achievement(
       id: 'fun_badge_gem',
       title: 'ほうせきバッジ',
       description: 'きらきら光るほうせきです！',
@@ -250,7 +250,7 @@ class AvailableAchievements {
       pointsCost: 80,
       category: AchievementCategory.fun,
     ),
-    Achievement(
+    const Achievement(
       id: 'fun_badge_magic',
       title: 'まほうバッジ',
       description: 'まほうのつえでまほう使い！',
@@ -260,7 +260,7 @@ class AvailableAchievements {
     ),
 
     // 新しい練習関連の実績
-    Achievement(
+    const Achievement(
       id: 'practice_badge_platinum',
       title: 'れんしゅうレジェンド',
       description: '100回練習しました！',
@@ -268,7 +268,7 @@ class AvailableAchievements {
       pointsCost: 350,
       category: AchievementCategory.practice,
     ),
-    Achievement(
+    const Achievement(
       id: 'practice_badge_daily',
       title: 'まいにちれんしゅう',
       description: 'まいにち練習がんばってる！',
@@ -278,7 +278,7 @@ class AvailableAchievements {
     ),
 
     // 新しい正確性関連の実績
-    Achievement(
+    const Achievement(
       id: 'accuracy_badge_80',
       title: 'パーフェクト80',
       description: '80%以上の正答率を達成！',
@@ -286,7 +286,7 @@ class AvailableAchievements {
       pointsCost: 60,
       category: AchievementCategory.accuracy,
     ),
-    Achievement(
+    const Achievement(
       id: 'accuracy_badge_streak_5',
       title: '5問連続正解',
       description: '5問連続で正解しました！',
@@ -294,7 +294,7 @@ class AvailableAchievements {
       pointsCost: 40,
       category: AchievementCategory.accuracy,
     ),
-    Achievement(
+    const Achievement(
       id: 'accuracy_badge_streak_10',
       title: '10問連続正解',
       description: '10問連続で正解しました！',
@@ -304,7 +304,7 @@ class AvailableAchievements {
     ),
 
     // 難易度関連の実績
-    Achievement(
+    const Achievement(
       id: 'difficulty_badge_easy',
       title: 'かんたんマスター',
       description: 'かんたんレベルをクリア！',
@@ -312,7 +312,7 @@ class AvailableAchievements {
       pointsCost: 30,
       category: AchievementCategory.difficulty,
     ),
-    Achievement(
+    const Achievement(
       id: 'difficulty_badge_normal',
       title: 'ふつうマスター',
       description: 'ふつうレベルをクリア！',
@@ -320,7 +320,7 @@ class AvailableAchievements {
       pointsCost: 60,
       category: AchievementCategory.difficulty,
     ),
-    Achievement(
+    const Achievement(
       id: 'difficulty_badge_hard',
       title: 'むずかしいマスター',
       description: 'むずかしいレベルをクリア！',
@@ -328,7 +328,7 @@ class AvailableAchievements {
       pointsCost: 120,
       category: AchievementCategory.difficulty,
     ),
-    Achievement(
+    const Achievement(
       id: 'difficulty_badge_expert',
       title: 'エキスパートマスター',
       description: 'エキスパートレベルをクリア！',
@@ -338,7 +338,7 @@ class AvailableAchievements {
     ),
 
     // 演算関連の実績
-    Achievement(
+    const Achievement(
       id: 'operation_badge_addition',
       title: 'たしざんマスター',
       description: 'たしざんが得意になりました！',
@@ -346,7 +346,7 @@ class AvailableAchievements {
       pointsCost: 50,
       category: AchievementCategory.operation,
     ),
-    Achievement(
+    const Achievement(
       id: 'operation_badge_subtraction',
       title: 'ひきざんマスター',
       description: 'ひきざんが得意になりました！',
@@ -354,7 +354,7 @@ class AvailableAchievements {
       pointsCost: 50,
       category: AchievementCategory.operation,
     ),
-    Achievement(
+    const Achievement(
       id: 'operation_badge_multiplication',
       title: 'かけざんマスター',
       description: 'かけざんが得意になりました！',
@@ -362,7 +362,7 @@ class AvailableAchievements {
       pointsCost: 70,
       category: AchievementCategory.operation,
     ),
-    Achievement(
+    const Achievement(
       id: 'operation_badge_division',
       title: 'わりざんマスター',
       description: 'わりざんが得意になりました！',
@@ -370,7 +370,7 @@ class AvailableAchievements {
       pointsCost: 70,
       category: AchievementCategory.operation,
     ),
-    Achievement(
+    const Achievement(
       id: 'operation_badge_all',
       title: 'よんそくマスター',
       description: 'すべての計算が得意です！',

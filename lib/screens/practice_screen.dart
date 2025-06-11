@@ -370,10 +370,11 @@ class _PracticeScreenState extends State<PracticeScreen>
     );
 
     final scoreService = context.read<ScoreService>();
+    final pointsService = context.read<PointsService>();
+
     await scoreService.saveScore(scoreRecord);
 
     // ポイントを追加
-    final pointsService = context.read<PointsService>();
     final earnedPoints = await pointsService.addPointsFromScore(scoreRecord);
 
     // 改善度をチェックして励ましのメッセージを表示

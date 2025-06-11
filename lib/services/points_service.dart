@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/achievement.dart';
-import '../models/math_problem.dart';
 import '../models/score_record.dart';
 
 /// ポイントシステム管理サービス

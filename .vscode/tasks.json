@@ -5,7 +5,7 @@
     {
       "label": "Flutter: 依存関係取得",
       "type": "shell",
-      "command": "flutter",
+      "command": "/home/vscode/flutter/bin/flutter",
       "args": [
         "pub",
         "get"
@@ -22,7 +22,7 @@
     {
       "label": "Flutter: コード解析",
       "type": "shell",
-      "command": "flutter",
+      "command": "/home/vscode/flutter/bin/flutter",
       "args": [
         "analyze"
       ],
@@ -38,7 +38,7 @@
     {
       "label": "Flutter: テスト実行",
       "type": "shell",
-      "command": "flutter",
+      "command": "/home/vscode/flutter/bin/flutter",
       "args": [
         "test"
       ],
@@ -54,7 +54,7 @@
     {
       "label": "Flutter: カバレッジ付きテスト",
       "type": "shell",
-      "command": "flutter",
+      "command": "/home/vscode/flutter/bin/flutter",
       "args": [
         "test",
         "--coverage"
@@ -72,7 +72,7 @@
     {
       "label": "Dart: フォーマット実行",
       "type": "shell",
-      "command": "dart",
+      "command": "/home/vscode/flutter/bin/dart",
       "args": [
         "format",
         "lib",
@@ -93,7 +93,7 @@
     {
       "label": "Dart: フォーマットチェック（修正なし）",
       "type": "shell",
-      "command": "dart",
+      "command": "/home/vscode/flutter/bin/dart",
       "args": [
         "format",
         "--set-exit-if-changed",
@@ -118,7 +118,7 @@
       "command": "bash",
       "args": [
         "-c",
-        "echo '📝 フォーマットをチェックして自動修正します...' && dart format --set-exit-if-changed lib test || (echo '⚠️  フォーマット問題を発見しました。自動修正を実行します...' && dart format lib test && echo '✅ フォーマットを修正しました！')"
+        "echo '📝 フォーマットをチェックして自動修正します...' && /home/vscode/flutter/bin/dart format --set-exit-if-changed lib test || (echo '⚠️  フォーマット問題を発見しました。自動修正を実行します...' && /home/vscode/flutter/bin/dart format lib test && echo '✅ フォーマットを修正しました！')"
       ],
       "options": {
         "cwd": "/workspaces/syonan-app"
@@ -136,7 +136,7 @@
     {
       "label": "Flutter: Webビルド",
       "type": "shell",
-      "command": "flutter",
+      "command": "/home/vscode/flutter/bin/flutter",
       "args": [
         "build",
         "web",
@@ -154,7 +154,7 @@
     {
       "label": "Flutter: ビルド（Android Debug）",
       "type": "shell",
-      "command": "flutter",
+      "command": "/home/vscode/flutter/bin/flutter",
       "args": [
         "build",
         "apk",
@@ -173,7 +173,7 @@
     {
       "label": "Flutter: Webアプリ起動",
       "type": "shell",
-      "command": "flutter",
+      "command": "/home/vscode/flutter/bin/flutter",
       "args": [
         "run",
         "-d",
@@ -282,7 +282,7 @@
       "command": "bash",
       "args": [
         "-c",
-        "echo '🔍 開発環境セットアップ状況:' && echo 'Flutter:' && flutter --version | head -1 && echo 'Dart:' && dart --version && echo '✅ セットアップ完了'"
+        "echo '🔍 開発環境セットアップ状況:' && echo 'Flutter:' && /home/vscode/flutter/bin/flutter --version | head -1 && echo 'Dart:' && /home/vscode/flutter/bin/dart --version && echo '✅ セットアップ完了'"
       ],
       "group": "build",
       "presentation": {
@@ -296,7 +296,7 @@
     {
       "label": "プロジェクト: クリーン",
       "type": "shell",
-      "command": "flutter",
+      "command": "/home/vscode/flutter/bin/flutter",
       "args": [
         "clean"
       ],

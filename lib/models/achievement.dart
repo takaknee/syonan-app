@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 /// 達成可能なバッジ/実績を表すモデルクラス
 class Achievement {
   const Achievement({

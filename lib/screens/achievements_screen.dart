@@ -282,7 +282,7 @@ class _AchievementsScreenState extends State<AchievementsScreen>
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('バッジをかいますか？'),
+        title: const Text('バッジをかいますか？'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [

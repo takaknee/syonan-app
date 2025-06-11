@@ -1,7 +1,7 @@
 # Makefile for syonan-app development tasks
 # Provides convenient commands for common development operations
 
-.PHONY: help format format-check lint test build clean setup setup-quick qa check-env setup-flutter
+.PHONY: help format format-check lint test build clean setup setup-quick qa check-env setup-flutter autofix autofix-format autofix-imports autofix-const
 
 # Default target
 help:
@@ -20,6 +20,12 @@ help:
 	@echo "  lint          Run Dart/Flutter analysis"
 	@echo "  check-env     Check development environment status"
 	@echo ""
+	@echo "Auto-fix commands:"
+	@echo "  autofix       🤖 Full automatic code quality fixes"
+	@echo "  autofix-format   Format code automatically"
+	@echo "  autofix-imports  Add missing common imports"
+	@echo "  autofix-const    Add const modifiers where appropriate"
+	@echo ""
 	@echo "Development:"
 	@echo "  test          Run all tests"
 	@echo "  build         Build the app (web)"
@@ -28,10 +34,12 @@ help:
 	@echo ""
 	@echo "🚨 Before creating PRs:"
 	@echo "  make qa       # Prevents CI/CD formatting errors"
+	@echo "  make autofix  # Auto-fix common quality issues"
 	@echo ""
 	@echo "Examples:"
 	@echo "  make setup        # Initial setup with pre-commit hooks"
 	@echo "  make setup-flutter # Download and setup Flutter SDK"
+	@echo "  make autofix      # Fix code quality issues automatically"
 	@echo "  make qa           # Check code quality before PR"
 	@echo "  make format       # Fix formatting issues"
 
@@ -169,3 +177,93 @@ qa: format-check lint test
 # Environment check
 check-env:
 	@./scripts/check-env.sh
+
+# ========================================
+# 🤖 AUTO-FIX COMMANDS
+# ========================================
+
+# Full automatic code quality fixes
+autofix:
+	@echo "🤖 Starting automatic code quality fixes..."
+	@echo ""
+	@echo "1️⃣ Formatting code..."
+	@if command -v dart >/dev/null 2>&1; then \
+		dart format .; \
+		echo "   ✅ Code formatted"; \
+	else \
+		echo "   ⚠️ Dart not available, skipping format"; \
+	fi
+	@echo ""
+	@echo "2️⃣ Adding missing imports..."
+	@$(MAKE) autofix-imports
+	@echo ""
+	@echo "3️⃣ Adding const modifiers..."
+	@$(MAKE) autofix-const
+	@echo ""
+	@echo "4️⃣ Running analysis..."
+	@if command -v flutter >/dev/null 2>&1; then \
+		flutter analyze || echo "   ⚠️ Some analysis issues remain (manual fix may be needed)"; \
+		echo "   ✅ Analysis completed"; \
+	else \
+		echo "   ⚠️ Flutter not available, skipping analysis"; \
+	fi
+	@echo ""
+	@echo "🎉 Automatic fixes completed!"
+	@echo "💡 Run 'make qa' to verify all changes"
+
+# Format code automatically
+autofix-format:
+	@echo "📝 Auto-formatting code..."
+	@if command -v dart >/dev/null 2>&1; then \
+		dart format .; \
+		echo "✅ Code formatting completed!"; \
+	elif command -v flutter >/dev/null 2>&1; then \
+		flutter format .; \
+		echo "✅ Code formatting completed!"; \
+	else \
+		echo "❌ Error: Neither 'dart' nor 'flutter' command found!"; \
+		exit 1; \
+	fi
+
+# Add missing common imports
+autofix-imports:
+	@echo "📦 Adding missing common imports..."
+	@import_added=false; \
+	for file in $$(find lib -name "*.dart" 2>/dev/null); do \
+		if [ -f "$$file" ] && grep -q "Widget\|BuildContext\|StatelessWidget\|StatefulWidget" "$$file" && ! grep -q "package:flutter/material.dart" "$$file"; then \
+			echo "   Adding Flutter import to $$file"; \
+			sed -i '1i import '\''package:flutter/material.dart'\'';' "$$file"; \
+			import_added=true; \
+		fi; \
+	done; \
+	if [ "$$import_added" = true ]; then \
+		echo "   ✅ Imports added"; \
+	else \
+		echo "   ✅ No missing imports found"; \
+	fi
+
+# Add const modifiers where appropriate
+autofix-const:
+	@echo "🔧 Adding const modifiers..."
+	@changes_made=false; \
+	for file in $$(find lib -name "*.dart" 2>/dev/null); do \
+		if [ -f "$$file" ]; then \
+			original_size=$$(wc -c < "$$file"); \
+			sed -i 's/\(return \)Text(/\1const Text(/g' "$$file" 2>/dev/null || true; \
+			sed -i 's/\(return \)SizedBox(/\1const SizedBox(/g' "$$file" 2>/dev/null || true; \
+			sed -i 's/\(child: \)Text(/\1const Text(/g' "$$file" 2>/dev/null || true; \
+			sed -i 's/\(child: \)SizedBox(/\1const SizedBox(/g' "$$file" 2>/dev/null || true; \
+			sed -i 's/\[\s*Text(/[const Text(/g' "$$file" 2>/dev/null || true; \
+			sed -i 's/\[\s*SizedBox(/[const SizedBox(/g' "$$file" 2>/dev/null || true; \
+			new_size=$$(wc -c < "$$file"); \
+			if [ "$$original_size" != "$$new_size" ]; then \
+				echo "   Modified $$file"; \
+				changes_made=true; \
+			fi; \
+		fi; \
+	done; \
+	if [ "$$changes_made" = true ]; then \
+		echo "   ✅ Const modifiers added"; \
+	else \
+		echo "   ✅ No const modifiers needed"; \
+	fi

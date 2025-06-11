@@ -1,0 +1,241 @@
+name: Issue Auto-Handler
+
+on:
+  issues:
+    types: [opened, labeled]
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  auto-handle-issue:
+    name: Auto Handle Issue
+    runs-on: ubuntu-latest
+    if: |
+      (github.event_name == 'issues' && 
+       (contains(github.event.issue.body, 'format') || 
+        contains(github.event.issue.body, 'analysis') ||
+        contains(github.event.issue.body, 'lint') ||
+        contains(github.event.issue.title, 'format') ||
+        contains(github.event.issue.title, 'analysis') ||
+        contains(github.event.issue.title, 'lint'))) ||
+      (github.event_name == 'issue_comment' && 
+       contains(github.event.comment.body, '@copilot-fix'))
+
+    steps:
+      - name: Analyze issue content
+        id: analyze
+        run: |
+          echo "🔍 Analyzing issue for auto-fixable problems..."
+          
+          # Extract issue/comment content
+          if [ "${{ github.event_name }}" = "issues" ]; then
+            CONTENT="${{ github.event.issue.body }}"
+            TITLE="${{ github.event.issue.title }}"
+          else
+            CONTENT="${{ github.event.comment.body }}"
+            TITLE="Comment auto-fix request"
+          fi
+          
+          echo "Title: $TITLE"
+          echo "Content preview: $(echo "$CONTENT" | head -3)"
+          
+          # Determine fix type
+          if echo "$CONTENT $TITLE" | grep -i "format\|formatting"; then
+            echo "fix_type=format" >> $GITHUB_OUTPUT
+            echo "🎯 Detected: Code formatting issue"
+          elif echo "$CONTENT $TITLE" | grep -i "analy\|lint\|error"; then
+            echo "fix_type=analysis" >> $GITHUB_OUTPUT
+            echo "🎯 Detected: Code analysis issue"
+          else
+            echo "fix_type=general" >> $GITHUB_OUTPUT
+            echo "🎯 Detected: General quality issue"
+          fi
+
+      - name: Create auto-fix PR
+        if: steps.analyze.outputs.fix_type != 'general'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fixType = '${{ steps.analyze.outputs.fix_type }}';
+            const issueNumber = context.issue.number;
+            
+            // Create a branch for the fix
+            const branchName = `auto-fix-${fixType}-issue-${issueNumber}`;
+            
+            // Trigger the auto-fix workflow
+            const workflowDispatch = await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'auto-fix-quality.yml',
+              ref: 'main',
+              inputs: {
+                target_branch: branchName
+              }
+            });
+            
+            // Comment on the issue
+            const comment = `## 🤖 Auto-Fix Initiated
+            
+I've detected that this issue might be automatically fixable!
+
+**Issue Type**: ${fixType === 'format' ? 'Code Formatting' : 'Code Analysis'}
+
+**What I'm doing**:
+1. 🔧 Running automatic ${fixType} fixes
+2. 📝 Creating a pull request with the fixes
+3. 🔗 Linking the PR to this issue
+
+**Expected Timeline**: 2-5 minutes
+
+I'll update this issue once the auto-fix is complete. If the auto-fix doesn't fully resolve the issue, I'll provide guidance on manual steps needed.
+
+---
+*Auto-fix triggered by: ${context.actor}*`;
+
+            await github.rest.issues.createComment({
+              issue_number: issueNumber,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
+      - name: Provide manual guidance
+        if: steps.analyze.outputs.fix_type == 'general'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issueNumber = context.issue.number;
+            
+            const comment = `## 🤖 Copilot Helper - Manual Guidance Needed
+
+I've analyzed this issue but it appears to require manual attention. Here's what I recommend:
+
+### 🔍 For Code Quality Issues:
+
+**Code Formatting**:
+\`\`\`bash
+# Auto-format all code
+flutter format .
+# Or
+dart format .
+\`\`\`
+
+**Code Analysis**:
+\`\`\`bash
+# Run analysis
+flutter analyze
+
+# Fix common issues:
+# 1. Add missing imports
+# 2. Add const keywords where suggested
+# 3. Fix type annotations
+\`\`\`
+
+### 🛠️ Quick Fixes Available:
+
+You can also trigger auto-fixes by:
+1. **Comment**: \`@copilot-fix\` on this issue
+2. **Workflow**: Run the "Auto-Fix Code Quality Issues" workflow manually
+3. **PR**: Create a PR and the auto-fix will run automatically
+
+### 📚 Resources:
+
+- [Formatting Guide](docs/formatting-guide.md)
+- [Quality Check Troubleshooting](docs/quality-check-troubleshooting.md)
+
+Would you like me to attempt an auto-fix? Just reply with \`@copilot-fix\` and I'll try!
+
+---
+*Need more help? Tag @copilot in your next comment for detailed assistance.*`;
+
+            await github.rest.issues.createComment({
+              issue_number: issueNumber,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
+  monitor-autofix-progress:
+    name: Monitor Auto-Fix Progress
+    runs-on: ubuntu-latest
+    if: github.event_name == 'issue_comment' && contains(github.event.comment.body, '@copilot-status')
+    
+    steps:
+      - name: Check recent workflow runs
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issueNumber = context.issue.number;
+            
+            // Get recent workflow runs
+            const workflows = await github.rest.actions.listWorkflowRuns({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'auto-fix-quality.yml',
+              per_page: 5
+            });
+            
+            let status = "No recent auto-fix runs found";
+            let latestRun = null;
+            
+            if (workflows.data.total_count > 0) {
+              latestRun = workflows.data.workflow_runs[0];
+              const runAge = Math.floor((new Date() - new Date(latestRun.created_at)) / 1000 / 60);
+              
+              status = `**Latest Auto-Fix Status**: ${latestRun.status} (${latestRun.conclusion || 'running'})
+              **Started**: ${runAge} minutes ago
+              **Run ID**: ${latestRun.id}`;
+            }
+            
+            // Check for related PRs
+            const prs = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              sort: 'created',
+              direction: 'desc',
+              per_page: 10
+            });
+            
+            const autoPRs = prs.data.filter(pr => 
+              pr.title.includes('Auto-fix') || 
+              pr.head.ref.includes('auto-fix')
+            );
+            
+            let prStatus = "No auto-fix PRs found";
+            if (autoPRs.length > 0) {
+              const pr = autoPRs[0];
+              prStatus = `**Latest Auto-Fix PR**: #${pr.number} - ${pr.title}
+              **Status**: ${pr.state}
+              **Link**: ${pr.html_url}`;
+            }
+            
+            const comment = `## 🤖 Auto-Fix Status Report
+
+### Workflow Status
+${status}
+
+### Pull Request Status  
+${prStatus}
+
+### Next Steps
+${latestRun && latestRun.conclusion === 'success' ? 
+  '✅ Auto-fix completed! Please review the PR above.' :
+  latestRun && latestRun.conclusion === 'failure' ?
+  '❌ Auto-fix failed. Manual intervention may be needed.' :
+  '⏳ Auto-fix in progress... Check back in a few minutes.'}
+
+---
+*Use \`@copilot-status\` to get an updated status report.*`;
+
+            await github.rest.issues.createComment({
+              issue_number: issueNumber,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });

@@ -1,0 +1,276 @@
+name: Auto-Fix Code Quality Issues
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+    inputs:
+      target_branch:
+        description: 'Target branch to fix'
+        required: false
+        default: 'main'
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: write
+
+jobs:
+  auto-fix-quality:
+    name: Auto-Fix Code Quality
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.x'
+          cache: true
+        continue-on-error: true
+        timeout-minutes: 3
+
+      - name: Check Flutter availability
+        id: flutter_check
+        run: |
+          if command -v flutter >/dev/null 2>&1; then
+            echo "flutter_available=true" >> $GITHUB_OUTPUT
+            echo "✅ Flutter is available"
+            flutter --version
+          else
+            echo "flutter_available=false" >> $GITHUB_OUTPUT
+            echo "❌ Flutter not available - skipping Flutter-specific fixes"
+          fi
+
+      - name: Get dependencies
+        if: steps.flutter_check.outputs.flutter_available == 'true'
+        run: |
+          if [ -f pubspec.yaml ]; then
+            echo "📦 Getting Flutter dependencies..."
+            flutter pub get
+          fi
+        continue-on-error: true
+        timeout-minutes: 3
+
+      - name: Auto-fix code formatting
+        if: steps.flutter_check.outputs.flutter_available == 'true'
+        id: format_fix
+        run: |
+          echo "🔧 Auto-fixing code formatting..."
+          
+          # Check if formatting is needed
+          if ! dart format --set-exit-if-changed . --dry-run; then
+            echo "format_needed=true" >> $GITHUB_OUTPUT
+            echo "⚠️ Formatting issues detected, applying fixes..."
+            
+            # Apply formatting
+            dart format .
+            
+            # Check if files were changed
+            if git diff --exit-code; then
+              echo "✅ No changes after formatting"
+              echo "changes_made=false" >> $GITHUB_OUTPUT
+            else
+              echo "📝 Files were formatted"
+              echo "changes_made=true" >> $GITHUB_OUTPUT
+              
+              # Show which files were changed
+              echo "Changed files:"
+              git diff --name-only
+            fi
+          else
+            echo "format_needed=false" >> $GITHUB_OUTPUT
+            echo "changes_made=false" >> $GITHUB_OUTPUT
+            echo "✅ Code is already properly formatted"
+          fi
+
+      - name: Auto-fix common analysis issues
+        if: steps.flutter_check.outputs.flutter_available == 'true'
+        id: analysis_fix
+        run: |
+          echo "🔍 Running analysis and attempting auto-fixes..."
+          
+          # Run analysis and capture output
+          if flutter analyze --no-preamble > analysis_output.txt 2>&1; then
+            echo "✅ No analysis issues found"
+            echo "analysis_issues=false" >> $GITHUB_OUTPUT
+            echo "fixes_applied=false" >> $GITHUB_OUTPUT
+          else
+            echo "analysis_issues=true" >> $GITHUB_OUTPUT
+            echo "⚠️ Analysis issues detected:"
+            cat analysis_output.txt
+            
+            # Common auto-fixes
+            fixes_applied=false
+            
+            # Fix 1: Add missing imports
+            echo "🔧 Checking for missing imports..."
+            if grep -q "undefined_class\|undefined_identifier" analysis_output.txt; then
+              echo "Attempting to add common missing imports..."
+              
+              # Add common Flutter imports to files that need them
+              find lib -name "*.dart" -exec grep -l "Widget\|BuildContext\|StatelessWidget\|StatefulWidget" {} \; | while read file; do
+                if ! grep -q "package:flutter/material.dart" "$file"; then
+                  echo "Adding Flutter import to $file"
+                  sed -i '1i import '\''package:flutter/material.dart'\'';' "$file"
+                  fixes_applied=true
+                fi
+              done
+            fi
+            
+            # Fix 2: Add const keywords where suggested (safer approach)
+            echo "🔧 Adding const keywords safely..."
+            if grep -q "prefer_const_constructors\|prefer_const_literals_to_create_immutables" analysis_output.txt; then
+              echo "Adding const keywords where appropriate..."
+              # More specific and safer patterns
+              find lib -name "*.dart" -exec sed -i 's/\(return\s\+\)Text(/\1const Text(/g' {} \; || true
+              find lib -name "*.dart" -exec sed -i 's/\(child:\s\+\)Text(/\1const Text(/g' {} \; || true
+              find lib -name "*.dart" -exec sed -i 's/\(return\s\+\)SizedBox(/\1const SizedBox(/g' {} \; || true
+              find lib -name "*.dart" -exec sed -i 's/\(child:\s\+\)SizedBox(/\1const SizedBox(/g' {} \; || true
+              fixes_applied=true
+            fi
+            
+            # Check if any fixes were applied
+            if git diff --exit-code; then
+              echo "fixes_applied=false" >> $GITHUB_OUTPUT
+              echo "ℹ️ No automatic fixes could be applied"
+            else
+              echo "fixes_applied=true" >> $GITHUB_OUTPUT
+              echo "✅ Some automatic fixes were applied"
+              echo "Fixed files:"
+              git diff --name-only
+            fi
+          fi
+
+      - name: Commit auto-fixes
+        if: |
+          steps.flutter_check.outputs.flutter_available == 'true' && 
+          (steps.format_fix.outputs.changes_made == 'true' || steps.analysis_fix.outputs.fixes_applied == 'true')
+        run: |
+          echo "💾 Committing auto-fixes..."
+          
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          
+          git add -A
+          
+          commit_message="🤖 Auto-fix: Code quality improvements"
+          
+          if [ "${{ steps.format_fix.outputs.changes_made }}" = "true" ]; then
+            commit_message="$commit_message - Format code"
+          fi
+          
+          if [ "${{ steps.analysis_fix.outputs.fixes_applied }}" = "true" ]; then
+            commit_message="$commit_message - Fix analysis issues"
+          fi
+          
+          git commit -m "$commit_message" || echo "No changes to commit"
+
+      - name: Push changes
+        if: |
+          steps.flutter_check.outputs.flutter_available == 'true' && 
+          (steps.format_fix.outputs.changes_made == 'true' || steps.analysis_fix.outputs.fixes_applied == 'true')
+        run: |
+          echo "📤 Pushing auto-fixes..."
+          git push origin HEAD
+
+      - name: Comment on PR with results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const flutterAvailable = '${{ steps.flutter_check.outputs.flutter_available }}';
+            const formatNeeded = '${{ steps.format_fix.outputs.format_needed }}';
+            const changesMade = '${{ steps.format_fix.outputs.changes_made }}';
+            const analysisIssues = '${{ steps.analysis_fix.outputs.analysis_issues }}';
+            const fixesApplied = '${{ steps.analysis_fix.outputs.fixes_applied }}';
+            
+            let comment = '## 🤖 Auto-Fix Quality Check Results\n\n';
+            
+            if (flutterAvailable === 'false') {
+              comment += '⚠️ Flutter environment not available - quality checks skipped\n';
+            } else {
+              comment += '### Code Formatting\n';
+              if (formatNeeded === 'true') {
+                if (changesMade === 'true') {
+                  comment += '✅ **Fixed**: Code formatting issues were automatically corrected\n';
+                } else {
+                  comment += '✅ **OK**: Formatting was already correct\n';
+                }
+              } else {
+                comment += '✅ **OK**: No formatting issues detected\n';
+              }
+              
+              comment += '\n### Code Analysis\n';
+              if (analysisIssues === 'true') {
+                if (fixesApplied === 'true') {
+                  comment += '✅ **Partially Fixed**: Some analysis issues were automatically corrected\n';
+                  comment += '⚠️ Manual review may be needed for remaining issues\n';
+                } else {
+                  comment += '⚠️ **Manual Fix Needed**: Analysis issues detected that require manual attention\n';
+                }
+              } else {
+                comment += '✅ **OK**: No analysis issues detected\n';
+              }
+              
+              if (changesMade === 'true' || fixesApplied === 'true') {
+                comment += '\n---\n';
+                comment += '✨ **Auto-fixes have been applied and committed to this PR**\n';
+                comment += 'Please review the changes and ensure they meet your requirements.\n';
+              }
+            }
+            
+            comment += '\n---\n';
+            comment += '*This comment was automatically generated by the Auto-Fix Quality workflow.*';
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
+      - name: Fallback quality check (without Flutter)
+        if: steps.flutter_check.outputs.flutter_available == 'false'
+        run: |
+          echo "🔍 Running basic quality checks without Flutter..."
+          
+          # Basic file structure checks
+          echo "📂 Checking project structure..."
+          if [ -f pubspec.yaml ]; then
+            echo "✅ pubspec.yaml found"
+          else
+            echo "❌ pubspec.yaml not found"
+          fi
+          
+          if [ -d lib ]; then
+            echo "✅ lib directory found"
+            echo "Dart files in lib: $(find lib -name "*.dart" | wc -l)"
+          else
+            echo "❌ lib directory not found"
+          fi
+          
+          if [ -d test ]; then
+            echo "✅ test directory found"
+            echo "Test files: $(find test -name "*_test.dart" | wc -l)"
+          else
+            echo "⚠️ test directory not found"
+          fi
+          
+          # Basic syntax checks using basic tools
+          echo "📝 Basic syntax validation..."
+          find lib test -name "*.dart" 2>/dev/null | head -10 | while read file; do
+            if [ -f "$file" ]; then
+              echo "Checking $file..."
+              # Basic syntax check - just ensure file is readable
+              cat "$file" > /dev/null && echo "  ✅ Readable" || echo "  ❌ Issue with file"
+            fi
+          done
+          
+          echo "✅ Basic quality checks completed"

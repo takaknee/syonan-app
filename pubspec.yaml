@@ -28,7 +28,6 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^4.0.0  # Dart 3.6.0と互換性のあるバージョン
-  test: ^1.25.7  # Flutter SDKと互換性のあるバージョン
 
 flutter:
   uses-material-design: true

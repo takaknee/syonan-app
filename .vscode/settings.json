@@ -51,6 +51,15 @@
   "github.copilot.chat.agent.autoFix": true,
   "github.copilot.chat.codesearch.enabled": true,
   "github.copilot.chat.search.keywordSuggestions": true,
+  "github.copilot.chat.welcomeMessage": "always",
+  "github.copilot.conversation.showWelcomeMessage": true,
+  "github.copilot.advanced.debug": false,
+  "github.copilot.advanced.listCount": 10,
+  "github.copilot.chat.referenceFiles": "always",
+  "github.copilot.chat.scopeSelection": true,
+  "github.copilot.editor.enableCodeActions": true,
+  "github.copilot.editor.enableAutoCompletions": true,
+  "github.copilot.prompt.addTests": "always",
   "files.associations": {
     "*.dart": "dart"
   },

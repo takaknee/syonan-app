@@ -1,0 +1,170 @@
+# GitHub Copilot Workspace Configuration
+# This file configures GitHub Copilot for optimal development experience in this Flutter project
+
+# Project-specific context and instructions
+context_files:
+  - .github/copilot-context.md
+  - .github/instructions/copilot-guidelines.md
+  - .github/instructions/flutter-development.md
+  - README.md
+  - pubspec.yaml
+
+# Language-specific configurations
+languages:
+  dart:
+    # Enable advanced Dart/Flutter features
+    enabled: true
+    patterns:
+      - "**/*.dart"
+    preferences:
+      style: "flutter"
+      line_length: 80
+      prefer_single_quotes: true
+      prefer_const_constructors: true
+    context:
+      - "This is a Flutter project for children's math practice"
+      - "Focus on child-safe, educational, and accessible design"
+      - "Use Material Design 3 components"
+      - "Implement proper error handling and performance optimization"
+
+  yaml:
+    enabled: true
+    patterns:
+      - "**/*.yaml"
+      - "**/*.yml"
+    preferences:
+      indent: 2
+
+  json:
+    enabled: true
+    patterns:
+      - "**/*.json"
+
+# Prompt engineering guidelines
+prompt_guidelines:
+  - "Use Japanese comments for code explanation"
+  - "Always consider child safety and privacy protection"
+  - "Implement accessibility features (Semantics, proper contrast)"
+  - "Follow Flutter best practices and Material Design 3"
+  - "Include comprehensive error handling"
+  - "Write testable and maintainable code"
+
+# Code generation preferences
+code_generation:
+  # Prefer const constructors for better performance
+  prefer_const: true
+  
+  # Generate comprehensive documentation
+  include_documentation: true
+  
+  # Generate tests alongside main code
+  generate_tests: true
+  
+  # Follow project's architectural patterns
+  follow_patterns:
+    - "Repository pattern for data access"
+    - "Provider/Riverpod for state management"
+    - "Service classes for business logic"
+    - "Immutable data classes"
+
+# File templates and patterns
+templates:
+  widget:
+    path: "lib/widgets/"
+    pattern: |
+      // [WIDGET_NAME]ウィジェット - [DESCRIPTION]
+      class [WIDGET_NAME] extends StatelessWidget {
+        const [WIDGET_NAME]({super.key});
+        
+        @override
+        Widget build(BuildContext context) {
+          return Container();
+        }
+      }
+  
+  screen:
+    path: "lib/screens/"
+    pattern: |
+      // [SCREEN_NAME]画面 - [DESCRIPTION]
+      class [SCREEN_NAME]Screen extends StatefulWidget {
+        const [SCREEN_NAME]Screen({super.key});
+        
+        @override
+        State<[SCREEN_NAME]Screen> createState() => _[SCREEN_NAME]ScreenState();
+      }
+      
+      class _[SCREEN_NAME]ScreenState extends State<[SCREEN_NAME]Screen> {
+        @override
+        Widget build(BuildContext context) {
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text('[SCREEN_TITLE]'),
+            ),
+            body: const Center(
+              child: Text('実装予定'),
+            ),
+          );
+        }
+      }
+
+  service:
+    path: "lib/services/"
+    pattern: |
+      // [SERVICE_NAME]サービス - [DESCRIPTION]
+      abstract class [SERVICE_NAME]Service {
+        // インターフェース定義
+      }
+      
+      class [SERVICE_NAME]ServiceImpl implements [SERVICE_NAME]Service {
+        const [SERVICE_NAME]ServiceImpl();
+        
+        // 実装
+      }
+
+# Testing preferences
+testing:
+  # Generate tests for new classes
+  auto_generate: true
+  
+  # Test patterns to follow
+  patterns:
+    - "Arrange-Act-Assert pattern"
+    - "Descriptive test names in Japanese"
+    - "Mock external dependencies"
+    - "Test both success and failure scenarios"
+
+# Performance optimization guidelines
+performance:
+  # Prefer performance-friendly patterns
+  patterns:
+    - "Use const constructors where possible"
+    - "Avoid unnecessary rebuilds"
+    - "Implement proper widget lifecycle management"
+    - "Use efficient data structures"
+
+# Security and privacy (critical for children's app)
+security:
+  guidelines:
+    - "No collection of personal information without explicit consent"
+    - "Implement COPPA compliance measures"
+    - "Use secure data storage methods"
+    - "Validate all user inputs"
+    - "Implement proper error boundaries"
+
+# Accessibility requirements
+accessibility:
+  requirements:
+    - "Include Semantics widgets for screen readers"
+    - "Ensure sufficient color contrast ratios"
+    - "Support keyboard navigation"
+    - "Provide alternative text for images"
+    - "Use appropriate font sizes for children"
+
+# Project-specific rules
+project_rules:
+  - "All user-facing text should be in Japanese"
+  - "Comments and documentation in Japanese"
+  - "Variable and function names in English"
+  - "Follow Material Design 3 guidelines"
+  - "Implement responsive design for different screen sizes"
+  - "Ensure content is appropriate for ages 3-12"

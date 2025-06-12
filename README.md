@@ -201,6 +201,12 @@ make qa    # フォーマット + 解析 + テスト
 
 ### 🎯 Copilot使用のベストプラクティス
 
+#### 最新のCopilot機能活用
+- **Copilotワークスペース設定**: `.github/copilot.yml`でプロジェクト固有の最適化
+- **タスク別プロンプト**: `.github/prompts/task-specific-prompts.md`の豊富なテンプレート
+- **ワークスペース指示書**: `.github/copilot-workspace-instructions.md`で包括的なガイダンス
+- **Copilot専用Issue/PRテンプレート**: 効率的な開発支援要請
+
 #### 効果的なプロンプト作成
 ```dart
 // TODO: 子供向けの安全な[機能名]を実装

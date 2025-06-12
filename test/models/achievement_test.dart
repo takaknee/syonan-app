@@ -129,13 +129,16 @@ void main() {
       expect(AchievementCategory.streak.displayName, '連続');
       expect(AchievementCategory.accuracy.displayName, '正確性');
       expect(AchievementCategory.fun.displayName, '楽しさ');
+      expect(AchievementCategory.difficulty.displayName, '難易度');
+      expect(AchievementCategory.operation.displayName, '演算');
     });
   });
 
   group('AvailableAchievements', () {
     test('should have all predefined achievements', () {
       expect(AvailableAchievements.all.isNotEmpty, true);
-      expect(AvailableAchievements.all.length, greaterThan(5));
+      // 新しいバッジが追加されたので数を増やす
+      expect(AvailableAchievements.all.length, greaterThan(20));
     });
 
     test('should find achievement by ID correctly', () {
@@ -170,6 +173,30 @@ void main() {
       expect(
         funAchievements.every(
           (a) => a.category == AchievementCategory.fun,
+        ),
+        true,
+      );
+    });
+
+    test('should have new achievement categories', () {
+      final difficultyAchievements = AvailableAchievements.getByCategory(
+        AchievementCategory.difficulty,
+      );
+      expect(difficultyAchievements.isNotEmpty, true);
+      expect(
+        difficultyAchievements.every(
+          (a) => a.category == AchievementCategory.difficulty,
+        ),
+        true,
+      );
+
+      final operationAchievements = AvailableAchievements.getByCategory(
+        AchievementCategory.operation,
+      );
+      expect(operationAchievements.isNotEmpty, true);
+      expect(
+        operationAchievements.every(
+          (a) => a.category == AchievementCategory.operation,
         ),
         true,
       );

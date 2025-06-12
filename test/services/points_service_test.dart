@@ -30,9 +30,11 @@ void main() {
         final earnedPoints =
             await pointsService.addPointsFromScore(scoreRecord);
 
-        // 基本ポイント(10) + 正答率ボーナス(10) + excellentボーナス(15) + パーフェクトボーナス(20) = 55
-        expect(earnedPoints, 55);
-        expect(pointsService.totalPoints, 55);
+        // 基本ポイント(10) + 正答率ボーナス(10) + excellentボーナス(15) + 
+        // パーフェクトボーナス(20) + 演算ボーナス(5) + 問題数ボーナス(0) + 
+        // 時間ボーナス(0) = 60
+        expect(earnedPoints, 60);
+        expect(pointsService.totalPoints, 60);
       });
 
       test('should calculate correct points for good score', () async {
@@ -48,9 +50,9 @@ void main() {
         final earnedPoints =
             await pointsService.addPointsFromScore(scoreRecord);
 
-        // 基本ポイント(10) + 正答率ボーナス(8) + goodボーナス(10) = 28
-        expect(earnedPoints, 28);
-        expect(pointsService.totalPoints, 28);
+        // 基本ポイント(10) + 正答率ボーナス(8) + goodボーナス(10) + 演算ボーナス(5) = 33
+        expect(earnedPoints, 33);
+        expect(pointsService.totalPoints, 33);
       });
 
       test('should calculate correct points for fair score', () async {
@@ -66,9 +68,9 @@ void main() {
         final earnedPoints =
             await pointsService.addPointsFromScore(scoreRecord);
 
-        // 基本ポイント(10) + 正答率ボーナス(7) + fairボーナス(5) = 22
-        expect(earnedPoints, 22);
-        expect(pointsService.totalPoints, 22);
+        // 基本ポイント(10) + 正答率ボーナス(7) + fairボーナス(5) + 演算ボーナス(2) = 24
+        expect(earnedPoints, 24);
+        expect(pointsService.totalPoints, 24);
       });
 
       test('should calculate correct points for needs practice score',
@@ -85,9 +87,9 @@ void main() {
         final earnedPoints =
             await pointsService.addPointsFromScore(scoreRecord);
 
-        // 基本ポイント(10) + 正答率ボーナス(5) + needsPracticeボーナス(0) = 15
-        expect(earnedPoints, 15);
-        expect(pointsService.totalPoints, 15);
+        // 基本ポイント(10) + 正答率ボーナス(5) + needsPracticeボーナス(0) + 演算ボーナス(3) = 18
+        expect(earnedPoints, 18);
+        expect(pointsService.totalPoints, 18);
       });
     });
 
@@ -114,6 +116,72 @@ void main() {
         final success = await pointsService.spendPoints(30);
         expect(success, false);
         expect(pointsService.totalPoints, 20);
+      });
+
+      test('should calculate enhanced points with time bonus', () async {
+        final scoreRecord = ScoreRecord(
+          id: 'test_time_bonus',
+          date: DateTime.now(),
+          operation: MathOperationType.multiplication,
+          correctAnswers: 10,
+          totalQuestions: 10,
+          timeSpent: const Duration(seconds: 80), // 8秒/問 = 時間ボーナス獲得
+        );
+
+        final earnedPoints =
+            await pointsService.addPointsFromScore(scoreRecord);
+
+        // 基本(10) + 正答率(10) + excellent(15) + パーフェクト(20) + 演算(5) + 時間(10) = 70
+        expect(earnedPoints, 70);
+      });
+
+      test('should calculate enhanced points with volume bonus', () async {
+        final scoreRecord = ScoreRecord(
+          id: 'test_volume_bonus',
+          date: DateTime.now(),
+          operation: MathOperationType.addition,
+          correctAnswers: 18,
+          totalQuestions: 20, // 20問以上で問題数ボーナス獲得
+          timeSpent: const Duration(minutes: 10),
+        );
+
+        final earnedPoints =
+            await pointsService.addPointsFromScore(scoreRecord);
+
+        // 基本(10) + 正答率(9) + good(10) + 演算(2) + 問題数(10) = 41
+        expect(earnedPoints, 41);
+      });
+
+      test('should give different operation bonuses', () async {
+        // たし算のテスト
+        final additionScore = ScoreRecord(
+          id: 'test_addition',
+          date: DateTime.now(),
+          operation: MathOperationType.addition,
+          correctAnswers: 7,
+          totalQuestions: 10,
+          timeSpent: const Duration(minutes: 5),
+        );
+
+        final additionPoints =
+            await pointsService.addPointsFromScore(additionScore);
+        await pointsService.addPoints(-additionPoints); // リセット
+
+        // ひき算のテスト
+        final subtractionScore = ScoreRecord(
+          id: 'test_subtraction',
+          date: DateTime.now(),
+          operation: MathOperationType.subtraction,
+          correctAnswers: 7,
+          totalQuestions: 10,
+          timeSpent: const Duration(minutes: 5),
+        );
+
+        final subtractionPoints =
+            await pointsService.addPointsFromScore(subtractionScore);
+
+        // ひき算の方がたし算より1ポイント多い（3 vs 2）
+        expect(subtractionPoints, additionPoints + 1);
       });
     });
 

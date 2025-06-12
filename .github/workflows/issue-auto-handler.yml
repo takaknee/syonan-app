@@ -81,21 +81,21 @@ jobs:
             // Comment on the issue
             const comment = `## 🤖 Auto-Fix Initiated
             
-I've detected that this issue might be automatically fixable!
-
-**Issue Type**: ${fixType === 'format' ? 'Code Formatting' : 'Code Analysis'}
-
-**What I'm doing**:
-1. 🔧 Running automatic ${fixType} fixes
-2. 📝 Creating a pull request with the fixes
-3. 🔗 Linking the PR to this issue
-
-**Expected Timeline**: 2-5 minutes
-
-I'll update this issue once the auto-fix is complete. If the auto-fix doesn't fully resolve the issue, I'll provide guidance on manual steps needed.
-
----
-*Auto-fix triggered by: ${context.actor}*`;
+            I've detected that this issue might be automatically fixable!
+            
+            **Issue Type**: ${fixType === 'format' ? 'Code Formatting' : 'Code Analysis'}
+            
+            **What I'm doing**:
+            1. 🔧 Running automatic ${fixType} fixes
+            2. 📝 Creating a pull request with the fixes
+            3. 🔗 Linking the PR to this issue
+            
+            **Expected Timeline**: 2-5 minutes
+            
+            I'll update this issue once the auto-fix is complete. If the auto-fix doesn't fully resolve the issue, I'll provide guidance on manual steps needed.
+            
+            ---
+            *Auto-fix triggered by: ${context.actor}*`;
 
             await github.rest.issues.createComment({
               issue_number: issueNumber,
@@ -112,46 +112,47 @@ I'll update this issue once the auto-fix is complete. If the auto-fix doesn't fu
             const issueNumber = context.issue.number;
             
             const comment = `## 🤖 Copilot Helper - Manual Guidance Needed
-
-I've analyzed this issue but it appears to require manual attention. Here's what I recommend:
-
-### 🔍 For Code Quality Issues:
-
-**Code Formatting**:
-\`\`\`bash
-# Auto-format all code
-flutter format .
-# Or
-dart format .
-\`\`\`
-
-**Code Analysis**:
-\`\`\`bash
-# Run analysis
-flutter analyze
-
-# Fix common issues:
-# 1. Add missing imports
-# 2. Add const keywords where suggested
-# 3. Fix type annotations
-\`\`\`
-
-### 🛠️ Quick Fixes Available:
-
-You can also trigger auto-fixes by:
-1. **Comment**: \`@copilot-fix\` on this issue
-2. **Workflow**: Run the "Auto-Fix Code Quality Issues" workflow manually
-3. **PR**: Create a PR and the auto-fix will run automatically
-
-### 📚 Resources:
-
-- [Formatting Guide](docs/formatting-guide.md)
-- [Quality Check Troubleshooting](docs/quality-check-troubleshooting.md)
-
-Would you like me to attempt an auto-fix? Just reply with \`@copilot-fix\` and I'll try!
-
----
-*Need more help? Tag @copilot in your next comment for detailed assistance.*`;
+            
+            I've analyzed this issue but it appears to require manual attention. Here's what I recommend:
+            
+            ### 🔍 For Code Quality Issues:
+            
+            **Code Formatting**:
+            \`\`\`bash
+            # Auto-format all code
+            flutter format .
+            # Or
+            dart format .
+            \`\`\`
+            
+            **Code Analysis**:
+            \`\`\`bash
+            # Run analysis
+            flutter analyze
+            
+            # Fix common issues:
+            # 1. Add missing imports
+            # 2. Add const keywords where suggested
+            # 2. Add const keywords where suggested
+            # 3. Fix type annotations
+            \`\`\`
+            
+            ### 🛠️ Quick Fixes Available:
+            
+            You can also trigger auto-fixes by:
+            1. **Comment**: \`@copilot-fix\` on this issue
+            2. **Workflow**: Run the "Auto-Fix Code Quality Issues" workflow manually
+            3. **PR**: Create a PR and the auto-fix will run automatically
+            
+            ### 📚 Resources:
+            
+            - [Formatting Guide](docs/formatting-guide.md)
+            - [Quality Check Troubleshooting](docs/quality-check-troubleshooting.md)
+            
+            Would you like me to attempt an auto-fix? Just reply with \`@copilot-fix\` and I'll try!
+            
+            ---
+            *Need more help? Tag @copilot in your next comment for detailed assistance.*`;
 
             await github.rest.issues.createComment({
               issue_number: issueNumber,
@@ -216,22 +217,22 @@ Would you like me to attempt an auto-fix? Just reply with \`@copilot-fix\` and I
             }
             
             const comment = `## 🤖 Auto-Fix Status Report
-
-### Workflow Status
-${status}
-
-### Pull Request Status  
-${prStatus}
-
-### Next Steps
-${latestRun && latestRun.conclusion === 'success' ? 
-  '✅ Auto-fix completed! Please review the PR above.' :
-  latestRun && latestRun.conclusion === 'failure' ?
-  '❌ Auto-fix failed. Manual intervention may be needed.' :
-  '⏳ Auto-fix in progress... Check back in a few minutes.'}
-
----
-*Use \`@copilot-status\` to get an updated status report.*`;
+            
+            ### Workflow Status
+            ${status}
+            
+            ### Pull Request Status  
+            ${prStatus}
+            
+            ### Next Steps
+            ${latestRun && latestRun.conclusion === 'success' ? 
+              '✅ Auto-fix completed! Please review the PR above.' :
+              latestRun && latestRun.conclusion === 'failure' ?
+              '❌ Auto-fix failed. Manual intervention may be needed.' :
+              '⏳ Auto-fix in progress... Check back in a few minutes.'}
+            
+            ---
+            *Use \`@copilot-status\` to get an updated status report.*`;
 
             await github.rest.issues.createComment({
               issue_number: issueNumber,

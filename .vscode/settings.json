@@ -45,6 +45,7 @@
   },
   "github.copilot.chat.followUps": "always",
   "github.copilot.chat.localeOverride": "ja",
+  "github.copilot.chat.agent.runTasks": true,
   "github.copilot.nextEditSuggestions.enabled": true,
   "github.copilot.nextEditSuggestions.fixes": true,
   "github.copilot.chat.agent.autoFix": true,

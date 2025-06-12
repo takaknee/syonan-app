@@ -275,9 +275,8 @@ void main() {
         }
       });
 
-      test(
-        'should generate advanced problems with different difficulty levels',
-        () {
+      test('should generate advanced problems with different difficulty levels',
+          () {
         for (int level = 1; level <= 5; level++) {
           final problem = mathService.generateAdvancedProblem(
             MathOperationType.multiplication,

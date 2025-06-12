@@ -50,7 +50,7 @@ class EncouragementDialog extends StatelessWidget {
                       color: _getColorForImprovement(improvement),
                       shape: BoxShape.circle,
                     ),
-                    child: const Text(
+                    child: Text(
                       improvement.emoji,
                       style: const TextStyle(fontSize: 48),
                     ),

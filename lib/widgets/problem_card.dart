@@ -47,7 +47,7 @@ class ProblemCard extends StatelessWidget {
       visual.add(
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: const Text(
+          child: Text(
             '+',
             style: theme.textTheme.bodyLarge?.copyWith(
               fontWeight: FontWeight.bold,
@@ -148,7 +148,7 @@ class ProblemCard extends StatelessWidget {
                     color: theme.colorScheme.primary.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: const Text(
+                  child: Text(
                     problem.operation.symbol,
                     style: theme.textTheme.headlineLarge?.copyWith(
                       fontSize: 36,
@@ -194,7 +194,7 @@ class ProblemCard extends StatelessWidget {
                     color: theme.colorScheme.secondary,
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: const Text(
+                  child: Text(
                     '?',
                     style: theme.textTheme.headlineLarge?.copyWith(
                       fontSize: 48,

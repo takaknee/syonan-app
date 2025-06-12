@@ -22,6 +22,7 @@ help:
 	@echo ""
 	@echo "Auto-fix commands:"
 	@echo "  autofix       🤖 Full automatic code quality fixes"
+	@echo "  autofix-safe  🛡️ Safe automatic fixes (recommended)"
 	@echo "  autofix-format   Format code automatically"
 	@echo "  autofix-imports  Add missing common imports"
 	@echo "  autofix-const    Add const modifiers where appropriate"
@@ -209,6 +210,21 @@ autofix:
 	fi
 	@echo ""
 	@echo "🎉 Automatic fixes completed!"
+	@echo "💡 Run 'make qa' to verify all changes"
+
+# Safe automatic code quality fixes (recommended)
+autofix-safe:
+	@echo "🛡️ Starting safe automatic code quality fixes..."
+	@echo ""
+	@if [ -f "./scripts/safe-auto-fix.sh" ]; then \
+		./scripts/safe-auto-fix.sh; \
+	else \
+		echo "❌ safe-auto-fix.sh script not found"; \
+		echo "💡 Please ensure the script exists in ./scripts/"; \
+		exit 1; \
+	fi
+	@echo ""
+	@echo "🎉 Safe automatic fixes completed!"
 	@echo "💡 Run 'make qa' to verify all changes"
 
 # Format code automatically

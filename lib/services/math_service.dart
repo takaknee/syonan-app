@@ -97,8 +97,7 @@ class MathService {
     while (problems.length < count &&
         usedProblems.length < _getMaxUniqueProblems(operation)) {
       final problem = generateProblem(operation);
-      final problemKey =
-          '${problem.firstNumber}_${problem.secondNumber}'
+      final problemKey = '${problem.firstNumber}_${problem.secondNumber}'
           '_${problem.operation.name}';
 
       if (!usedProblems.contains(problemKey)) {
@@ -196,7 +195,7 @@ class MathService {
       3 => 100,
       _ => 1,
     };
-    
+
     final maxNumber = switch (digitCount) {
       1 => 9,
       2 => 99,
@@ -218,8 +217,7 @@ class MathService {
 
       case MathOperationType.division:
         final divisor = _random.nextInt(9) + 1; // 割る数は1桁に制限
-        final quotient =
-            _random.nextInt(maxNumber - minNumber + 1) + minNumber;
+        final quotient = _random.nextInt(maxNumber - minNumber + 1) + minNumber;
         final dividend = divisor * quotient;
         return MathProblem(
           firstNumber: dividend,
@@ -233,7 +231,7 @@ class MathService {
             _random.nextInt(maxNumber - minNumber + 1) + minNumber;
         final maxSecond = maxNumber - firstNumber;
         final minSecond = max(1, minNumber - firstNumber);
-        final secondNumber = maxSecond > minSecond 
+        final secondNumber = maxSecond > minSecond
             ? _random.nextInt(maxSecond - minSecond + 1) + minSecond
             : minSecond;
         return MathProblem(
@@ -273,7 +271,7 @@ class MathService {
       case 2: // 簡単：1桁の発展問題
         return generateProblemWithDifficulty(operation, 1);
       case 3: // 普通：2桁を含む基本問題
-        return _random.nextBool() 
+        return _random.nextBool()
             ? generateProblemWithDigits(operation, 2)
             : generateProblemWithDifficulty(operation, 2);
       case 4: // 難しい：2桁の発展問題

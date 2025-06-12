@@ -30,8 +30,8 @@ void main() {
         final earnedPoints =
             await pointsService.addPointsFromScore(scoreRecord);
 
-        // 基本ポイント(10) + 正答率ボーナス(10) + excellentボーナス(15) + 
-        // パーフェクトボーナス(20) + 演算ボーナス(5) + 問題数ボーナス(0) + 
+        // 基本ポイント(10) + 正答率ボーナス(10) + excellentボーナス(15) +
+        // パーフェクトボーナス(20) + 演算ボーナス(5) + 問題数ボーナス(0) +
         // 時間ボーナス(0) = 60
         expect(earnedPoints, 60);
         expect(pointsService.totalPoints, 60);

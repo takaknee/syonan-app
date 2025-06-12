@@ -96,6 +96,9 @@ class _PracticeScreenState extends State<PracticeScreen>
           // プログレスバー
           _buildProgressBar(theme),
 
+          // Expert mode indicator
+          if (widget.difficultyLevel == 5) _buildExpertModeIndicator(theme),
+
           // メインコンテンツ
           Expanded(
             child: _isCompleted
@@ -415,7 +418,46 @@ class _PracticeScreenState extends State<PracticeScreen>
         builder: (context) => PracticeScreen(
           operation: widget.operation,
           problemCount: widget.problemCount,
+          difficultyLevel: widget.difficultyLevel,
         ),
+      ),
+    );
+  }
+
+  Widget _buildExpertModeIndicator(ThemeData theme) {
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: Colors.red.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.red.withValues(alpha: 0.3)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.emoji_events,
+            color: Colors.red,
+            size: 20,
+          ),
+          const SizedBox(width: 8),
+          Text(
+            'エキスパートモード',
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: Colors.red,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const Spacer(),
+          Text(
+            '高難易度チャレンジ中',
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: Colors.red.withValues(alpha: 0.8),
+            ),
+          ),
+        ],
       ),
     );
   }

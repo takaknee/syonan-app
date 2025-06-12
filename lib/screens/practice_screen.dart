@@ -17,10 +17,12 @@ class PracticeScreen extends StatefulWidget {
     super.key,
     required this.operation,
     this.problemCount = 10,
+    this.difficultyLevel,
   });
 
   final MathOperationType operation;
   final int problemCount;
+  final int? difficultyLevel;
 
   @override
   State<PracticeScreen> createState() => _PracticeScreenState();
@@ -45,10 +47,16 @@ class _PracticeScreenState extends State<PracticeScreen>
 
     // 問題を生成
     final mathService = context.read<MathService>();
-    _problems = mathService.generateProblems(
-      widget.operation,
-      widget.problemCount,
-    );
+    _problems = widget.difficultyLevel != null
+        ? mathService.generateProblemsWithDifficulty(
+            widget.operation,
+            widget.problemCount,
+            widget.difficultyLevel!,
+          )
+        : mathService.generateProblems(
+            widget.operation,
+            widget.problemCount,
+          );
     _userAnswers = List.filled(widget.problemCount, null);
     _isCorrect = List.filled(widget.problemCount, false);
 
@@ -76,7 +84,9 @@ class _PracticeScreenState extends State<PracticeScreen>
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('${widget.operation.displayName}の練習'),
+        title: Text(widget.difficultyLevel != null 
+            ? '${widget.operation.displayName}の練習 (レベル${widget.difficultyLevel})' 
+            : '${widget.operation.displayName}の練習'),
         backgroundColor: theme.colorScheme.primaryContainer,
         foregroundColor: theme.colorScheme.onPrimaryContainer,
         elevation: 0,

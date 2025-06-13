@@ -88,5 +88,6 @@
   ],
   "dart.analyzeAngularTemplates": false,
   "dart.triggerSignatureHelpAutomatically": false,
-  "dart.enableSdkFormatter": true
+  "dart.enableSdkFormatter": true,
+  "makefile.configureOnOpen": false
 }

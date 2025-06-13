@@ -124,7 +124,28 @@ jobs:
               done
             fi
             
-            # Fix 2: Add const keywords where suggested (safer approach)
+            # Fix 2: Flutter API compatibility fixes
+            echo "🔧 Checking for Flutter API compatibility issues..."
+            if grep -q "argument_type_not_assignable" analysis_output.txt; then
+              echo "Attempting to fix Flutter API compatibility issues..."
+              
+              # Fix CardTheme -> CardThemeData (Flutter 3.32+ compatibility)
+              if grep -q "CardTheme.*can't be assigned.*CardThemeData" analysis_output.txt; then
+                echo "Fixing CardTheme -> CardThemeData compatibility..."
+                find lib -name "*.dart" -exec sed -i 's/cardTheme: const CardTheme(/cardTheme: const CardThemeData(/g' {} \; || true
+                find lib -name "*.dart" -exec sed -i 's/cardTheme: CardTheme(/cardTheme: CardThemeData(/g' {} \; || true
+                fixes_applied=true
+              fi
+              
+              # Fix other common Flutter API changes
+              if grep -q "withOpacity.*withValues" analysis_output.txt; then
+                echo "Fixing withOpacity -> withValues compatibility..."
+                find lib -name "*.dart" -exec sed -i 's/\.withOpacity(\([^)]*\))/\.withValues(alpha: \1)/g' {} \; || true
+                fixes_applied=true
+              fi
+            fi
+            
+            # Fix 3: Add const keywords where suggested (safer approach)
             echo "🔧 Adding const keywords safely..."
             if grep -q "prefer_const_constructors\|prefer_const_literals_to_create_immutables" analysis_output.txt; then
               echo "Adding const keywords where appropriate..."

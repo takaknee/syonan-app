@@ -42,12 +42,25 @@ languages:
 
 # Prompt engineering guidelines
 prompt_guidelines:
+  - "すべての出力を日本語で記述してください"
+  - "コメントは日本語で詳細に説明してください"
+  - "GitHub Actionsのメッセージは日本語で出力してください"
+  - "エラーメッセージは子供にも分かりやすい日本語で記述してください"
+  - "PR/Issueの説明は日本語で記述してください"
   - "Use Japanese comments for code explanation"
   - "Always consider child safety and privacy protection"
   - "Implement accessibility features (Semantics, proper contrast)"
   - "Follow Flutter best practices and Material Design 3"
   - "Include comprehensive error handling"
   - "Write testable and maintainable code"
+
+# Localization settings
+localization:
+  primary_language: "ja"
+  output_language: "japanese"
+  comment_language: "japanese"
+  error_messages: "japanese"
+  github_actions: "japanese"
 
 # Code generation preferences
 code_generation:

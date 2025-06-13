@@ -1,4 +1,4 @@
-name: Auto-Fix Code Quality Issues
+name: コード品質自動修正
 
 on:
   pull_request:
@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       target_branch:
-        description: 'Target branch to fix'
+        description: '修正対象ブランチ'
         required: false
         default: 'main'
 
@@ -17,18 +17,18 @@ permissions:
 
 jobs:
   auto-fix-quality:
-    name: Auto-Fix Code Quality
+    name: コード品質自動修正
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
 
     steps:
-      - name: Checkout
+      - name: 📦 リポジトリのチェックアウト
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
-      - name: Setup Flutter
+      - name: 🚀 Flutter環境のセットアップ
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.x'
@@ -36,58 +36,58 @@ jobs:
         continue-on-error: true
         timeout-minutes: 3
 
-      - name: Check Flutter availability
+      - name: 🔍 Flutter利用可能性の確認
         id: flutter_check
         run: |
           if command -v flutter >/dev/null 2>&1; then
             echo "flutter_available=true" >> $GITHUB_OUTPUT
-            echo "✅ Flutter is available"
+            echo "✅ Flutter が利用可能です"
             flutter --version
           else
             echo "flutter_available=false" >> $GITHUB_OUTPUT
-            echo "❌ Flutter not available - skipping Flutter-specific fixes"
+            echo "❌ Flutter が利用できません - Flutter固有の修正をスキップします"
           fi
 
-      - name: Get dependencies
+      - name: 📦 依存関係の取得
         if: steps.flutter_check.outputs.flutter_available == 'true'
         run: |
           if [ -f pubspec.yaml ]; then
-            echo "📦 Getting Flutter dependencies..."
+            echo "📦 Flutter依存関係を取得中..."
             flutter pub get
           fi
         continue-on-error: true
         timeout-minutes: 3
 
-      - name: Auto-fix code formatting
+      - name: 🎨 コードフォーマットの自動修正
         if: steps.flutter_check.outputs.flutter_available == 'true'
         id: format_fix
         run: |
-          echo "🔧 Auto-fixing code formatting (120 char limit)..."
+          echo "🔧 コードフォーマットの自動修正中（120文字制限）..."
           
-          # Check if formatting is needed
+          # フォーマットが必要かチェック
           if ! dart format --line-length=120 --set-exit-if-changed . --dry-run; then
             echo "format_needed=true" >> $GITHUB_OUTPUT
-            echo "⚠️ Formatting issues detected, applying fixes..."
+            echo "⚠️ フォーマット問題を検出しました。修正を適用中..."
             
-            # Apply formatting
+            # フォーマットを適用
             dart format --line-length=120 .
             
-            # Check if files were changed
+            # ファイルが変更されたかチェック
             if git diff --exit-code; then
-              echo "✅ No changes after formatting"
+              echo "✅ フォーマット後に変更はありません"
               echo "changes_made=false" >> $GITHUB_OUTPUT
             else
-              echo "📝 Files were formatted"
+              echo "📝 ファイルがフォーマットされました"
               echo "changes_made=true" >> $GITHUB_OUTPUT
               
-              # Show which files were changed
-              echo "Changed files:"
+              # 変更されたファイルを表示
+              echo "変更されたファイル:"
               git diff --name-only
             fi
           else
             echo "format_needed=false" >> $GITHUB_OUTPUT
             echo "changes_made=false" >> $GITHUB_OUTPUT
-            echo "✅ Code is already properly formatted"
+            echo "✅ コードは既に適切にフォーマットされています"
           fi
 
       - name: Auto-fix analysis issues with precise targeting
@@ -202,15 +202,15 @@ jobs:
           
           git commit -m "$commit_message" || echo "No changes to commit"
 
-      - name: Push changes
+      - name: 📤 変更のプッシュ
         if: |
           steps.flutter_check.outputs.flutter_available == 'true' && 
           (steps.format_fix.outputs.changes_made == 'true' || steps.analysis_fix.outputs.fixes_applied == 'true')
         run: |
-          echo "📤 Pushing auto-fixes..."
+          echo "📤 自動修正をプッシュ中..."
           git push origin HEAD
 
-      - name: Comment on PR with results
+      - name: 📝 PR結果コメントの投稿
         if: github.event_name == 'pull_request'
         uses: actions/github-script@v7
         with:
@@ -221,43 +221,43 @@ jobs:
             const analysisIssues = '${{ steps.analysis_fix.outputs.analysis_issues }}';
             const fixesApplied = '${{ steps.analysis_fix.outputs.fixes_applied }}';
             
-            let comment = '## 🤖 Auto-Fix Quality Check Results\n\n';
+            let comment = '## 🤖 コード品質自動修正の結果\n\n';
             
             if (flutterAvailable === 'false') {
-              comment += '⚠️ Flutter environment not available - quality checks skipped\n';
+              comment += '⚠️ Flutter環境が利用できません - 品質チェックをスキップしました\n';
             } else {
-              comment += '### Code Formatting\n';
+              comment += '### 📝 コードフォーマット\n';
               if (formatNeeded === 'true') {
                 if (changesMade === 'true') {
-                  comment += '✅ **Fixed**: Code formatting issues were automatically corrected\n';
+                  comment += '✅ **修正完了**: コードフォーマットの問題が自動修正されました\n';
                 } else {
-                  comment += '✅ **OK**: Formatting was already correct\n';
+                  comment += '✅ **正常**: フォーマットは既に正しい状態でした\n';
                 }
               } else {
-                comment += '✅ **OK**: No formatting issues detected\n';
+                comment += '✅ **正常**: フォーマットの問題は検出されませんでした\n';
               }
               
-              comment += '\n### Code Analysis\n';
+              comment += '\n### 🔍 コード解析\n';
               if (analysisIssues === 'true') {
                 if (fixesApplied === 'true') {
-                  comment += '✅ **Partially Fixed**: Some analysis issues were automatically corrected\n';
-                  comment += '⚠️ Manual review may be needed for remaining issues\n';
+                  comment += '✅ **一部修正完了**: いくつかの解析問題が自動修正されました\n';
+                  comment += '⚠️ 残りの問題については手動での確認が必要です\n';
                 } else {
-                  comment += '⚠️ **Manual Fix Needed**: Analysis issues detected that require manual attention\n';
+                  comment += '⚠️ **手動修正が必要**: 手動対応が必要な解析問題が検出されました\n';
                 }
               } else {
-                comment += '✅ **OK**: No analysis issues detected\n';
+                comment += '✅ **正常**: 解析問題は検出されませんでした\n';
               }
               
               if (changesMade === 'true' || fixesApplied === 'true') {
                 comment += '\n---\n';
-                comment += '✨ **Auto-fixes have been applied and committed to this PR**\n';
-                comment += 'Please review the changes and ensure they meet your requirements.\n';
+                comment += '✨ **自動修正が適用され、このPRにコミットされました**\n';
+                comment += '変更内容を確認し、要件を満たしているかご確認ください。\n';
               }
             }
             
             comment += '\n---\n';
-            comment += '*This comment was automatically generated by the Auto-Fix Quality workflow.*';
+            comment += '*このコメントはコード品質自動修正ワークフローによって自動生成されました。*';
             
             github.rest.issues.createComment({
               issue_number: context.issue.number,

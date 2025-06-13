@@ -10,7 +10,7 @@
   "dart.flutterSdkPath": "${workspaceFolder}/flutter",
   "dart.sdkPath": "${workspaceFolder}/flutter/bin/cache/dart-sdk",
   "dart.analysisServerPath": "${workspaceFolder}/flutter/bin/cache/dart-sdk/bin/dart",
-  "dart.lineLength": 80,
+  "dart.lineLength": 120,
   "dart.insertArgumentPlaceholders": false,
   "dart.updateImportsOnRename": true,
   "dart.warnWhenEditingFilesOutsideWorkspace": true,
@@ -28,7 +28,7 @@
     "editor.tabSize": 2,
     "editor.insertSpaces": true,
     "editor.rulers": [
-      80
+      120
     ]
   },
   "github.copilot.enable": {

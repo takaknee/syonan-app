@@ -17,10 +17,12 @@ class PracticeScreen extends StatefulWidget {
     super.key,
     required this.operation,
     this.problemCount = 10,
+    this.difficultyLevel,
   });
 
   final MathOperationType operation;
   final int problemCount;
+  final int? difficultyLevel;
 
   @override
   State<PracticeScreen> createState() => _PracticeScreenState();
@@ -45,10 +47,16 @@ class _PracticeScreenState extends State<PracticeScreen>
 
     // 問題を生成
     final mathService = context.read<MathService>();
-    _problems = mathService.generateProblems(
-      widget.operation,
-      widget.problemCount,
-    );
+    _problems = widget.difficultyLevel != null
+        ? mathService.generateProblemsWithDifficulty(
+            widget.operation,
+            widget.problemCount,
+            widget.difficultyLevel!,
+          )
+        : mathService.generateProblems(
+            widget.operation,
+            widget.problemCount,
+          );
     _userAnswers = List.filled(widget.problemCount, null);
     _isCorrect = List.filled(widget.problemCount, false);
 
@@ -76,7 +84,9 @@ class _PracticeScreenState extends State<PracticeScreen>
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('${widget.operation.displayName}の練習'),
+        title: Text(widget.difficultyLevel != null 
+            ? '${widget.operation.displayName}の練習 (レベル${widget.difficultyLevel})' 
+            : '${widget.operation.displayName}の練習'),
         backgroundColor: theme.colorScheme.primaryContainer,
         foregroundColor: theme.colorScheme.onPrimaryContainer,
         elevation: 0,
@@ -85,6 +95,9 @@ class _PracticeScreenState extends State<PracticeScreen>
         children: [
           // プログレスバー
           _buildProgressBar(theme),
+
+          // Expert mode indicator
+          if (widget.difficultyLevel == 5) _buildExpertModeIndicator(theme),
 
           // メインコンテンツ
           Expanded(
@@ -405,7 +418,46 @@ class _PracticeScreenState extends State<PracticeScreen>
         builder: (context) => PracticeScreen(
           operation: widget.operation,
           problemCount: widget.problemCount,
+          difficultyLevel: widget.difficultyLevel,
         ),
+      ),
+    );
+  }
+
+  Widget _buildExpertModeIndicator(ThemeData theme) {
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: Colors.red.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.red.withValues(alpha: 0.3)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.emoji_events,
+            color: Colors.red,
+            size: 20,
+          ),
+          const SizedBox(width: 8),
+          Text(
+            'エキスパートモード',
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: Colors.red,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const Spacer(),
+          Text(
+            '高難易度チャレンジ中',
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: Colors.red.withValues(alpha: 0.8),
+            ),
+          ),
+        ],
       ),
     );
   }

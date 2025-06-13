@@ -9,6 +9,7 @@ class PracticeButton extends StatelessWidget {
     required this.icon,
     required this.color,
     required this.onTap,
+    this.onLongPress,
   });
 
   final String title;
@@ -16,6 +17,7 @@ class PracticeButton extends StatelessWidget {
   final IconData icon;
   final Color color;
   final VoidCallback onTap;
+  final VoidCallback? onLongPress;
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +27,7 @@ class PracticeButton extends StatelessWidget {
       elevation: 4,
       child: InkWell(
         onTap: onTap,
+        onLongPress: onLongPress,
         borderRadius: BorderRadius.circular(12),
         child: Container(
           padding: const EdgeInsets.all(20),

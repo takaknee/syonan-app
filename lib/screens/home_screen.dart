@@ -121,6 +121,14 @@ class _HomeScreenState extends State<HomeScreen> {
             color: theme.colorScheme.primary,
           ),
         ),
+        const SizedBox(height: 8),
+        Text(
+          '長押しで難易度を選択できます',
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+            fontStyle: FontStyle.italic,
+          ),
+        ),
         const SizedBox(height: 16),
         Row(
           children: [
@@ -131,6 +139,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 icon: Icons.close,
                 color: Colors.blue,
                 onTap: () => _startPractice(MathOperationType.multiplication),
+                onLongPress: () =>
+                    _showDifficultyDialog(MathOperationType.multiplication),
               ),
             ),
             const SizedBox(width: 16),
@@ -141,6 +151,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 icon: Icons.more_horiz,
                 color: Colors.green,
                 onTap: () => _startPractice(MathOperationType.division),
+                onLongPress: () =>
+                    _showDifficultyDialog(MathOperationType.division),
               ),
             ),
           ],
@@ -155,6 +167,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 icon: Icons.add,
                 color: Colors.orange,
                 onTap: () => _startPractice(MathOperationType.addition),
+                onLongPress: () =>
+                    _showDifficultyDialog(MathOperationType.addition),
               ),
             ),
             const SizedBox(width: 16),
@@ -165,6 +179,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 icon: Icons.remove,
                 color: Colors.purple,
                 onTap: () => _startPractice(MathOperationType.subtraction),
+                onLongPress: () =>
+                    _showDifficultyDialog(MathOperationType.subtraction),
               ),
             ),
           ],
@@ -414,6 +430,104 @@ class _HomeScreenState extends State<HomeScreen> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => PracticeScreen(operation: operation),
+      ),
+    );
+  }
+
+  void _showDifficultyDialog(MathOperationType operation) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Row(
+          children: [
+            Icon(Icons.tune, color: Theme.of(context).colorScheme.primary),
+            const SizedBox(width: 8),
+            Text('${operation.displayName}の難易度を選んでください'),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildDifficultyButton(
+              context,
+              '初級',
+              'かんたんな問題',
+              Icons.sentiment_satisfied,
+              Colors.green,
+              1,
+              operation,
+            ),
+            const SizedBox(height: 8),
+            _buildDifficultyButton(
+              context,
+              '中級',
+              'ふつうの問題',
+              Icons.sentiment_neutral,
+              Colors.orange,
+              3,
+              operation,
+            ),
+            const SizedBox(height: 8),
+            _buildDifficultyButton(
+              context,
+              'エキスパート',
+              'とても難しい問題',
+              Icons.emoji_events,
+              Colors.red,
+              5,
+              operation,
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('キャンセル'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDifficultyButton(
+    BuildContext context,
+    String title,
+    String description,
+    IconData icon,
+    Color color,
+    int difficulty,
+    MathOperationType operation,
+  ) {
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton.icon(
+        onPressed: () {
+          Navigator.of(context).pop();
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => PracticeScreen(
+                operation: operation,
+                difficultyLevel: difficulty,
+              ),
+            ),
+          );
+        },
+        icon: Icon(icon),
+        label: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(title),
+            Text(
+              description,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+          ],
+        ),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: color.withValues(alpha: 0.1),
+          foregroundColor: color,
+          minimumSize: const Size(double.infinity, 60),
+        ),
       ),
     );
   }

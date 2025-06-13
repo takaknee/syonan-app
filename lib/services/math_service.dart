@@ -109,6 +109,31 @@ class MathService {
     return problems;
   }
 
+  /// 難易度指定で複数の問題を生成
+  List<MathProblem> generateProblemsWithDifficulty(
+    MathOperationType operation,
+    int count,
+    int difficultyLevel,
+  ) {
+    final problems = <MathProblem>[];
+    final usedProblems = <String>{};
+
+    // 同じ問題が重複しないようにする
+    while (problems.length < count &&
+        usedProblems.length < _getMaxUniqueProblems(operation)) {
+      final problem = generateAdvancedProblem(operation, difficultyLevel);
+      final problemKey = '${problem.firstNumber}_${problem.secondNumber}'
+          '_${problem.operation.name}';
+
+      if (!usedProblems.contains(problemKey)) {
+        problems.add(problem);
+        usedProblems.add(problemKey);
+      }
+    }
+
+    return problems;
+  }
+
   /// 操作タイプごとの最大ユニーク問題数を取得
   int _getMaxUniqueProblems(MathOperationType operation) {
     switch (operation) {

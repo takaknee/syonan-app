@@ -2,15 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../models/math_problem.dart';
+import '../models/mini_game.dart';
+import '../services/mini_game_service.dart';
 import '../services/points_service.dart';
 import '../services/score_service.dart';
 import '../utils/build_info.dart';
+import '../widgets/mini_game_button.dart';
 import '../widgets/points_card.dart';
 import '../widgets/practice_button.dart';
 import '../widgets/stat_card.dart';
 import 'achievements_screen.dart';
+import 'number_memory_game_screen.dart';
 import 'practice_screen.dart';
 import 'score_history_screen.dart';
+import 'speed_math_game_screen.dart';
 
 /// ホーム画面
 /// アプリのメイン画面で、練習選択とスコア概要を表示
@@ -29,6 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<ScoreService>().initialize();
       context.read<PointsService>().initialize();
+      context.read<MiniGameService>().initialize();
     });
   }
 
@@ -37,11 +43,12 @@ class _HomeScreenState extends State<HomeScreen> {
     final theme = Theme.of(context);
     final scoreService = context.watch<ScoreService>();
     final pointsService = context.watch<PointsService>();
+    final miniGameService = context.watch<MiniGameService>();
 
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
       body: SafeArea(
-        child: scoreService.isLoading || pointsService.isLoading
+        child: scoreService.isLoading || pointsService.isLoading || miniGameService.isLoading
             ? const Center(child: CircularProgressIndicator())
             : SingleChildScrollView(
                 padding: const EdgeInsets.all(20),
@@ -58,6 +65,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
                     // 練習ボタン
                     _buildPracticeSection(theme),
+                    const SizedBox(height: 32),
+
+                    // ミニゲーム
+                    _buildMiniGamesSection(theme, pointsService, miniGameService),
                     const SizedBox(height: 32),
 
                     // 統計情報
@@ -181,6 +192,58 @@ class _HomeScreenState extends State<HomeScreen> {
                 onTap: () => _startPractice(MathOperationType.subtraction),
                 onLongPress: () =>
                     _showDifficultyDialog(MathOperationType.subtraction),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMiniGamesSection(
+    ThemeData theme,
+    PointsService pointsService,
+    MiniGameService miniGameService,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'ミニゲーム',
+          style: theme.textTheme.headlineMedium?.copyWith(
+            color: theme.colorScheme.primary,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          'ポイントを使って楽しいゲームで遊ぼう！',
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+            fontStyle: FontStyle.italic,
+          ),
+        ),
+        const SizedBox(height: 16),
+        Row(
+          children: [
+            Expanded(
+              child: MiniGameButton(
+                miniGame: AvailableMiniGames.all
+                    .firstWhere((game) => game.id == 'number_memory'),
+                hasEnoughPoints: pointsService.totalPoints >= 10,
+                playCount: miniGameService.getPlayCount('number_memory'),
+                bestScore: miniGameService.getBestScore('number_memory'),
+                onTap: () => _startMiniGame('number_memory', pointsService),
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: MiniGameButton(
+                miniGame: AvailableMiniGames.all
+                    .firstWhere((game) => game.id == 'speed_math'),
+                hasEnoughPoints: pointsService.totalPoints >= 15,
+                playCount: miniGameService.getPlayCount('speed_math'),
+                bestScore: miniGameService.getBestScore('speed_math'),
+                onTap: () => _startMiniGame('speed_math', pointsService),
               ),
             ),
           ],
@@ -528,6 +591,111 @@ class _HomeScreenState extends State<HomeScreen> {
           foregroundColor: color,
           minimumSize: const Size(double.infinity, 60),
         ),
+      ),
+    );
+  }
+
+  void _startMiniGame(String gameId, PointsService pointsService) async {
+    final game = AvailableMiniGames.findById(gameId);
+    if (game == null) return;
+
+    // ポイント消費の確認
+    if (pointsService.totalPoints < game.pointsCost) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('ポイントが足りません（必要: ${game.pointsCost}P）'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    // ポイント消費の確認ダイアログ
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Row(
+          children: [
+            Text(game.emoji, style: const TextStyle(fontSize: 24)),
+            const SizedBox(width: 8),
+            Expanded(child: Text(game.name)),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(game.description),
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Color(game.color).withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Color(game.color)),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.monetization_on,
+                    color: Color(game.color),
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    '${game.pointsCost}ポイント消費',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Color(game.color),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('キャンセル'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('開始'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true) return;
+
+    // ポイントを消費
+    final success = await pointsService.spendPoints(game.pointsCost);
+    if (!success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('ポイントの消費に失敗しました'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    // 対応するゲーム画面に遷移
+    Widget gameScreen;
+    switch (gameId) {
+      case 'number_memory':
+        gameScreen = const NumberMemoryGameScreen();
+        break;
+      case 'speed_math':
+        gameScreen = const SpeedMathGameScreen();
+        break;
+      default:
+        return;
+    }
+
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => gameScreen,
       ),
     );
   }

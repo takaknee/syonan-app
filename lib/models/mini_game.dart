@@ -2,6 +2,9 @@
 enum MiniGameType {
   numberMemory,
   speedMath,
+  puzzle,
+  rhythm,
+  action,
 }
 
 /// ミニゲームの難易度
@@ -119,6 +122,36 @@ class AvailableMiniGames {
       pointsCost: 15,
       difficulty: MiniGameDifficulty.normal,
       color: 0xFFFF9800, // Orange
+    ),
+    MiniGame(
+      id: 'sliding_puzzle',
+      type: MiniGameType.puzzle,
+      name: 'スライドパズル',
+      description: '数字を正しい順番に並べよう！',
+      emoji: '🧩',
+      pointsCost: 8,
+      difficulty: MiniGameDifficulty.easy,
+      color: 0xFF9C27B0, // Purple
+    ),
+    MiniGame(
+      id: 'rhythm_tap',
+      type: MiniGameType.rhythm,
+      name: 'リズムタップ',
+      description: 'リズムに合わせてタップしよう！',
+      emoji: '🎵',
+      pointsCost: 12,
+      difficulty: MiniGameDifficulty.normal,
+      color: 0xFFE91E63, // Pink
+    ),
+    MiniGame(
+      id: 'dodge_game',
+      type: MiniGameType.action,
+      name: 'ドッジゲーム',
+      description: '落ちてくる障害物を避けよう！',
+      emoji: '🎯',
+      pointsCost: 10,
+      difficulty: MiniGameDifficulty.easy,
+      color: 0xFF2196F3, // Blue
     ),
   ];
 

@@ -12,9 +12,12 @@ import '../widgets/points_card.dart';
 import '../widgets/practice_button.dart';
 import '../widgets/stat_card.dart';
 import 'achievements_screen.dart';
+import 'dodge_game_screen.dart';
 import 'number_memory_game_screen.dart';
 import 'practice_screen.dart';
+import 'rhythm_tap_game_screen.dart';
 import 'score_history_screen.dart';
+import 'sliding_puzzle_game_screen.dart';
 import 'speed_math_game_screen.dart';
 
 /// ホーム画面
@@ -223,6 +226,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         const SizedBox(height: 16),
+        // First row - Study games
         Row(
           children: [
             Expanded(
@@ -247,6 +251,48 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ],
+        ),
+        const SizedBox(height: 12),
+        // Second row - Entertainment games  
+        Row(
+          children: [
+            Expanded(
+              child: MiniGameButton(
+                miniGame: AvailableMiniGames.all
+                    .firstWhere((game) => game.id == 'sliding_puzzle'),
+                hasEnoughPoints: pointsService.totalPoints >= 8,
+                playCount: miniGameService.getPlayCount('sliding_puzzle'),
+                bestScore: miniGameService.getBestScore('sliding_puzzle'),
+                onTap: () => _startMiniGame('sliding_puzzle', pointsService),
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: MiniGameButton(
+                miniGame: AvailableMiniGames.all
+                    .firstWhere((game) => game.id == 'rhythm_tap'),
+                hasEnoughPoints: pointsService.totalPoints >= 12,
+                playCount: miniGameService.getPlayCount('rhythm_tap'),
+                bestScore: miniGameService.getBestScore('rhythm_tap'),
+                onTap: () => _startMiniGame('rhythm_tap', pointsService),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        // Third row - Action game (centered)
+        Center(
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width * 0.45,
+            child: MiniGameButton(
+              miniGame: AvailableMiniGames.all
+                  .firstWhere((game) => game.id == 'dodge_game'),
+              hasEnoughPoints: pointsService.totalPoints >= 10,
+              playCount: miniGameService.getPlayCount('dodge_game'),
+              bestScore: miniGameService.getBestScore('dodge_game'),
+              onTap: () => _startMiniGame('dodge_game', pointsService),
+            ),
+          ),
         ),
       ],
     );
@@ -688,6 +734,15 @@ class _HomeScreenState extends State<HomeScreen> {
         break;
       case 'speed_math':
         gameScreen = const SpeedMathGameScreen();
+        break;
+      case 'sliding_puzzle':
+        gameScreen = const SlidingPuzzleGameScreen();
+        break;
+      case 'rhythm_tap':
+        gameScreen = const RhythmTapGameScreen();
+        break;
+      case 'dodge_game':
+        gameScreen = const DodgeGameScreen();
         break;
       default:
         return;

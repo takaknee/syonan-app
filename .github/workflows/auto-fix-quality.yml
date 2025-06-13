@@ -90,11 +90,11 @@ jobs:
             echo "✅ Code is already properly formatted"
           fi
 
-      - name: Auto-fix common analysis issues
+      - name: Auto-fix analysis issues with precise targeting
         if: steps.flutter_check.outputs.flutter_available == 'true'
         id: analysis_fix
         run: |
-          echo "🔍 Running analysis and attempting auto-fixes..."
+          echo "🔍 Running analysis and attempting precise auto-fixes..."
           
           # Run analysis and capture output
           if flutter analyze --no-preamble > analysis_output.txt 2>&1; then
@@ -106,25 +106,53 @@ jobs:
             echo "⚠️ Analysis issues detected:"
             cat analysis_output.txt
             
-            # Common auto-fixes
             fixes_applied=false
             
-            # Fix 1: Add missing imports
-            echo "🔧 Checking for missing imports..."
-            if grep -q "undefined_class\|undefined_identifier" analysis_output.txt; then
-              echo "Attempting to add common missing imports..."
+            # Parse analysis output and fix specific issues
+            echo "🎯 Applying precise fixes based on analysis results..."
+            
+            # Fix prefer_const_constructors issues
+            if grep -q "prefer_const_constructors" analysis_output.txt; then
+              echo "🔧 Fixing const constructor issues..."
               
-              # Add common Flutter imports to files that need them
-              find lib -name "*.dart" -exec grep -l "Widget\|BuildContext\|StatelessWidget\|StatefulWidget" {} \; | while read file; do
-                if ! grep -q "package:flutter/material.dart" "$file"; then
-                  echo "Adding Flutter import to $file"
-                  sed -i '1i import '\''package:flutter/material.dart'\'';' "$file"
-                  fixes_applied=true
+              # Extract file:line information and fix each specific case
+              grep "prefer_const_constructors" analysis_output.txt | while IFS= read -r line; do
+                # Extract file and line number: file.dart:123:45
+                if [[ $line =~ ([^[:space:]]+\.dart):([0-9]+):([0-9]+) ]]; then
+                  file="${BASH_REMATCH[1]}"
+                  line_num="${BASH_REMATCH[2]}"
+                  
+                  if [ -f "$file" ]; then
+                    echo "  → Fixing const in $file at line $line_num"
+                    
+                    # Read the specific line and apply const fix
+                    current_line=$(sed -n "${line_num}p" "$file")
+                    
+                    # Smart const addition patterns
+                    if [[ $current_line =~ ^([[:space:]]*)([^[:space:]].*)$ ]]; then
+                      indent="${BASH_REMATCH[1]}"
+                      content="${BASH_REMATCH[2]}"
+                      
+                      # Common patterns to add const
+                      if [[ $content =~ ^(Icon|Text|SizedBox|Padding|Container|MaterialApp|Scaffold)\( ]]; then
+                        new_line="${indent}const ${content}"
+                        sed -i "${line_num}s/.*/$new_line/" "$file"
+                        fixes_applied=true
+                        echo "    ✓ Added const to: $content"
+                      elif [[ $content =~ ^([a-zA-Z_][a-zA-Z0-9_]*\() ]]; then
+                        # General constructor pattern
+                        new_line="${indent}const ${content}"
+                        sed -i "${line_num}s/.*/$new_line/" "$file"
+                        fixes_applied=true
+                        echo "    ✓ Added const to constructor at line $line_num"
+                      fi
+                    fi
+                  fi
                 fi
               done
             fi
             
-            # Fix 2: Flutter API compatibility fixes
+            # Fix Flutter API compatibility issues
             echo "🔧 Checking for Flutter API compatibility issues..."
             if grep -q "argument_type_not_assignable" analysis_output.txt; then
               echo "Attempting to fix Flutter API compatibility issues..."
@@ -136,25 +164,6 @@ jobs:
                 find lib -name "*.dart" -exec sed -i 's/cardTheme: CardTheme(/cardTheme: CardThemeData(/g' {} \; || true
                 fixes_applied=true
               fi
-              
-              # Fix other common Flutter API changes
-              if grep -q "withOpacity.*withValues" analysis_output.txt; then
-                echo "Fixing withOpacity -> withValues compatibility..."
-                find lib -name "*.dart" -exec sed -i 's/\.withOpacity(\([^)]*\))/\.withValues(alpha: \1)/g' {} \; || true
-                fixes_applied=true
-              fi
-            fi
-            
-            # Fix 3: Add const keywords where suggested (safer approach)
-            echo "🔧 Adding const keywords safely..."
-            if grep -q "prefer_const_constructors\|prefer_const_literals_to_create_immutables" analysis_output.txt; then
-              echo "Adding const keywords where appropriate..."
-              # More specific and safer patterns
-              find lib -name "*.dart" -exec sed -i 's/\(return\s\+\)Text(/\1const Text(/g' {} \; || true
-              find lib -name "*.dart" -exec sed -i 's/\(child:\s\+\)Text(/\1const Text(/g' {} \; || true
-              find lib -name "*.dart" -exec sed -i 's/\(return\s\+\)SizedBox(/\1const SizedBox(/g' {} \; || true
-              find lib -name "*.dart" -exec sed -i 's/\(child:\s\+\)SizedBox(/\1const SizedBox(/g' {} \; || true
-              fixes_applied=true
             fi
             
             # Check if any fixes were applied

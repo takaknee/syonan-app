@@ -379,6 +379,19 @@
       "problemMatcher": []
     },
     {
+      "label": "AutoFix: 精密自動修正 (推奨)",
+      "type": "shell",
+      "command": "/workspaces/syonan-app/scripts/precise-auto-fix.sh",
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": true,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
       "label": "AutoFix: 修正後品質チェック",
       "dependsOrder": "sequence",
       "dependsOn": [

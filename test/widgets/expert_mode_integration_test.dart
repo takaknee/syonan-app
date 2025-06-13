@@ -20,7 +20,7 @@ void main() {
             ChangeNotifierProvider<PointsService>(
                 create: (_) => PointsService()),
           ],
-          child: MaterialApp(
+          child: const MaterialApp(
             home: PracticeScreen(
               operation: MathOperationType.multiplication,
               difficultyLevel: 5, // Expert mode
@@ -42,7 +42,7 @@ void main() {
     });
 
     testWidgets(
-        'PracticeScreen should not show expert mode indicator for normal difficulty',
+        'PracticeScreen should not show expert mode indicator for normal difficu lty',
         (tester) async {
       await tester.pumpWidget(
         MultiProvider(
@@ -52,7 +52,7 @@ void main() {
             ChangeNotifierProvider<PointsService>(
                 create: (_) => PointsService()),
           ],
-          child: MaterialApp(
+          child: const MaterialApp(
             home: PracticeScreen(
               operation: MathOperationType.multiplication,
               // No difficulty level specified (normal mode)
@@ -83,7 +83,7 @@ void main() {
             ChangeNotifierProvider<PointsService>(
                 create: (_) => PointsService()),
           ],
-          child: MaterialApp(
+          child: const MaterialApp(
             home: PracticeScreen(
               operation: MathOperationType.addition,
               difficultyLevel: 3, // Medium level

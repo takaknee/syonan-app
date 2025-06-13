@@ -437,7 +437,7 @@ class _PracticeScreenState extends State<PracticeScreen>
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
+          const Icon(
             Icons.emoji_events,
             color: Colors.red,
             size: 20,

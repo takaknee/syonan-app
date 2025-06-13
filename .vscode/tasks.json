@@ -118,7 +118,7 @@
       "command": "bash",
       "args": [
         "-c",
-        "echo '📝 フォーマットをチェックして自動修正します...' && /home/vscode/flutter/bin/dart format --set-exit-if-changed lib test || (echo '⚠️  フォーマット問題を発見しました。自動修正を実行します...' && /home/vscode/flutter/bin/dart format lib test && echo '✅ フォーマットを修正しました！')"
+        "echo '📝 フォーマットをチェックして自動修正します（120文字制限）...' && /home/vscode/flutter/bin/dart format --line-length=120 --set-exit-if-changed lib test || (echo '⚠️  フォーマット問題を発見しました。自動修正を実行します...' && /home/vscode/flutter/bin/dart format --line-length=120 lib test && echo '✅ フォーマットを修正しました！')"
       ],
       "options": {
         "cwd": "/workspaces/syonan-app"
@@ -333,7 +333,7 @@
       "command": "bash",
       "args": [
         "-c",
-        "echo '📝 コードフォーマットの自動修正...' && dart format . && echo '✅ フォーマット修正完了！'"
+        "echo '📝 コードフォーマットの自動修正（120文字制限）...' && dart format --line-length=120 . && echo '✅ フォーマット修正完了！'"
       ],
       "group": "build",
       "presentation": {

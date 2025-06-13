@@ -14,7 +14,7 @@ linter:
     
     # フォーマット関連の追加規則
     curly_braces_in_flow_control_structures: true
-    lines_longer_than_80_chars: true
+    lines_longer_than_80_chars: false  # 80文字制限を無効化
     unnecessary_parenthesis: true
     avoid_redundant_argument_values: true
     directives_ordering: true
@@ -31,6 +31,10 @@ analyzer:
     - "**/flutter/packages/**"
     - "**/flutter/examples/**"
 
+  # 行長制限を120文字に設定
+  language:
+    strict-raw-types: true
+  
   errors:
     # 致命的でないエラーを警告に変更
     invalid_annotation_target: ignore

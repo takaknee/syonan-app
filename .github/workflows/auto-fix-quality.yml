@@ -62,15 +62,15 @@ jobs:
         if: steps.flutter_check.outputs.flutter_available == 'true'
         id: format_fix
         run: |
-          echo "🔧 Auto-fixing code formatting..."
+          echo "🔧 Auto-fixing code formatting (120 char limit)..."
           
           # Check if formatting is needed
-          if ! dart format --set-exit-if-changed . --dry-run; then
+          if ! dart format --line-length=120 --set-exit-if-changed . --dry-run; then
             echo "format_needed=true" >> $GITHUB_OUTPUT
             echo "⚠️ Formatting issues detected, applying fixes..."
             
             # Apply formatting
-            dart format .
+            dart format --line-length=120 .
             
             # Check if files were changed
             if git diff --exit-code; then

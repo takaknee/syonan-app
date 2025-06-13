@@ -58,7 +58,6 @@
   "github.copilot.chat.referenceFiles": "always",
   "github.copilot.chat.scopeSelection": true,
   "github.copilot.editor.enableCodeActions": true,
-  "github.copilot.editor.enableAutoCompletions": true,
   "github.copilot.prompt.addTests": "always",
   "files.associations": {
     "*.dart": "dart"

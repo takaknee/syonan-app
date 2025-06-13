@@ -7,12 +7,12 @@ set -e
 
 echo "🎯 精密自動修正システム開始..."
 
-# Step 1: フォーマット修正
+# Step 1: フォーマット修正（120文字制限）
 echo ""
-echo "1️⃣ コードフォーマット修正..."
-if ! dart format --set-exit-if-changed . --dry-run >/dev/null 2>&1; then
+echo "1️⃣ コードフォーマット修正（120文字制限）..."
+if ! dart format --line-length=120 --set-exit-if-changed . --dry-run >/dev/null 2>&1; then
     echo "⚠️ フォーマット問題を検出、修正中..."
-    dart format .
+    dart format --line-length=120 .
     echo "✅ フォーマット修正完了"
 else
     echo "✅ フォーマットは既に正しい"

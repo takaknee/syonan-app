@@ -87,8 +87,7 @@ class ScoreService extends ChangeNotifier {
 
     if (operationScores.isEmpty) return 0.0;
 
-    final totalAccuracy =
-        operationScores.map((score) => score.accuracy).reduce((a, b) => a + b);
+    final totalAccuracy = operationScores.map((score) => score.accuracy).reduce((a, b) => a + b);
 
     return totalAccuracy / operationScores.length;
   }

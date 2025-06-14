@@ -66,7 +66,7 @@ class MiniGameService extends ChangeNotifier {
     );
 
     _scores.add(newScore);
-    
+
     // プレイ回数を増加
     _playCount[gameId] = (_playCount[gameId] ?? 0) + 1;
 
@@ -77,11 +77,9 @@ class MiniGameService extends ChangeNotifier {
 
   /// 特定のゲームの最新スコア5件を取得
   List<MiniGameScore> getRecentScores(String gameId, {int limit = 5}) {
-    final gameScores = _scores
-        .where((score) => score.gameId == gameId)
-        .toList()
+    final gameScores = _scores.where((score) => score.gameId == gameId).toList()
       ..sort((a, b) => b.completedAt.compareTo(a.completedAt));
-    
+
     return gameScores.take(limit).toList();
   }
 
@@ -106,9 +104,7 @@ class MiniGameService extends ChangeNotifier {
 
     if (scoresJson != null) {
       final scoresList = jsonDecode(scoresJson) as List;
-      _scores = scoresList
-          .map((json) => MiniGameScore.fromJson(json as Map<String, dynamic>))
-          .toList();
+      _scores = scoresList.map((json) => MiniGameScore.fromJson(json as Map<String, dynamic>)).toList();
     }
   }
 

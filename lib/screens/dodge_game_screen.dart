@@ -15,32 +15,29 @@ class DodgeGameScreen extends StatefulWidget {
   State<DodgeGameScreen> createState() => _DodgeGameScreenState();
 }
 
-class _DodgeGameScreenState extends State<DodgeGameScreen>
-    with TickerProviderStateMixin {
+class _DodgeGameScreenState extends State<DodgeGameScreen> with TickerProviderStateMixin {
   late AnimationController _gameController;
   late AnimationController _explosionController;
 
   Timer? _gameTimer;
   Timer? _obstacleTimer;
   bool _isPlaying = false;
-  bool _isGameOver = false;
   int _score = 0;
   double _timeLeft = 60.0; // 60 seconds game
-  
+
   // Player position
   double _playerX = 0.5; // Center of screen (0.0 to 1.0)
   final double _playerY = 0.8; // Near bottom
   final double _playerSize = 0.08;
-  
+
   // Obstacles
   final List<Obstacle> _obstacles = [];
   final Random _random = Random();
   double _obstacleSpeed = 2.0; // pixels per frame
   double _spawnRate = 2000; // milliseconds between spawns
-  
+
   // Game state
   bool _gameStarted = false;
-  late DateTime _startTime;
 
   @override
   void initState() {
@@ -67,7 +64,6 @@ class _DodgeGameScreenState extends State<DodgeGameScreen>
   void _startGame() {
     setState(() {
       _isPlaying = true;
-      _isGameOver = false;
       _gameStarted = true;
       _score = 0;
       _timeLeft = 60.0;
@@ -76,8 +72,6 @@ class _DodgeGameScreenState extends State<DodgeGameScreen>
       _obstacleSpeed = 2.0;
       _spawnRate = 2000;
     });
-
-    _startTime = DateTime.now();
 
     // Start game timer (countdown)
     _gameTimer = Timer.periodic(const Duration(milliseconds: 100), (timer) {
@@ -100,9 +94,9 @@ class _DodgeGameScreenState extends State<DodgeGameScreen>
   void _startObstacleSpawning() {
     _obstacleTimer = Timer.periodic(Duration(milliseconds: _spawnRate.round()), (timer) {
       if (!_isPlaying) return;
-      
+
       _spawnObstacle();
-      
+
       // Increase difficulty over time
       if (_spawnRate > 800) {
         _spawnRate -= 50;
@@ -115,10 +109,10 @@ class _DodgeGameScreenState extends State<DodgeGameScreen>
     final x = _random.nextDouble();
     final size = 0.04 + _random.nextDouble() * 0.04; // Random size between 0.04 and 0.08
     final speed = _obstacleSpeed + _random.nextDouble() * 1.0;
-    
+
     final colors = [Colors.red, Colors.orange, Colors.yellow, Colors.purple];
     final color = colors[_random.nextInt(colors.length)];
-    
+
     _obstacles.add(Obstacle(
       x: x,
       y: -0.1,
@@ -130,24 +124,24 @@ class _DodgeGameScreenState extends State<DodgeGameScreen>
 
   void _gameLoop() {
     if (!_isPlaying) return;
-    
+
     setState(() {
       // Update obstacles
       _obstacles.removeWhere((obstacle) {
         obstacle.y += obstacle.speed / 100;
-        
+
         // Remove obstacles that are off screen
         if (obstacle.y > 1.1) {
           _score += 10; // Points for surviving
           return true;
         }
-        
+
         // Check collision with player
         if (_checkCollision(obstacle)) {
           _gameOver();
           return true;
         }
-        
+
         return false;
       });
     });
@@ -163,7 +157,7 @@ class _DodgeGameScreenState extends State<DodgeGameScreen>
     final dy = _playerY - obstacle.y;
     final distance = sqrt(dx * dx + dy * dy);
     final minDistance = (_playerSize + obstacle.size) / 2;
-    
+
     return distance < minDistance;
   }
 
@@ -175,14 +169,13 @@ class _DodgeGameScreenState extends State<DodgeGameScreen>
   void _endGame() {
     _gameTimer?.cancel();
     _obstacleTimer?.cancel();
-    
+
     setState(() {
       _isPlaying = false;
-      _isGameOver = true;
     });
 
     _gameController.stop();
-    
+
     // Add time bonus to score
     final timeBonus = (_timeLeft * 5).round();
     _score += timeBonus;
@@ -193,7 +186,6 @@ class _DodgeGameScreenState extends State<DodgeGameScreen>
   }
 
   void _showResultDialog() {
-    final duration = DateTime.now().difference(_startTime);
     final survivedTime = 60.0 - _timeLeft;
 
     showDialog(
@@ -275,11 +267,12 @@ class _DodgeGameScreenState extends State<DodgeGameScreen>
             onPressed: () async {
               // Record score
               await context.read<MiniGameService>().recordScore(
-                'dodge_game',
-                _score,
-                MiniGameDifficulty.easy,
-              );
-              
+                    'dodge_game',
+                    _score,
+                    MiniGameDifficulty.easy,
+                  );
+
+              if (!mounted) return;
               Navigator.of(context).pop();
               _resetGame();
             },
@@ -293,7 +286,6 @@ class _DodgeGameScreenState extends State<DodgeGameScreen>
   void _resetGame() {
     setState(() {
       _isPlaying = false;
-      _isGameOver = false;
       _gameStarted = false;
       _score = 0;
       _timeLeft = 60.0;
@@ -313,7 +305,6 @@ class _DodgeGameScreenState extends State<DodgeGameScreen>
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final screenSize = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -462,7 +453,7 @@ class _DodgeGameScreenState extends State<DodgeGameScreen>
                         final deltaX = tapX - _playerX;
                         _movePlayer(deltaX * 0.3); // Smooth movement
                       },
-                      child: Container(
+                      child: SizedBox(
                         width: double.infinity,
                         height: double.infinity,
                         child: Stack(
@@ -487,7 +478,7 @@ class _DodgeGameScreenState extends State<DodgeGameScreen>
                                     ),
                                   ),
                                 )),
-                            
+
                             // Player
                             AnimatedPositioned(
                               duration: const Duration(milliseconds: 100),

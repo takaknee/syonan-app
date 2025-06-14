@@ -76,7 +76,7 @@ syonan-app/
 ```
 
 #### 4. 自動修正対象
-- **コードフォーマット**: `dart format`による整形
+- **コードフォーマット**: `dart format --line-length=120` による整形（120文字制限）
 - **インポート追加**: よく使われるFlutterインポートの自動追加
 - **const修飾子**: 推奨されるconst修飾子の自動追加
 - **基本的な構文エラー**: 単純な構文問題の修正
@@ -85,7 +85,7 @@ syonan-app/
 ```bash
 # ローカルでの確認
 flutter analyze                    # コード解析
-dart format --set-exit-if-changed . # フォーマットチェック
+dart format --line-length=120 --set-exit-if-changed . # フォーマットチェック（120文字制限）
 flutter test                       # テスト実行
 ```
 - **パフォーマンス要件**があれば指定

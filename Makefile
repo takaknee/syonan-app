@@ -1,7 +1,19 @@
 # Makefile for syonan-app development tasks
 # Provides convenient commands for common development operations
 
-.PHONY: help format format-check lint test build clean setup setup-quick qa check-env setup-flutter autofix autofix-format autofix-imports autofix-const
+.PHONY: help format format-check lint test build clean setup setup-quick qa check-env setup-flutter autofix autofix-for# Format code automatically
+autofix-format:
+	@echo "📝 Auto-formatting code..."
+	@if command -v dart >/dev/null 2>&1; then \
+		dart format --line-length=120 .; \
+		echo "✅ Code formatting completed!"; \
+	elif command -v flutter >/dev/null 2>&1; then \
+		flutter format --line-length=120 .; \
+		echo "✅ Code formatting completed!"; \
+	else \
+		echo "❌ Error: Neither 'dart' nor 'flutter' command found!"; \
+		exit 1; \
+	fimports autofix-const
 
 # Default target
 help:
@@ -48,10 +60,10 @@ help:
 format:
 	@echo "🎨 Formatting Dart code..."
 	@if command -v dart >/dev/null 2>&1; then \
-		dart format .; \
+		dart format --line-length=120 .; \
 		echo "✅ Code formatting completed!"; \
 	elif command -v flutter >/dev/null 2>&1; then \
-		flutter format .; \
+		flutter format --line-length=120 .; \
 		echo "✅ Code formatting completed!"; \
 	else \
 		echo "❌ Error: Neither 'dart' nor 'flutter' command found!"; \
@@ -189,7 +201,7 @@ autofix:
 	@echo ""
 	@echo "1️⃣ Formatting code..."
 	@if command -v dart >/dev/null 2>&1; then \
-		dart format .; \
+		dart format --line-length=120 .; \
 		echo "   ✅ Code formatted"; \
 	else \
 		echo "   ⚠️ Dart not available, skipping format"; \

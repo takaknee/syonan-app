@@ -17,8 +17,7 @@ class SpeedMathGameScreen extends StatefulWidget {
   State<SpeedMathGameScreen> createState() => _SpeedMathGameScreenState();
 }
 
-class _SpeedMathGameScreenState extends State<SpeedMathGameScreen>
-    with TickerProviderStateMixin {
+class _SpeedMathGameScreenState extends State<SpeedMathGameScreen> with TickerProviderStateMixin {
   late Timer _gameTimer;
   late AnimationController _progressController;
   late AnimationController _feedbackController;
@@ -28,11 +27,10 @@ class _SpeedMathGameScreenState extends State<SpeedMathGameScreen>
   int _correctAnswers = 0;
   int _totalProblems = 0;
   bool _isGameActive = false;
-  bool _isGameOver = false;
 
   MathProblem? _currentProblem;
   String _userAnswer = '';
-  
+
   final Random _random = Random();
   final TextEditingController _answerController = TextEditingController();
 
@@ -70,7 +68,7 @@ class _SpeedMathGameScreenState extends State<SpeedMathGameScreen>
 
     _progressController.forward();
     _generateNewProblem();
-    
+
     _gameTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
         _timeLeft--;
@@ -88,9 +86,9 @@ class _SpeedMathGameScreenState extends State<SpeedMathGameScreen>
       MathOperationType.subtraction,
       MathOperationType.multiplication,
     ];
-    
+
     final operation = operations[_random.nextInt(operations.length)];
-    
+
     int num1, num2;
     switch (operation) {
       case MathOperationType.addition:
@@ -111,11 +109,19 @@ class _SpeedMathGameScreenState extends State<SpeedMathGameScreen>
         break;
     }
 
+    final correctAnswer = switch (operation) {
+      MathOperationType.addition => num1 + num2,
+      MathOperationType.subtraction => num1 - num2,
+      MathOperationType.multiplication => num1 * num2,
+      MathOperationType.division => num1 ~/ num2,
+    };
+
     setState(() {
       _currentProblem = MathProblem(
+        firstNumber: num1,
+        secondNumber: num2,
         operation: operation,
-        operand1: num1,
-        operand2: num2,
+        correctAnswer: correctAnswer,
       );
       _userAnswer = '';
       _answerController.clear();
@@ -129,7 +135,7 @@ class _SpeedMathGameScreenState extends State<SpeedMathGameScreen>
     if (userAnswerInt == null) return;
 
     final isCorrect = _currentProblem!.isCorrectAnswer(userAnswerInt);
-    
+
     setState(() {
       _totalProblems++;
       if (isCorrect) {
@@ -178,10 +184,9 @@ class _SpeedMathGameScreenState extends State<SpeedMathGameScreen>
 
   void _endGame() async {
     if (_gameTimer.isActive) _gameTimer.cancel();
-    
+
     setState(() {
       _isGameActive = false;
-      _isGameOver = true;
     });
 
     // スコアを記録
@@ -192,12 +197,13 @@ class _SpeedMathGameScreenState extends State<SpeedMathGameScreen>
       MiniGameDifficulty.normal,
     );
 
+    if (!mounted) return;
     _showGameOverDialog();
   }
 
   void _showGameOverDialog() {
     final accuracy = _totalProblems > 0 ? (_correctAnswers / _totalProblems * 100) : 0.0;
-    
+
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -283,7 +289,9 @@ class _SpeedMathGameScreenState extends State<SpeedMathGameScreen>
     // ポイントを再消費
     final pointsService = context.read<PointsService>();
     final success = await pointsService.spendPoints(15);
-    
+
+    if (!mounted) return;
+
     if (!success) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -296,15 +304,12 @@ class _SpeedMathGameScreenState extends State<SpeedMathGameScreen>
     }
 
     _progressController.reset();
-    setState(() {
-      _isGameOver = false;
-    });
     _startGame();
   }
 
   void _onNumberPressed(String number) {
     if (!_isGameActive) return;
-    
+
     setState(() {
       _userAnswer += number;
       _answerController.text = _userAnswer;
@@ -313,7 +318,7 @@ class _SpeedMathGameScreenState extends State<SpeedMathGameScreen>
 
   void _onDeletePressed() {
     if (!_isGameActive || _userAnswer.isEmpty) return;
-    
+
     setState(() {
       _userAnswer = _userAnswer.substring(0, _userAnswer.length - 1);
       _answerController.text = _userAnswer;
@@ -399,9 +404,7 @@ class _SpeedMathGameScreenState extends State<SpeedMathGameScreen>
                       _buildStatCard('問題数', _totalProblems.toString(), Colors.blue),
                       _buildStatCard(
                         '正答率',
-                        _totalProblems > 0 
-                            ? '${(_correctAnswers / _totalProblems * 100).round()}%'
-                            : '0%',
+                        _totalProblems > 0 ? '${(_correctAnswers / _totalProblems * 100).round()}%' : '0%',
                         Colors.purple,
                       ),
                     ],
@@ -525,7 +528,7 @@ class _SpeedMathGameScreenState extends State<SpeedMathGameScreen>
               ],
             ),
           ),
-        
+
         // 最下段: 削除, 0, 決定
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 4),

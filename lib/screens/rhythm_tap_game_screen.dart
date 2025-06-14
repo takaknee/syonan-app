@@ -15,8 +15,7 @@ class RhythmTapGameScreen extends StatefulWidget {
   State<RhythmTapGameScreen> createState() => _RhythmTapGameScreenState();
 }
 
-class _RhythmTapGameScreenState extends State<RhythmTapGameScreen>
-    with TickerProviderStateMixin {
+class _RhythmTapGameScreenState extends State<RhythmTapGameScreen> with TickerProviderStateMixin {
   late AnimationController _beatController;
   late AnimationController _successController;
   late AnimationController _rippleController;
@@ -32,12 +31,11 @@ class _RhythmTapGameScreenState extends State<RhythmTapGameScreen>
   int _good = 0;
   int _miss = 0;
   double _timeLeft = 60.0; // 60 seconds game
-  
+
   // Beat timing
-  double _bpm = 120; // Beats per minute
+  final double _bpm = 120; // Beats per minute
   late double _beatInterval;
   DateTime? _lastBeatTime;
-  DateTime? _nextBeatTime;
   bool _beatActive = false;
 
   final Random _random = Random();
@@ -49,7 +47,7 @@ class _RhythmTapGameScreenState extends State<RhythmTapGameScreen>
     Colors.purple,
     Colors.orange,
   ];
-  
+
   Color _currentColor = Colors.red;
   int _currentColorIndex = 0;
 
@@ -68,7 +66,7 @@ class _RhythmTapGameScreenState extends State<RhythmTapGameScreen>
       duration: const Duration(milliseconds: 500),
       vsync: this,
     );
-    
+
     _beatInterval = 60000 / _bpm; // milliseconds per beat
     _currentColor = _colors[0];
   }
@@ -113,20 +111,19 @@ class _RhythmTapGameScreenState extends State<RhythmTapGameScreen>
   void _startBeats() {
     _beatTimer = Timer.periodic(Duration(milliseconds: _beatInterval.round()), (timer) {
       if (!_isPlaying) return;
-      
+
       setState(() {
         _lastBeatTime = DateTime.now();
-        _nextBeatTime = _lastBeatTime!.add(Duration(milliseconds: _beatInterval.round()));
         _beatActive = true;
-        
+
         // Change color randomly
         _currentColorIndex = _random.nextInt(_colors.length);
         _currentColor = _colors[_currentColorIndex];
       });
-      
+
       _beatController.forward().then((_) {
         _beatController.reverse();
-        
+
         // Check if beat was missed after animation
         Timer(Duration(milliseconds: (_beatInterval * 0.3).round()), () {
           if (_beatActive) {
@@ -147,15 +144,15 @@ class _RhythmTapGameScreenState extends State<RhythmTapGameScreen>
     final timeDiff = now.difference(_lastBeatTime!).inMilliseconds;
     final perfectWindow = _beatInterval * 0.15; // 15% window for perfect
     final goodWindow = _beatInterval * 0.3; // 30% window for good
-    
+
     if (timeDiff <= perfectWindow) {
       _hitPerfect();
     } else if (timeDiff <= goodWindow) {
-      _hitGood();  
+      _hitGood();
     } else {
       _beatMissed();
     }
-    
+
     _beatActive = false;
   }
 
@@ -166,7 +163,7 @@ class _RhythmTapGameScreenState extends State<RhythmTapGameScreen>
       _maxCombo = max(_maxCombo, _combo);
       _score += 100 + (_combo * 10);
     });
-    
+
     _successController.forward().then((_) => _successController.reverse());
     _rippleController.forward().then((_) => _rippleController.reset());
   }
@@ -178,7 +175,7 @@ class _RhythmTapGameScreenState extends State<RhythmTapGameScreen>
       _maxCombo = max(_maxCombo, _combo);
       _score += 50 + (_combo * 5);
     });
-    
+
     _rippleController.forward().then((_) => _rippleController.reset());
   }
 
@@ -193,7 +190,7 @@ class _RhythmTapGameScreenState extends State<RhythmTapGameScreen>
   void _endGame() {
     _gameTimer?.cancel();
     _beatTimer?.cancel();
-    
+
     setState(() {
       _isPlaying = false;
       _isGameOver = true;
@@ -301,11 +298,12 @@ class _RhythmTapGameScreenState extends State<RhythmTapGameScreen>
             onPressed: () async {
               // Record score
               await context.read<MiniGameService>().recordScore(
-                'rhythm_tap',
-                _score,
-                MiniGameDifficulty.normal,
-              );
-              
+                    'rhythm_tap',
+                    _score,
+                    MiniGameDifficulty.normal,
+                  );
+
+              if (!mounted) return;
               Navigator.of(context).pop();
               _resetGame();
             },
@@ -333,8 +331,6 @@ class _RhythmTapGameScreenState extends State<RhythmTapGameScreen>
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -538,7 +534,7 @@ class _RhythmTapGameScreenState extends State<RhythmTapGameScreen>
                             },
                           ),
                         ),
-                        
+
                         // Success animation
                         AnimatedBuilder(
                           animation: _successController,
@@ -568,7 +564,7 @@ class _RhythmTapGameScreenState extends State<RhythmTapGameScreen>
                                 : const SizedBox.shrink();
                           },
                         ),
-                        
+
                         // Ripple effect
                         AnimatedBuilder(
                           animation: _rippleController,

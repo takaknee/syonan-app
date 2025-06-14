@@ -93,7 +93,7 @@ jobs:
       - name: Check formatting
         run: |
           if [ -f pubspec.yaml ]; then
-            dart format --set-exit-if-changed .
+            dart format --line-length=120 --set-exit-if-changed .
           else
             echo "Skipping format check."
           fi

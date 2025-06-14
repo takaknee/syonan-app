@@ -41,8 +41,7 @@ class ScoreCard extends StatelessWidget {
                 )
               : null,
         ),
-        child:
-            isCompact ? _buildCompactContent(theme) : _buildFullContent(theme),
+        child: isCompact ? _buildCompactContent(theme) : _buildFullContent(theme),
       ),
     );
   }
@@ -58,9 +57,7 @@ class ScoreCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
           ),
           child: Icon(
-            scoreRecord.operation == MathOperationType.multiplication
-                ? Icons.close
-                : Icons.more_horiz,
+            scoreRecord.operation == MathOperationType.multiplication ? Icons.close : Icons.more_horiz,
             color: _getOperationColor(),
             size: 20,
           ),
@@ -114,9 +111,7 @@ class ScoreCard extends StatelessWidget {
                 Row(
                   children: [
                     Icon(
-                      scoreRecord.operation == MathOperationType.multiplication
-                          ? Icons.close
-                          : Icons.more_horiz,
+                      scoreRecord.operation == MathOperationType.multiplication ? Icons.close : Icons.more_horiz,
                       color: _getOperationColor(),
                       size: 20,
                     ),
@@ -285,9 +280,7 @@ class ScoreCard extends StatelessWidget {
   }
 
   Color _getOperationColor() {
-    return scoreRecord.operation == MathOperationType.multiplication
-        ? Colors.blue
-        : Colors.green;
+    return scoreRecord.operation == MathOperationType.multiplication ? Colors.blue : Colors.green;
   }
 
   Color _getLevelColor() {

@@ -14,8 +14,7 @@ class SlidingPuzzleGameScreen extends StatefulWidget {
   State<SlidingPuzzleGameScreen> createState() => _SlidingPuzzleGameScreenState();
 }
 
-class _SlidingPuzzleGameScreenState extends State<SlidingPuzzleGameScreen>
-    with TickerProviderStateMixin {
+class _SlidingPuzzleGameScreenState extends State<SlidingPuzzleGameScreen> with TickerProviderStateMixin {
   late AnimationController _slideController;
   late AnimationController _successController;
 
@@ -133,9 +132,9 @@ class _SlidingPuzzleGameScreenState extends State<SlidingPuzzleGameScreen>
     final duration = DateTime.now().difference(_startTime);
     final minutes = duration.inMinutes;
     final seconds = duration.inSeconds % 60;
-    
+
     // Calculate score based on moves and time
-    final baseScore = 1000;
+    const baseScore = 1000;
     final movesPenalty = _moves * 5;
     final timePenalty = duration.inSeconds;
     final score = (baseScore - movesPenalty - timePenalty).clamp(100, baseScore);
@@ -190,7 +189,7 @@ class _SlidingPuzzleGameScreenState extends State<SlidingPuzzleGameScreen>
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Text('時間:'),
-                      Text('${minutes}分${seconds}秒'),
+                      Text('$minutes分$seconds秒'),
                     ],
                   ),
                 ],
@@ -210,11 +209,12 @@ class _SlidingPuzzleGameScreenState extends State<SlidingPuzzleGameScreen>
             onPressed: () async {
               // Record score
               await context.read<MiniGameService>().recordScore(
-                'sliding_puzzle',
-                score,
-                MiniGameDifficulty.easy,
-              );
-              
+                    'sliding_puzzle',
+                    score,
+                    MiniGameDifficulty.easy,
+                  );
+
+              if (!mounted) return;
               Navigator.of(context).pop();
               _resetGame();
             },
@@ -297,7 +297,7 @@ class _SlidingPuzzleGameScreenState extends State<SlidingPuzzleGameScreen>
                             final minutes = elapsed.inMinutes;
                             final seconds = elapsed.inSeconds % 60;
                             return Text(
-                              '${minutes}:${seconds.toString().padLeft(2, '0')}',
+                              '$minutes:$seconds.toString().padLeft(2, '0')}',
                               style: theme.textTheme.headlineSmall,
                             );
                           },
@@ -309,7 +309,7 @@ class _SlidingPuzzleGameScreenState extends State<SlidingPuzzleGameScreen>
               ),
             ),
             const SizedBox(height: 20),
-            
+
             // Instruction
             if (!_isGameStarted)
               Container(
@@ -355,7 +355,7 @@ class _SlidingPuzzleGameScreenState extends State<SlidingPuzzleGameScreen>
                       itemBuilder: (context, index) {
                         final value = _puzzle[index];
                         final isEmpty = value == 0;
-                        
+
                         return AnimatedBuilder(
                           animation: _slideController,
                           builder: (context, child) {
@@ -364,17 +364,17 @@ class _SlidingPuzzleGameScreenState extends State<SlidingPuzzleGameScreen>
                               child: AnimatedContainer(
                                 duration: const Duration(milliseconds: 200),
                                 decoration: BoxDecoration(
-                                  color: isEmpty
-                                      ? Colors.transparent
-                                      : theme.colorScheme.primary,
+                                  color: isEmpty ? Colors.transparent : theme.colorScheme.primary,
                                   borderRadius: BorderRadius.circular(8),
-                                  boxShadow: isEmpty ? null : [
-                                    BoxShadow(
-                                      color: Colors.black.withValues(alpha: 0.2),
-                                      blurRadius: 4,
-                                      offset: const Offset(0, 2),
-                                    ),
-                                  ],
+                                  boxShadow: isEmpty
+                                      ? null
+                                      : [
+                                          BoxShadow(
+                                            color: Colors.black.withValues(alpha: 0.2),
+                                            blurRadius: 4,
+                                            offset: const Offset(0, 2),
+                                          ),
+                                        ],
                                 ),
                                 child: isEmpty
                                     ? null

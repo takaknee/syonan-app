@@ -75,7 +75,7 @@ if grep -q "prefer_const_constructors" /tmp/analysis_output.txt; then
 fi
 
 # API互換性の修正
-if grep -q "argument_type_not_assignable" /tmp/analysis_output.txt; then
+if grep -q "argument_type_not_assignable\|missing_required_argument\|undefined_named_parameter" /tmp/analysis_output.txt; then
     echo "🔧 Flutter API互換性の修正中..."
     
     # CardTheme -> CardThemeData
@@ -85,6 +85,65 @@ if grep -q "argument_type_not_assignable" /tmp/analysis_output.txt; then
         find lib -name "*.dart" -exec sed -i 's/cardTheme: CardTheme(/cardTheme: CardThemeData(/g' {} \; || true
         fixes_applied=true
     fi
+    
+    # MathProblem コンストラクタ修正
+    if grep -q "speed_math_game_screen.dart.*missing_required_argument\|speed_math_game_screen.dart.*undefined_named_parameter" /tmp/analysis_output.txt; then
+        echo "  → MathProblem コンストラクタ引数の修正中..."
+        # 古い operand1, operand2 パターンを新しい firstNumber, secondNumber, correctAnswer パターンに修正
+        sed -i '/MathProblem(/,/);/{
+            s/operand1:/firstNumber:/g
+            s/operand2:/secondNumber:/g
+            /operation:/a\
+        correctAnswer: correctAnswer,
+        }' lib/screens/speed_math_game_screen.dart || true
+        fixes_applied=true
+    fi
+fi
+
+# 未使用変数・フィールドの修正
+if grep -q "unused_field\|unused_local_variable" /tmp/analysis_output.txt; then
+    echo "🔧 未使用変数・フィールドの修正中..."
+    
+    # 未使用のローカル変数を削除（安全なパターンのみ）
+    grep "unused_local_variable" /tmp/analysis_output.txt | while IFS= read -r line; do
+        if [[ $line =~ ([^[:space:]]+\.dart):([0-9]+):([0-9]+) ]]; then
+            file="${BASH_REMATCH[1]}"
+            line_num="${BASH_REMATCH[2]}"
+            
+            if [ -f "$file" ]; then
+                current_line=$(sed -n "${line_num}p" "$file")
+                # theme, duration などの安全に削除できる変数
+                if [[ $current_line =~ final[[:space:]]+theme[[:space:]]*=[[:space:]]*Theme\.of\(context\) ]] ||
+                   [[ $current_line =~ final[[:space:]]+duration[[:space:]]*=[[:space:]]*DateTime\.now\(\)\.difference ]] ; then
+                    echo "  → $file の $line_num 行目の未使用変数を削除中..."
+                    sed -i "${line_num}d" "$file"
+                    fixes_applied=true
+                fi
+            fi
+        fi
+    done
+    
+    # 未使用のフィールドを削除（よく使用される安全なパターンのみ）
+    grep "unused_field" /tmp/analysis_output.txt | while IFS= read -r line; do
+        if [[ $line =~ ([^[:space:]]+\.dart):([0-9]+):([0-9]+) ]] && 
+           [[ $line =~ \'([^\']+)\' ]]; then
+            file="${BASH_REMATCH[1]}"
+            line_num="${BASH_REMATCH[2]}"
+            field_name="${BASH_REMATCH[3]}"
+            
+            if [ -f "$file" ]; then
+                # 安全に削除できるフィールドパターン
+                if [[ $field_name =~ ^_isGameOver$|^_nextBeatTime$ ]]; then
+                    echo "  → $file の未使用フィールド $field_name を削除中..."
+                    # フィールド宣言行を削除
+                    sed -i "/${field_name}/d" "$file"
+                    # フィールドへの代入も削除
+                    sed -i "/setState.*{/,/}.*/{/${field_name}[[:space:]]*=/d}" "$file"
+                    fixes_applied=true
+                fi
+            fi
+        fi
+    done
 fi
 
 # 修正結果の確認

@@ -87,14 +87,14 @@ make qa
 ### 4. 手動実行
 
 ```bash
-# 全ファイルフォーマット
-dart format .
+# 全ファイルフォーマット（120文字制限）
+dart format --line-length=120 .
 
 # 特定ファイルのフォーマット
-dart format lib/main.dart
+dart format --line-length=120 lib/main.dart
 
 # フォーマット確認（変更なし）
-dart format --dry-run .
+dart format --line-length=120 --dry-run .
 ```
 
 ### 5. VS Codeタスク
@@ -127,7 +127,10 @@ Process completed with exit code 1.
    git push
    ```
 
-2. **自動修正の有効化**：
+2. **手動でフォーマット修正**：
+   ```bash
+   dart format --line-length=120 --set-exit-if-changed .
+   ```
    GitHub Actionsワークフローは自動でフォーマットを修正するように設定されています。
 
 ### ワークフローの改善
@@ -224,10 +227,10 @@ echo $PATH | grep flutter
 #### 3. 大量のフォーマット変更
 
 ```bash
-# 段階的にフォーマット
-dart format lib/
-dart format test/
-dart format .
+# 段階的にフォーマット（120文字制限）
+dart format --line-length=120 lib/
+dart format --line-length=120 test/
+dart format --line-length=120 .
 ```
 
 ## 📚 関連ドキュメント

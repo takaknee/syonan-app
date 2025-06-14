@@ -134,7 +134,7 @@ void main() {
   group('AvailableMiniGames', () {
     test('contains all expected games', () {
       expect(AvailableMiniGames.all.length, 5);
-      
+
       final gameIds = AvailableMiniGames.all.map((g) => g.id).toList();
       expect(gameIds, contains('number_memory'));
       expect(gameIds, contains('speed_math'));

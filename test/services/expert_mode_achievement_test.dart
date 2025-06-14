@@ -21,8 +21,7 @@ void main() {
       expect(pointsService.totalPoints, 250);
 
       // Try to unlock expert achievement
-      final success =
-          await pointsService.unlockAchievement('difficulty_badge_expert');
+      final success = await pointsService.unlockAchievement('difficulty_badge_expert');
 
       expect(success, true);
       expect(pointsService.hasAchievement('difficulty_badge_expert'), true);
@@ -30,8 +29,7 @@ void main() {
     });
 
     test('expert achievement should exist in available achievements', () {
-      final expertAchievement =
-          AvailableAchievements.findById('difficulty_badge_expert');
+      final expertAchievement = AvailableAchievements.findById('difficulty_badge_expert');
 
       expect(expertAchievement, isNotNull);
       expect(expertAchievement!.title, 'エキスパートマスター');
@@ -59,24 +57,19 @@ void main() {
       expect(pointsService.totalPoints, pointsEarned);
     });
 
-    test(
-        'should show expert achievement in available achievements when unlocked',
-        () async {
+    test('should show expert achievement in available achievements when unlocked', () async {
       final availableBefore = pointsService.getAvailableAchievements();
-      expect(
-          availableBefore.any((a) => a.id == 'difficulty_badge_expert'), true);
+      expect(availableBefore.any((a) => a.id == 'difficulty_badge_expert'), true);
 
       // Unlock the achievement
       await pointsService.addPoints(250);
       await pointsService.unlockAchievement('difficulty_badge_expert');
 
       final availableAfter = pointsService.getAvailableAchievements();
-      expect(
-          availableAfter.any((a) => a.id == 'difficulty_badge_expert'), false);
+      expect(availableAfter.any((a) => a.id == 'difficulty_badge_expert'), false);
 
       final userAchievements = pointsService.getUserAchievementDetails();
-      expect(
-          userAchievements.any((a) => a.id == 'difficulty_badge_expert'), true);
+      expect(userAchievements.any((a) => a.id == 'difficulty_badge_expert'), true);
     });
   });
 }

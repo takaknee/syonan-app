@@ -57,7 +57,7 @@
 make autofix
 
 # 個別修正
-dart format .                    # フォーマット
+dart format --line-length=120 .  # フォーマット（120文字制限）
 flutter analyze                  # 解析
 ```
 
@@ -123,7 +123,7 @@ flutter analyze                  # 解析
 
 3. **手動実行でテスト**
    ```bash
-   dart format .
+   dart format --line-length=120 .
    flutter analyze
    ```
 

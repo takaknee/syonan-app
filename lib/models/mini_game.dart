@@ -27,6 +27,19 @@ class MiniGame {
     required this.color,
   });
 
+  factory MiniGame.fromJson(Map<String, dynamic> json) {
+    return MiniGame(
+      id: json['id'] as String,
+      type: MiniGameType.values[json['type'] as int],
+      name: json['name'] as String,
+      description: json['description'] as String,
+      emoji: json['emoji'] as String,
+      pointsCost: json['pointsCost'] as int,
+      difficulty: MiniGameDifficulty.values[json['difficulty'] as int],
+      color: json['color'] as int,
+    );
+  }
+
   final String id;
   final MiniGameType type;
   final String name;
@@ -48,19 +61,6 @@ class MiniGame {
       'color': color,
     };
   }
-
-  factory MiniGame.fromJson(Map<String, dynamic> json) {
-    return MiniGame(
-      id: json['id'] as String,
-      type: MiniGameType.values[json['type'] as int],
-      name: json['name'] as String,
-      description: json['description'] as String,
-      emoji: json['emoji'] as String,
-      pointsCost: json['pointsCost'] as int,
-      difficulty: MiniGameDifficulty.values[json['difficulty'] as int],
-      color: json['color'] as int,
-    );
-  }
 }
 
 /// ミニゲームのスコア記録
@@ -72,6 +72,16 @@ class MiniGameScore {
     required this.completedAt,
     required this.difficulty,
   });
+
+  factory MiniGameScore.fromJson(Map<String, dynamic> json) {
+    return MiniGameScore(
+      id: json['id'] as String,
+      gameId: json['gameId'] as String,
+      score: json['score'] as int,
+      completedAt: DateTime.parse(json['completedAt'] as String),
+      difficulty: MiniGameDifficulty.values[json['difficulty'] as int],
+    );
+  }
 
   final String id;
   final String gameId;
@@ -87,16 +97,6 @@ class MiniGameScore {
       'completedAt': completedAt.toIso8601String(),
       'difficulty': difficulty.index,
     };
-  }
-
-  factory MiniGameScore.fromJson(Map<String, dynamic> json) {
-    return MiniGameScore(
-      id: json['id'] as String,
-      gameId: json['gameId'] as String,
-      score: json['score'] as int,
-      completedAt: DateTime.parse(json['completedAt'] as String),
-      difficulty: MiniGameDifficulty.values[json['difficulty'] as int],
-    );
   }
 }
 

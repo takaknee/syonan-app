@@ -707,9 +707,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
     // ポイントを消費
     final success = await pointsService.spendPoints(game.pointsCost);
-    
+
     if (!mounted) return;
-    
+
     if (!success) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -743,7 +743,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     if (!mounted) return;
-    
+
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => gameScreen,

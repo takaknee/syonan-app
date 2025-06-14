@@ -297,7 +297,7 @@ class _SlidingPuzzleGameScreenState extends State<SlidingPuzzleGameScreen> with 
                             final minutes = elapsed.inMinutes;
                             final seconds = elapsed.inSeconds % 60;
                             return Text(
-                              '$minutes:$seconds.toString().padLeft(2, '0')}',
+                              '$minutes:${seconds.toString().padLeft(2, '0')}',
                               style: theme.textTheme.headlineSmall,
                             );
                           },

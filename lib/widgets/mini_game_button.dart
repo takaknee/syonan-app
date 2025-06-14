@@ -86,7 +86,6 @@ class MiniGameButton extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
                     color: hasEnoughPoints ? gameColor : Colors.grey,
-                    width: 1,
                   ),
                 ),
                 child: Row(
@@ -120,7 +119,7 @@ class MiniGameButton extends StatelessWidget {
                     ),
                     const SizedBox(width: 2),
                     Text(
-                      '${playCount}回',
+                      '$playCount回',
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                       ),

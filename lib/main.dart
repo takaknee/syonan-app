@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'screens/home_screen.dart';
 import 'services/math_service.dart';
+import 'services/mini_game_service.dart';
 import 'services/points_service.dart';
 import 'services/score_service.dart';
 
@@ -28,6 +29,10 @@ class SyonanApp extends StatelessWidget {
         // ポイントシステム管理サービス
         ChangeNotifierProvider<PointsService>(
           create: (context) => PointsService(),
+        ),
+        // ミニゲーム管理サービス
+        ChangeNotifierProvider<MiniGameService>(
+          create: (context) => MiniGameService(),
         ),
       ],
       child: MaterialApp(

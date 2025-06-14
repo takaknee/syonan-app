@@ -119,10 +119,10 @@ jobs:
             
             **Code Formatting**:
             \`\`\`bash
-            # Auto-format all code
-            flutter format .
+            # Auto-format all code (120 characters per line)
+            flutter format --line-length=120 .
             # Or
-            dart format .
+            dart format --line-length=120 .
             \`\`\`
             
             **Code Analysis**:

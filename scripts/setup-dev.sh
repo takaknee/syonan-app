@@ -106,16 +106,16 @@ echo ""
 # Check formatting
 print_status "Checking code formatting..."
 if command_exists dart; then
-    if dart format --dry-run . 2>&1 | grep -q "Formatted"; then
+    if dart format --line-length=120 --dry-run . 2>&1 | grep -q "Formatted"; then
         print_warning "Some files need formatting"
         echo ""
         echo "Files that need formatting:"
-        dart format --dry-run . 2>&1 | grep "Formatted"
+        dart format --line-length=120 --dry-run . 2>&1 | grep "Formatted"
         echo ""
         read -p "Do you want to fix formatting now? (Y/n): " -n 1 -r
         echo ""
         if [[ $REPLY =~ ^[Yy]$ ]] || [[ -z $REPLY ]]; then
-            dart format .
+            dart format --line-length=120 .
             print_success "Code formatting fixed"
         fi
     else

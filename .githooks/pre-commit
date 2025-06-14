@@ -18,7 +18,7 @@ if ! ./scripts/format.sh check >/dev/null 2>&1; then
     echo "Please run one of the following to fix formatting:"
     echo "  make format"
     echo "  ./scripts/format.sh fix"
-    echo "  dart format ."
+    echo "  dart format --line-length=120 ."
     echo ""
     echo "Then commit again."
     exit 1

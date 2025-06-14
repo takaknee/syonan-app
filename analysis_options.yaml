@@ -14,7 +14,7 @@ linter:
     
     # フォーマット関連の追加規則
     curly_braces_in_flow_control_structures: true
-    lines_longer_than_80_chars: false  # 80文字制限を無効化
+    lines_longer_than_80_chars: false  # 80文字制限を無効化（120文字制限を使用）
     unnecessary_parenthesis: true
     avoid_redundant_argument_values: true
     directives_ordering: true

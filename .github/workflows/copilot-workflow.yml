@@ -71,9 +71,9 @@ jobs:
           if [ -f pubspec.yaml ]; then
             echo "🔍 Checking code formatting..."
             # Check if formatting is needed and auto-fix if necessary
-            if ! dart format --set-exit-if-changed . --dry-run; then
+            if ! dart format --line-length=120 --set-exit-if-changed . --dry-run; then
               echo "⚠️ Code formatting issues detected, auto-fixing..."
-              dart format .
+              dart format --line-length=120 .
               echo "✅ Formatting has been automatically fixed!"
               
               # Check if we're in a pull request context and can commit changes

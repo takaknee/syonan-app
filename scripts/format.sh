@@ -34,9 +34,9 @@ format_code() {
     echo ""
     
     if [ "$DART_CMD" = "dart" ]; then
-        $DART_CMD format .
+        $DART_CMD format --line-length=120 .
     else
-        $DART_CMD format .
+        $DART_CMD format --line-length=120 .
     fi
     
     echo ""
@@ -62,9 +62,9 @@ check_formatting() {
     else
         # Flutter doesn't have --dry-run, so we'll use dart if available
         if command -v dart >/dev/null 2>&1; then
-            if dart format --dry-run . 2>&1 | grep -q "Formatted"; then
+            if dart format --line-length=120 --dry-run . 2>&1 | grep -q "Formatted"; then
                 echo "⚠️ Some files need formatting:"
-                dart format --dry-run . 2>&1 | grep "Formatted"
+                dart format --line-length=120 --dry-run . 2>&1 | grep "Formatted"
                 echo ""
                 echo "Run '$0 fix' to automatically format these files."
                 return 1

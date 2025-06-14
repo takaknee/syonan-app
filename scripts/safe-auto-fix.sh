@@ -21,7 +21,7 @@ echo "📁 対象ファイル数: $DART_COUNT"
 # 1. 基本フォーマット
 echo ""
 echo "1️⃣ 基本フォーマット..."
-if dart format . --line-length=80 --set-exit-if-changed; then
+if dart format . --line-length=120 --set-exit-if-changed; then
     echo "✅ フォーマット完了（変更なし）"
 else
     echo "✅ フォーマット完了（変更あり）"
@@ -126,7 +126,7 @@ echo "✅ const修正完了"
 # 4. 最終フォーマット
 echo ""
 echo "4️⃣ 最終フォーマット..."
-dart format . --line-length=80 > /dev/null 2>&1 || echo "⚠️ フォーマットでエラーがありました"
+dart format . --line-length=120 > /dev/null 2>&1 || echo "⚠️ フォーマットでエラーがありました"
 echo "✅ 最終フォーマット完了"
 
 # 5. 最終構文チェック

@@ -87,7 +87,7 @@ jobs:
 
       - name: Check formatting
         if: steps.flutter_check.outputs.flutter_available == 'true'
-        run: dart format --set-exit-if-changed lib test
+        run: dart format --line-length=120 --set-exit-if-changed lib test
         continue-on-error: false
         timeout-minutes: 5
 

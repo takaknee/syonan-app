@@ -21,7 +21,7 @@ echo "📁 対象ファイル数: $(echo "$TARGET_FILES" | wc -w)"
 # 1. フォーマット修正
 echo ""
 echo "1️⃣ コードフォーマット修正..."
-dart format $TARGET_FILES
+dart format --line-length=120 $TARGET_FILES
 echo "✅ フォーマット完了"
 
 # 2. インポート修正
@@ -106,7 +106,7 @@ echo "✅ const修正完了"
 # 4. 最終フォーマット
 echo ""
 echo "4️⃣ 最終フォーマット..."
-dart format $TARGET_FILES
+dart format --line-length=120 $TARGET_FILES
 echo "✅ 最終フォーマット完了"
 
 # 5. 解析チェック

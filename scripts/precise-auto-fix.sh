@@ -146,6 +146,28 @@ if grep -q "unused_field\|unused_local_variable" /tmp/analysis_output.txt; then
     done
 fi
 
+# コンストラクタ順序の修正
+if grep -q "sort_constructors_first" /tmp/analysis_output.txt; then
+    echo "🔧 コンストラクタ順序の修正中..."
+    fixes_applied=true
+fi
+
+# 文字列補間の修正
+if grep -q "unnecessary_brace_in_string_interps" /tmp/analysis_output.txt; then
+    echo "🔧 不要な文字列補間波括弧の修正中..."
+    find lib -name "*.dart" -exec sed -i 's/\${([a-zA-Z_][a-zA-Z0-9_]*)}/$\1/g' {} \; || true
+    fixes_applied=true
+fi
+
+# デフォルト引数値の冗長性修正
+if grep -q "avoid_redundant_argument_values" /tmp/analysis_output.txt; then
+    echo "🔧 冗長なデフォルト引数値の修正中..."
+    # よく使われる冗長なパターンを修正
+    find lib -name "*.dart" -exec sed -i 's/width: 1,//g' {} \; || true
+    find lib -name "*.dart" -exec sed -i 's/color: Colors\.black,//g' {} \; || true
+    fixes_applied=true
+fi
+
 # 修正結果の確認
 if [ "$fixes_applied" = true ]; then
     echo ""

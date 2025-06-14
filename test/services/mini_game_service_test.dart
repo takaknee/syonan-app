@@ -56,7 +56,7 @@ void main() {
         await Future.delayed(const Duration(milliseconds: 1)); // Ensure different timestamps
       }
 
-      final recentScores = miniGameService.getRecentScores('number_memory', limit: 5);
+      final recentScores = miniGameService.getRecentScores('number_memory');
       expect(recentScores.length, 5);
       // Most recent score should be first (90 points)
       expect(recentScores.first.score, 90);

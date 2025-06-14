@@ -524,7 +524,6 @@ class _RhythmTapGameScreenState extends State<RhythmTapGameScreen> with TickerPr
                                         Shadow(
                                           offset: Offset(2, 2),
                                           blurRadius: 4,
-                                          color: Colors.black,
                                         ),
                                       ],
                                     ),

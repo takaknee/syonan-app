@@ -535,12 +535,6 @@ class _DodgeGameScreenState extends State<DodgeGameScreen> with TickerProviderSt
 }
 
 class Obstacle {
-  double x;
-  double y;
-  final double size;
-  final double speed;
-  final Color color;
-
   Obstacle({
     required this.x,
     required this.y,
@@ -548,4 +542,9 @@ class Obstacle {
     required this.speed,
     required this.color,
   });
+  double x;
+  double y;
+  final double size;
+  final double speed;
+  final Color color;
 }

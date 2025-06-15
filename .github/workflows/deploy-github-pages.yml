@@ -119,6 +119,30 @@ jobs:
         continue-on-error: false
         timeout-minutes: 10
 
+      - name: Auto-fix code quality issues
+        if: steps.flutter_check.outputs.flutter_available == 'true'
+        run: |
+          echo "🤖 自動修正スクリプトを実行中..."
+          
+          # 自動修正を実行
+          chmod +x scripts/precise-auto-fix.sh
+          ./scripts/precise-auto-fix.sh
+          
+          # 変更があったかチェック
+          if ! git diff --quiet; then
+            echo "📝 自動修正による変更が見つかりました"
+            git config --local user.email "action@github.com"
+            git config --local user.name "GitHub Action"
+            git add -A
+            git commit -m "chore: Auto-fix code quality issues - Applied automated fixes via precise-auto-fix.sh [skip ci]"
+            git push
+            echo "✅ 自動修正をコミットしました"
+          else
+            echo "ℹ️ 自動修正による変更はありませんでした"
+          fi
+        continue-on-error: true
+        timeout-minutes: 5
+
       - name: Run tests
         if: steps.flutter_check.outputs.flutter_available == 'true'
         run: echo "Tests temporarily disabled to fix deployment"

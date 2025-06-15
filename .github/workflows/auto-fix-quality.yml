@@ -90,122 +90,69 @@ jobs:
             echo "✅ コードは既に適切にフォーマットされています"
           fi
 
-      - name: Auto-fix analysis issues with precise targeting
+      - name: 🎯 精密自動修正の実行
         if: steps.flutter_check.outputs.flutter_available == 'true'
-        id: analysis_fix
+        id: precise_fix
         run: |
-          echo "🔍 Running analysis and attempting precise auto-fixes..."
+          echo "🎯 精密自動修正システムを実行中..."
           
-          # Run analysis and capture output
-          if flutter analyze --no-preamble > analysis_output.txt 2>&1; then
-            echo "✅ No analysis issues found"
-            echo "analysis_issues=false" >> $GITHUB_OUTPUT
-            echo "fixes_applied=false" >> $GITHUB_OUTPUT
+          # 実行権限を付与
+          chmod +x scripts/precise-auto-fix.sh
+          
+          # 精密自動修正を実行
+          ./scripts/precise-auto-fix.sh
+          
+          # 変更があったかチェック
+          if git diff --exit-code; then
+            echo "changes_made=false" >> $GITHUB_OUTPUT
+            echo "ℹ️ 自動修正による変更はありませんでした"
           else
-            echo "analysis_issues=true" >> $GITHUB_OUTPUT
-            echo "⚠️ Analysis issues detected:"
-            cat analysis_output.txt
+            echo "changes_made=true" >> $GITHUB_OUTPUT
+            echo "📝 自動修正による変更が見つかりました"
             
-            fixes_applied=false
+            # 変更されたファイルを表示
+            echo "変更されたファイル:"
+            git diff --name-only
             
-            # Parse analysis output and fix specific issues
-            echo "🎯 Applying precise fixes based on analysis results..."
-            
-            # Fix prefer_const_constructors issues
-            if grep -q "prefer_const_constructors" analysis_output.txt; then
-              echo "🔧 Fixing const constructor issues..."
-              
-              # Extract file:line information and fix each specific case
-              grep "prefer_const_constructors" analysis_output.txt | while IFS= read -r line; do
-                # Extract file and line number: file.dart:123:45
-                if [[ $line =~ ([^[:space:]]+\.dart):([0-9]+):([0-9]+) ]]; then
-                  file="${BASH_REMATCH[1]}"
-                  line_num="${BASH_REMATCH[2]}"
-                  
-                  if [ -f "$file" ]; then
-                    echo "  → Fixing const in $file at line $line_num"
-                    
-                    # Read the specific line and apply const fix
-                    current_line=$(sed -n "${line_num}p" "$file")
-                    
-                    # Smart const addition patterns
-                    if [[ $current_line =~ ^([[:space:]]*)([^[:space:]].*)$ ]]; then
-                      indent="${BASH_REMATCH[1]}"
-                      content="${BASH_REMATCH[2]}"
-                      
-                      # Common patterns to add const
-                      if [[ $content =~ ^(Icon|Text|SizedBox|Padding|Container|MaterialApp|Scaffold)\( ]]; then
-                        new_line="${indent}const ${content}"
-                        sed -i "${line_num}s/.*/$new_line/" "$file"
-                        fixes_applied=true
-                        echo "    ✓ Added const to: $content"
-                      elif [[ $content =~ ^([a-zA-Z_][a-zA-Z0-9_]*\() ]]; then
-                        # General constructor pattern
-                        new_line="${indent}const ${content}"
-                        sed -i "${line_num}s/.*/$new_line/" "$file"
-                        fixes_applied=true
-                        echo "    ✓ Added const to constructor at line $line_num"
-                      fi
-                    fi
-                  fi
-                fi
-              done
-            fi
-            
-            # Fix Flutter API compatibility issues
-            echo "🔧 Checking for Flutter API compatibility issues..."
-            if grep -q "argument_type_not_assignable" analysis_output.txt; then
-              echo "Attempting to fix Flutter API compatibility issues..."
-              
-              # Fix CardTheme -> CardThemeData (Flutter 3.32+ compatibility)
-              if grep -q "CardTheme.*can't be assigned.*CardThemeData" analysis_output.txt; then
-                echo "Fixing CardTheme -> CardThemeData compatibility..."
-                find lib -name "*.dart" -exec sed -i 's/cardTheme: const CardTheme(/cardTheme: const CardThemeData(/g' {} \; || true
-                find lib -name "*.dart" -exec sed -i 's/cardTheme: CardTheme(/cardTheme: CardThemeData(/g' {} \; || true
-                fixes_applied=true
-              fi
-            fi
-            
-            # Check if any fixes were applied
-            if git diff --exit-code; then
-              echo "fixes_applied=false" >> $GITHUB_OUTPUT
-              echo "ℹ️ No automatic fixes could be applied"
-            else
-              echo "fixes_applied=true" >> $GITHUB_OUTPUT
-              echo "✅ Some automatic fixes were applied"
-              echo "Fixed files:"
-              git diff --name-only
-            fi
+            echo "変更の詳細:"
+            git diff --stat
+          fi
+      - name: 📊 変更の統合確認
+        if: steps.flutter_check.outputs.flutter_available == 'true'
+        id: combined_changes
+        run: |
+          if git diff --exit-code; then
+            echo "any_changes=false" >> $GITHUB_OUTPUT
+            echo "ℹ️ 全体で変更はありませんでした"
+          else
+            echo "any_changes=true" >> $GITHUB_OUTPUT
+            echo "📝 変更が見つかりました"
+            echo "変更されたファイル数: $(git diff --name-only | wc -l)"
+            echo "変更の詳細:"
+            git diff --stat
           fi
 
       - name: Commit auto-fixes
         if: |
           steps.flutter_check.outputs.flutter_available == 'true' && 
-          (steps.format_fix.outputs.changes_made == 'true' || steps.analysis_fix.outputs.fixes_applied == 'true')
+          steps.combined_changes.outputs.any_changes == 'true'
         run: |
-          echo "💾 Committing auto-fixes..."
+          echo "💾 自動修正をコミット中..."
           
           git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
+          git config --local user.name "GitHub Action Auto-fix"
           
           git add -A
           
-          commit_message="🤖 Auto-fix: Code quality improvements"
+          # 精密自動修正による変更をコミット
+          git commit -m "chore: Auto-fix code quality issues [auto-fix] - Applied automated fixes via precise-auto-fix.sh"
           
-          if [ "${{ steps.format_fix.outputs.changes_made }}" = "true" ]; then
-            commit_message="$commit_message - Format code"
-          fi
-          
-          if [ "${{ steps.analysis_fix.outputs.fixes_applied }}" = "true" ]; then
-            commit_message="$commit_message - Fix analysis issues"
-          fi
-          
-          git commit -m "$commit_message" || echo "No changes to commit"
+          echo "✅ 自動修正をコミットしました"
 
       - name: 📤 変更のプッシュ
         if: |
           steps.flutter_check.outputs.flutter_available == 'true' && 
-          (steps.format_fix.outputs.changes_made == 'true' || steps.analysis_fix.outputs.fixes_applied == 'true')
+          steps.combined_changes.outputs.any_changes == 'true'
         run: |
           echo "📤 自動修正をプッシュ中..."
           git push origin HEAD

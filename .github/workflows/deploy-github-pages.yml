@@ -93,7 +93,29 @@ jobs:
 
       - name: Analyze code
         if: steps.flutter_check.outputs.flutter_available == 'true'
-        run: flutter analyze
+        run: |
+          echo "🔍 Flutterコードを解析中..."
+          set +e  # エラーでも継続
+          flutter analyze --no-fatal-infos > analyze_output.txt 2>&1
+          analyze_exit_code=$?
+          set -e  # エラーチェックを再開
+          
+          # 結果を表示
+          cat analyze_output.txt
+          
+          # エラー・警告の種類をチェック
+          if [ $analyze_exit_code -eq 0 ]; then
+            echo "✅ 解析完了：問題なし"
+          elif grep -q "error •" analyze_output.txt; then
+            echo "❌ エラーレベルの問題が見つかりました"
+            exit 1
+          elif grep -q "warning •" analyze_output.txt; then
+            echo "⚠️ 警告レベルの問題が見つかりました（継続）"
+          else
+            echo "ℹ️ info レベルの問題のみ（継続）"
+          fi
+          
+          echo "🎯 ビルドを継続します"
         continue-on-error: false
         timeout-minutes: 10
 

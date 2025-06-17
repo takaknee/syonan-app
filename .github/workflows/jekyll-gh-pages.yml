@@ -1,14 +1,16 @@
-# Sample workflow for building and deploying a Jekyll site to GitHub Pages
-# NOTE: This workflow is DISABLED to avoid conflicts with Flutter web deployment
-name: Deploy Jekyll with GitHub Pages dependencies preinstalled (DISABLED)
+name: Jekyll (Disabled)
+
+# This workflow is disabled to prevent conflicts with Flutter web deployment
+# The main CI/CD pipeline handles web deployment
 
 on:
-  # Disabled - runs on pushes targeting the default branch
-  # push:
-  #   branches: ["main"]
-
-  # Allows you to run this workflow manually from the Actions tab
+  # Intentionally left empty - this workflow is disabled
   workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'This workflow is disabled. Use ci-cd.yml instead.'
+        required: true
+        default: 'disabled'
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:

@@ -1,0 +1,128 @@
+name: 'Flutter Code Quality Check'
+description: 'Run Flutter code quality checks and fixes'
+
+inputs:
+  auto-fix:
+    description: 'Whether to automatically fix issues'
+    required: false
+    default: 'false'
+  check-format:
+    description: 'Whether to check code formatting'
+    required: false
+    default: 'true'
+  check-analysis:
+    description: 'Whether to run static analysis'
+    required: false
+    default: 'true'
+  run-tests:
+    description: 'Whether to run tests'
+    required: false
+    default: 'true'
+
+outputs:
+  format-issues:
+    description: 'Number of formatting issues found'
+    value: ${{ steps.format.outputs.issues }}
+  analysis-issues:
+    description: 'Number of analysis issues found'
+    value: ${{ steps.analysis.outputs.issues }}
+  test-result:
+    description: 'Test execution result'
+    value: ${{ steps.test.outputs.result }}
+  fixes-applied:
+    description: 'Whether fixes were applied'
+    value: ${{ steps.fix.outputs.applied }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Get Dependencies
+      shell: bash
+      run: |
+        if [ -f pubspec.yaml ]; then
+          echo "📦 Getting Flutter dependencies..."
+          flutter pub get
+        else
+          echo "❌ pubspec.yaml not found"
+          exit 1
+        fi
+
+    - name: Format Check
+      if: inputs.check-format == 'true'
+      id: format
+      shell: bash
+      run: |
+        echo "📝 Checking code formatting..."
+        
+        if [ "${{ inputs.auto-fix }}" = "true" ]; then
+          # Auto-fix mode
+          dart format --line-length=120 lib test
+          echo "✅ Code formatting applied"
+          echo "issues=0" >> $GITHUB_OUTPUT
+        else
+          # Check mode
+          if dart format --line-length=120 --set-exit-if-changed lib test; then
+            echo "✅ Code formatting is correct"
+            echo "issues=0" >> $GITHUB_OUTPUT
+          else
+            echo "❌ Code formatting issues found"
+            echo "issues=1" >> $GITHUB_OUTPUT
+          fi
+        fi
+
+    - name: Static Analysis
+      if: inputs.check-analysis == 'true'
+      id: analysis
+      shell: bash
+      run: |
+        echo "🔍 Running static analysis..."
+        
+        # Run analysis and capture both exit code and output
+        if output=$(flutter analyze --no-pub 2>&1); then
+          echo "✅ No analysis issues found"
+          echo "issues=0" >> $GITHUB_OUTPUT
+        else
+          echo "❌ Analysis issues found"
+          echo "$output"
+          
+          # Count issues more accurately
+          error_count=$(echo "$output" | grep -c "error •" || echo "0")
+          warning_count=$(echo "$output" | grep -c "info •" || echo "0")
+          total_issues=$((error_count + warning_count))
+          
+          echo "Found $error_count errors and $warning_count warnings (total: $total_issues)"
+          echo "issues=$total_issues" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Run Tests
+      if: inputs.run-tests == 'true'
+      id: test
+      shell: bash
+      run: |
+        echo "🧪 Running tests..."
+        
+        if flutter test; then
+          echo "✅ All tests passed"
+          echo "result=success" >> $GITHUB_OUTPUT
+        else
+          echo "❌ Some tests failed"
+          echo "result=failure" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Apply Fixes
+      if: inputs.auto-fix == 'true'
+      id: fix
+      shell: bash
+      run: |
+        echo "🔧 Applying automatic fixes..."
+        
+        # Apply safe const fixes
+        echo "Adding const modifiers..."
+        find lib -name '*.dart' -exec sed -i 's/\(return \)Text(/\1const Text(/g' {} \; 2>/dev/null || true
+        find lib -name '*.dart' -exec sed -i 's/\(child: \)Text(/\1const Text(/g' {} \; 2>/dev/null || true
+        
+        # Apply formatting
+        dart format --line-length=120 lib test
+        
+        echo "applied=true" >> $GITHUB_OUTPUT
+        echo "✅ Automatic fixes applied"

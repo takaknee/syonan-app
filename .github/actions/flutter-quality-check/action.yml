@@ -77,14 +77,21 @@ runs:
       run: |
         echo "🔍 Running static analysis..."
         
-        if flutter analyze --no-pub; then
+        # Run analysis and capture both exit code and output
+        if output=$(flutter analyze --no-pub 2>&1); then
           echo "✅ No analysis issues found"
           echo "issues=0" >> $GITHUB_OUTPUT
         else
           echo "❌ Analysis issues found"
-          # Count issues
-          issues=$(flutter analyze --no-pub 2>&1 | grep -c "error\|warning" || echo "0")
-          echo "issues=$issues" >> $GITHUB_OUTPUT
+          echo "$output"
+          
+          # Count issues more accurately
+          error_count=$(echo "$output" | grep -c "error •" || echo "0")
+          warning_count=$(echo "$output" | grep -c "info •" || echo "0")
+          total_issues=$((error_count + warning_count))
+          
+          echo "Found $error_count errors and $warning_count warnings (total: $total_issues)"
+          echo "issues=$total_issues" >> $GITHUB_OUTPUT
         fi
 
     - name: Run Tests

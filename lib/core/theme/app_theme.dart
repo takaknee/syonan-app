@@ -59,8 +59,7 @@ class AppTheme {
   );
 
   /// ボタンテーマ（子供向けに大きめのタッチターゲット）
-  static final ElevatedButtonThemeData _elevatedButtonTheme =
-      ElevatedButtonThemeData(
+  static final ElevatedButtonThemeData _elevatedButtonTheme = ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
       minimumSize: const Size(120, 56),
       textStyle: const TextStyle(
@@ -92,8 +91,7 @@ class AppTheme {
   );
 
   /// 入力フィールドテーマ
-  static final InputDecorationTheme _inputDecorationTheme =
-      InputDecorationTheme(
+  static final InputDecorationTheme _inputDecorationTheme = InputDecorationTheme(
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(12),
     ),

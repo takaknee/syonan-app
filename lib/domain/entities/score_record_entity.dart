@@ -36,7 +36,7 @@ enum ScoreImprovement {
 class ScoreRecordEntity {
   final String id;
   final String userId;
-  final GameType gameType;  
+  final GameType gameType;
   final MathOperationType operation;
   final int score;
   final int correctCount;
@@ -119,10 +119,7 @@ class ScoreRecordEntity {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is ScoreRecordEntity &&
-          runtimeType == other.runtimeType &&
-          id == other.id;
+      identical(this, other) || other is ScoreRecordEntity && runtimeType == other.runtimeType && id == other.id;
 
   @override
   int get hashCode => id.hashCode;
@@ -136,7 +133,7 @@ class ScoreRecordEntity {
     String? id,
     String? userId,
     GameType? gameType,
-    MathOperationType? operation,  
+    MathOperationType? operation,
     int? score,
     int? correctCount,
     int? wrongAnswers,

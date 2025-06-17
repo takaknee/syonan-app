@@ -19,10 +19,10 @@ class ScoreRecordLocalDataSource {
     try {
       final scores = await getAllScoreRecords();
       scores.add(scoreRecord);
-      
+
       final jsonList = scores.map((score) => score.toJson()).toList();
       await _prefs.setString(_scoresKey, jsonEncode(jsonList));
-      
+
       // 統計も更新
       await _updateStatistics(scoreRecord);
     } catch (e) {
@@ -40,9 +40,7 @@ class ScoreRecordLocalDataSource {
       if (jsonString == null) return [];
 
       final jsonList = jsonDecode(jsonString) as List;
-      return jsonList
-          .map((json) => ScoreRecordModel.fromJson(json as Map<String, dynamic>))
-          .toList();
+      return jsonList.map((json) => ScoreRecordModel.fromJson(json as Map<String, dynamic>)).toList();
     } catch (e) {
       throw DataException(
         message: 'スコア記録の取得中にエラーが発生しました',
@@ -111,10 +109,8 @@ class ScoreRecordLocalDataSource {
   }) async {
     try {
       final all = await getAllScoreRecords();
-      final filtered = userId != null 
-          ? all.where((score) => score.userId == userId).toList()
-          : all;
-      
+      final filtered = userId != null ? all.where((score) => score.userId == userId).toList() : all;
+
       filtered.sort((a, b) => b.timestamp.compareTo(a.timestamp));
       return filtered.take(limit).toList();
     } catch (e) {
@@ -155,9 +151,7 @@ class ScoreRecordLocalDataSource {
   /// スコア統計を取得
   Future<Map<String, dynamic>> getScoreStatistics({String? userId}) async {
     try {
-      final scores = userId != null 
-          ? await getScoreRecordsByUser(userId)
-          : await getAllScoreRecords();
+      final scores = userId != null ? await getScoreRecordsByUser(userId) : await getAllScoreRecords();
 
       if (scores.isEmpty) {
         return {
@@ -199,7 +193,7 @@ class ScoreRecordLocalDataSource {
     try {
       final scores = await getAllScoreRecords();
       scores.removeWhere((score) => score.id == id);
-      
+
       final jsonList = scores.map((score) => score.toJson()).toList();
       await _prefs.setString(_scoresKey, jsonEncode(jsonList));
     } catch (e) {
@@ -227,9 +221,7 @@ class ScoreRecordLocalDataSource {
   Future<void> _updateStatistics(ScoreRecordModel newRecord) async {
     try {
       final stats = _prefs.getString(_statsKey);
-      Map<String, dynamic> currentStats = stats != null 
-          ? jsonDecode(stats) as Map<String, dynamic>
-          : {};
+      Map<String, dynamic> currentStats = stats != null ? jsonDecode(stats) as Map<String, dynamic> : {};
 
       // 基本統計を更新
       currentStats['totalRecords'] = (currentStats['totalRecords'] ?? 0) + 1;
@@ -253,7 +245,7 @@ class ScoreRecordLocalDataSource {
   /// ゲームタイプ別統計を計算
   Map<String, dynamic> _calculateGameTypeStats(List<ScoreRecordModel> scores) {
     final stats = <String, dynamic>{};
-    
+
     for (final gameType in GameType.values) {
       final gameScores = scores.where((s) => s.gameType == gameType).toList();
       if (gameScores.isNotEmpty) {
@@ -265,14 +257,14 @@ class ScoreRecordLocalDataSource {
         };
       }
     }
-    
+
     return stats;
   }
 
   /// 操作タイプ別統計を計算
   Map<String, dynamic> _calculateOperationStats(List<ScoreRecordModel> scores) {
     final stats = <String, dynamic>{};
-    
+
     for (final operation in MathOperationType.values) {
       final operationScores = scores.where((s) => s.operation == operation).toList();
       if (operationScores.isNotEmpty) {
@@ -284,7 +276,7 @@ class ScoreRecordLocalDataSource {
         };
       }
     }
-    
+
     return stats;
   }
 }

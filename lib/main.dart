@@ -12,10 +12,10 @@ import 'services/score_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // 依存性注入を初期化
   await AppBindings.init();
-  
+
   runApp(const SyonanApp());
 }
 
@@ -32,7 +32,7 @@ class SyonanApp extends StatelessWidget {
         ChangeNotifierProvider<MathPracticeController>(
           create: (_) => AppBindings.mathPracticeController,
         ),
-        
+
         // 既存のサービス（段階的に移行するため残しておく）
         Provider<MathService>(create: (_) => MathService()),
         ChangeNotifierProvider<ScoreService>(create: (_) => ScoreService()),

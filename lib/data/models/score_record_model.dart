@@ -30,7 +30,7 @@ class ScoreRecordModel extends ScoreRecordEntity {
         orElse: () => GameType.mathPractice,
       ),
       operation: MathOperationType.values.firstWhere(
-        (e) => e.value == json['operation'],  
+        (e) => e.value == json['operation'],
         orElse: () => MathOperationType.multiplication,
       ),
       score: json['score'] as int,
@@ -95,7 +95,7 @@ class ScoreRecordModel extends ScoreRecordEntity {
     String? id,
     String? userId,
     GameType? gameType,
-    MathOperationType? operation,  
+    MathOperationType? operation,
     int? score,
     int? correctCount,
     int? wrongAnswers,

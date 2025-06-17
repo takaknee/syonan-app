@@ -9,8 +9,7 @@ class StrategyBattleGameScreen extends StatefulWidget {
   const StrategyBattleGameScreen({super.key});
 
   @override
-  State<StrategyBattleGameScreen> createState() =>
-      _StrategyBattleGameScreenState();
+  State<StrategyBattleGameScreen> createState() => _StrategyBattleGameScreenState();
 }
 
 class _StrategyBattleGameScreenState extends State<StrategyBattleGameScreen> {
@@ -41,15 +40,11 @@ class _StrategyBattleGameScreenState extends State<StrategyBattleGameScreen> {
     });
 
     final duration = DateTime.now().difference(_startTime);
-    final finalScore = _score +
-        (_enemiesDefeated * 100) +
-        (1000 - duration.inSeconds).clamp(0, 1000);
+    final finalScore = _score + (_enemiesDefeated * 100) + (1000 - duration.inSeconds).clamp(0, 1000);
 
     // スコアを記録
-    final miniGameService =
-        Provider.of<MiniGameService>(context, listen: false);
-    miniGameService.recordScore(
-        'strategy_battle', finalScore, MiniGameDifficulty.hard);
+    final miniGameService = Provider.of<MiniGameService>(context, listen: false);
+    miniGameService.recordScore('strategy_battle', finalScore, MiniGameDifficulty.hard);
 
     _showGameCompleteDialog(finalScore);
   }
@@ -120,13 +115,11 @@ class _StrategyBattleGameScreenState extends State<StrategyBattleGameScreen> {
                 children: [
                   Text(
                     'スコア: $_score',
-                    style: const TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   Text(
                     '撃破: $_enemiesDefeated',
-                    style: const TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -145,8 +138,7 @@ class _StrategyBattleGameScreenState extends State<StrategyBattleGameScreen> {
                     const SizedBox(height: 24),
                     const Text(
                       '戦略バトル',
-                      style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 16),
                     const Text(
@@ -160,8 +152,7 @@ class _StrategyBattleGameScreenState extends State<StrategyBattleGameScreen> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF8BC34A),
                         foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 32, vertical: 16),
+                        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                       ),
                       child: const Text('デモスコア獲得'),
                     ),

@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -17,7 +15,6 @@ class NumberPuzzleGameScreen extends StatefulWidget {
 class _NumberPuzzleGameScreenState extends State<NumberPuzzleGameScreen> {
   int _score = 0;
   int _level = 1;
-  bool _isGameStarted = false;
   bool _isGameComplete = false;
   late DateTime _startTime;
 
@@ -29,7 +26,6 @@ class _NumberPuzzleGameScreenState extends State<NumberPuzzleGameScreen> {
 
   void _startGame() {
     setState(() {
-      _isGameStarted = true;
       _startTime = DateTime.now();
       _score = 0;
       _level = 1;
@@ -47,8 +43,10 @@ class _NumberPuzzleGameScreenState extends State<NumberPuzzleGameScreen> {
     final finalScore = _score + (1000 - duration.inSeconds).clamp(0, 1000);
 
     // スコアを記録
-    final miniGameService = Provider.of<MiniGameService>(context, listen: false);
-    miniGameService.recordScore('number_puzzle', finalScore, MiniGameDifficulty.normal);
+    final miniGameService =
+        Provider.of<MiniGameService>(context, listen: false);
+    miniGameService.recordScore(
+        'number_puzzle', finalScore, MiniGameDifficulty.normal);
 
     _showGameCompleteDialog(finalScore);
   }
@@ -90,7 +88,6 @@ class _NumberPuzzleGameScreenState extends State<NumberPuzzleGameScreen> {
   void _restartGame() {
     setState(() {
       _isGameComplete = false;
-      _isGameStarted = false;
     });
     _startGame();
   }
@@ -112,7 +109,7 @@ class _NumberPuzzleGameScreenState extends State<NumberPuzzleGameScreen> {
               width: double.infinity,
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: const Color(0xFF795548).withOpacity(0.1),
+                color: const Color(0xFF795548).withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Row(
@@ -120,11 +117,13 @@ class _NumberPuzzleGameScreenState extends State<NumberPuzzleGameScreen> {
                 children: [
                   Text(
                     'スコア: $_score',
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   Text(
                     'レベル: $_level',
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -143,7 +142,8 @@ class _NumberPuzzleGameScreenState extends State<NumberPuzzleGameScreen> {
                     const SizedBox(height: 24),
                     const Text(
                       '数字パズル',
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 16),
                     const Text(
@@ -157,7 +157,8 @@ class _NumberPuzzleGameScreenState extends State<NumberPuzzleGameScreen> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF795548),
                         foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 32, vertical: 16),
                       ),
                       child: const Text('デモスコア獲得'),
                     ),

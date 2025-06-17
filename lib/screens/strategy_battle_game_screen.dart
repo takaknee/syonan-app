@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -11,13 +9,13 @@ class StrategyBattleGameScreen extends StatefulWidget {
   const StrategyBattleGameScreen({super.key});
 
   @override
-  State<StrategyBattleGameScreen> createState() => _StrategyBattleGameScreenState();
+  State<StrategyBattleGameScreen> createState() =>
+      _StrategyBattleGameScreenState();
 }
 
 class _StrategyBattleGameScreenState extends State<StrategyBattleGameScreen> {
   int _score = 0;
   int _enemiesDefeated = 0;
-  bool _isGameStarted = false;
   bool _isGameComplete = false;
   late DateTime _startTime;
 
@@ -29,7 +27,6 @@ class _StrategyBattleGameScreenState extends State<StrategyBattleGameScreen> {
 
   void _startGame() {
     setState(() {
-      _isGameStarted = true;
       _startTime = DateTime.now();
       _score = 0;
       _enemiesDefeated = 0;
@@ -44,11 +41,15 @@ class _StrategyBattleGameScreenState extends State<StrategyBattleGameScreen> {
     });
 
     final duration = DateTime.now().difference(_startTime);
-    final finalScore = _score + (_enemiesDefeated * 100) + (1000 - duration.inSeconds).clamp(0, 1000);
+    final finalScore = _score +
+        (_enemiesDefeated * 100) +
+        (1000 - duration.inSeconds).clamp(0, 1000);
 
     // スコアを記録
-    final miniGameService = Provider.of<MiniGameService>(context, listen: false);
-    miniGameService.recordScore('strategy_battle', finalScore, MiniGameDifficulty.hard);
+    final miniGameService =
+        Provider.of<MiniGameService>(context, listen: false);
+    miniGameService.recordScore(
+        'strategy_battle', finalScore, MiniGameDifficulty.hard);
 
     _showGameCompleteDialog(finalScore);
   }
@@ -90,7 +91,6 @@ class _StrategyBattleGameScreenState extends State<StrategyBattleGameScreen> {
   void _restartGame() {
     setState(() {
       _isGameComplete = false;
-      _isGameStarted = false;
     });
     _startGame();
   }
@@ -112,7 +112,7 @@ class _StrategyBattleGameScreenState extends State<StrategyBattleGameScreen> {
               width: double.infinity,
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: const Color(0xFF8BC34A).withOpacity(0.1),
+                color: const Color(0xFF8BC34A).withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Row(
@@ -120,11 +120,13 @@ class _StrategyBattleGameScreenState extends State<StrategyBattleGameScreen> {
                 children: [
                   Text(
                     'スコア: $_score',
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   Text(
                     '撃破: $_enemiesDefeated',
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -143,7 +145,8 @@ class _StrategyBattleGameScreenState extends State<StrategyBattleGameScreen> {
                     const SizedBox(height: 24),
                     const Text(
                       '戦略バトル',
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 16),
                     const Text(
@@ -157,7 +160,8 @@ class _StrategyBattleGameScreenState extends State<StrategyBattleGameScreen> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF8BC34A),
                         foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 32, vertical: 16),
                       ),
                       child: const Text('デモスコア獲得'),
                     ),

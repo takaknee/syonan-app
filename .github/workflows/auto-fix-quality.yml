@@ -155,7 +155,27 @@ jobs:
           steps.combined_changes.outputs.any_changes == 'true'
         run: |
           echo "📤 自動修正をプッシュ中..."
-          git push origin HEAD
+          
+          # 現在のブランチ名を取得
+          CURRENT_BRANCH="${{ github.head_ref || github.ref_name }}"
+          echo "対象ブランチ: $CURRENT_BRANCH"
+          
+          # リモートの設定を確認
+          git remote -v
+          
+          # プッシュを実行（force-with-leaseで安全にプッシュ）
+          git push --force-with-lease origin "HEAD:$CURRENT_BRANCH" || {
+            echo "⚠️ プッシュに失敗しました。競合が発生した可能性があります。"
+            echo "🔄 リモートの最新状態を取得してリトライします..."
+            git fetch origin "$CURRENT_BRANCH"
+            git rebase "origin/$CURRENT_BRANCH" || {
+              echo "❌ リベースに失敗しました。手動での解決が必要です。"
+              exit 1
+            }
+            git push origin "HEAD:$CURRENT_BRANCH"
+          }
+          
+          echo "✅ 自動修正のプッシュが完了しました"
 
       - name: 📝 PR結果コメントの投稿
         if: github.event_name == 'pull_request'

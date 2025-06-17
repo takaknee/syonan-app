@@ -15,7 +15,8 @@ class DodgeGameScreen extends StatefulWidget {
   State<DodgeGameScreen> createState() => _DodgeGameScreenState();
 }
 
-class _DodgeGameScreenState extends State<DodgeGameScreen> with TickerProviderStateMixin {
+class _DodgeGameScreenState extends State<DodgeGameScreen>
+    with TickerProviderStateMixin {
   late AnimationController _gameController;
   late AnimationController _explosionController;
 
@@ -92,7 +93,8 @@ class _DodgeGameScreenState extends State<DodgeGameScreen> with TickerProviderSt
   }
 
   void _startObstacleSpawning() {
-    _obstacleTimer = Timer.periodic(Duration(milliseconds: _spawnRate.round()), (timer) {
+    _obstacleTimer =
+        Timer.periodic(Duration(milliseconds: _spawnRate.round()), (timer) {
       if (!_isPlaying) return;
 
       _spawnObstacle();
@@ -107,7 +109,8 @@ class _DodgeGameScreenState extends State<DodgeGameScreen> with TickerProviderSt
 
   void _spawnObstacle() {
     final x = _random.nextDouble();
-    final size = 0.04 + _random.nextDouble() * 0.04; // Random size between 0.04 and 0.08
+    final size =
+        0.04 + _random.nextDouble() * 0.04; // Random size between 0.04 and 0.08
     final speed = _obstacleSpeed + _random.nextDouble() * 1.0;
 
     final colors = [Colors.red, Colors.orange, Colors.yellow, Colors.purple];
@@ -265,15 +268,20 @@ class _DodgeGameScreenState extends State<DodgeGameScreen> with TickerProviderSt
           ),
           ElevatedButton(
             onPressed: () async {
+              // BuildContextを先に取得
+              if (!mounted) return;
+              final navigator = Navigator.of(context);
+              final miniGameService = context.read<MiniGameService>();
+
               // Record score
-              await context.read<MiniGameService>().recordScore(
-                    'dodge_game',
-                    _score,
-                    MiniGameDifficulty.easy,
-                  );
+              await miniGameService.recordScore(
+                'dodge_game',
+                _score,
+                MiniGameDifficulty.easy,
+              );
 
               if (!mounted) return;
-              Navigator.of(context).pop();
+              navigator.pop();
               _resetGame();
             },
             child: const Text('もう一度'),
@@ -336,7 +344,8 @@ class _DodgeGameScreenState extends State<DodgeGameScreen> with TickerProviderSt
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.3)),
+                  border:
+                      Border.all(color: Colors.white.withValues(alpha: 0.3)),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -449,7 +458,8 @@ class _DodgeGameScreenState extends State<DodgeGameScreen> with TickerProviderSt
                       },
                       onTapDown: (details) {
                         if (!_isPlaying) return;
-                        final tapX = details.localPosition.dx / screenSize.width;
+                        final tapX =
+                            details.localPosition.dx / screenSize.width;
                         final deltaX = tapX - _playerX;
                         _movePlayer(deltaX * 0.3); // Smooth movement
                       },
@@ -460,8 +470,10 @@ class _DodgeGameScreenState extends State<DodgeGameScreen> with TickerProviderSt
                           children: [
                             // Obstacles
                             ..._obstacles.map((obstacle) => Positioned(
-                                  left: obstacle.x * screenSize.width - (obstacle.size * screenSize.width / 2),
-                                  top: obstacle.y * (screenSize.height - 200) - (obstacle.size * screenSize.width / 2),
+                                  left: obstacle.x * screenSize.width -
+                                      (obstacle.size * screenSize.width / 2),
+                                  top: obstacle.y * (screenSize.height - 200) -
+                                      (obstacle.size * screenSize.width / 2),
                                   child: Container(
                                     width: obstacle.size * screenSize.width,
                                     height: obstacle.size * screenSize.width,
@@ -470,7 +482,8 @@ class _DodgeGameScreenState extends State<DodgeGameScreen> with TickerProviderSt
                                       shape: BoxShape.circle,
                                       boxShadow: [
                                         BoxShadow(
-                                          color: obstacle.color.withValues(alpha: 0.5),
+                                          color: obstacle.color
+                                              .withValues(alpha: 0.5),
                                           blurRadius: 8,
                                           spreadRadius: 2,
                                         ),
@@ -482,17 +495,25 @@ class _DodgeGameScreenState extends State<DodgeGameScreen> with TickerProviderSt
                             // Player
                             AnimatedPositioned(
                               duration: const Duration(milliseconds: 100),
-                              left: _playerX * screenSize.width - (_playerSize * screenSize.width / 2),
-                              top: _playerY * (screenSize.height - 200) - (_playerSize * screenSize.width / 2),
+                              left: _playerX * screenSize.width -
+                                  (_playerSize * screenSize.width / 2),
+                              top: _playerY * (screenSize.height - 200) -
+                                  (_playerSize * screenSize.width / 2),
                               child: AnimatedBuilder(
                                 animation: _explosionController,
                                 builder: (context, child) {
                                   if (_explosionController.value > 0) {
                                     return Container(
-                                      width: _playerSize * screenSize.width * (1 + _explosionController.value * 2),
-                                      height: _playerSize * screenSize.width * (1 + _explosionController.value * 2),
+                                      width: _playerSize *
+                                          screenSize.width *
+                                          (1 + _explosionController.value * 2),
+                                      height: _playerSize *
+                                          screenSize.width *
+                                          (1 + _explosionController.value * 2),
                                       decoration: BoxDecoration(
-                                        color: Colors.red.withValues(alpha: 1 - _explosionController.value),
+                                        color: Colors.red.withValues(
+                                            alpha:
+                                                1 - _explosionController.value),
                                         shape: BoxShape.circle,
                                       ),
                                     );

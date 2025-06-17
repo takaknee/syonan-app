@@ -1,18 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'core/theme/app_theme.dart';
+import 'presentation/bindings/app_bindings.dart';
+import 'presentation/controllers/math_practice_controller.dart';
 import 'screens/home_screen.dart';
 import 'services/math_service.dart';
 import 'services/mini_game_service.dart';
 import 'services/points_service.dart';
 import 'services/score_service.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
+  // 依存性注入を初期化
+  await AppBindings.init();
+  
   runApp(const SyonanApp());
 }
 
 /// メインアプリケーションクラス
-/// 小学三年生向けの算数学習アプリのエントリーポイント
+/// Clean Architecture + MVVMパターンを採用した小学三年生向けの算数学習アプリ
 class SyonanApp extends StatelessWidget {
   const SyonanApp({super.key});
 
@@ -20,69 +28,21 @@ class SyonanApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        // 算数問題生成サービス
-        Provider<MathService>(create: (context) => MathService()),
-        // スコア管理サービス
-        ChangeNotifierProvider<ScoreService>(
-          create: (context) => ScoreService(),
+        // Clean Architectureベースの新しいコントローラー
+        ChangeNotifierProvider<MathPracticeController>(
+          create: (_) => AppBindings.mathPracticeController,
         ),
-        // ポイントシステム管理サービス
-        ChangeNotifierProvider<PointsService>(
-          create: (context) => PointsService(),
-        ),
-        // ミニゲーム管理サービス
-        ChangeNotifierProvider<MiniGameService>(
-          create: (context) => MiniGameService(),
-        ),
+        
+        // 既存のサービス（段階的に移行するため残しておく）
+        Provider<MathService>(create: (_) => MathService()),
+        ChangeNotifierProvider<ScoreService>(create: (_) => ScoreService()),
+        ChangeNotifierProvider<PointsService>(create: (_) => PointsService()),
+        ChangeNotifierProvider<MiniGameService>(create: (_) => MiniGameService()),
       ],
       child: MaterialApp(
         title: '算数れんしゅう',
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          // Material Design 3を使用した子供向けのカラフルなテーマ
-          useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: Colors.blue,
-          ),
-          // 子供向けの大きめのフォントサイズ
-          textTheme: const TextTheme(
-            headlineLarge: TextStyle(
-              fontSize: 32,
-              fontWeight: FontWeight.bold,
-            ),
-            headlineMedium: TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
-            ),
-            headlineSmall: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-            bodyLarge: TextStyle(fontSize: 18),
-            bodyMedium: TextStyle(fontSize: 16),
-          ),
-          // 子供向けのボタンスタイル（大きめのタッチターゲット）
-          elevatedButtonTheme: ElevatedButtonThemeData(
-            style: ElevatedButton.styleFrom(
-              // 大きめのタッチターゲット
-              minimumSize: const Size(120, 56),
-              textStyle: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-            ),
-          ),
-          // カードの角を丸くして子供向けの優しいデザイン
-          cardTheme: const CardThemeData(
-            elevation: 4,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(16)),
-            ),
-          ),
-        ),
+        theme: AppTheme.lightTheme,
         home: const HomeScreen(),
       ),
     );

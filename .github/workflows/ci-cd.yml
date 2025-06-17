@@ -1,0 +1,154 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  setup:
+    name: Environment Setup
+    runs-on: ubuntu-latest
+    outputs:
+      flutter-available: ${{ steps.flutter.outputs.flutter-available }}
+      flutter-version: ${{ steps.flutter.outputs.flutter-version }}
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup Flutter
+        id: flutter
+        uses: ./.github/actions/setup-flutter
+        with:
+          flutter-version: '3.x'
+          timeout-minutes: '8'
+
+  quality-check:
+    name: Code Quality Check
+    runs-on: ubuntu-latest
+    needs: setup
+    if: needs.setup.outputs.flutter-available == 'true'
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: ./.github/actions/setup-flutter
+        with:
+          flutter-version: '3.x'
+
+      - name: Quality Check
+        id: quality
+        uses: ./.github/actions/flutter-quality-check
+        with:
+          auto-fix: 'false'
+          check-format: 'true'
+          check-analysis: 'true'
+          run-tests: 'true'
+
+      - name: Comment PR
+        if: github.event_name == 'pull_request' && steps.quality.outputs.analysis-issues != '0'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issues = ${{ steps.quality.outputs.analysis-issues }};
+            const formatIssues = ${{ steps.quality.outputs.format-issues }};
+            
+            let message = '## Code Quality Report\n\n';
+            if (formatIssues > 0) {
+              message += `❌ **Formatting Issues**: ${formatIssues} issues found\n`;
+            } else {
+              message += '✅ **Formatting**: No issues\n';
+            }
+            
+            if (issues > 0) {
+              message += `❌ **Analysis Issues**: ${issues} issues found\n`;
+            } else {
+              message += '✅ **Analysis**: No issues\n';
+            }
+            
+            message += '\nPlease fix these issues before merging.';
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: message
+            });
+
+  build-web:
+    name: Build Web App
+    runs-on: ubuntu-latest
+    needs: [setup, quality-check]
+    if: needs.setup.outputs.flutter-available == 'true' && (github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch')
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: ./.github/actions/setup-flutter
+
+      - name: Get Dependencies
+        run: flutter pub get
+
+      - name: Build Web
+        run: |
+          echo "🏗️ Building Flutter web app..."
+          flutter build web --release --web-renderer html --base-href "/syonan-app/"
+
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-build
+          path: build/web/
+          retention-days: 30
+
+  deploy:
+    name: Deploy to GitHub Pages
+    runs-on: ubuntu-latest
+    needs: build-web
+    if: github.ref == 'refs/heads/main'
+    
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    
+    steps:
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: web-build
+          path: ./build
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./build
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

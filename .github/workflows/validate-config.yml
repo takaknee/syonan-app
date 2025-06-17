@@ -1,0 +1,71 @@
+name: Validate Configuration
+
+on:
+  pull_request:
+    paths:
+      - '.github/**'
+      - '.vscode/**'
+      - 'pubspec.yaml'
+      - 'analysis_options.yaml'
+  push:
+    branches: [main]
+    paths:
+      - '.github/**'
+
+jobs:
+  validate:
+    name: Configuration Validation
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate YAML Files
+        run: |
+          echo "🔍 Validating YAML configuration files..."
+          
+          # Check for basic YAML syntax
+          for file in $(find .github -name "*.yml" -o -name "*.yaml"); do
+            echo "Checking: $file"
+            if ! python3 -c "import yaml; yaml.safe_load(open('$file'))" 2>/dev/null; then
+              echo "❌ Invalid YAML syntax in $file"
+              exit 1
+            fi
+          done
+          
+          echo "✅ All YAML files are valid"
+
+      - name: Validate pubspec.yaml
+        if: hashFiles('pubspec.yaml') != ''
+        run: |
+          echo "🔍 Validating pubspec.yaml..."
+          
+          # Check required fields
+          if ! grep -q "name:" pubspec.yaml; then
+            echo "❌ Missing 'name' field in pubspec.yaml"
+            exit 1
+          fi
+          
+          if ! grep -q "version:" pubspec.yaml; then
+            echo "❌ Missing 'version' field in pubspec.yaml"
+            exit 1
+          fi
+          
+          echo "✅ pubspec.yaml is valid"
+
+      - name: Check Workflow Security
+        run: |
+          echo "🔒 Checking workflow security..."
+          
+          # Check for potential security issues
+          if grep -r "secrets\." .github/workflows/ | grep -v "secrets.GITHUB_TOKEN"; then
+            echo "⚠️  Found custom secrets usage - please review for security"
+          fi
+          
+          # Check for write permissions
+          if grep -r "contents: write" .github/workflows/; then
+            echo "⚠️  Found write permissions - ensure they are necessary"
+          fi
+          
+          echo "✅ Basic security check completed"

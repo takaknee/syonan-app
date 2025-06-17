@@ -1,0 +1,159 @@
+name: Auto-Fix Code Quality
+
+on:
+  issue_comment:
+    types: [created]
+  workflow_dispatch:
+    inputs:
+      fix_type:
+        description: 'Type of fixes to apply'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - format
+          - analysis
+          - const
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  auto-fix:
+    name: Apply Automatic Fixes
+    runs-on: ubuntu-latest
+    if: |
+      (github.event_name == 'issue_comment' && 
+       contains(github.event.comment.body, '/auto-fix')) ||
+      github.event_name == 'workflow_dispatch'
+    
+    steps:
+      - name: Parse Fix Type
+        id: parse
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "fix_type=${{ inputs.fix_type }}" >> $GITHUB_OUTPUT
+          else
+            # Parse from comment
+            comment="${{ github.event.comment.body }}"
+            if echo "$comment" | grep -q "/auto-fix format"; then
+              echo "fix_type=format" >> $GITHUB_OUTPUT
+            elif echo "$comment" | grep -q "/auto-fix analysis"; then
+              echo "fix_type=analysis" >> $GITHUB_OUTPUT
+            elif echo "$comment" | grep -q "/auto-fix const"; then
+              echo "fix_type=const" >> $GITHUB_OUTPUT
+            else
+              echo "fix_type=all" >> $GITHUB_OUTPUT
+            fi
+          fi
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Flutter
+        id: flutter
+        uses: ./.github/actions/setup-flutter
+        continue-on-error: true
+
+      - name: Apply Fixes
+        if: steps.flutter.outputs.flutter-available == 'true'
+        uses: ./.github/actions/flutter-quality-check
+        with:
+          auto-fix: 'true'
+          check-format: ${{ steps.parse.outputs.fix_type == 'all' || steps.parse.outputs.fix_type == 'format' }}
+          check-analysis: ${{ steps.parse.outputs.fix_type == 'all' || steps.parse.outputs.fix_type == 'analysis' }}
+          run-tests: 'false'
+
+      - name: Commit Changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          
+          if git diff --quiet; then
+            echo "No changes to commit"
+            echo "has_changes=false" >> $GITHUB_ENV
+          else
+            git add .
+            git commit -m "🤖 Auto-fix: Apply code quality improvements"
+            git push
+            echo "has_changes=true" >> $GITHUB_ENV
+          fi
+
+      - name: Comment Result
+        if: github.event_name == 'issue_comment'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const hasChanges = process.env.has_changes === 'true';
+            const fixType = '${{ steps.parse.outputs.fix_type }}';
+            
+            let message = '## 🤖 Auto-Fix Results\n\n';
+            message += `**Fix Type**: ${fixType}\n`;
+            
+            if (hasChanges) {
+              message += '✅ **Status**: Fixes applied and committed\n';
+              message += '📝 **Changes**: Code quality improvements have been automatically applied\n';
+            } else {
+              message += '✅ **Status**: No fixes needed\n';
+              message += '🎉 **Result**: Code is already in good shape!\n';
+            }
+            
+            message += '\n---\n*Triggered by comment command `/auto-fix`*';
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: message
+            });
+
+  # Fallback job when Flutter is not available
+  basic-fixes:
+    name: Basic Fixes (No Flutter)
+    runs-on: ubuntu-latest
+    if: |
+      (github.event_name == 'issue_comment' && 
+       contains(github.event.comment.body, '/auto-fix')) ||
+      github.event_name == 'workflow_dispatch'
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Flutter
+        id: flutter
+        uses: ./.github/actions/setup-flutter
+        continue-on-error: true
+
+      - name: Apply Basic Fixes
+        if: steps.flutter.outputs.flutter-available != 'true'
+        run: |
+          echo "🔧 Applying basic fixes without Flutter..."
+          
+          # Apply const fixes
+          echo "Adding const modifiers..."
+          find lib -name '*.dart' -exec sed -i 's/\(return \)Text(/\1const Text(/g' {} \; 2>/dev/null || true
+          find lib -name '*.dart' -exec sed -i 's/\(child: \)Text(/\1const Text(/g' {} \; 2>/dev/null || true
+          
+          echo "✅ Basic fixes applied"
+
+      - name: Commit Basic Changes
+        if: steps.flutter.outputs.flutter-available != 'true'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          
+          if git diff --quiet; then
+            echo "No changes to commit"
+          else
+            git add .
+            git commit -m "🤖 Auto-fix: Apply basic code improvements (Flutter unavailable)"
+            git push
+          fi

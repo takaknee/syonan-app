@@ -20,6 +20,9 @@ void main() {
       // Verify practice buttons are present
       expect(find.text('掛け算'), findsOneWidget);
       expect(find.text('割り算'), findsOneWidget);
+
+      // Verify coming soon section is present
+      expect(find.text('近日公開予定'), findsOneWidget);
     });
 
     testWidgets('Practice buttons should be tappable', (
@@ -68,6 +71,44 @@ void main() {
 
       // Should navigate to score history screen - look for the AppBar title
       expect(find.text('スコア履歴'), findsOneWidget);
+    });
+
+    testWidgets('Coming soon cards should be tappable and show dialog', (
+      WidgetTester tester,
+    ) async {
+      // Set up a larger test viewport
+      await tester.binding.setSurfaceSize(const Size(1200, 800));
+
+      await tester.pumpWidget(const SyonanApp());
+
+      // Find the coming soon section by scrolling
+      final scrollable = find.byType(Scrollable);
+      if (scrollable.evaluate().isNotEmpty) {
+        await tester.scrollUntilVisible(
+          find.text('近日公開予定'),
+          300.0,
+          scrollable: scrollable.first,
+        );
+      }
+
+      // Verify coming soon section is visible
+      expect(find.text('近日公開予定'), findsOneWidget);
+
+      // Find one of the coming soon cards (AI先生)
+      final aiTutorCard = find.text('AI先生');
+      if (aiTutorCard.evaluate().isNotEmpty) {
+        await tester.tap(aiTutorCard);
+        await tester.pumpAndSettle();
+
+        // Should show coming soon dialog
+        expect(find.text('AI先生 - 近日公開予定'), findsOneWidget);
+        expect(find.text('この機能は現在開発中です。'), findsOneWidget);
+        expect(find.byIcon(Icons.construction), findsOneWidget);
+
+        // Close the dialog
+        await tester.tap(find.text('楽しみに待ってます！'));
+        await tester.pumpAndSettle();
+      }
     });
 
     testWidgets('App should provide required services', (

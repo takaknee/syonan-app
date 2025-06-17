@@ -5,6 +5,8 @@ enum MiniGameType {
   puzzle,
   rhythm,
   action,
+  strategy,
+  simulation,
 }
 
 /// ミニゲームの難易度
@@ -152,6 +154,36 @@ class AvailableMiniGames {
       pointsCost: 10,
       difficulty: MiniGameDifficulty.easy,
       color: 0xFF2196F3, // Blue
+    ),
+    MiniGame(
+      id: 'number_puzzle',
+      type: MiniGameType.puzzle,
+      name: '数字パズル',
+      description: '数字を使った論理パズルに挑戦！',
+      emoji: '🔢',
+      pointsCost: 12,
+      difficulty: MiniGameDifficulty.normal,
+      color: 0xFF795548, // Brown
+    ),
+    MiniGame(
+      id: 'strategy_battle',
+      type: MiniGameType.strategy,
+      name: '戦略バトル',
+      description: '敵を倒すための戦略を考えよう！',
+      emoji: '⚔️',
+      pointsCost: 18,
+      difficulty: MiniGameDifficulty.hard,
+      color: 0xFF8BC34A, // Light Green
+    ),
+    MiniGame(
+      id: 'city_builder',
+      type: MiniGameType.simulation,
+      name: '街づくり',
+      description: '理想の街を建設しよう！',
+      emoji: '🏙️',
+      pointsCost: 20,
+      difficulty: MiniGameDifficulty.hard,
+      color: 0xFF607D8B, // Blue Grey
     ),
   ];
 

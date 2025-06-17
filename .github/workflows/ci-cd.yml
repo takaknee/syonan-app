@@ -35,7 +35,6 @@ jobs:
         uses: ./.github/actions/setup-flutter
         with:
           flutter-version: '3.x'
-          timeout-minutes: '8'
 
   quality-check:
     name: Code Quality Check

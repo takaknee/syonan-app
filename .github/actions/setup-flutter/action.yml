@@ -10,10 +10,6 @@ inputs:
     description: 'Flutter channel'
     required: false
     default: 'stable'
-  timeout-minutes:
-    description: 'Timeout for setup in minutes'
-    required: false
-    default: '10'
 
 outputs:
   flutter-available:
@@ -37,8 +33,6 @@ runs:
         channel: ${{ inputs.channel }}
         cache: true
       continue-on-error: true
-      timeout-minutes: ${{ fromJSON(inputs.timeout-minutes) }}
-      shell: bash
 
     - name: Manual Flutter Setup (Fallback)
       if: steps.primary.outcome == 'failure'

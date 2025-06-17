@@ -102,9 +102,7 @@ class ScoreRepositoryImpl implements ScoreRepository {
   ) async {
     try {
       final allModels = await _localDataSource.getAllScoreRecords();
-      final filtered = allModels
-          .where((score) => score.difficultyLevel == difficultyLevel)
-          .toList();
+      final filtered = allModels.where((score) => score.difficultyLevel == difficultyLevel).toList();
       return Success(filtered.cast<ScoreRecordEntity>());
     } catch (e) {
       return ResultFailure(DataFailure('難易度別スコアの取得に失敗しました'));
@@ -118,11 +116,8 @@ class ScoreRepositoryImpl implements ScoreRepository {
   ) async {
     try {
       final allModels = await _localDataSource.getAllScoreRecords();
-      final filtered = allModels
-          .where((score) =>
-              score.timestamp.isAfter(startDate) &&
-              score.timestamp.isBefore(endDate))
-          .toList();
+      final filtered =
+          allModels.where((score) => score.timestamp.isAfter(startDate) && score.timestamp.isBefore(endDate)).toList();
       return Success(filtered.cast<ScoreRecordEntity>());
     } catch (e) {
       return ResultFailure(DataFailure('期間別スコアの取得に失敗しました'));
@@ -134,7 +129,7 @@ class ScoreRepositoryImpl implements ScoreRepository {
     try {
       final models = await _localDataSource.getScoreRecordsByOperation(operation);
       if (models.isEmpty) return const Success(0.0);
-      
+
       final total = models.map((s) => s.score).fold(0, (a, b) => a + b);
       final average = total / models.length;
       return Success(average.toDouble());
@@ -158,7 +153,7 @@ class ScoreRepositoryImpl implements ScoreRepository {
     try {
       final models = await _localDataSource.getScoreRecordsByOperation(operation);
       if (models.isEmpty) return const Success(null);
-      
+
       models.sort((a, b) => b.timestamp.compareTo(a.timestamp));
       return Success(models.first);
     } catch (e) {
@@ -171,18 +166,16 @@ class ScoreRepositoryImpl implements ScoreRepository {
     try {
       final allModels = await _localDataSource.getAllScoreRecords();
       if (allModels.isEmpty) return const Success(0);
-      
+
       // 日付でグループ化して連続日数を計算
-      final practicesDays = allModels
-          .map((s) => DateTime(s.timestamp.year, s.timestamp.month, s.timestamp.day))
-          .toSet()
-          .toList();
-      
+      final practicesDays =
+          allModels.map((s) => DateTime(s.timestamp.year, s.timestamp.month, s.timestamp.day)).toSet().toList();
+
       practicesDays.sort((a, b) => b.compareTo(a));
-      
+
       int streak = 0;
       DateTime? lastDate;
-      
+
       for (final date in practicesDays) {
         if (lastDate == null) {
           streak = 1;
@@ -194,7 +187,7 @@ class ScoreRepositoryImpl implements ScoreRepository {
           break;
         }
       }
-      
+
       return Success(streak);
     } catch (e) {
       return ResultFailure(DataFailure('連続練習日数の取得に失敗しました'));
@@ -207,10 +200,10 @@ class ScoreRepositoryImpl implements ScoreRepository {
       final now = DateTime.now();
       final startOfWeek = now.subtract(Duration(days: now.weekday - 1));
       final endOfWeek = startOfWeek.add(const Duration(days: 7));
-      
+
       final result = await getScoresByDateRange(startOfWeek, endOfWeek);
       if (result.isFailure) return ResultFailure(result.failure);
-      
+
       return Success(result.data.length);
     } catch (e) {
       return ResultFailure(DataFailure('週間練習回数の取得に失敗しました'));
@@ -223,10 +216,10 @@ class ScoreRepositoryImpl implements ScoreRepository {
       final now = DateTime.now();
       final startOfMonth = DateTime(now.year, now.month, 1);
       final endOfMonth = DateTime(now.year, now.month + 1, 0);
-      
+
       final result = await getScoresByDateRange(startOfMonth, endOfMonth);
       if (result.isFailure) return ResultFailure(result.failure);
-      
+
       return Success(result.data.length);
     } catch (e) {
       return ResultFailure(DataFailure('月間練習回数の取得に失敗しました'));

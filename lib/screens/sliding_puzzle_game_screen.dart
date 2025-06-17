@@ -207,15 +207,20 @@ class _SlidingPuzzleGameScreenState extends State<SlidingPuzzleGameScreen> with 
           ),
           ElevatedButton(
             onPressed: () async {
+              // BuildContextを先に取得
+              if (!mounted) return;
+              final navigator = Navigator.of(context);
+              final miniGameService = context.read<MiniGameService>();
+
               // Record score
-              await context.read<MiniGameService>().recordScore(
-                    'sliding_puzzle',
-                    score,
-                    MiniGameDifficulty.easy,
-                  );
+              await miniGameService.recordScore(
+                'sliding_puzzle',
+                score,
+                MiniGameDifficulty.easy,
+              );
 
               if (!mounted) return;
-              Navigator.of(context).pop();
+              navigator.pop();
               _resetGame();
             },
             child: const Text('もう一度'),

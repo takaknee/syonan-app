@@ -133,7 +133,7 @@ void main() {
 
   group('AvailableMiniGames', () {
     test('contains all expected games', () {
-      expect(AvailableMiniGames.all.length, 5);
+      expect(AvailableMiniGames.all.length, 8);
 
       final gameIds = AvailableMiniGames.all.map((g) => g.id).toList();
       expect(gameIds, contains('number_memory'));
@@ -141,6 +141,9 @@ void main() {
       expect(gameIds, contains('sliding_puzzle'));
       expect(gameIds, contains('rhythm_tap'));
       expect(gameIds, contains('dodge_game'));
+      expect(gameIds, contains('number_puzzle'));
+      expect(gameIds, contains('strategy_battle'));
+      expect(gameIds, contains('city_builder'));
     });
 
     test('can find games by ID', () {
@@ -181,6 +184,23 @@ void main() {
       expect(dodgeGame!.type, MiniGameType.action);
       expect(dodgeGame.pointsCost, 10);
       expect(dodgeGame.color, 0xFF2196F3);
+    });
+
+    test('new puzzle, strategy and simulation games have correct properties', () {
+      final numberPuzzle = AvailableMiniGames.findById('number_puzzle');
+      expect(numberPuzzle!.type, MiniGameType.puzzle);
+      expect(numberPuzzle.pointsCost, 12);
+      expect(numberPuzzle.color, 0xFF795548);
+
+      final strategyBattle = AvailableMiniGames.findById('strategy_battle');
+      expect(strategyBattle!.type, MiniGameType.strategy);
+      expect(strategyBattle.pointsCost, 18);
+      expect(strategyBattle.color, 0xFF8BC34A);
+
+      final cityBuilder = AvailableMiniGames.findById('city_builder');
+      expect(cityBuilder!.type, MiniGameType.simulation);
+      expect(cityBuilder.pointsCost, 20);
+      expect(cityBuilder.color, 0xFF607D8B);
     });
   });
 }

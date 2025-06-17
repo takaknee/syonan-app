@@ -55,14 +55,14 @@ class MathProblemLocalDataSource {
           operation: operation,
           difficultyLevel: difficultyLevel,
         );
-        
+
         final problemKey = '${problem.firstNumber}_${problem.secondNumber}_${problem.operation.value}';
-        
+
         if (!usedProblems.contains(problemKey)) {
           problems.add(problem);
           usedProblems.add(problemKey);
         }
-        
+
         attempts++;
       }
 
@@ -285,43 +285,67 @@ class MathProblemLocalDataSource {
   /// 操作タイプごとの最大ユニーク問題数を取得
   int _getMaxUniqueProblems(MathOperationType operation, int? difficultyLevel) {
     final level = difficultyLevel ?? 1;
-    
+
     switch (operation) {
       case MathOperationType.multiplication:
         switch (level) {
-          case 1: return 25; // 5 × 5
-          case 2: return 49; // 7 × 7
-          case 3: return 81; // 9 × 9
-          case 4: return 144; // 12 × 12
-          case 5: return 225; // 15 × 15
-          default: return 81;
+          case 1:
+            return 25; // 5 × 5
+          case 2:
+            return 49; // 7 × 7
+          case 3:
+            return 81; // 9 × 9
+          case 4:
+            return 144; // 12 × 12
+          case 5:
+            return 225; // 15 × 15
+          default:
+            return 81;
         }
       case MathOperationType.division:
         switch (level) {
-          case 1: return 25; // 5 × 5
-          case 2: return 49; // 7 × 7
-          case 3: return 81; // 9 × 9
-          case 4: return 144; // 12 × 12
-          case 5: return 225; // 15 × 15
-          default: return 81;
+          case 1:
+            return 25; // 5 × 5
+          case 2:
+            return 49; // 7 × 7
+          case 3:
+            return 81; // 9 × 9
+          case 4:
+            return 144; // 12 × 12
+          case 5:
+            return 225; // 15 × 15
+          default:
+            return 81;
         }
       case MathOperationType.addition:
         switch (level) {
-          case 1: return 400; // 20 × 20
-          case 2: return 2500; // 50 × 50
-          case 3: return 9801; // 99 × 99
-          case 4: return 40000; // 200 × 200
-          case 5: return 250000; // 500 × 500
-          default: return 2500;
+          case 1:
+            return 400; // 20 × 20
+          case 2:
+            return 2500; // 50 × 50
+          case 3:
+            return 9801; // 99 × 99
+          case 4:
+            return 40000; // 200 × 200
+          case 5:
+            return 250000; // 500 × 500
+          default:
+            return 2500;
         }
       case MathOperationType.subtraction:
         switch (level) {
-          case 1: return 400; // 20 × 20
-          case 2: return 2500; // 50 × 50
-          case 3: return 9801; // 99 × 99
-          case 4: return 40000; // 200 × 200
-          case 5: return 250000; // 500 × 500
-          default: return 2500;
+          case 1:
+            return 400; // 20 × 20
+          case 2:
+            return 2500; // 50 × 50
+          case 3:
+            return 9801; // 99 × 99
+          case 4:
+            return 40000; // 200 × 200
+          case 5:
+            return 250000; // 500 × 500
+          default:
+            return 2500;
         }
     }
   }

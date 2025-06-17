@@ -28,6 +28,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
 
       # 複数の方法でFlutterをセットアップ
       - name: Setup Flutter (Primary Method)
@@ -135,7 +138,16 @@ jobs:
             git config --local user.name "GitHub Action"
             git add -A
             git commit -m "chore: Auto-fix code quality issues - Applied automated fixes via precise-auto-fix.sh [skip ci]"
-            git push
+            
+            # 現在のブランチ名を取得
+            CURRENT_BRANCH="${{ github.head_ref || github.ref_name }}"
+            echo "対象ブランチ: $CURRENT_BRANCH"
+            
+            # 安全にプッシュ
+            git push --force-with-lease origin "HEAD:$CURRENT_BRANCH" || {
+              echo "⚠️ プッシュに失敗しました - 自動修正をスキップします"
+              exit 0
+            }
             echo "✅ 自動修正をコミットしました"
           else
             echo "ℹ️ 自動修正による変更はありませんでした"

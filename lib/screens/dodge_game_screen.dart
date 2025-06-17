@@ -265,15 +265,20 @@ class _DodgeGameScreenState extends State<DodgeGameScreen> with TickerProviderSt
           ),
           ElevatedButton(
             onPressed: () async {
+              // BuildContextを先に取得
+              if (!mounted) return;
+              final navigator = Navigator.of(context);
+              final miniGameService = context.read<MiniGameService>();
+
               // Record score
-              await context.read<MiniGameService>().recordScore(
-                    'dodge_game',
-                    _score,
-                    MiniGameDifficulty.easy,
-                  );
+              await miniGameService.recordScore(
+                'dodge_game',
+                _score,
+                MiniGameDifficulty.easy,
+              );
 
               if (!mounted) return;
-              Navigator.of(context).pop();
+              navigator.pop();
               _resetGame();
             },
             child: const Text('もう一度'),

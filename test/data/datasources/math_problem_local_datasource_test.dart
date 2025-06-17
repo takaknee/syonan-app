@@ -84,10 +84,9 @@ void main() {
 
         // Assert
         expect(problems, hasLength(5));
-        
+
         // Check uniqueness
-        final problemKeys = problems.map((p) => 
-          '${p.firstNumber}_${p.secondNumber}_${p.operation.value}').toSet();
+        final problemKeys = problems.map((p) => '${p.firstNumber}_${p.secondNumber}_${p.operation.value}').toSet();
         expect(problemKeys, hasLength(5));
       });
 
@@ -102,7 +101,7 @@ void main() {
         // Assert - 最大25個まで生成される（5×5の組み合わせ）
         expect(problems.length, lessThanOrEqualTo(25));
         expect(problems.length, greaterThan(0));
-        
+
         // すべてレベル1の問題であることを確認
         for (final problem in problems) {
           expect(problem.difficultyLevel, 1);
@@ -121,7 +120,7 @@ void main() {
 
         // Assert - レベル3では最大81個（9×9）まで可能
         expect(problems.length, 50);
-        
+
         // すべてレベル3の問題であることを確認
         for (final problem in problems) {
           expect(problem.difficultyLevel, 3);
@@ -142,7 +141,7 @@ void main() {
 
           // Assert
           expect(problem.difficultyLevel, level);
-          
+
           // Check number ranges based on difficulty
           switch (level) {
             case 1:

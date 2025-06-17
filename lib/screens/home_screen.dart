@@ -12,13 +12,16 @@ import '../widgets/points_card.dart';
 import '../widgets/practice_button.dart';
 import '../widgets/stat_card.dart';
 import 'achievements_screen.dart';
+import 'city_builder_game_screen.dart';
 import 'dodge_game_screen.dart';
 import 'number_memory_game_screen.dart';
+import 'number_puzzle_game_screen.dart';
 import 'practice_screen.dart';
 import 'rhythm_tap_game_screen.dart';
 import 'score_history_screen.dart';
 import 'sliding_puzzle_game_screen.dart';
 import 'speed_math_game_screen.dart';
+import 'strategy_battle_game_screen.dart';
 
 /// ホーム画面
 /// アプリのメイン画面で、練習選択とスコア概要を表示
@@ -282,6 +285,45 @@ class _HomeScreenState extends State<HomeScreen> {
               playCount: miniGameService.getPlayCount('dodge_game'),
               bestScore: miniGameService.getBestScore('dodge_game'),
               onTap: () => _startMiniGame('dodge_game', pointsService),
+            ),
+          ),
+        ),
+        const SizedBox(height: 12),
+        // Fourth row - Advanced puzzle games
+        Row(
+          children: [
+            Expanded(
+              child: MiniGameButton(
+                miniGame: AvailableMiniGames.all.firstWhere((game) => game.id == 'number_puzzle'),
+                hasEnoughPoints: pointsService.totalPoints >= 12,
+                playCount: miniGameService.getPlayCount('number_puzzle'),
+                bestScore: miniGameService.getBestScore('number_puzzle'),
+                onTap: () => _startMiniGame('number_puzzle', pointsService),
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: MiniGameButton(
+                miniGame: AvailableMiniGames.all.firstWhere((game) => game.id == 'strategy_battle'),
+                hasEnoughPoints: pointsService.totalPoints >= 18,
+                playCount: miniGameService.getPlayCount('strategy_battle'),
+                bestScore: miniGameService.getBestScore('strategy_battle'),
+                onTap: () => _startMiniGame('strategy_battle', pointsService),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        // Fifth row - Simulation game (centered)
+        Center(
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width * 0.45,
+            child: MiniGameButton(
+              miniGame: AvailableMiniGames.all.firstWhere((game) => game.id == 'city_builder'),
+              hasEnoughPoints: pointsService.totalPoints >= 20,
+              playCount: miniGameService.getPlayCount('city_builder'),
+              bestScore: miniGameService.getBestScore('city_builder'),
+              onTap: () => _startMiniGame('city_builder', pointsService),
             ),
           ),
         ),
@@ -737,6 +779,15 @@ class _HomeScreenState extends State<HomeScreen> {
         break;
       case 'dodge_game':
         gameScreen = const DodgeGameScreen();
+        break;
+      case 'number_puzzle':
+        gameScreen = const NumberPuzzleGameScreen();
+        break;
+      case 'strategy_battle':
+        gameScreen = const StrategyBattleGameScreen();
+        break;
+      case 'city_builder':
+        gameScreen = const CityBuilderGameScreen();
         break;
       default:
         return;

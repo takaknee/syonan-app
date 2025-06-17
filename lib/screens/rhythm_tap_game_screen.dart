@@ -296,15 +296,20 @@ class _RhythmTapGameScreenState extends State<RhythmTapGameScreen> with TickerPr
           ),
           ElevatedButton(
             onPressed: () async {
+              // BuildContextを先に取得
+              if (!mounted) return;
+              final navigator = Navigator.of(context);
+              final miniGameService = context.read<MiniGameService>();
+
               // Record score
-              await context.read<MiniGameService>().recordScore(
-                    'rhythm_tap',
-                    _score,
-                    MiniGameDifficulty.normal,
-                  );
+              await miniGameService.recordScore(
+                'rhythm_tap',
+                _score,
+                MiniGameDifficulty.normal,
+              );
 
               if (!mounted) return;
-              Navigator.of(context).pop();
+              navigator.pop();
               _resetGame();
             },
             child: const Text('もう一度'),

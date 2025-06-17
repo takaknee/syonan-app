@@ -19,7 +19,7 @@ class MathProblemRepositoryImpl implements MathProblemRepository {
         operation: operation,
         difficultyLevel: difficultyLevel,
       );
-      
+
       return Success(problemModel.toEntity());
     } catch (e) {
       return ResultFailure(
@@ -40,9 +40,9 @@ class MathProblemRepositoryImpl implements MathProblemRepository {
         count: count,
         difficultyLevel: difficultyLevel,
       );
-      
+
       final entities = problemModels.map((model) => model.toEntity()).toList();
-      
+
       return Success(entities);
     } catch (e) {
       return ResultFailure(

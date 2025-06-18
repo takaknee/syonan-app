@@ -9,20 +9,25 @@ import '../services/points_service.dart';
 import '../services/score_service.dart';
 import '../utils/build_info.dart';
 import '../widgets/coming_soon_card.dart';
+import '../widgets/feature_card.dart';
 import '../widgets/mini_game_button.dart';
 import '../widgets/points_card.dart';
 import '../widgets/practice_button.dart';
 import '../widgets/stat_card.dart';
 import 'achievements_screen.dart';
+import 'ai_tutor_screen.dart';
 import 'city_builder_game_screen.dart';
 import 'dodge_game_screen.dart';
+import 'multiplayer_battle_screen.dart';
 import 'number_memory_game_screen.dart';
 import 'number_puzzle_game_screen.dart';
+import 'parent_dashboard_screen.dart';
 import 'practice_screen.dart';
 import 'rhythm_tap_game_screen.dart';
 import 'score_history_screen.dart';
 import 'sliding_puzzle_game_screen.dart';
 import 'speed_math_game_screen.dart';
+import 'story_mode_screen.dart';
 import 'strategy_battle_game_screen.dart';
 
 /// ホーム画面
@@ -82,8 +87,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         theme, pointsService, miniGameService),
                     const SizedBox(height: 32),
 
-                    // 近日公開予定
-                    _buildComingSoonSection(theme),
+                    // 新機能
+                    _buildFeaturesSection(theme),
                     const SizedBox(height: 32),
 
                     // 統計情報
@@ -352,19 +357,19 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildComingSoonSection(ThemeData theme) {
+  Widget _buildFeaturesSection(ThemeData theme) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '近日公開予定',
+          '新機能',
           style: theme.textTheme.headlineMedium?.copyWith(
             color: theme.colorScheme.primary,
           ),
         ),
         const SizedBox(height: 8),
         Text(
-          '楽しい新機能が続々と登場予定です！',
+          '楽しい学習機能を使ってみましょう！',
           style: theme.textTheme.bodySmall?.copyWith(
             color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
             fontStyle: FontStyle.italic,
@@ -375,18 +380,24 @@ class _HomeScreenState extends State<HomeScreen> {
         Row(
           children: [
             Expanded(
-              child: ComingSoonCard(
+              child: FeatureCard(
                 feature: ComingSoonFeatures.all
                     .firstWhere((feature) => feature.id == 'ai_tutor'),
-                onTap: () => _showComingSoonDialog('AI先生'),
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const AiTutorScreen()),
+                ),
               ),
             ),
             const SizedBox(width: 16),
             Expanded(
-              child: ComingSoonCard(
+              child: FeatureCard(
                 feature: ComingSoonFeatures.all.firstWhere(
                     (feature) => feature.id == 'multiplayer_battle'),
-                onTap: () => _showComingSoonDialog('みんなでバトル'),
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const MultiplayerBattleScreen()),
+                ),
               ),
             ),
           ],
@@ -396,18 +407,24 @@ class _HomeScreenState extends State<HomeScreen> {
         Row(
           children: [
             Expanded(
-              child: ComingSoonCard(
+              child: FeatureCard(
                 feature: ComingSoonFeatures.all
                     .firstWhere((feature) => feature.id == 'story_mode'),
-                onTap: () => _showComingSoonDialog('ストーリーモード'),
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const StoryModeScreen()),
+                ),
               ),
             ),
             const SizedBox(width: 16),
             Expanded(
-              child: ComingSoonCard(
+              child: FeatureCard(
                 feature: ComingSoonFeatures.all
                     .firstWhere((feature) => feature.id == 'parent_dashboard'),
-                onTap: () => _showComingSoonDialog('保護者ダッシュボード'),
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ParentDashboardScreen()),
+                ),
               ),
             ),
           ],
@@ -755,73 +772,6 @@ class _HomeScreenState extends State<HomeScreen> {
           foregroundColor: color,
           minimumSize: const Size(double.infinity, 60),
         ),
-      ),
-    );
-  }
-
-  void _showComingSoonDialog(String featureName) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Row(
-          children: [
-            Icon(Icons.schedule, color: Theme.of(context).colorScheme.primary),
-            const SizedBox(width: 8),
-            Expanded(child: Text('$featureName - 近日公開予定')),
-          ],
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Icons.construction,
-              size: 64,
-              color:
-                  Theme.of(context).colorScheme.primary.withValues(alpha: 0.7),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'この機能は現在開発中です。\n近日中にリリース予定ですので、\nお楽しみにお待ちください！',
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            const SizedBox(height: 16),
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primaryContainer,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.info_outline,
-                    size: 20,
-                    color: Theme.of(context).colorScheme.onPrimaryContainer,
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      '今後のアップデートで追加される予定です',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onPrimaryContainer,
-                          ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('楽しみに待ってます！'),
-          ),
-        ],
       ),
     );
   }

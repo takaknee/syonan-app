@@ -21,8 +21,8 @@ void main() {
       expect(find.text('掛け算'), findsOneWidget);
       expect(find.text('割り算'), findsOneWidget);
 
-      // Verify coming soon section is present
-      expect(find.text('近日公開予定'), findsOneWidget);
+      // Verify features section is present
+      expect(find.text('新機能'), findsOneWidget);
     });
 
     testWidgets('Practice buttons should be tappable', (
@@ -73,7 +73,7 @@ void main() {
       expect(find.text('スコア履歴'), findsOneWidget);
     });
 
-    testWidgets('Coming soon cards should be tappable and show dialog', (
+    testWidgets('Feature cards should be tappable and navigate to screens', (
       WidgetTester tester,
     ) async {
       // Set up a larger test viewport
@@ -81,32 +81,30 @@ void main() {
 
       await tester.pumpWidget(const SyonanApp());
 
-      // Find the coming soon section by scrolling
+      // Find the features section by scrolling
       final scrollable = find.byType(Scrollable);
       if (scrollable.evaluate().isNotEmpty) {
         await tester.scrollUntilVisible(
-          find.text('近日公開予定'),
+          find.text('新機能'),
           300.0,
           scrollable: scrollable.first,
         );
       }
 
-      // Verify coming soon section is visible
-      expect(find.text('近日公開予定'), findsOneWidget);
+      // Verify features section is visible
+      expect(find.text('新機能'), findsOneWidget);
 
-      // Find one of the coming soon cards (AI先生)
+      // Find one of the feature cards (AI先生)
       final aiTutorCard = find.text('AI先生');
       if (aiTutorCard.evaluate().isNotEmpty) {
         await tester.tap(aiTutorCard);
         await tester.pumpAndSettle();
 
-        // Should show coming soon dialog
-        expect(find.text('AI先生 - 近日公開予定'), findsOneWidget);
-        expect(find.text('この機能は現在開発中です。'), findsOneWidget);
-        expect(find.byIcon(Icons.construction), findsOneWidget);
-
-        // Close the dialog
-        await tester.tap(find.text('楽しみに待ってます！'));
+        // Should navigate to AI Tutor screen - look for the AppBar title
+        expect(find.text('🤖 AI先生'), findsOneWidget);
+        
+        // Go back to home screen
+        await tester.tap(find.byType(BackButton));
         await tester.pumpAndSettle();
       }
     });

@@ -26,11 +26,11 @@ class AppUtils {
     final seconds = duration.inSeconds.remainder(60);
 
     if (hours > 0) {
-      return '${hours}時間${minutes}分${seconds}秒';
+      return '$hours時間$minutes分$seconds秒';
     } else if (minutes > 0) {
-      return '${minutes}分${seconds}秒';
+      return '$minutes分$seconds秒';
     } else {
-      return '${seconds}秒';
+      return '$seconds秒';
     }
   }
 
@@ -45,11 +45,11 @@ class AppUtils {
       final man = number ~/ 10000;
       final remainder = number % 10000;
       if (remainder == 0) {
-        return '${man}万';
+        return '$man万';
       } else if (remainder >= 1000) {
-        return '${man}万${remainder ~/ 1000}千';
+        return '$man万${remainder ~/ 1000}千';
       } else {
-        return '${man}万${remainder}';
+        return '$man万$remainder';
       }
     } else if (number >= 1000) {
       return '${number ~/ 1000}千${number % 1000}';
@@ -67,7 +67,7 @@ class AppUtils {
     } else if (difference == 1) {
       return '昨日';
     } else if (difference < 7) {
-      return '${difference}日前';
+      return '$difference日前';
     } else if (difference < 30) {
       return '${difference ~/ 7}週間前';
     } else {
@@ -80,7 +80,8 @@ class AppUtils {
     final List<List<T>> chunks = [];
     for (int i = 0; i < list.length; i += chunkSize) {
       chunks.add(
-        list.sublist(i, i + chunkSize > list.length ? list.length : i + chunkSize),
+        list.sublist(
+            i, i + chunkSize > list.length ? list.length : i + chunkSize),
       );
     }
     return chunks;

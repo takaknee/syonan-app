@@ -8,7 +8,10 @@ abstract class Failure {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is Failure && runtimeType == other.runtimeType && message == other.message && code == other.code;
+      other is Failure &&
+          runtimeType == other.runtimeType &&
+          message == other.message &&
+          code == other.code;
 
   @override
   int get hashCode => message.hashCode ^ code.hashCode;
@@ -44,5 +47,5 @@ class GameFailure extends Failure {
 
 /// 一般的なエラー
 class UnknownFailure extends Failure {
-  const UnknownFailure([String message = '不明なエラーが発生しました']) : super(message);
+  const UnknownFailure([super.message = '不明なエラーが発生しました']);
 }

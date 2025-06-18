@@ -55,7 +55,10 @@ class MiniGameEntity {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) || other is MiniGameEntity && runtimeType == other.runtimeType && id == other.id;
+      identical(this, other) ||
+      other is MiniGameEntity &&
+          runtimeType == other.runtimeType &&
+          id == other.id;
 
   @override
   int get hashCode => id.hashCode;
@@ -107,13 +110,17 @@ class MiniGameScoreEntity {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) || other is MiniGameScoreEntity && runtimeType == other.runtimeType && id == other.id;
+      identical(this, other) ||
+      other is MiniGameScoreEntity &&
+          runtimeType == other.runtimeType &&
+          id == other.id;
 
   @override
   int get hashCode => id.hashCode;
 
   @override
-  String toString() => 'MiniGameScoreEntity(id: $id, gameId: $gameId, score: $score)';
+  String toString() =>
+      'MiniGameScoreEntity(id: $id, gameId: $gameId, score: $score)';
 
   /// エンティティをコピーして新しいインスタンスを作成
   MiniGameScoreEntity copyWith({

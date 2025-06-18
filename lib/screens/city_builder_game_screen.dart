@@ -42,11 +42,16 @@ class _CityBuilderGameScreenState extends State<CityBuilderGameScreen> {
     });
 
     final duration = DateTime.now().difference(_startTime);
-    final finalScore = _score + (_population * 10) + (_buildings * 50) + (1000 - duration.inSeconds).clamp(0, 1000);
+    final finalScore = _score +
+        (_population * 10) +
+        (_buildings * 50) +
+        (1000 - duration.inSeconds).clamp(0, 1000);
 
     // スコアを記録
-    final miniGameService = Provider.of<MiniGameService>(context, listen: false);
-    miniGameService.recordScore('city_builder', finalScore, MiniGameDifficulty.hard);
+    final miniGameService =
+        Provider.of<MiniGameService>(context, listen: false);
+    miniGameService.recordScore(
+        'city_builder', finalScore, MiniGameDifficulty.hard);
 
     _showGameCompleteDialog(finalScore);
   }
@@ -125,7 +130,8 @@ class _CityBuilderGameScreenState extends State<CityBuilderGameScreen> {
                       ),
                       Text(
                         '$_score',
-                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
@@ -137,7 +143,8 @@ class _CityBuilderGameScreenState extends State<CityBuilderGameScreen> {
                       ),
                       Text(
                         '$_population',
-                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
@@ -149,7 +156,8 @@ class _CityBuilderGameScreenState extends State<CityBuilderGameScreen> {
                       ),
                       Text(
                         '$_buildings',
-                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
@@ -170,7 +178,8 @@ class _CityBuilderGameScreenState extends State<CityBuilderGameScreen> {
                     const SizedBox(height: 24),
                     const Text(
                       '街づくり',
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 16),
                     const Text(
@@ -184,7 +193,8 @@ class _CityBuilderGameScreenState extends State<CityBuilderGameScreen> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF607D8B),
                         foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 32, vertical: 16),
                       ),
                       child: const Text('デモスコア獲得'),
                     ),

@@ -1,5 +1,5 @@
-import '../entities/math_problem_entity.dart';
 import '../../core/errors/failures.dart';
+import '../entities/math_problem_entity.dart';
 
 /// Either-likeな結果を表現するクラス
 abstract class Result<T> {
@@ -16,13 +16,21 @@ abstract class Result<T> {
 }
 
 class Success<T> extends Result<T> {
-  final T data;
-  const Success(this.data);
+  final T _data;
+
+  const Success(this._data);
+
+  @override
+  T get data => _data;
 }
 
 class ResultFailure<T> extends Result<T> {
-  final Failure failure;
-  const ResultFailure(this.failure);
+  final Failure _failure;
+
+  ResultFailure(this._failure);
+
+  @override
+  Failure get failure => _failure;
 }
 
 /// 算数問題リポジトリの抽象クラス

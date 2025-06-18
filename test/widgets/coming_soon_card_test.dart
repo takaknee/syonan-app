@@ -34,6 +34,12 @@ void main() {
       // Check if the description is displayed
       expect(find.text('テスト用の機能です'), findsOneWidget);
 
+      // Test tap functionality
+      await tester.tap(find.byType(ComingSoonCard));
+      await tester.pump();
+
+      expect(wasTapped, isTrue);
+
       // Check if the emoji is displayed
       expect(find.text('🧪'), findsOneWidget);
 
@@ -68,7 +74,8 @@ void main() {
       expect(wasTapped, true);
     });
 
-    testWidgets('should not display expected release when null', (tester) async {
+    testWidgets('should not display expected release when null',
+        (tester) async {
       const featureWithoutRelease = ComingSoonFeature(
         id: 'test_feature',
         name: 'テスト機能',

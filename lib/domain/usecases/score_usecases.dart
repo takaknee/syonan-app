@@ -1,7 +1,7 @@
-import '../entities/score_record_entity.dart';
-import '../repositories/score_repository.dart';
-import '../repositories/math_problem_repository.dart';
 import '../../core/errors/failures.dart';
+import '../entities/score_record_entity.dart';
+import '../repositories/math_problem_repository.dart';
+import '../repositories/score_repository.dart';
 
 /// スコア保存のユースケース
 class SaveScoreUseCase {
@@ -13,19 +13,19 @@ class SaveScoreUseCase {
   Future<Result<void>> call(ScoreRecordEntity score) async {
     // 入力検証
     if (score.totalCount <= 0) {
-      return const ResultFailure(
+      return ResultFailure(
         ValidationFailure('総問題数は1以上である必要があります'),
       );
     }
 
     if (score.correctCount < 0 || score.correctCount > score.totalCount) {
-      return const ResultFailure(
+      return ResultFailure(
         ValidationFailure('正答数が無効です'),
       );
     }
 
     if (score.accuracy < 0.0 || score.accuracy > 1.0) {
-      return const ResultFailure(
+      return ResultFailure(
         ValidationFailure('正答率は0.0～1.0の範囲である必要があります'),
       );
     }
@@ -77,7 +77,7 @@ class GetScoresUseCase {
   ) async {
     // 入力検証
     if (startDate.isAfter(endDate)) {
-      return const ResultFailure(
+      return ResultFailure(
         ValidationFailure('開始日は終了日より前である必要があります'),
       );
     }
@@ -110,7 +110,8 @@ class GetScoreStatisticsUseCase {
   }
 
   /// 最高スコアを取得する
-  Future<Result<ScoreRecordEntity?>> getBestScore(MathOperationType operation) async {
+  Future<Result<ScoreRecordEntity?>> getBestScore(
+      MathOperationType operation) async {
     try {
       return await _repository.getBestScore(operation);
     } catch (e) {

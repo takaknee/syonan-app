@@ -1,6 +1,6 @@
+import '../../core/errors/failures.dart';
 import '../../domain/entities/math_problem_entity.dart';
 import '../../domain/repositories/math_problem_repository.dart';
-import '../../core/errors/failures.dart';
 import '../datasources/math_problem_local_datasource.dart';
 
 /// 算数問題リポジトリの実装
@@ -91,7 +91,8 @@ class MathProblemRepositoryImpl implements MathProblemRepository {
   }
 
   @override
-  Future<Result<Map<MathOperationType, int>>> getMaxProblemsPerOperation() async {
+  Future<Result<Map<MathOperationType, int>>>
+      getMaxProblemsPerOperation() async {
     try {
       const maxProblems = {
         MathOperationType.multiplication: 81,
@@ -102,7 +103,7 @@ class MathProblemRepositoryImpl implements MathProblemRepository {
       return Success(maxProblems);
     } catch (e) {
       return ResultFailure(
-        DataFailure('最大問題数の取得に失敗しました: ${e.toString()}'),
+        DataFailure('最大問題数の取得に失敗しました'),
       );
     }
   }

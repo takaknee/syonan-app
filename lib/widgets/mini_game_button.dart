@@ -80,9 +80,12 @@ class MiniGameButton extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
-                  color: hasEnoughPoints ? gameColor.withValues(alpha: 0.1) : Colors.grey.withValues(alpha: 0.1),
+                  color: hasEnoughPoints
+                      ? gameColor.withValues(alpha: 0.1)
+                      : Colors.grey.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
                     color: hasEnoughPoints ? gameColor : Colors.grey,
@@ -121,7 +124,8 @@ class MiniGameButton extends StatelessWidget {
                     Text(
                       '$playCount回',
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                        color:
+                            theme.colorScheme.onSurface.withValues(alpha: 0.6),
                       ),
                     ),
                     if (bestScore > 0) ...[
@@ -129,13 +133,15 @@ class MiniGameButton extends StatelessWidget {
                       Icon(
                         Icons.emoji_events,
                         size: 14,
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                        color:
+                            theme.colorScheme.onSurface.withValues(alpha: 0.6),
                       ),
                       const SizedBox(width: 2),
                       Text(
                         '最高: $bestScore',
                         style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                          color: theme.colorScheme.onSurface
+                              .withValues(alpha: 0.6),
                         ),
                       ),
                     ],

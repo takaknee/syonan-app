@@ -15,7 +15,8 @@ class NumberMemoryGameScreen extends StatefulWidget {
   State<NumberMemoryGameScreen> createState() => _NumberMemoryGameScreenState();
 }
 
-class _NumberMemoryGameScreenState extends State<NumberMemoryGameScreen> with TickerProviderStateMixin {
+class _NumberMemoryGameScreenState extends State<NumberMemoryGameScreen>
+    with TickerProviderStateMixin {
   late AnimationController _fadeController;
   late AnimationController _scaleController;
 
@@ -57,7 +58,8 @@ class _NumberMemoryGameScreenState extends State<NumberMemoryGameScreen> with Ti
   }
 
   void _generateSequence() {
-    _sequence = List.generate(_currentLevel + 2, (index) => _random.nextInt(10));
+    _sequence =
+        List.generate(_currentLevel + 2, (index) => _random.nextInt(10));
   }
 
   void _showSequence() async {
@@ -330,8 +332,11 @@ class _NumberMemoryGameScreenState extends State<NumberMemoryGameScreen> with Ti
             AnimatedBuilder(
               animation: _fadeController,
               builder: (context, child) {
-                final currentIndex = (_fadeController.value * _sequence.length).floor();
-                final displayNumber = currentIndex < _sequence.length ? _sequence[currentIndex].toString() : '';
+                final currentIndex =
+                    (_fadeController.value * _sequence.length).floor();
+                final displayNumber = currentIndex < _sequence.length
+                    ? _sequence[currentIndex].toString()
+                    : '';
 
                 return Container(
                   width: 120,
@@ -414,7 +419,8 @@ class _NumberMemoryGameScreenState extends State<NumberMemoryGameScreen> with Ti
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 if (row < 3)
-                  for (int col = 0; col < 3; col++) _buildNumberButton(row * 3 + col + 1, theme)
+                  for (int col = 0; col < 3; col++)
+                    _buildNumberButton(row * 3 + col + 1, theme)
                 else ...[
                   _buildDeleteButton(theme),
                   _buildNumberButton(0, theme),

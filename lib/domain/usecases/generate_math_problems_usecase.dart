@@ -1,6 +1,6 @@
+import '../../core/errors/failures.dart';
 import '../entities/math_problem_entity.dart';
 import '../repositories/math_problem_repository.dart';
-import '../../core/errors/failures.dart';
 
 /// 算数問題生成のユースケース
 class GenerateMathProblemsUseCase {
@@ -16,19 +16,20 @@ class GenerateMathProblemsUseCase {
   }) async {
     // 入力検証
     if (count <= 0) {
-      return const ResultFailure(
+      return ResultFailure(
         ValidationFailure('問題数は1以上である必要があります'),
       );
     }
 
     if (count > 50) {
-      return const ResultFailure(
+      return ResultFailure(
         ValidationFailure('問題数は50以下である必要があります'),
       );
     }
 
-    if (difficultyLevel != null && (difficultyLevel < 1 || difficultyLevel > 5)) {
-      return const ResultFailure(
+    if (difficultyLevel != null &&
+        (difficultyLevel < 1 || difficultyLevel > 5)) {
+      return ResultFailure(
         ValidationFailure('難易度レベルは1～5の範囲である必要があります'),
       );
     }
@@ -59,8 +60,9 @@ class GenerateSingleMathProblemUseCase {
     int? difficultyLevel,
   }) async {
     // 入力検証
-    if (difficultyLevel != null && (difficultyLevel < 1 || difficultyLevel > 5)) {
-      return const ResultFailure(
+    if (difficultyLevel != null &&
+        (difficultyLevel < 1 || difficultyLevel > 5)) {
+      return ResultFailure(
         ValidationFailure('難易度レベルは1～5の範囲である必要があります'),
       );
     }

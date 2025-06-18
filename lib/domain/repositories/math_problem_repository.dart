@@ -16,18 +16,16 @@ abstract class Result<T> {
 }
 
 class Success<T> extends Result<T> {
-  final T _data;
-
   const Success(this._data);
+  final T _data;
 
   @override
   T get data => _data;
 }
 
 class ResultFailure<T> extends Result<T> {
-  final Failure _failure;
-
   ResultFailure(this._failure);
+  final Failure _failure;
 
   @override
   Failure get failure => _failure;

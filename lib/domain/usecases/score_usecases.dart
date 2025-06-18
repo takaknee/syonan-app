@@ -5,28 +5,27 @@ import '../repositories/score_repository.dart';
 
 /// スコア保存のユースケース
 class SaveScoreUseCase {
-  final ScoreRepository _repository;
-
   const SaveScoreUseCase(this._repository);
+  final ScoreRepository _repository;
 
   /// スコアを保存する
   Future<Result<void>> call(ScoreRecordEntity score) async {
     // 入力検証
     if (score.totalCount <= 0) {
       return ResultFailure(
-        ValidationFailure('総問題数は1以上である必要があります'),
+        const ValidationFailure('総問題数は1以上である必要があります'),
       );
     }
 
     if (score.correctCount < 0 || score.correctCount > score.totalCount) {
       return ResultFailure(
-        ValidationFailure('正答数が無効です'),
+        const ValidationFailure('正答数が無効です'),
       );
     }
 
     if (score.accuracy < 0.0 || score.accuracy > 1.0) {
       return ResultFailure(
-        ValidationFailure('正答率は0.0～1.0の範囲である必要があります'),
+        const ValidationFailure('正答率は0.0～1.0の範囲である必要があります'),
       );
     }
 
@@ -42,9 +41,8 @@ class SaveScoreUseCase {
 
 /// スコア取得のユースケース
 class GetScoresUseCase {
-  final ScoreRepository _repository;
-
   const GetScoresUseCase(this._repository);
+  final ScoreRepository _repository;
 
   /// すべてのスコアを取得する
   Future<Result<List<ScoreRecordEntity>>> getAllScores() async {
@@ -78,7 +76,7 @@ class GetScoresUseCase {
     // 入力検証
     if (startDate.isAfter(endDate)) {
       return ResultFailure(
-        ValidationFailure('開始日は終了日より前である必要があります'),
+        const ValidationFailure('開始日は終了日より前である必要があります'),
       );
     }
 
@@ -94,9 +92,8 @@ class GetScoresUseCase {
 
 /// スコア統計取得のユースケース
 class GetScoreStatisticsUseCase {
-  final ScoreRepository _repository;
-
   const GetScoreStatisticsUseCase(this._repository);
+  final ScoreRepository _repository;
 
   /// 平均スコアを取得する
   Future<Result<double>> getAverageScore(MathOperationType operation) async {
@@ -110,8 +107,7 @@ class GetScoreStatisticsUseCase {
   }
 
   /// 最高スコアを取得する
-  Future<Result<ScoreRecordEntity?>> getBestScore(
-      MathOperationType operation) async {
+  Future<Result<ScoreRecordEntity?>> getBestScore(MathOperationType operation) async {
     try {
       return await _repository.getBestScore(operation);
     } catch (e) {

@@ -5,9 +5,8 @@ import '../datasources/math_problem_local_datasource.dart';
 
 /// 算数問題リポジトリの実装
 class MathProblemRepositoryImpl implements MathProblemRepository {
-  final MathProblemLocalDataSource _localDataSource;
-
   const MathProblemRepositoryImpl(this._localDataSource);
+  final MathProblemLocalDataSource _localDataSource;
 
   @override
   Future<Result<MathProblemEntity>> generateProblem({
@@ -91,8 +90,7 @@ class MathProblemRepositoryImpl implements MathProblemRepository {
   }
 
   @override
-  Future<Result<Map<MathOperationType, int>>>
-      getMaxProblemsPerOperation() async {
+  Future<Result<Map<MathOperationType, int>>> getMaxProblemsPerOperation() async {
     try {
       const maxProblems = {
         MathOperationType.multiplication: 81,
@@ -100,10 +98,10 @@ class MathProblemRepositoryImpl implements MathProblemRepository {
         MathOperationType.addition: 2000,
         MathOperationType.subtraction: 2000,
       };
-      return Success(maxProblems);
+      return const Success(maxProblems);
     } catch (e) {
       return ResultFailure(
-        DataFailure('最大問題数の取得に失敗しました'),
+        const DataFailure('最大問題数の取得に失敗しました'),
       );
     }
   }

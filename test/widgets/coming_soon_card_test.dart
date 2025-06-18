@@ -74,8 +74,7 @@ void main() {
       expect(wasTapped, true);
     });
 
-    testWidgets('should not display expected release when null',
-        (tester) async {
+    testWidgets('should not display expected release when null', (tester) async {
       const featureWithoutRelease = ComingSoonFeature(
         id: 'test_feature',
         name: 'テスト機能',

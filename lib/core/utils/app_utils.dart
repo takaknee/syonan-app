@@ -80,8 +80,7 @@ class AppUtils {
     final List<List<T>> chunks = [];
     for (int i = 0; i < list.length; i += chunkSize) {
       chunks.add(
-        list.sublist(
-            i, i + chunkSize > list.length ? list.length : i + chunkSize),
+        list.sublist(i, i + chunkSize > list.length ? list.length : i + chunkSize),
       );
     }
     return chunks;

@@ -24,7 +24,8 @@ class ProblemCard extends StatelessWidget {
   /// 視覚的補助が必要かどうかを判定
   bool _shouldShowVisualAid(MathProblem problem) {
     // 小さい数（10以下）の足し算と引き算のみ視覚的補助を表示
-    return (problem.operation == MathOperationType.addition || problem.operation == MathOperationType.subtraction) &&
+    return (problem.operation == MathOperationType.addition ||
+            problem.operation == MathOperationType.subtraction) &&
         problem.firstNumber <= 10 &&
         problem.secondNumber <= 10;
   }

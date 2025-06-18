@@ -1,17 +1,17 @@
 import 'dart:math';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../core/errors/exceptions.dart';
 import '../../core/constants/app_constants.dart';
-import '../models/math_problem_model.dart';
+import '../../core/errors/exceptions.dart';
 import '../../domain/entities/math_problem_entity.dart';
+import '../models/math_problem_model.dart';
 
 /// 算数問題のローカルデータソース
 class MathProblemLocalDataSource {
+  MathProblemLocalDataSource(this._prefs);
   final SharedPreferences _prefs;
   final Random _random = Random();
-
-  MathProblemLocalDataSource(this._prefs);
 
   /// 問題を生成する
   MathProblemModel generateProblem({

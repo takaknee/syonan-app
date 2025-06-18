@@ -10,7 +10,6 @@ class AppTheme {
       useMaterial3: true,
       colorScheme: ColorScheme.fromSeed(
         seedColor: _primaryColor,
-        brightness: Brightness.light,
       ),
       textTheme: _textTheme,
       elevatedButtonTheme: _elevatedButtonTheme,

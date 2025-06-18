@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../models/coming_soon_feature.dart';
 import '../models/math_problem.dart';
 import '../models/mini_game.dart';
 import '../services/mini_game_service.dart';
 import '../services/points_service.dart';
 import '../services/score_service.dart';
 import '../utils/build_info.dart';
+import '../widgets/coming_soon_card.dart';
 import '../widgets/mini_game_button.dart';
 import '../widgets/points_card.dart';
 import '../widgets/practice_button.dart';
@@ -54,7 +56,9 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
       body: SafeArea(
-        child: scoreService.isLoading || pointsService.isLoading || miniGameService.isLoading
+        child: scoreService.isLoading ||
+                pointsService.isLoading ||
+                miniGameService.isLoading
             ? const Center(child: CircularProgressIndicator())
             : SingleChildScrollView(
                 padding: const EdgeInsets.all(20),
@@ -74,7 +78,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     const SizedBox(height: 32),
 
                     // ミニゲーム
-                    _buildMiniGamesSection(theme, pointsService, miniGameService),
+                    _buildMiniGamesSection(
+                        theme, pointsService, miniGameService),
+                    const SizedBox(height: 32),
+
+                    // 近日公開予定
+                    _buildComingSoonSection(theme),
                     const SizedBox(height: 32),
 
                     // 統計情報
@@ -156,7 +165,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 icon: Icons.close,
                 color: Colors.blue,
                 onTap: () => _startPractice(MathOperationType.multiplication),
-                onLongPress: () => _showDifficultyDialog(MathOperationType.multiplication),
+                onLongPress: () =>
+                    _showDifficultyDialog(MathOperationType.multiplication),
               ),
             ),
             const SizedBox(width: 16),
@@ -167,7 +177,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 icon: Icons.more_horiz,
                 color: Colors.green,
                 onTap: () => _startPractice(MathOperationType.division),
-                onLongPress: () => _showDifficultyDialog(MathOperationType.division),
+                onLongPress: () =>
+                    _showDifficultyDialog(MathOperationType.division),
               ),
             ),
           ],
@@ -182,7 +193,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 icon: Icons.add,
                 color: Colors.orange,
                 onTap: () => _startPractice(MathOperationType.addition),
-                onLongPress: () => _showDifficultyDialog(MathOperationType.addition),
+                onLongPress: () =>
+                    _showDifficultyDialog(MathOperationType.addition),
               ),
             ),
             const SizedBox(width: 16),
@@ -193,7 +205,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 icon: Icons.remove,
                 color: Colors.purple,
                 onTap: () => _startPractice(MathOperationType.subtraction),
-                onLongPress: () => _showDifficultyDialog(MathOperationType.subtraction),
+                onLongPress: () =>
+                    _showDifficultyDialog(MathOperationType.subtraction),
               ),
             ),
           ],
@@ -230,7 +243,8 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Expanded(
               child: MiniGameButton(
-                miniGame: AvailableMiniGames.all.firstWhere((game) => game.id == 'number_memory'),
+                miniGame: AvailableMiniGames.all
+                    .firstWhere((game) => game.id == 'number_memory'),
                 hasEnoughPoints: pointsService.totalPoints >= 10,
                 playCount: miniGameService.getPlayCount('number_memory'),
                 bestScore: miniGameService.getBestScore('number_memory'),
@@ -240,7 +254,8 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(width: 16),
             Expanded(
               child: MiniGameButton(
-                miniGame: AvailableMiniGames.all.firstWhere((game) => game.id == 'speed_math'),
+                miniGame: AvailableMiniGames.all
+                    .firstWhere((game) => game.id == 'speed_math'),
                 hasEnoughPoints: pointsService.totalPoints >= 15,
                 playCount: miniGameService.getPlayCount('speed_math'),
                 bestScore: miniGameService.getBestScore('speed_math'),
@@ -255,7 +270,8 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Expanded(
               child: MiniGameButton(
-                miniGame: AvailableMiniGames.all.firstWhere((game) => game.id == 'sliding_puzzle'),
+                miniGame: AvailableMiniGames.all
+                    .firstWhere((game) => game.id == 'sliding_puzzle'),
                 hasEnoughPoints: pointsService.totalPoints >= 8,
                 playCount: miniGameService.getPlayCount('sliding_puzzle'),
                 bestScore: miniGameService.getBestScore('sliding_puzzle'),
@@ -265,7 +281,8 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(width: 16),
             Expanded(
               child: MiniGameButton(
-                miniGame: AvailableMiniGames.all.firstWhere((game) => game.id == 'rhythm_tap'),
+                miniGame: AvailableMiniGames.all
+                    .firstWhere((game) => game.id == 'rhythm_tap'),
                 hasEnoughPoints: pointsService.totalPoints >= 12,
                 playCount: miniGameService.getPlayCount('rhythm_tap'),
                 bestScore: miniGameService.getBestScore('rhythm_tap'),
@@ -280,7 +297,8 @@ class _HomeScreenState extends State<HomeScreen> {
           child: SizedBox(
             width: MediaQuery.of(context).size.width * 0.45,
             child: MiniGameButton(
-              miniGame: AvailableMiniGames.all.firstWhere((game) => game.id == 'dodge_game'),
+              miniGame: AvailableMiniGames.all
+                  .firstWhere((game) => game.id == 'dodge_game'),
               hasEnoughPoints: pointsService.totalPoints >= 10,
               playCount: miniGameService.getPlayCount('dodge_game'),
               bestScore: miniGameService.getBestScore('dodge_game'),
@@ -294,7 +312,8 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Expanded(
               child: MiniGameButton(
-                miniGame: AvailableMiniGames.all.firstWhere((game) => game.id == 'number_puzzle'),
+                miniGame: AvailableMiniGames.all
+                    .firstWhere((game) => game.id == 'number_puzzle'),
                 hasEnoughPoints: pointsService.totalPoints >= 12,
                 playCount: miniGameService.getPlayCount('number_puzzle'),
                 bestScore: miniGameService.getBestScore('number_puzzle'),
@@ -304,7 +323,8 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(width: 16),
             Expanded(
               child: MiniGameButton(
-                miniGame: AvailableMiniGames.all.firstWhere((game) => game.id == 'strategy_battle'),
+                miniGame: AvailableMiniGames.all
+                    .firstWhere((game) => game.id == 'strategy_battle'),
                 hasEnoughPoints: pointsService.totalPoints >= 18,
                 playCount: miniGameService.getPlayCount('strategy_battle'),
                 bestScore: miniGameService.getBestScore('strategy_battle'),
@@ -319,13 +339,78 @@ class _HomeScreenState extends State<HomeScreen> {
           child: SizedBox(
             width: MediaQuery.of(context).size.width * 0.45,
             child: MiniGameButton(
-              miniGame: AvailableMiniGames.all.firstWhere((game) => game.id == 'city_builder'),
+              miniGame: AvailableMiniGames.all
+                  .firstWhere((game) => game.id == 'city_builder'),
               hasEnoughPoints: pointsService.totalPoints >= 20,
               playCount: miniGameService.getPlayCount('city_builder'),
               bestScore: miniGameService.getBestScore('city_builder'),
               onTap: () => _startMiniGame('city_builder', pointsService),
             ),
           ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildComingSoonSection(ThemeData theme) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '近日公開予定',
+          style: theme.textTheme.headlineMedium?.copyWith(
+            color: theme.colorScheme.primary,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          '楽しい新機能が続々と登場予定です！',
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+            fontStyle: FontStyle.italic,
+          ),
+        ),
+        const SizedBox(height: 16),
+        // First row
+        Row(
+          children: [
+            Expanded(
+              child: ComingSoonCard(
+                feature: ComingSoonFeatures.all
+                    .firstWhere((feature) => feature.id == 'ai_tutor'),
+                onTap: () => _showComingSoonDialog('AI先生'),
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: ComingSoonCard(
+                feature: ComingSoonFeatures.all.firstWhere(
+                    (feature) => feature.id == 'multiplayer_battle'),
+                onTap: () => _showComingSoonDialog('みんなでバトル'),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        // Second row
+        Row(
+          children: [
+            Expanded(
+              child: ComingSoonCard(
+                feature: ComingSoonFeatures.all
+                    .firstWhere((feature) => feature.id == 'story_mode'),
+                onTap: () => _showComingSoonDialog('ストーリーモード'),
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: ComingSoonCard(
+                feature: ComingSoonFeatures.all
+                    .firstWhere((feature) => feature.id == 'parent_dashboard'),
+                onTap: () => _showComingSoonDialog('保護者ダッシュボード'),
+              ),
+            ),
+          ],
         ),
       ],
     );
@@ -670,6 +755,73 @@ class _HomeScreenState extends State<HomeScreen> {
           foregroundColor: color,
           minimumSize: const Size(double.infinity, 60),
         ),
+      ),
+    );
+  }
+
+  void _showComingSoonDialog(String featureName) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Row(
+          children: [
+            Icon(Icons.schedule, color: Theme.of(context).colorScheme.primary),
+            const SizedBox(width: 8),
+            Expanded(child: Text('$featureName - 近日公開予定')),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.construction,
+              size: 64,
+              color:
+                  Theme.of(context).colorScheme.primary.withValues(alpha: 0.7),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              'この機能は現在開発中です。\n近日中にリリース予定ですので、\nお楽しみにお待ちください！',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primaryContainer,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.info_outline,
+                    size: 20,
+                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      '今後のアップデートで追加される予定です',
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onPrimaryContainer,
+                          ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('楽しみに待ってます！'),
+          ),
+        ],
       ),
     );
   }

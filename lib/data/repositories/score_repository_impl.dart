@@ -1,15 +1,14 @@
-import '../../domain/entities/score_record_entity.dart';
-import '../../domain/repositories/score_repository.dart';
-import '../../domain/repositories/math_problem_repository.dart'; // Result型のために必要
 import '../../core/errors/failures.dart';
+import '../../domain/entities/score_record_entity.dart';
+import '../../domain/repositories/math_problem_repository.dart'; // Result型のために必要
+import '../../domain/repositories/score_repository.dart';
 import '../datasources/score_record_local_datasource.dart';
 import '../models/score_record_model.dart';
 
 /// スコア記録のリポジトリ実装
 class ScoreRepositoryImpl implements ScoreRepository {
-  final ScoreRecordLocalDataSource _localDataSource;
-
   ScoreRepositoryImpl(this._localDataSource);
+  final ScoreRecordLocalDataSource _localDataSource;
 
   @override
   Future<Result<void>> saveScore(ScoreRecordEntity scoreRecord) async {
@@ -18,7 +17,7 @@ class ScoreRepositoryImpl implements ScoreRepository {
       await _localDataSource.saveScoreRecord(model);
       return const Success(null);
     } catch (e) {
-      return ResultFailure(DataFailure('スコアの保存に失敗しました'));
+      return ResultFailure(const DataFailure('スコアの保存に失敗しました'));
     }
   }
 
@@ -28,7 +27,7 @@ class ScoreRepositoryImpl implements ScoreRepository {
       final models = await _localDataSource.getAllScoreRecords();
       return Success(models.cast<ScoreRecordEntity>());
     } catch (e) {
-      return ResultFailure(DataFailure('スコアの取得に失敗しました'));
+      return ResultFailure(const DataFailure('スコアの取得に失敗しました'));
     }
   }
 
@@ -38,7 +37,7 @@ class ScoreRepositoryImpl implements ScoreRepository {
       final models = await _localDataSource.getScoreRecordsByUser(userId);
       return Success(models.cast<ScoreRecordEntity>());
     } catch (e) {
-      return ResultFailure(DataFailure('ユーザー別スコアの取得に失敗しました'));
+      return ResultFailure(const DataFailure('ユーザー別スコアの取得に失敗しました'));
     }
   }
 
@@ -54,7 +53,7 @@ class ScoreRepositoryImpl implements ScoreRepository {
       );
       return Success(models.cast<ScoreRecordEntity>());
     } catch (e) {
-      return ResultFailure(DataFailure('ゲームタイプ別スコアの取得に失敗しました'));
+      return ResultFailure(const DataFailure('ゲームタイプ別スコアの取得に失敗しました'));
     }
   }
 
@@ -70,7 +69,7 @@ class ScoreRepositoryImpl implements ScoreRepository {
       );
       return Success(models.cast<ScoreRecordEntity>());
     } catch (e) {
-      return ResultFailure(DataFailure('最新スコアの取得に失敗しました'));
+      return ResultFailure(const DataFailure('最新スコアの取得に失敗しました'));
     }
   }
 
@@ -80,7 +79,7 @@ class ScoreRepositoryImpl implements ScoreRepository {
       final stats = await _localDataSource.getScoreStatistics(userId: userId);
       return Success(stats);
     } catch (e) {
-      return ResultFailure(DataFailure('スコア統計の取得に失敗しました'));
+      return ResultFailure(const DataFailure('スコア統計の取得に失敗しました'));
     }
   }
 
@@ -92,7 +91,7 @@ class ScoreRepositoryImpl implements ScoreRepository {
       final models = await _localDataSource.getScoreRecordsByOperation(operation);
       return Success(models.cast<ScoreRecordEntity>());
     } catch (e) {
-      return ResultFailure(DataFailure('操作タイプ別スコアの取得に失敗しました'));
+      return ResultFailure(const DataFailure('操作タイプ別スコアの取得に失敗しました'));
     }
   }
 
@@ -105,7 +104,7 @@ class ScoreRepositoryImpl implements ScoreRepository {
       final filtered = allModels.where((score) => score.difficultyLevel == difficultyLevel).toList();
       return Success(filtered.cast<ScoreRecordEntity>());
     } catch (e) {
-      return ResultFailure(DataFailure('難易度別スコアの取得に失敗しました'));
+      return ResultFailure(const DataFailure('難易度別スコアの取得に失敗しました'));
     }
   }
 
@@ -120,7 +119,7 @@ class ScoreRepositoryImpl implements ScoreRepository {
           allModels.where((score) => score.timestamp.isAfter(startDate) && score.timestamp.isBefore(endDate)).toList();
       return Success(filtered.cast<ScoreRecordEntity>());
     } catch (e) {
-      return ResultFailure(DataFailure('期間別スコアの取得に失敗しました'));
+      return ResultFailure(const DataFailure('期間別スコアの取得に失敗しました'));
     }
   }
 
@@ -134,7 +133,7 @@ class ScoreRepositoryImpl implements ScoreRepository {
       final average = total / models.length;
       return Success(average.toDouble());
     } catch (e) {
-      return ResultFailure(DataFailure('平均スコアの取得に失敗しました'));
+      return ResultFailure(const DataFailure('平均スコアの取得に失敗しました'));
     }
   }
 
@@ -144,7 +143,7 @@ class ScoreRepositoryImpl implements ScoreRepository {
       final model = await _localDataSource.getBestScore(operation: operation);
       return Success(model);
     } catch (e) {
-      return ResultFailure(DataFailure('ベストスコアの取得に失敗しました'));
+      return ResultFailure(const DataFailure('ベストスコアの取得に失敗しました'));
     }
   }
 
@@ -157,7 +156,7 @@ class ScoreRepositoryImpl implements ScoreRepository {
       models.sort((a, b) => b.timestamp.compareTo(a.timestamp));
       return Success(models.first);
     } catch (e) {
-      return ResultFailure(DataFailure('最新スコアの取得に失敗しました'));
+      return ResultFailure(const DataFailure('最新スコアの取得に失敗しました'));
     }
   }
 
@@ -190,7 +189,7 @@ class ScoreRepositoryImpl implements ScoreRepository {
 
       return Success(streak);
     } catch (e) {
-      return ResultFailure(DataFailure('連続練習日数の取得に失敗しました'));
+      return ResultFailure(const DataFailure('連続練習日数の取得に失敗しました'));
     }
   }
 
@@ -206,7 +205,7 @@ class ScoreRepositoryImpl implements ScoreRepository {
 
       return Success(result.data.length);
     } catch (e) {
-      return ResultFailure(DataFailure('週間練習回数の取得に失敗しました'));
+      return ResultFailure(const DataFailure('週間練習回数の取得に失敗しました'));
     }
   }
 
@@ -214,7 +213,7 @@ class ScoreRepositoryImpl implements ScoreRepository {
   Future<Result<int>> getMonthlyPracticeCount() async {
     try {
       final now = DateTime.now();
-      final startOfMonth = DateTime(now.year, now.month, 1);
+      final startOfMonth = DateTime(now.year, now.month);
       final endOfMonth = DateTime(now.year, now.month + 1, 0);
 
       final result = await getScoresByDateRange(startOfMonth, endOfMonth);
@@ -222,7 +221,7 @@ class ScoreRepositoryImpl implements ScoreRepository {
 
       return Success(result.data.length);
     } catch (e) {
-      return ResultFailure(DataFailure('月間練習回数の取得に失敗しました'));
+      return ResultFailure(const DataFailure('月間練習回数の取得に失敗しました'));
     }
   }
 
@@ -232,7 +231,7 @@ class ScoreRepositoryImpl implements ScoreRepository {
       await _localDataSource.deleteScoreRecord(scoreId);
       return const Success(null);
     } catch (e) {
-      return ResultFailure(DataFailure('スコアの削除に失敗しました'));
+      return ResultFailure(const DataFailure('スコアの削除に失敗しました'));
     }
   }
 
@@ -242,7 +241,7 @@ class ScoreRepositoryImpl implements ScoreRepository {
       await _localDataSource.clearAllScoreRecords();
       return const Success(null);
     } catch (e) {
-      return ResultFailure(DataFailure('スコアのクリアに失敗しました'));
+      return ResultFailure(const DataFailure('スコアのクリアに失敗しました'));
     }
   }
 }

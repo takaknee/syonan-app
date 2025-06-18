@@ -17,7 +17,8 @@ void main() {
     });
 
     test('should record score correctly', () async {
-      await miniGameService.recordScore('number_memory', 100, MiniGameDifficulty.easy);
+      await miniGameService.recordScore(
+          'number_memory', 100, MiniGameDifficulty.easy);
 
       expect(miniGameService.scores.length, 1);
       expect(miniGameService.scores.first.gameId, 'number_memory');
@@ -27,18 +28,24 @@ void main() {
     });
 
     test('should get best score correctly', () async {
-      await miniGameService.recordScore('number_memory', 50, MiniGameDifficulty.easy);
-      await miniGameService.recordScore('number_memory', 100, MiniGameDifficulty.easy);
-      await miniGameService.recordScore('number_memory', 75, MiniGameDifficulty.easy);
+      await miniGameService.recordScore(
+          'number_memory', 50, MiniGameDifficulty.easy);
+      await miniGameService.recordScore(
+          'number_memory', 100, MiniGameDifficulty.easy);
+      await miniGameService.recordScore(
+          'number_memory', 75, MiniGameDifficulty.easy);
 
       expect(miniGameService.getBestScore('number_memory'), 100);
       expect(miniGameService.getPlayCount('number_memory'), 3);
     });
 
     test('should get average score correctly', () async {
-      await miniGameService.recordScore('speed_math', 60, MiniGameDifficulty.normal);
-      await miniGameService.recordScore('speed_math', 80, MiniGameDifficulty.normal);
-      await miniGameService.recordScore('speed_math', 100, MiniGameDifficulty.normal);
+      await miniGameService.recordScore(
+          'speed_math', 60, MiniGameDifficulty.normal);
+      await miniGameService.recordScore(
+          'speed_math', 80, MiniGameDifficulty.normal);
+      await miniGameService.recordScore(
+          'speed_math', 100, MiniGameDifficulty.normal);
 
       expect(miniGameService.getAverageScore('speed_math'), 80.0);
     });
@@ -52,8 +59,10 @@ void main() {
     test('should get recent scores correctly', () async {
       // Record multiple scores
       for (int i = 0; i < 10; i++) {
-        await miniGameService.recordScore('number_memory', i * 10, MiniGameDifficulty.easy);
-        await Future.delayed(const Duration(milliseconds: 1)); // Ensure different timestamps
+        await miniGameService.recordScore(
+            'number_memory', i * 10, MiniGameDifficulty.easy);
+        await Future.delayed(
+            const Duration(milliseconds: 1)); // Ensure different timestamps
       }
 
       final recentScores = miniGameService.getRecentScores('number_memory');
@@ -64,8 +73,10 @@ void main() {
     });
 
     test('should calculate overall stats correctly', () async {
-      await miniGameService.recordScore('number_memory', 100, MiniGameDifficulty.easy);
-      await miniGameService.recordScore('speed_math', 200, MiniGameDifficulty.normal);
+      await miniGameService.recordScore(
+          'number_memory', 100, MiniGameDifficulty.easy);
+      await miniGameService.recordScore(
+          'speed_math', 200, MiniGameDifficulty.normal);
 
       final stats = miniGameService.getOverallStats();
       expect(stats['totalGamesPlayed'], 2);
@@ -75,7 +86,8 @@ void main() {
     });
 
     test('should clear all data correctly', () async {
-      await miniGameService.recordScore('number_memory', 100, MiniGameDifficulty.easy);
+      await miniGameService.recordScore(
+          'number_memory', 100, MiniGameDifficulty.easy);
       expect(miniGameService.scores.length, 1);
       expect(miniGameService.getPlayCount('number_memory'), 1);
 

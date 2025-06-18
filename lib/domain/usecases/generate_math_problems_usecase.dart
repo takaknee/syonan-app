@@ -1,12 +1,11 @@
+import '../../core/errors/failures.dart';
 import '../entities/math_problem_entity.dart';
 import '../repositories/math_problem_repository.dart';
-import '../../core/errors/failures.dart';
 
 /// 算数問題生成のユースケース
 class GenerateMathProblemsUseCase {
-  final MathProblemRepository _repository;
-
   const GenerateMathProblemsUseCase(this._repository);
+  final MathProblemRepository _repository;
 
   /// 複数の問題を生成する
   Future<Result<List<MathProblemEntity>>> call({
@@ -16,20 +15,20 @@ class GenerateMathProblemsUseCase {
   }) async {
     // 入力検証
     if (count <= 0) {
-      return const ResultFailure(
-        ValidationFailure('問題数は1以上である必要があります'),
+      return ResultFailure(
+        const ValidationFailure('問題数は1以上である必要があります'),
       );
     }
 
     if (count > 50) {
-      return const ResultFailure(
-        ValidationFailure('問題数は50以下である必要があります'),
+      return ResultFailure(
+        const ValidationFailure('問題数は50以下である必要があります'),
       );
     }
 
     if (difficultyLevel != null && (difficultyLevel < 1 || difficultyLevel > 5)) {
-      return const ResultFailure(
-        ValidationFailure('難易度レベルは1～5の範囲である必要があります'),
+      return ResultFailure(
+        const ValidationFailure('難易度レベルは1～5の範囲である必要があります'),
       );
     }
 
@@ -49,9 +48,8 @@ class GenerateMathProblemsUseCase {
 
 /// 単一の算数問題生成のユースケース
 class GenerateSingleMathProblemUseCase {
-  final MathProblemRepository _repository;
-
   const GenerateSingleMathProblemUseCase(this._repository);
+  final MathProblemRepository _repository;
 
   /// 単一の問題を生成する
   Future<Result<MathProblemEntity>> call({
@@ -60,8 +58,8 @@ class GenerateSingleMathProblemUseCase {
   }) async {
     // 入力検証
     if (difficultyLevel != null && (difficultyLevel < 1 || difficultyLevel > 5)) {
-      return const ResultFailure(
-        ValidationFailure('難易度レベルは1～5の範囲である必要があります'),
+      return ResultFailure(
+        const ValidationFailure('難易度レベルは1～5の範囲である必要があります'),
       );
     }
 
@@ -80,9 +78,8 @@ class GenerateSingleMathProblemUseCase {
 
 /// 問題設定取得のユースケース
 class GetProblemSettingsUseCase {
-  final MathProblemRepository _repository;
-
   const GetProblemSettingsUseCase(this._repository);
+  final MathProblemRepository _repository;
 
   /// 問題設定を取得する
   Future<Result<Map<String, dynamic>>> call() async {
@@ -98,9 +95,8 @@ class GetProblemSettingsUseCase {
 
 /// 問題統計取得のユースケース
 class GetProblemStatisticsUseCase {
-  final MathProblemRepository _repository;
-
   const GetProblemStatisticsUseCase(this._repository);
+  final MathProblemRepository _repository;
 
   /// 問題統計を取得する
   Future<Result<Map<String, dynamic>>> call() async {

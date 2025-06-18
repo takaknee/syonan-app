@@ -27,7 +27,8 @@ void main() {
           timeSpent: const Duration(minutes: 5),
         );
 
-        final earnedPoints = await pointsService.addPointsFromScore(scoreRecord);
+        final earnedPoints =
+            await pointsService.addPointsFromScore(scoreRecord);
 
         // 基本ポイント(10) + 正答率ボーナス(10) + excellentボーナス(15) +
         // パーフェクトボーナス(20) + 演算ボーナス(5) + 問題数ボーナス(0) +
@@ -46,7 +47,8 @@ void main() {
           timeSpent: const Duration(minutes: 5),
         );
 
-        final earnedPoints = await pointsService.addPointsFromScore(scoreRecord);
+        final earnedPoints =
+            await pointsService.addPointsFromScore(scoreRecord);
 
         // 基本ポイント(10) + 正答率ボーナス(8) + goodボーナス(10) + 演算ボーナス(5) = 33
         expect(earnedPoints, 33);
@@ -63,14 +65,16 @@ void main() {
           timeSpent: const Duration(minutes: 5),
         );
 
-        final earnedPoints = await pointsService.addPointsFromScore(scoreRecord);
+        final earnedPoints =
+            await pointsService.addPointsFromScore(scoreRecord);
 
         // 基本ポイント(10) + 正答率ボーナス(7) + fairボーナス(5) + 演算ボーナス(2) = 24
         expect(earnedPoints, 24);
         expect(pointsService.totalPoints, 24);
       });
 
-      test('should calculate correct points for needs practice score', () async {
+      test('should calculate correct points for needs practice score',
+          () async {
         final scoreRecord = ScoreRecord(
           id: 'test_4',
           date: DateTime.now(),
@@ -80,7 +84,8 @@ void main() {
           timeSpent: const Duration(minutes: 5),
         );
 
-        final earnedPoints = await pointsService.addPointsFromScore(scoreRecord);
+        final earnedPoints =
+            await pointsService.addPointsFromScore(scoreRecord);
 
         // 基本ポイント(10) + 正答率ボーナス(5) + needsPracticeボーナス(0) + 演算ボーナス(3) = 18
         expect(earnedPoints, 18);
@@ -123,7 +128,8 @@ void main() {
           timeSpent: const Duration(seconds: 80), // 8秒/問 = 時間ボーナス獲得
         );
 
-        final earnedPoints = await pointsService.addPointsFromScore(scoreRecord);
+        final earnedPoints =
+            await pointsService.addPointsFromScore(scoreRecord);
 
         // 基本(10) + 正答率(10) + excellent(15) + パーフェクト(20) + 演算(5) + 時間(10) = 70
         expect(earnedPoints, 70);
@@ -139,7 +145,8 @@ void main() {
           timeSpent: const Duration(minutes: 10),
         );
 
-        final earnedPoints = await pointsService.addPointsFromScore(scoreRecord);
+        final earnedPoints =
+            await pointsService.addPointsFromScore(scoreRecord);
 
         // 基本(10) + 正答率(9) + good(10) + 演算(2) + 問題数(10) = 41
         expect(earnedPoints, 41);
@@ -156,7 +163,8 @@ void main() {
           timeSpent: const Duration(minutes: 5),
         );
 
-        final additionPoints = await pointsService.addPointsFromScore(additionScore);
+        final additionPoints =
+            await pointsService.addPointsFromScore(additionScore);
         await pointsService.addPoints(-additionPoints); // リセット
 
         // ひき算のテスト
@@ -169,7 +177,8 @@ void main() {
           timeSpent: const Duration(minutes: 5),
         );
 
-        final subtractionPoints = await pointsService.addPointsFromScore(subtractionScore);
+        final subtractionPoints =
+            await pointsService.addPointsFromScore(subtractionScore);
 
         // ひき算の方がたし算より1ポイント多い（3 vs 2）
         expect(subtractionPoints, additionPoints + 1);
@@ -180,16 +189,19 @@ void main() {
       test('should unlock achievement when sufficient points', () async {
         await pointsService.addPoints(100);
 
-        final success = await pointsService.unlockAchievement('fun_badge_rainbow');
+        final success =
+            await pointsService.unlockAchievement('fun_badge_rainbow');
         expect(success, true);
         expect(pointsService.totalPoints, 75); // 100 - 25 = 75
         expect(pointsService.hasAchievement('fun_badge_rainbow'), true);
       });
 
-      test('should fail to unlock achievement when insufficient points', () async {
+      test('should fail to unlock achievement when insufficient points',
+          () async {
         await pointsService.addPoints(10);
 
-        final success = await pointsService.unlockAchievement('fun_badge_rainbow');
+        final success =
+            await pointsService.unlockAchievement('fun_badge_rainbow');
         expect(success, false);
         expect(pointsService.totalPoints, 10);
         expect(pointsService.hasAchievement('fun_badge_rainbow'), false);
@@ -199,12 +211,14 @@ void main() {
         await pointsService.addPoints(100);
 
         // First unlock
-        final success1 = await pointsService.unlockAchievement('fun_badge_rainbow');
+        final success1 =
+            await pointsService.unlockAchievement('fun_badge_rainbow');
         expect(success1, true);
         expect(pointsService.totalPoints, 75);
 
         // Second attempt
-        final success2 = await pointsService.unlockAchievement('fun_badge_rainbow');
+        final success2 =
+            await pointsService.unlockAchievement('fun_badge_rainbow');
         expect(success2, false);
         expect(pointsService.totalPoints, 75); // Points not spent again
       });

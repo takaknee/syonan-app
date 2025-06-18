@@ -104,7 +104,8 @@ void main() {
       });
 
       test('should generate subtraction problem when specified', () {
-        final problem = mathService.generateProblem(MathOperationType.subtraction);
+        final problem =
+            mathService.generateProblem(MathOperationType.subtraction);
         expect(problem.operation, MathOperationType.subtraction);
       });
     });
@@ -128,7 +129,10 @@ void main() {
           10,
         );
 
-        final problemStrings = problems.map((p) => '${p.firstNumber}_${p.secondNumber}_${p.operation.name}').toSet();
+        final problemStrings = problems
+            .map(
+                (p) => '${p.firstNumber}_${p.secondNumber}_${p.operation.name}')
+            .toSet();
 
         expect(problemStrings.length, problems.length);
       });
@@ -145,7 +149,10 @@ void main() {
 
           expect(problems.length, lessThanOrEqualTo(81));
 
-          final problemStrings = problems.map((p) => '${p.firstNumber}_${p.secondNumber}_${p.operation.name}').toSet();
+          final problemStrings = problems
+              .map((p) =>
+                  '${p.firstNumber}_${p.secondNumber}_${p.operation.name}')
+              .toSet();
 
           expect(problemStrings.length, problems.length);
         },
@@ -268,7 +275,8 @@ void main() {
         }
       });
 
-      test('should generate advanced problems with different difficulty levels', () {
+      test('should generate advanced problems with different difficulty levels',
+          () {
         for (int level = 1; level <= 5; level++) {
           final problem = mathService.generateAdvancedProblem(
             MathOperationType.multiplication,

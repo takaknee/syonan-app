@@ -5,11 +5,10 @@ import '../../domain/usecases/generate_math_problems_usecase.dart';
 
 /// 算数練習のコントローラー
 class MathPracticeController extends ChangeNotifier {
-  final GenerateMathProblemsUseCase _generateProblemsUseCase;
-
   MathPracticeController({
     required GenerateMathProblemsUseCase generateProblemsUseCase,
   }) : _generateProblemsUseCase = generateProblemsUseCase;
+  final GenerateMathProblemsUseCase _generateProblemsUseCase;
 
   // 状態管理
   List<MathProblemEntity> _problems = [];
@@ -164,10 +163,5 @@ class MathPracticeController extends ChangeNotifier {
 
   void _clearError() {
     _error = null;
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 }

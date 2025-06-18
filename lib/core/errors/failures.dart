@@ -1,9 +1,8 @@
 /// エラー状態を表現する抽象クラス
 abstract class Failure {
+  const Failure(this.message, {this.code});
   final String message;
   final String? code;
-
-  const Failure(this.message, {this.code});
 
   @override
   bool operator ==(Object other) =>
@@ -44,5 +43,5 @@ class GameFailure extends Failure {
 
 /// 一般的なエラー
 class UnknownFailure extends Failure {
-  const UnknownFailure([String message = '不明なエラーが発生しました']) : super(message);
+  const UnknownFailure([super.message = '不明なエラーが発生しました']);
 }

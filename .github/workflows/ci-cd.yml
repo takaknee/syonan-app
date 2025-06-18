@@ -115,7 +115,7 @@ jobs:
       - name: Build Web
         run: |
           echo "🏗️ Building Flutter web app..."
-          flutter build web --release --web-renderer html --base-href "/syonan-app/"
+          flutter build web --release --base-href "/syonan-app/"
 
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v4

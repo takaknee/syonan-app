@@ -278,7 +278,7 @@ class _MultiplayerBattleScreenState extends State<MultiplayerBattleScreen>
                     'VS',
                     style: theme.textTheme.headlineMedium?.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: theme.colors.error,
+                      color: theme.colorScheme.error,
                     ),
                   ),
                   if (_roundAnswered)
@@ -309,7 +309,7 @@ class _MultiplayerBattleScreenState extends State<MultiplayerBattleScreen>
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                       decoration: BoxDecoration(
-                        color: theme.colors.error,
+                        color: theme.colorScheme.error,
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
@@ -375,7 +375,7 @@ class _MultiplayerBattleScreenState extends State<MultiplayerBattleScreen>
             value: _timeRemaining / _timePerRound,
             backgroundColor: theme.colorScheme.surfaceVariant,
             valueColor: AlwaysStoppedAnimation<Color>(
-              _timeRemaining > 3 ? theme.colorScheme.primary : theme.colors.error,
+              _timeRemaining > 3 ? theme.colorScheme.primary : theme.colorScheme.error,
             ),
             minHeight: 8,
           ),
@@ -385,7 +385,7 @@ class _MultiplayerBattleScreenState extends State<MultiplayerBattleScreen>
           '$_timeRemaining秒',
           style: theme.textTheme.headlineMedium?.copyWith(
             fontWeight: FontWeight.bold,
-            color: _timeRemaining > 3 ? theme.colorScheme.primary : theme.colors.error,
+            color: _timeRemaining > 3 ? theme.colorScheme.primary : theme.colorScheme.error,
           ),
         ),
       ],
@@ -467,7 +467,7 @@ class _MultiplayerBattleScreenState extends State<MultiplayerBattleScreen>
                     isWin ? '🏆 勝利！' : isDraw ? '🤝 引き分け！' : '😅 敗北...',
                     style: theme.textTheme.displayMedium?.copyWith(
                       color: isWin ? theme.colorScheme.primary : 
-                             isDraw ? theme.colorScheme.secondary : theme.colors.error,
+                             isDraw ? theme.colorScheme.secondary : theme.colorScheme.error,
                     ),
                   ),
                   const SizedBox(height: 24),
@@ -497,7 +497,7 @@ class _MultiplayerBattleScreenState extends State<MultiplayerBattleScreen>
                             '$_aiScore',
                             style: theme.textTheme.displaySmall?.copyWith(
                               fontWeight: FontWeight.bold,
-                              color: theme.colors.error,
+                              color: theme.colorScheme.error,
                             ),
                           ),
                         ],

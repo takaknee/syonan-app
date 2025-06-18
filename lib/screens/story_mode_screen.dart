@@ -396,7 +396,7 @@ class _StoryModeScreenState extends State<StoryModeScreen> {
                       fontWeight: FontWeight.bold,
                       color: isStageComplete
                           ? theme.colorScheme.primary
-                          : theme.colors.error,
+                          : theme.colorScheme.error,
                     ),
                   ),
                   const SizedBox(height: 16),

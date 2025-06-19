@@ -41,21 +41,53 @@ class _CityBuilderGameScreenState extends State<CityBuilderGameScreen> {
       _lastEventMessage = null;
     });
     
-    // ゲームタイマーを開始
+    // チュートリアルを表示
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _showTutorial();
+    });
+    
+    // ゲームタイマーを開始（1秒ごとに時間チェック）
     _gameTimer?.cancel();
     _gameTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (mounted) {
-        setState(() {
-          // 時間経過で状態更新
-          _gameState = _gameService.endTurn(_gameState);
-          
-          // ゲーム終了チェック
-          if (_gameState.gameStatus != GameStatus.playing) {
-            _completeGame();
-          }
-        });
+      if (mounted && _gameState.gameStatus == GameStatus.playing) {
+        // 時間切れチェックのみ行う
+        if (_gameState.isTimeUp) {
+          setState(() {
+            _gameState = _gameState.copyWith(gameStatus: GameStatus.timeUp);
+          });
+          _completeGame();
+        } else {
+          // UIの時間表示を更新
+          setState(() {});
+        }
       }
     });
+  }
+
+  void _showTutorial() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('🏙️ 街づくりゲーム'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('10分以内に理想の街を作ろう！'),
+            const SizedBox(height: 12),
+            Text(_gameService.getVictoryConditionsText()),
+            const SizedBox(height: 12),
+            const Text('・建物を建設して資源を生産\n・ターン終了で資源が更新\n・ランダムイベントに注意！'),
+          ],
+        ),
+        actions: [
+          ElevatedButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('開始！'),
+          ),
+        ],
+      ),
+    );
   }
 
   void _completeGame() {
@@ -88,14 +120,90 @@ class _CityBuilderGameScreenState extends State<CityBuilderGameScreen> {
   void _endTurn() {
     if (_isGameComplete) return;
 
+    final oldResources = Map<ResourceType, int>.from(_gameState.resources);
+    
+    final turnResult = _gameService.endTurn(_gameState);
+    
     setState(() {
-      _gameState = _gameService.endTurn(_gameState);
+      _gameState = turnResult.gameState;
       
       // ゲーム終了チェック
       if (_gameState.gameStatus != GameStatus.playing) {
         _completeGame();
       }
     });
+
+    // イベントが発生した場合は表示
+    if (turnResult.triggeredEvent != null) {
+      _showEvent(turnResult.triggeredEvent!);
+    }
+
+    // リソース変化を表示
+    _showTurnSummary(oldResources, _gameState.resources);
+  }
+
+  void _showEvent(RandomEvent event) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Row(
+          children: [
+            Text(event.emoji, style: const TextStyle(fontSize: 24)),
+            const SizedBox(width: 8),
+            Expanded(child: Text(event.name)),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(event.description),
+            const SizedBox(height: 12),
+            ...event.effects.entries.map((entry) {
+              final emoji = _getResourceEmoji(entry.key);
+              final sign = entry.value > 0 ? '+' : '';
+              return Text(
+                '$emoji $sign${entry.value}',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: entry.value > 0 ? Colors.green : Colors.red,
+                ),
+              );
+            }).toList(),
+          ],
+        ),
+        actions: [
+          ElevatedButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showTurnSummary(Map<ResourceType, int> oldResources, Map<ResourceType, int> newResources) {
+    final changes = <String>[];
+    
+    for (final resourceType in ResourceType.values) {
+      final oldValue = oldResources[resourceType] ?? 0;
+      final newValue = newResources[resourceType] ?? 0;
+      final change = newValue - oldValue;
+      
+      if (change != 0) {
+        final emoji = _getResourceEmoji(resourceType);
+        final sign = change > 0 ? '+' : '';
+        changes.add('$emoji$sign$change');
+      }
+    }
+    
+    if (changes.isNotEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('ターン結果: ${changes.join(' ')}'),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    }
   }
 
   void _showGameCompleteDialog(int finalScore) {
@@ -333,36 +441,75 @@ class _CityBuilderGameScreenState extends State<CityBuilderGameScreen> {
     final isUpgrade = existingBuilding != null;
     
     return Card(
+      color: canBuild ? null : Colors.grey[100],
       child: InkWell(
         onTap: canBuild ? () => _buildBuilding(buildingType) : null,
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(6.0),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Text(template.emoji, style: const TextStyle(fontSize: 24)),
+              Text(template.emoji, style: const TextStyle(fontSize: 20)),
               Text(
                 isUpgrade ? '${template.name} Lv.${existingBuilding!.level + 1}' : template.name,
-                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 4),
-              ...template.buildCost.entries.map((entry) {
-                final resourceEmoji = _getResourceEmoji(entry.key);
-                return Text(
-                  '$resourceEmoji${entry.value}',
-                  style: TextStyle(
-                    fontSize: 10,
-                    color: canBuild ? Colors.green : Colors.red,
-                  ),
-                );
-              }).toList(),
-              if (isUpgrade)
+              const SizedBox(height: 2),
+              // 建設コスト
+              Wrap(
+                alignment: WrapAlignment.center,
+                children: template.buildCost.entries.map((entry) {
+                  final resourceEmoji = _getResourceEmoji(entry.key);
+                  final hasEnough = (_gameState.resources[entry.key] ?? 0) >= entry.value;
+                  return Text(
+                    '$resourceEmoji${entry.value}',
+                    style: TextStyle(
+                      fontSize: 8,
+                      color: hasEnough ? Colors.green : Colors.red,
+                    ),
+                  );
+                }).toList(),
+              ),
+              // 生産・効果
+              if (template.production.isNotEmpty) 
+                Wrap(
+                  alignment: WrapAlignment.center,
+                  children: template.production.entries.map((entry) {
+                    final resourceEmoji = _getResourceEmoji(entry.key);
+                    return Text(
+                      '+$resourceEmoji${entry.value}',
+                      style: const TextStyle(
+                        fontSize: 8,
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    );
+                  }).toList(),
+                ),
+              if (template.populationProvided > 0)
                 Text(
-                  'アップグレード',
-                  style: TextStyle(
+                  '+👥${template.populationProvided}',
+                  style: const TextStyle(
                     fontSize: 8,
-                    color: Colors.blue[700],
+                    color: Colors.blue,
                     fontWeight: FontWeight.bold,
+                  ),
+                ),
+              if (isUpgrade)
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+                  decoration: BoxDecoration(
+                    color: Colors.blue[100],
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Text(
+                    'UP',
+                    style: TextStyle(
+                      fontSize: 7,
+                      color: Colors.blue[700],
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
             ],
@@ -407,6 +554,19 @@ class _CityBuilderGameScreenState extends State<CityBuilderGameScreen> {
           populationProvided: 12,
           unlockRequirements: {ResourceType.population: 20},
         );
+      case BuildingType.mansion:
+        return const Building(
+          type: BuildingType.mansion,
+          name: 'マンション',
+          emoji: '🏬',
+          level: 1,
+          maxLevel: 2,
+          buildCost: {ResourceType.materials: 50, ResourceType.money: 100},
+          production: {},
+          upkeep: {ResourceType.energy: 4},
+          populationProvided: 30,
+          unlockRequirements: {ResourceType.population: 50},
+        );
       case BuildingType.farm:
         return const Building(
           type: BuildingType.farm,
@@ -446,6 +606,19 @@ class _CityBuilderGameScreenState extends State<CityBuilderGameScreen> {
           populationProvided: 0,
           unlockRequirements: {ResourceType.population: 25},
         );
+      case BuildingType.mine:
+        return const Building(
+          type: BuildingType.mine,
+          name: '鉱山',
+          emoji: '⛏️',
+          level: 1,
+          maxLevel: 3,
+          buildCost: {ResourceType.money: 70},
+          production: {ResourceType.materials: 10},
+          upkeep: {ResourceType.energy: 2, ResourceType.food: 1},
+          populationProvided: 0,
+          unlockRequirements: {ResourceType.population: 20},
+        );
       case BuildingType.shop:
         return const Building(
           type: BuildingType.shop,
@@ -459,8 +632,45 @@ class _CityBuilderGameScreenState extends State<CityBuilderGameScreen> {
           populationProvided: 0,
           unlockRequirements: {ResourceType.population: 30},
         );
-      default:
-        return null;
+      case BuildingType.hospital:
+        return const Building(
+          type: BuildingType.hospital,
+          name: '病院',
+          emoji: '🏥',
+          level: 1,
+          maxLevel: 2,
+          buildCost: {ResourceType.materials: 35, ResourceType.money: 100},
+          production: {},
+          upkeep: {ResourceType.energy: 3, ResourceType.money: 10},
+          populationProvided: 5,
+          unlockRequirements: {ResourceType.population: 40},
+        );
+      case BuildingType.school:
+        return const Building(
+          type: BuildingType.school,
+          name: '学校',
+          emoji: '🏫',
+          level: 1,
+          maxLevel: 2,
+          buildCost: {ResourceType.materials: 30, ResourceType.money: 80},
+          production: {},
+          upkeep: {ResourceType.energy: 2, ResourceType.money: 5},
+          populationProvided: 8,
+          unlockRequirements: {ResourceType.population: 35},
+        );
+      case BuildingType.park:
+        return const Building(
+          type: BuildingType.park,
+          name: '公園',
+          emoji: '🌳',
+          level: 1,
+          maxLevel: 2,
+          buildCost: {ResourceType.money: 25},
+          production: {},
+          upkeep: {ResourceType.money: 2},
+          populationProvided: 3,
+          unlockRequirements: {ResourceType.population: 25},
+        );
     }
   }
 

@@ -72,9 +72,22 @@ class CityBuildingGameService {
     );
   }
 
+  /// ターン終了処理結果
+  class TurnResult {
+    const TurnResult({
+      required this.gameState,
+      this.triggeredEvent,
+    });
+
+    final CityGameState gameState;
+    final RandomEvent? triggeredEvent;
+  }
+
   /// ターン終了処理
-  CityGameState endTurn(CityGameState gameState) {
-    if (gameState.gameStatus != GameStatus.playing) return gameState;
+  TurnResult endTurn(CityGameState gameState) {
+    if (gameState.gameStatus != GameStatus.playing) {
+      return TurnResult(gameState: gameState);
+    }
 
     // 生産と消費を計算
     final newResources = Map<ResourceType, int>.from(gameState.resources);
@@ -105,8 +118,11 @@ class CityBuildingGameService {
       currentTurn: gameState.currentTurn + 1,
     );
 
+    RandomEvent? triggeredEvent;
     if (_random.nextDouble() < 0.2) { // 20%の確率でイベント発生
-      updatedGameState = _triggerRandomEvent(updatedGameState);
+      final eventResult = _triggerRandomEvent(updatedGameState);
+      updatedGameState = eventResult.gameState;
+      triggeredEvent = eventResult.event;
     }
 
     // 街の拡張判定
@@ -117,7 +133,12 @@ class CityBuildingGameService {
     }
 
     // ゲーム終了条件をチェック
-    return _checkGameStatus(updatedGameState);
+    updatedGameState = _checkGameStatus(updatedGameState);
+
+    return TurnResult(
+      gameState: updatedGameState,
+      triggeredEvent: triggeredEvent,
+    );
   }
 
   /// 利用可能な建設選択肢を取得
@@ -373,13 +394,26 @@ class CityBuildingGameService {
     ];
   }
 
+  /// ランダムイベント結果
+  class EventResult {
+    const EventResult({
+      required this.gameState,
+      this.event,
+    });
+
+    final CityGameState gameState;
+    final RandomEvent? event;
+  }
+
   /// ランダムイベントを発生させる
-  CityGameState _triggerRandomEvent(CityGameState gameState) {
+  EventResult _triggerRandomEvent(CityGameState gameState) {
     final availableEvents = gameState.availableEvents.where((event) {
       return _random.nextDouble() < event.probability;
     }).toList();
 
-    if (availableEvents.isEmpty) return gameState;
+    if (availableEvents.isEmpty) {
+      return EventResult(gameState: gameState);
+    }
 
     final event = availableEvents[_random.nextInt(availableEvents.length)];
     final newResources = Map<ResourceType, int>.from(gameState.resources);
@@ -388,7 +422,10 @@ class CityBuildingGameService {
       newResources[entry.key] = ((newResources[entry.key] ?? 0) + entry.value).clamp(0, 9999);
     }
 
-    return gameState.copyWith(resources: newResources);
+    return EventResult(
+      gameState: gameState.copyWith(resources: newResources),
+      event: event,
+    );
   }
 
   /// ゲーム状態をチェック
@@ -413,5 +450,10 @@ class CityBuildingGameService {
     }
 
     return gameState;
+  }
+
+  /// 勝利条件の説明を取得
+  String getVictoryConditionsText() {
+    return '勝利条件：\n・人口100人以上\n・建物10個以上\n・お金500以上\n\nいずれか一つを達成すれば勝利！';
   }
 }

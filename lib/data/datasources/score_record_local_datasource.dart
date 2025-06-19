@@ -7,12 +7,12 @@ import '../models/score_record_model.dart';
 
 /// スコア記録のローカルデータソース
 class ScoreRecordLocalDataSource {
+
+  ScoreRecordLocalDataSource(this._prefs);
   final SharedPreferences _prefs;
 
   static const String _scoresKey = 'score_records';
   static const String _statsKey = 'score_statistics';
-
-  ScoreRecordLocalDataSource(this._prefs);
 
   /// スコア記録を保存
   Future<void> saveScoreRecord(ScoreRecordModel scoreRecord) async {

@@ -130,8 +130,9 @@ class _SpeedMathGameScreenState extends State<SpeedMathGameScreen>
   }
 
   void _submitAnswer() {
-    if (_currentProblem == null || !_isGameActive || _userAnswer.isEmpty)
+    if (_currentProblem == null || !_isGameActive || _userAnswer.isEmpty) {
       return;
+    }
 
     final userAnswerInt = int.tryParse(_userAnswer);
     if (userAnswerInt == null) return;

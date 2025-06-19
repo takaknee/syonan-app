@@ -35,7 +35,7 @@ void main() {
           accuracy: 0.85,
           duration: const Duration(minutes: 5),
           difficultyLevel: 2,
-          timestamp: DateTime(2024, 1, 1, 10, 0),
+          timestamp: DateTime(2024, 1, 1, 10),
           answerResults: [true, true, false, true, true],
           pointsEarned: 170,
         );
@@ -64,7 +64,7 @@ void main() {
           accuracy: 0.85,
           duration: const Duration(minutes: 5),
           difficultyLevel: 2,
-          timestamp: DateTime(2024, 1, 1, 10, 0),
+          timestamp: DateTime(2024, 1, 1, 10),
           answerResults: [true, true, false, true, true],
           pointsEarned: 170,
         );
@@ -81,7 +81,7 @@ void main() {
           accuracy: 0.90,
           duration: const Duration(minutes: 3),
           difficultyLevel: 1,
-          timestamp: DateTime(2024, 1, 1, 11, 0),
+          timestamp: DateTime(2024, 1, 1, 11),
           answerResults: [true, true, true, false, true],
           pointsEarned: 180,
         );
@@ -111,7 +111,7 @@ void main() {
           accuracy: 0.85,
           duration: const Duration(minutes: 5),
           difficultyLevel: 2,
-          timestamp: DateTime(2024, 1, 1, 10, 0),
+          timestamp: DateTime(2024, 1, 1, 10),
           answerResults: [true, true, false, true, true],
           pointsEarned: 170,
         );
@@ -128,7 +128,7 @@ void main() {
           accuracy: 0.90,
           duration: const Duration(minutes: 3),
           difficultyLevel: 1,
-          timestamp: DateTime(2024, 1, 1, 11, 0),
+          timestamp: DateTime(2024, 1, 1, 11),
           answerResults: [true, true, true, false, true],
           pointsEarned: 180,
         );
@@ -161,7 +161,7 @@ void main() {
           accuracy: 0.85,
           duration: const Duration(minutes: 5),
           difficultyLevel: 2,
-          timestamp: DateTime(2024, 1, 1, 10, 0),
+          timestamp: DateTime(2024, 1, 1, 10),
           answerResults: [true, true, false, true, true],
           pointsEarned: 170,
         );
@@ -178,7 +178,7 @@ void main() {
           accuracy: 0.90,
           duration: const Duration(minutes: 3),
           difficultyLevel: 1,
-          timestamp: DateTime(2024, 1, 1, 11, 0),
+          timestamp: DateTime(2024, 1, 1, 11),
           answerResults: [true, true, true, false, true],
           pointsEarned: 180,
         );
@@ -213,7 +213,7 @@ void main() {
           accuracy: 0.85,
           duration: const Duration(minutes: 5),
           difficultyLevel: 2,
-          timestamp: DateTime(2024, 1, 1, 10, 0),
+          timestamp: DateTime(2024, 1, 1, 10),
           answerResults: [true, true, false, true, true],
           pointsEarned: 170,
         );
@@ -230,7 +230,7 @@ void main() {
           accuracy: 0.95,
           duration: const Duration(minutes: 4),
           difficultyLevel: 2,
-          timestamp: DateTime(2024, 1, 1, 11, 0),
+          timestamp: DateTime(2024, 1, 1, 11),
           answerResults: [true, true, true, false, true],
           pointsEarned: 190,
         );
@@ -277,7 +277,7 @@ void main() {
           accuracy: 0.80,
           duration: const Duration(minutes: 5),
           difficultyLevel: 2,
-          timestamp: DateTime(2024, 1, 1, 10, 0),
+          timestamp: DateTime(2024, 1, 1, 10),
           answerResults: [true, true, false, true, true],
           pointsEarned: 160,
         );
@@ -294,7 +294,7 @@ void main() {
           accuracy: 0.90,
           duration: const Duration(minutes: 4),
           difficultyLevel: 2,
-          timestamp: DateTime(2024, 1, 1, 11, 0),
+          timestamp: DateTime(2024, 1, 1, 11),
           answerResults: [true, true, true, false, true],
           pointsEarned: 180,
         );
@@ -339,7 +339,7 @@ void main() {
           accuracy: 0.85,
           duration: const Duration(minutes: 5),
           difficultyLevel: 2,
-          timestamp: DateTime(2024, 1, 1, 10, 0),
+          timestamp: DateTime(2024, 1, 1, 10),
           answerResults: [true, true, false, true, true],
           pointsEarned: 170,
         );

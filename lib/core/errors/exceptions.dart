@@ -1,14 +1,14 @@
 /// アプリケーション内で使用する例外の基底クラス
 abstract class AppException implements Exception {
-  final String message;
-  final String? code;
-  final dynamic originalError;
 
   const AppException({
     required this.message,
     this.code,
     this.originalError,
   });
+  final String message;
+  final String? code;
+  final dynamic originalError;
 
   @override
   String toString() => 'AppException: $message';

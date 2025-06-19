@@ -33,14 +33,6 @@ enum MiniGameDifficulty {
 
 /// ミニゲームのエンティティ
 class MiniGameEntity {
-  final String id;
-  final MiniGameType type;
-  final String name;
-  final String description;
-  final String emoji;
-  final int pointsCost;
-  final MiniGameDifficulty difficulty;
-  final int color;
 
   const MiniGameEntity({
     required this.id,
@@ -52,6 +44,14 @@ class MiniGameEntity {
     required this.difficulty,
     required this.color,
   });
+  final String id;
+  final MiniGameType type;
+  final String name;
+  final String description;
+  final String emoji;
+  final int pointsCost;
+  final MiniGameDifficulty difficulty;
+  final int color;
 
   @override
   bool operator ==(Object other) =>
@@ -92,12 +92,6 @@ class MiniGameEntity {
 
 /// ミニゲームスコアのエンティティ
 class MiniGameScoreEntity {
-  final String id;
-  final String gameId;
-  final int score;
-  final MiniGameDifficulty difficulty;
-  final Duration duration;
-  final DateTime timestamp;
 
   const MiniGameScoreEntity({
     required this.id,
@@ -107,6 +101,12 @@ class MiniGameScoreEntity {
     required this.duration,
     required this.timestamp,
   });
+  final String id;
+  final String gameId;
+  final int score;
+  final MiniGameDifficulty difficulty;
+  final Duration duration;
+  final DateTime timestamp;
 
   @override
   bool operator ==(Object other) =>

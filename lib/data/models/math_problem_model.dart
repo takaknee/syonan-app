@@ -2,6 +2,18 @@ import '../../domain/entities/math_problem_entity.dart';
 
 /// 算数問題のデータモデル（JSON変換用）
 class MathProblemModel extends MathProblemEntity {
+
+  /// EntityからModelを作成
+  factory MathProblemModel.fromEntity(MathProblemEntity entity) {
+    return MathProblemModel(
+      firstNumber: entity.firstNumber,
+      secondNumber: entity.secondNumber,
+      operation: entity.operation,
+      correctAnswer: entity.correctAnswer,
+      difficultyLevel: entity.difficultyLevel,
+      createdAt: entity.createdAt,
+    );
+  }
   MathProblemModel({
     required super.firstNumber,
     required super.secondNumber,
@@ -35,18 +47,6 @@ class MathProblemModel extends MathProblemEntity {
       'difficultyLevel': difficultyLevel,
       'createdAt': createdAt.toIso8601String(),
     };
-  }
-
-  /// EntityからModelを作成
-  factory MathProblemModel.fromEntity(MathProblemEntity entity) {
-    return MathProblemModel(
-      firstNumber: entity.firstNumber,
-      secondNumber: entity.secondNumber,
-      operation: entity.operation,
-      correctAnswer: entity.correctAnswer,
-      difficultyLevel: entity.difficultyLevel,
-      createdAt: entity.createdAt,
-    );
   }
 
   /// ModelからEntityに変換

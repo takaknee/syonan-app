@@ -2,6 +2,27 @@ import '../../domain/entities/score_record_entity.dart';
 
 /// スコア記録のデータモデル
 class ScoreRecordModel extends ScoreRecordEntity {
+
+  /// EntityからModelに変換
+  factory ScoreRecordModel.fromEntity(ScoreRecordEntity entity) {
+    return ScoreRecordModel(
+      id: entity.id,
+      userId: entity.userId,
+      gameType: entity.gameType,
+      operation: entity.operation,
+      score: entity.score,
+      correctCount: entity.correctCount,
+      wrongAnswers: entity.wrongAnswers,
+      totalCount: entity.totalCount,
+      accuracy: entity.accuracy,
+      duration: entity.duration,
+      difficultyLevel: entity.difficultyLevel,
+      timestamp: entity.timestamp,
+      answerResults: entity.answerResults,
+      pointsEarned: entity.pointsEarned,
+      metadata: entity.metadata,
+    );
+  }
   const ScoreRecordModel({
     required super.id,
     required super.userId,
@@ -66,27 +87,6 @@ class ScoreRecordModel extends ScoreRecordEntity {
       'pointsEarned': pointsEarned,
       'metadata': metadata,
     };
-  }
-
-  /// EntityからModelに変換
-  factory ScoreRecordModel.fromEntity(ScoreRecordEntity entity) {
-    return ScoreRecordModel(
-      id: entity.id,
-      userId: entity.userId,
-      gameType: entity.gameType,
-      operation: entity.operation,
-      score: entity.score,
-      correctCount: entity.correctCount,
-      wrongAnswers: entity.wrongAnswers,
-      totalCount: entity.totalCount,
-      accuracy: entity.accuracy,
-      duration: entity.duration,
-      difficultyLevel: entity.difficultyLevel,
-      timestamp: entity.timestamp,
-      answerResults: entity.answerResults,
-      pointsEarned: entity.pointsEarned,
-      metadata: entity.metadata,
-    );
   }
 
   /// ScoreRecordModelをコピーして部分的に変更

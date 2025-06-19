@@ -34,21 +34,6 @@ enum ScoreImprovement {
 
 /// スコア記録のエンティティ
 class ScoreRecordEntity {
-  final String id;
-  final String userId;
-  final GameType gameType;
-  final MathOperationType operation;
-  final int score;
-  final int correctCount;
-  final int wrongAnswers;
-  final int totalCount;
-  final double accuracy;
-  final Duration duration;
-  final int? difficultyLevel;
-  final DateTime timestamp;
-  final List<bool> answerResults;
-  final int pointsEarned;
-  final Map<String, dynamic>? metadata;
 
   const ScoreRecordEntity({
     required this.id,
@@ -67,6 +52,21 @@ class ScoreRecordEntity {
     required this.pointsEarned,
     this.metadata,
   });
+  final String id;
+  final String userId;
+  final GameType gameType;
+  final MathOperationType operation;
+  final int score;
+  final int correctCount;
+  final int wrongAnswers;
+  final int totalCount;
+  final double accuracy;
+  final Duration duration;
+  final int? difficultyLevel;
+  final DateTime timestamp;
+  final List<bool> answerResults;
+  final int pointsEarned;
+  final Map<String, dynamic>? metadata;
 
   // Getterを追加してbackward compatibility維持
   int get correctAnswers => correctCount;
@@ -129,7 +129,7 @@ class ScoreRecordEntity {
 
   @override
   String toString() =>
-      'ScoreRecordEntity(id: $id, operation: $operation, accuracy: ${accuracyPercentage}%, difficulty: $difficultyLevel)';
+      'ScoreRecordEntity(id: $id, operation: $operation, accuracy: $accuracyPercentage%, difficulty: $difficultyLevel)';
 
   /// エンティティをコピーして新しいインスタンスを作成
   ScoreRecordEntity copyWith({

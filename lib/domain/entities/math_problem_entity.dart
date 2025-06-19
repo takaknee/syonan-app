@@ -17,12 +17,6 @@ enum MathOperationType {
 
 /// 算数問題のエンティティ
 class MathProblemEntity {
-  final int firstNumber;
-  final int secondNumber;
-  final MathOperationType operation;
-  final int correctAnswer;
-  final int? difficultyLevel;
-  final DateTime createdAt;
 
   MathProblemEntity({
     required this.firstNumber,
@@ -32,6 +26,12 @@ class MathProblemEntity {
     this.difficultyLevel,
     DateTime? createdAt,
   }) : createdAt = createdAt ?? DateTime.now();
+  final int firstNumber;
+  final int secondNumber;
+  final MathOperationType operation;
+  final int correctAnswer;
+  final int? difficultyLevel;
+  final DateTime createdAt;
 
   /// 問題を文字列として表現
   String get problemText => '$firstNumber ${operation.symbol} $secondNumber';
@@ -79,7 +79,7 @@ class MathProblemEntity {
 
   @override
   String toString() =>
-      'MathProblemEntity(${problemText} = $correctAnswer, difficulty: $difficultyLevel)';
+      'MathProblemEntity($problemText = $correctAnswer, difficulty: $difficultyLevel)';
 
   /// エンティティをコピーして新しいインスタンスを作成
   MathProblemEntity copyWith({

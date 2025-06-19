@@ -20,11 +20,20 @@ class _StrategyBattleGameScreenState extends State<StrategyBattleGameScreen> {
   late StrategyGameState _gameState;
   late DateTime _startTime;
   bool _isGameComplete = false;
+  bool _showTutorial = true;
 
   @override
   void initState() {
     super.initState();
     _startGame();
+    // チュートリアルを3秒後に自動的に閉じる
+    Future.delayed(const Duration(seconds: 3), () {
+      if (mounted && _showTutorial) {
+        setState(() {
+          _showTutorial = false;
+        });
+      }
+    });
   }
 
   void _startGame() {
@@ -99,6 +108,7 @@ class _StrategyBattleGameScreenState extends State<StrategyBattleGameScreen> {
   void _restartGame() {
     setState(() {
       _isGameComplete = false;
+      _showTutorial = true;
     });
     _startGame();
   }
@@ -114,6 +124,11 @@ class _StrategyBattleGameScreenState extends State<StrategyBattleGameScreen> {
   }
 
   void _attackTerritory(String attackerTerritoryId, String defenderTerritoryId) {
+    final attacker = _gameState.getTerritoryById(attackerTerritoryId);
+    final defender = _gameState.getTerritoryById(defenderTerritoryId);
+    
+    if (attacker == null || defender == null) return;
+    
     setState(() {
       _gameState = _gameService.attackTerritory(
         _gameState,
@@ -122,10 +137,30 @@ class _StrategyBattleGameScreenState extends State<StrategyBattleGameScreen> {
       );
     });
 
+    // 戦闘結果を表示
+    final conqueredTerritory = _gameState.getTerritoryById(defenderTerritoryId);
+    final wasConquered = conqueredTerritory?.owner == Owner.player;
+    
+    _showBattleResult(defender.name, wasConquered);
+
     // ゲーム終了チェック
     if (_gameState.gameStatus != GameStatus.playing) {
       _completeGame();
     }
+  }
+
+  void _showBattleResult(String territoryName, bool victory) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          victory 
+            ? '🎉 $territoryNameを占領しました！'
+            : '😓 $territoryNameの攻略に失敗...',
+        ),
+        backgroundColor: victory ? Colors.green : Colors.red,
+        duration: const Duration(seconds: 2),
+      ),
+    );
   }
 
   void _recruitTroops(String territoryId, int amount) {
@@ -154,44 +189,80 @@ class _StrategyBattleGameScreenState extends State<StrategyBattleGameScreen> {
         foregroundColor: Colors.white,
         actions: [
           IconButton(
+            icon: const Icon(Icons.help_outline),
+            onPressed: () => setState(() => _showTutorial = true),
+          ),
+          IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: _restartGame,
           ),
         ],
       ),
-      body: Column(
+      body: Stack(
         children: [
-          // ゲーム情報パネル
-          _buildGameInfoPanel(),
-          // マップ表示
-          Expanded(
-            flex: 3,
-            child: _buildGameMap(),
+          Column(
+            children: [
+              // ゲーム情報パネル
+              _buildGameInfoPanel(),
+              // マップ表示
+              Expanded(
+                flex: 3,
+                child: _buildGameMap(),
+              ),
+              // アクションパネル
+              Expanded(
+                flex: 1,
+                child: _buildActionPanel(),
+              ),
+            ],
           ),
-          // アクションパネル
-          Expanded(
-            flex: 1,
-            child: _buildActionPanel(),
-          ),
+          if (_showTutorial) _buildTutorialOverlay(),
         ],
       ),
     );
   }
 
   Widget _buildGameInfoPanel() {
+    final totalTerritories = _gameState.territories.length;
+    final playerPercent = _gameState.playerTerritoryCount / totalTerritories;
+    final enemyPercent = _gameState.enemyTerritoryCount / totalTerritories;
+    
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: const Color(0xFF8BC34A).withValues(alpha: 0.1),
         border: const Border(bottom: BorderSide(color: Colors.grey, width: 0.5)),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+      child: Column(
         children: [
-          _buildInfoItem('💰', '${_gameState.playerGold}', '金'),
-          _buildInfoItem('⚔️', '${_gameState.playerTroops}', '兵力'),
-          _buildInfoItem('🏰', '${_gameState.playerTerritoryCount}', '領土'),
-          _buildInfoItem('📅', '${_gameState.currentTurn}', 'ターン'),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildInfoItem('💰', '${_gameState.playerGold}', '金'),
+              _buildInfoItem('⚔️', '${_gameState.playerTroops}', '兵力'),
+              _buildInfoItem('🏰', '${_gameState.playerTerritoryCount}', '領土'),
+              _buildInfoItem('📅', '${_gameState.currentTurn}/${StrategyGameService.maxTurns}', 'ターン'),
+            ],
+          ),
+          const SizedBox(height: 8),
+          // 支配状況を表示
+          Row(
+            children: [
+              const Text('支配状況: ', style: TextStyle(fontSize: 12)),
+              Expanded(
+                child: LinearProgressIndicator(
+                  value: playerPercent,
+                  backgroundColor: Colors.red.withValues(alpha: 0.3),
+                  valueColor: const AlwaysStoppedAnimation<Color>(Colors.green),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                '${(_gameState.playerTerritoryCount / totalTerritories * 100).round()}%',
+                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
         ],
       ),
     );
@@ -237,53 +308,114 @@ class _StrategyBattleGameScreenState extends State<StrategyBattleGameScreen> {
     final isSelected = _gameState.selectedTerritoryId == territory.id;
     final isPlayerTerritory = territory.owner == Owner.player;
     final isEnemyTerritory = territory.owner == Owner.enemy;
+    final canAttack = isSelected && isPlayerTerritory && 
+                     _gameService.getAttackableTargets(_gameState, territory.id).isNotEmpty;
     
     Color backgroundColor;
     Color borderColor;
+    String ownerEmoji;
     
     if (isPlayerTerritory) {
       backgroundColor = const Color(0xFF4CAF50);
-      borderColor = isSelected ? Colors.blue : Colors.green;
+      borderColor = isSelected ? Colors.lightBlue : Colors.green;
+      ownerEmoji = '🟢';
     } else if (isEnemyTerritory) {
       backgroundColor = const Color(0xFFF44336);
-      borderColor = isSelected ? Colors.blue : Colors.red;
+      borderColor = isSelected ? Colors.lightBlue : Colors.red;
+      ownerEmoji = '🔴';
     } else {
       backgroundColor = const Color(0xFF9E9E9E);
-      borderColor = isSelected ? Colors.blue : Colors.grey;
+      borderColor = isSelected ? Colors.lightBlue : Colors.grey;
+      ownerEmoji = '⚪';
     }
 
-    return GestureDetector(
-      onTap: () => _selectTerritory(territory.id),
-      child: Container(
-        decoration: BoxDecoration(
-          color: backgroundColor.withValues(alpha: 0.8),
-          border: Border.all(color: borderColor, width: isSelected ? 3 : 1),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (territory.isCapital)
-              const Text('👑', style: TextStyle(fontSize: 16)),
-            Text(
-              territory.name,
-              style: const TextStyle(
-                fontSize: 10,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-              textAlign: TextAlign.center,
-              overflow: TextOverflow.ellipsis,
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      child: GestureDetector(
+        onTap: () => _selectTerritory(territory.id),
+        child: Container(
+          decoration: BoxDecoration(
+            color: backgroundColor.withValues(alpha: isSelected ? 1.0 : 0.8),
+            border: Border.all(
+              color: borderColor, 
+              width: isSelected ? 3 : 1
             ),
-            Text(
-              '⚔️${territory.troops}',
-              style: const TextStyle(
-                fontSize: 12,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
+            borderRadius: BorderRadius.circular(8),
+            boxShadow: isSelected ? [
+              BoxShadow(
+                color: borderColor.withValues(alpha: 0.3),
+                spreadRadius: 2,
+                blurRadius: 4,
+              )
+            ] : null,
+          ),
+          child: Stack(
+            children: [
+              if (canAttack)
+                Positioned(
+                  top: 2,
+                  right: 2,
+                  child: Container(
+                    width: 12,
+                    height: 12,
+                    decoration: const BoxDecoration(
+                      color: Colors.orange,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.flash_on,
+                      size: 8,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        if (territory.isCapital) ...[
+                          const Text('👑', style: TextStyle(fontSize: 14)),
+                          const SizedBox(width: 2),
+                        ],
+                        Text(ownerEmoji, style: const TextStyle(fontSize: 12)),
+                      ],
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      territory.name,
+                      style: const TextStyle(
+                        fontSize: 9,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                    const SizedBox(height: 1),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withValues(alpha: 0.3),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        '⚔️${territory.troops}',
+                        style: const TextStyle(
+                          fontSize: 11,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -393,5 +525,46 @@ class _StrategyBattleGameScreenState extends State<StrategyBattleGameScreen> {
         ),
       );
     }).toList();
+  }
+
+  Widget _buildTutorialOverlay() {
+    return Container(
+      color: Colors.black.withValues(alpha: 0.8),
+      child: Center(
+        child: Card(
+          margin: const EdgeInsets.all(20),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  '🏰 水滸伝 国盗り戦略 🏰',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  '目標: 敵の首都（👑）を占領せよ！\n\n'
+                  '🟢 = あなたの領土\n'
+                  '🔴 = 敵の領土\n'
+                  '⚪ = 中立の領土\n\n'
+                  '1. 領土をタップして選択\n'
+                  '2. 隣接する敵領土を攻撃\n'
+                  '3. 金で兵士を募集\n'
+                  '4. ターン終了で資源獲得',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 14),
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () => setState(() => _showTutorial = false),
+                  child: const Text('ゲーム開始！'),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

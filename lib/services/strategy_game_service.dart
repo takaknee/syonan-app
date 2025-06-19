@@ -5,10 +5,10 @@ import '../models/strategy_game.dart';
 class StrategyGameService {
   static const int mapWidth = 5;
   static const int mapHeight = 4;
-  static const int maxTurns = 20; // 10分程度でゲーム終了
-  static const int startingGold = 100;
-  static const int startingTroops = 50;
-  static const int troopCost = 10; // 兵士1人あたりのコスト
+  static const int maxTurns = 15; // 約8-10分でゲーム終了を目指す
+  static const int startingGold = 80;
+  static const int startingTroops = 40;
+  static const int troopCost = 8; // 兵士1人あたりのコスト（少し安く）
   
   final Random _random = Random();
 
@@ -44,24 +44,24 @@ class StrategyGameService {
         
         if (isPlayerStart) {
           owner = Owner.player;
-          troops = 20;
-          resources = 30;
+          troops = 25; // 開始時の兵力を増やす
+          resources = 40;
         } else if (isEnemyCapital) {
           owner = Owner.enemy;
-          troops = 40; // ボス領土は強い
-          resources = 50;
+          troops = 35; // ボス領土の兵力を調整
+          resources = 60;
           isCapital = true;
         } else {
           // その他の領土は中立またはランダムに敵
           final random = _random.nextDouble();
-          if (random < 0.3) {
+          if (random < 0.25) { // 敵の確率を下げる
             owner = Owner.enemy;
-            troops = _random.nextInt(15) + 5;
+            troops = _random.nextInt(12) + 3; // 敵の兵力を少し弱く
           } else {
             owner = Owner.neutral;
-            troops = _random.nextInt(10) + 2;
+            troops = _random.nextInt(8) + 1; // 中立の兵力を少し弱く
           }
-          resources = _random.nextInt(20) + 10;
+          resources = _random.nextInt(25) + 10;
         }
         
         final territory = Territory(

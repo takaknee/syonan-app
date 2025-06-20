@@ -36,6 +36,15 @@ class MathProblem {
   final MathOperationType operation;
   final int correctAnswer;
 
+  /// 正解（correctAnswerのエイリアス）
+  int get answer => correctAnswer;
+
+  /// 第1オペランド（firstNumberのエイリアス）
+  int get operand1 => firstNumber;
+
+  /// 第2オペランド（secondNumberのエイリアス）
+  int get operand2 => secondNumber;
+
   /// 問題文を文字列として取得
   String get questionText {
     return '$firstNumber ${operation.symbol} $secondNumber = ? ';

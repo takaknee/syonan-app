@@ -1,5 +1,8 @@
 /// ビルド情報を管理するクラス
 class BuildInfo {
+  // アプリ起動時に一度だけ設定されるビルド時刻
+  static final DateTime _buildTime = DateTime.now();
+
   /// ビルド日時を取得
   static String getBuildDateTime() {
     // GitHub Actionsでビルド時に設定される環境変数から取得
@@ -8,11 +11,27 @@ class BuildInfo {
     );
 
     if (buildTime.isEmpty) {
-      // 開発環境では現在時刻を表示
-      final now = DateTime.now();
-      return '開発ビルド (${now.year}年${now.month}月${now.day}日 '
-          '${now.hour.toString().padLeft(2, '0')}:'
-          '${now.minute.toString().padLeft(2, '0')})';
+      // コンパイル時に設定される環境変数から取得
+      const compiledTime = String.fromEnvironment(
+        'COMPILED_TIME',
+      );
+
+      if (compiledTime.isNotEmpty) {
+        try {
+          final dateTime = DateTime.parse(compiledTime);
+          final jstDateTime = dateTime.add(const Duration(hours: 9));
+          return '開発ビルド (${jstDateTime.year}年${jstDateTime.month}月${jstDateTime.day}日 '
+              '${jstDateTime.hour.toString().padLeft(2, '0')}:'
+              '${jstDateTime.minute.toString().padLeft(2, '0')})';
+        } catch (e) {
+          // パースエラーの場合は固定時刻を使用
+        }
+      }
+
+      // 環境変数が設定されていない場合は、アプリ起動時の時刻を使用
+      return '開発ビルド (${_buildTime.year}年${_buildTime.month}月${_buildTime.day}日 '
+          '${_buildTime.hour.toString().padLeft(2, '0')}:'
+          '${_buildTime.minute.toString().padLeft(2, '0')})';
     }
 
     try {

@@ -31,6 +31,15 @@ class ScoreRecord {
   final int totalQuestions;
   final Duration timeSpent; // 練習にかかった時間
 
+  /// スコア（0-100のスコア）を取得
+  int get score => accuracyPercentage;
+
+  /// 作成日時（dateのエイリアス）
+  DateTime get createdAt => date;
+
+  /// 操作タイプ（operationのエイリアス）
+  MathOperationType get operationType => operation;
+
   /// 正答率を計算（0.0 〜 1.0）
   double get accuracy {
     if (totalQuestions == 0) return 0.0;

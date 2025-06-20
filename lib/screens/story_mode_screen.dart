@@ -54,9 +54,7 @@ class _StoryModeScreenState extends State<StoryModeScreen> {
         title: const Text('📚 ストーリーモード'),
         backgroundColor: theme.colorScheme.tertiaryContainer,
       ),
-      body: _isInBattle
-          ? _buildBattleScreen(theme)
-          : _buildStoryScreen(theme),
+      body: _isInBattle ? _buildBattleScreen(theme) : _buildStoryScreen(theme),
     );
   }
 
@@ -117,7 +115,7 @@ class _StoryModeScreenState extends State<StoryModeScreen> {
 
   Widget _buildCurrentChapterCard(ThemeData theme) {
     final chapterInfo = _getChapterInfo(_currentChapter);
-    
+
     return Card(
       elevation: 4,
       child: Padding(
@@ -217,9 +215,7 @@ class _StoryModeScreenState extends State<StoryModeScreen> {
 
           return Card(
             margin: const EdgeInsets.only(bottom: 12),
-            color: isUnlocked
-                ? theme.cardColor
-                : theme.colorScheme.surfaceVariant.withValues(alpha: 0.5),
+            color: isUnlocked ? theme.cardColor : theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
             child: ListTile(
               leading: Text(
                 chapterInfo.emoji,
@@ -339,7 +335,7 @@ class _StoryModeScreenState extends State<StoryModeScreen> {
 
   Widget _buildStoryContext(ThemeData theme) {
     final storyText = _getStoryText(_currentChapter, _currentStage, _currentProblemIndex);
-    
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -373,7 +369,7 @@ class _StoryModeScreenState extends State<StoryModeScreen> {
 
   Widget _buildBattleCompleteScreen(ThemeData theme) {
     final isStageComplete = _correctAnswers >= (_problemsPerStage * 0.7); // 70%以上で合格
-    
+
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -394,9 +390,7 @@ class _StoryModeScreenState extends State<StoryModeScreen> {
                     isStageComplete ? 'ステージクリア！' : 'もう一度挑戦！',
                     style: theme.textTheme.displaySmall?.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: isStageComplete
-                          ? theme.colorScheme.primary
-                          : theme.colorScheme.error,
+                      color: isStageComplete ? theme.colorScheme.primary : theme.colorScheme.error,
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -465,7 +459,7 @@ class _StoryModeScreenState extends State<StoryModeScreen> {
   void _startStage() {
     final mathService = context.read<MathService>();
     final chapterInfo = _getChapterInfo(_currentChapter);
-    
+
     // チャプターに応じた問題を生成
     _currentProblems = List.generate(_problemsPerStage, (index) {
       return mathService.generateProblem(
@@ -485,7 +479,7 @@ class _StoryModeScreenState extends State<StoryModeScreen> {
   void _handleAnswer(int answer) {
     final currentProblem = _currentProblems[_currentProblemIndex];
     final isCorrect = answer == currentProblem.answer;
-    
+
     _userAnswers[_currentProblemIndex] = answer;
     if (isCorrect) {
       _correctAnswers++;
@@ -504,23 +498,22 @@ class _StoryModeScreenState extends State<StoryModeScreen> {
     }
   }
 
-  void _recordStageResult() {
+  void _recordStageResult() async {
     final scoreService = context.read<ScoreService>();
     final pointsService = context.read<PointsService>();
     final chapterInfo = _getChapterInfo(_currentChapter);
 
     // スコアを記録
-    final score = (_correctAnswers / _problemsPerStage * 100).toDouble();
-    scoreService.addScore(
+    await scoreService.addScore(
       chapterInfo.operationType,
-      score,
-      _problemsPerStage,
-      _correctAnswers,
+      _correctAnswers, // 正解数
+      _problemsPerStage, // 総問題数
+      const Duration(minutes: 5), // 推定時間
     );
 
     // ポイントを追加
     pointsService.addPoints(_correctAnswers * 15, 'ストーリーモード');
-    
+
     if (_correctAnswers >= (_problemsPerStage * 0.7)) {
       pointsService.addPoints(25, 'ステージクリアボーナス');
     }
@@ -572,7 +565,7 @@ class _StoryModeScreenState extends State<StoryModeScreen> {
   _ChapterInfo _getChapterInfo(int chapter) {
     switch (chapter) {
       case 1:
-        return _ChapterInfo(
+        return const _ChapterInfo(
           title: '森の村の危機',
           description: '掛け算の力で魔物を倒そう！',
           emoji: '🌲',
@@ -580,7 +573,7 @@ class _StoryModeScreenState extends State<StoryModeScreen> {
           difficulty: 1,
         );
       case 2:
-        return _ChapterInfo(
+        return const _ChapterInfo(
           title: '砂漠の遺跡',
           description: '割り算で古代の謎を解き明かせ！',
           emoji: '🏜️',
@@ -588,7 +581,7 @@ class _StoryModeScreenState extends State<StoryModeScreen> {
           difficulty: 2,
         );
       case 3:
-        return _ChapterInfo(
+        return const _ChapterInfo(
           title: '魔王城の決戦',
           description: 'すべての計算スキルで魔王に立ち向かえ！',
           emoji: '🏰',

@@ -17,8 +17,7 @@ class MultiplayerBattleScreen extends StatefulWidget {
   State<MultiplayerBattleScreen> createState() => _MultiplayerBattleScreenState();
 }
 
-class _MultiplayerBattleScreenState extends State<MultiplayerBattleScreen>
-    with TickerProviderStateMixin {
+class _MultiplayerBattleScreenState extends State<MultiplayerBattleScreen> with TickerProviderStateMixin {
   static const int _roundCount = 5;
   static const int _timePerRound = 10; // seconds
 
@@ -160,7 +159,7 @@ class _MultiplayerBattleScreenState extends State<MultiplayerBattleScreen>
     return random.nextDouble() < aiAccuracy;
   }
 
-  void _finishGame() {
+  void _finishGame() async {
     setState(() {
       _isGameActive = false;
       _isGameFinished = true;
@@ -170,12 +169,11 @@ class _MultiplayerBattleScreenState extends State<MultiplayerBattleScreen>
     final scoreService = context.read<ScoreService>();
     final pointsService = context.read<PointsService>();
 
-    final battleScore = (_playerScore * 20).toDouble(); // 20点×正解数
-    scoreService.addScore(
+    await scoreService.addScore(
       MathOperationType.multiplication,
-      battleScore,
-      _roundCount,
-      _roundCount - (_roundCount - _playerScore), // 正解数
+      _playerScore, // 正解数
+      _roundCount, // 総問題数
+      const Duration(seconds: _roundCount * 30), // 推定時間
     );
 
     // 勝利ボーナス
@@ -373,7 +371,7 @@ class _MultiplayerBattleScreenState extends State<MultiplayerBattleScreen>
           width: 200,
           child: LinearProgressIndicator(
             value: _timeRemaining / _timePerRound,
-            backgroundColor: theme.colorScheme.surfaceVariant,
+            backgroundColor: theme.colorScheme.surfaceContainerHighest,
             valueColor: AlwaysStoppedAnimation<Color>(
               _timeRemaining > 3 ? theme.colorScheme.primary : theme.colorScheme.error,
             ),
@@ -464,10 +462,17 @@ class _MultiplayerBattleScreenState extends State<MultiplayerBattleScreen>
               child: Column(
                 children: [
                   Text(
-                    isWin ? '🏆 勝利！' : isDraw ? '🤝 引き分け！' : '😅 敗北...',
+                    isWin
+                        ? '🏆 勝利！'
+                        : isDraw
+                            ? '🤝 引き分け！'
+                            : '😅 敗北...',
                     style: theme.textTheme.displayMedium?.copyWith(
-                      color: isWin ? theme.colorScheme.primary : 
-                             isDraw ? theme.colorScheme.secondary : theme.colorScheme.error,
+                      color: isWin
+                          ? theme.colorScheme.primary
+                          : isDraw
+                              ? theme.colorScheme.secondary
+                              : theme.colorScheme.error,
                     ),
                   ),
                   const SizedBox(height: 24),
@@ -506,8 +511,11 @@ class _MultiplayerBattleScreenState extends State<MultiplayerBattleScreen>
                   ),
                   const SizedBox(height: 24),
                   Text(
-                    isWin ? 'おめでとうございます！' : 
-                    isDraw ? 'いい勝負でした！' : '次回頑張りましょう！',
+                    isWin
+                        ? 'おめでとうございます！'
+                        : isDraw
+                            ? 'いい勝負でした！'
+                            : '次回頑張りましょう！',
                     style: theme.textTheme.titleMedium,
                     textAlign: TextAlign.center,
                   ),

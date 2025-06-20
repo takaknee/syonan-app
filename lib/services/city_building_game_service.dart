@@ -10,7 +10,7 @@ class CityBuildingGameService {
   static const int startingEnergy = 10;
   static const int startingMoney = 50;
   static const int baseCitySize = 3; // 初期建設可能数
-  
+
   final Random _random = Random();
 
   /// 新しいゲームを初期化
@@ -37,7 +37,7 @@ class CityBuildingGameService {
   /// 建物を建設
   CityGameState buildBuilding(CityGameState gameState, BuildingType buildingType) {
     if (gameState.gameStatus != GameStatus.playing) return gameState;
-    
+
     final buildingTemplate = _getBuildingTemplate(buildingType);
     if (buildingTemplate == null) return gameState;
 
@@ -72,17 +72,6 @@ class CityBuildingGameService {
     );
   }
 
-  /// ターン終了処理結果
-  class TurnResult {
-    const TurnResult({
-      required this.gameState,
-      this.triggeredEvent,
-    });
-
-    final CityGameState gameState;
-    final RandomEvent? triggeredEvent;
-  }
-
   /// ターン終了処理
   TurnResult endTurn(CityGameState gameState) {
     if (gameState.gameStatus != GameStatus.playing) {
@@ -91,7 +80,7 @@ class CityBuildingGameService {
 
     // 生産と消費を計算
     final newResources = Map<ResourceType, int>.from(gameState.resources);
-    
+
     // 建物からの生産
     for (final building in gameState.buildings.values) {
       for (final entry in building.production.entries) {
@@ -119,7 +108,8 @@ class CityBuildingGameService {
     );
 
     RandomEvent? triggeredEvent;
-    if (_random.nextDouble() < 0.2) { // 20%の確率でイベント発生
+    if (_random.nextDouble() < 0.2) {
+      // 20%の確率でイベント発生
       final eventResult = _triggerRandomEvent(updatedGameState);
       updatedGameState = eventResult.gameState;
       triggeredEvent = eventResult.event;
@@ -144,7 +134,7 @@ class CityBuildingGameService {
   /// 利用可能な建設選択肢を取得
   List<BuildingType> getAvailableBuildingOptions(CityGameState gameState) {
     final available = <BuildingType>[];
-    
+
     for (final buildingType in BuildingType.values) {
       final template = _getBuildingTemplate(buildingType);
       if (template != null) {
@@ -158,36 +148,36 @@ class CityBuildingGameService {
         }
       }
     }
-    
+
     return available;
   }
 
   /// 最終スコアを計算
   int calculateFinalScore(CityGameState gameState) {
     int score = 0;
-    
+
     // 基本スコア
     score += gameState.totalPopulation * 10;
     score += gameState.totalBuildings * 50;
-    score += (gameState.resources[ResourceType.money] ?? 0);
+    score += gameState.resources[ResourceType.money] ?? 0;
     score += gameState.citySize * 20;
-    
+
     // 建物レベルボーナス
     for (final building in gameState.buildings.values) {
       score += building.level * 30;
     }
-    
+
     // 時間ボーナス（早期達成）
     final elapsedMinutes = gameState.elapsedTime.inMinutes;
     if (elapsedMinutes < 10) {
       score += (10 - elapsedMinutes) * 100;
     }
-    
+
     // 勝利ボーナス
     if (gameState.gameStatus == GameStatus.victory) {
       score += 1000;
     }
-    
+
     return score.clamp(0, 10000);
   }
 
@@ -394,17 +384,6 @@ class CityBuildingGameService {
     ];
   }
 
-  /// ランダムイベント結果
-  class EventResult {
-    const EventResult({
-      required this.gameState,
-      this.event,
-    });
-
-    final CityGameState gameState;
-    final RandomEvent? event;
-  }
-
   /// ランダムイベントを発生させる
   EventResult _triggerRandomEvent(CityGameState gameState) {
     final availableEvents = gameState.availableEvents.where((event) {
@@ -456,4 +435,26 @@ class CityBuildingGameService {
   String getVictoryConditionsText() {
     return '勝利条件：\n・人口100人以上\n・建物10個以上\n・お金500以上\n\nいずれか一つを達成すれば勝利！';
   }
+}
+
+/// ターン終了処理結果
+class TurnResult {
+  const TurnResult({
+    required this.gameState,
+    this.triggeredEvent,
+  });
+
+  final CityGameState gameState;
+  final RandomEvent? triggeredEvent;
+}
+
+/// ランダムイベント結果
+class EventResult {
+  const EventResult({
+    required this.gameState,
+    this.event,
+  });
+
+  final CityGameState gameState;
+  final RandomEvent? event;
 }

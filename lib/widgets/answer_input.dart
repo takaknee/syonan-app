@@ -7,10 +7,12 @@ class AnswerInput extends StatefulWidget {
     super.key,
     required this.onAnswerSubmitted,
     this.onAnswerChanged,
+    this.autofocus = false,
   });
 
   final Function(int) onAnswerSubmitted;
   final Function(int?)? onAnswerChanged;
+  final bool autofocus;
 
   @override
   State<AnswerInput> createState() => _AnswerInputState();
@@ -23,10 +25,12 @@ class _AnswerInputState extends State<AnswerInput> {
   @override
   void initState() {
     super.initState();
-    // 自動的にフォーカスを当てる
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _focusNode.requestFocus();
-    });
+    // autofocusが有効な場合は自動的にフォーカスを当てる
+    if (widget.autofocus) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _focusNode.requestFocus();
+      });
+    }
   }
 
   @override

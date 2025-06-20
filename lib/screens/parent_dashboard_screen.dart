@@ -15,8 +15,7 @@ class ParentDashboardScreen extends StatefulWidget {
   State<ParentDashboardScreen> createState() => _ParentDashboardScreenState();
 }
 
-class _ParentDashboardScreenState extends State<ParentDashboardScreen>
-    with SingleTickerProviderStateMixin {
+class _ParentDashboardScreenState extends State<ParentDashboardScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override
@@ -42,7 +41,7 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
         bottom: TabBar(
           controller: _tabController,
           tabs: const [
-            Tab(icon: Icon(Icons.overview), text: '概要'),
+            Tab(icon: Icon(Icons.dashboard), text: '概要'),
             Tab(icon: Icon(Icons.analytics), text: '成績'),
             Tab(icon: Icon(Icons.timeline), text: '進捗'),
             Tab(icon: Icon(Icons.settings), text: '設定'),
@@ -162,7 +161,7 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
         _buildStatCard(
           theme,
           '総合成績',
-          '${summary.overallGrade}',
+          summary.overallGrade,
           Icons.grade,
           _getGradeColor(theme, summary.overallGrade),
         ),
@@ -265,8 +264,7 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
                           width: 40,
                           height: 40,
                           decoration: BoxDecoration(
-                            color: _getOperationColor(theme, score.operationType)
-                                .withValues(alpha: 0.1),
+                            color: _getOperationColor(theme, score.operationType).withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Icon(
@@ -288,8 +286,7 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
                               Text(
                                 '${score.score.toStringAsFixed(0)}点 (${score.correctAnswers}/${score.totalQuestions}問正解)',
                                 style: theme.textTheme.bodySmall?.copyWith(
-                                  color: theme.colorScheme.onSurface
-                                      .withValues(alpha: 0.6),
+                                  color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                                 ),
                               ),
                             ],
@@ -428,7 +425,9 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
                   child: _buildPerformanceMetric(
                     theme,
                     '改善度',
-                    performanceData.improvementTrend > 0 ? '+${performanceData.improvementTrend.toStringAsFixed(1)}%' : '${performanceData.improvementTrend.toStringAsFixed(1)}%',
+                    performanceData.improvementTrend > 0
+                        ? '+${performanceData.improvementTrend.toStringAsFixed(1)}%'
+                        : '${performanceData.improvementTrend.toStringAsFixed(1)}%',
                     performanceData.improvementTrend > 0
                         ? Colors.green
                         : performanceData.improvementTrend < 0
@@ -524,7 +523,7 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
                     const SizedBox(height: 8),
                     LinearProgressIndicator(
                       value: entry.value / 100,
-                      backgroundColor: theme.colorScheme.surfaceVariant,
+                      backgroundColor: theme.colorScheme.surfaceContainerHighest,
                       valueColor: AlwaysStoppedAnimation<Color>(
                         _getAccuracyColor(theme, entry.value),
                       ),
@@ -568,13 +567,13 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
 
   Widget _buildSimpleTrendChart(ThemeData theme, List<ScoreRecord> scores) {
     final recentScores = scores.take(10).toList().reversed.toList();
-    
+
     return CustomPaint(
       size: const Size(double.infinity, 200),
       painter: _SimpleTrendPainter(
         scores: recentScores,
         primaryColor: theme.colorScheme.primary,
-        backgroundColor: theme.colorScheme.surfaceVariant,
+        backgroundColor: theme.colorScheme.surfaceContainerHighest,
       ),
     );
   }
@@ -672,7 +671,7 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
               Row(
                 children: [
                   Text(
-                    '${current.toStringAsFixed(current % 1 == 0 ? 0 : 1)}',
+                    current.toStringAsFixed(current % 1 == 0 ? 0 : 1),
                     style: theme.textTheme.bodyLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: isAchieved ? Colors.green : theme.colorScheme.primary,
@@ -684,7 +683,7 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
                   ),
                   if (isAchieved) ...[
                     const SizedBox(width: 8),
-                    Icon(
+                    const Icon(
                       Icons.check_circle,
                       color: Colors.green,
                       size: 20,
@@ -697,7 +696,7 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
           const SizedBox(height: 8),
           LinearProgressIndicator(
             value: progress > 1.0 ? 1.0 : progress,
-            backgroundColor: theme.colorScheme.surfaceVariant,
+            backgroundColor: theme.colorScheme.surfaceContainerHighest,
             valueColor: AlwaysStoppedAnimation<Color>(
               isAchieved ? Colors.green : theme.colorScheme.primary,
             ),
@@ -746,14 +745,12 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
                   subtitle: Text(
                     milestone.description,
                     style: TextStyle(
-                      color: milestone.isAchieved 
+                      color: milestone.isAchieved
                           ? theme.colorScheme.onSurface.withValues(alpha: 0.7)
                           : theme.disabledColor,
                     ),
                   ),
-                  trailing: milestone.isAchieved
-                      ? const Icon(Icons.check_circle, color: Colors.green)
-                      : null,
+                  trailing: milestone.isAchieved ? const Icon(Icons.check_circle, color: Colors.green) : null,
                 )),
           ],
         ),
@@ -798,8 +795,8 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
       final date = now.subtract(Duration(days: 6 - index));
       final dayScores = allScores.where((score) {
         return score.createdAt.day == date.day &&
-               score.createdAt.month == date.month &&
-               score.createdAt.year == date.year;
+            score.createdAt.month == date.month &&
+            score.createdAt.year == date.year;
       }).length;
       return dayScores;
     });
@@ -820,7 +817,7 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
               width: 30,
               height: height.toDouble(),
               decoration: BoxDecoration(
-                color: count > 0 ? theme.colorScheme.primary : theme.colorScheme.surfaceVariant,
+                color: count > 0 ? theme.colorScheme.primary : theme.colorScheme.surfaceContainerHighest,
                 borderRadius: BorderRadius.circular(4),
               ),
             ),
@@ -955,7 +952,7 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
 
   _LearningySummary _calculateSummary(List<ScoreRecord> allScores) {
     if (allScores.isEmpty) {
-      return _LearningySummary(
+      return const _LearningySummary(
         totalPractices: 0,
         averageScore: 0.0,
         streakDays: 0,
@@ -971,7 +968,7 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
     // 分野別平均スコアを計算
     final subjectScores = <MathOperationType, List<double>>{};
     for (final score in allScores) {
-      subjectScores.putIfAbsent(score.operationType, () => []).add(score.score);
+      subjectScores.putIfAbsent(score.operationType, () => []).add(score.score.toDouble());
     }
 
     String strongestSubject = '未設定';
@@ -1003,7 +1000,7 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
 
   _PerformanceData _calculatePerformanceData(List<ScoreRecord> allScores) {
     if (allScores.isEmpty) {
-      return _PerformanceData(
+      return const _PerformanceData(
         overallAccuracy: 0.0,
         highestScore: 0.0,
         improvementTrend: 0.0,
@@ -1016,13 +1013,13 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
     final totalQuestions = allScores.map((s) => s.totalQuestions).reduce((a, b) => a + b);
     final overallAccuracy = (totalCorrect / totalQuestions) * 100;
 
-    final highestScore = allScores.map((s) => s.score).reduce((a, b) => a > b ? a : b);
+    final highestScore = allScores.map((s) => s.score.toDouble()).reduce((a, b) => a > b ? a : b);
 
     // 改善度を計算（最初の5回と最後の5回の平均スコアを比較）
     double improvementTrend = 0.0;
     if (allScores.length >= 10) {
-      final firstFiveAvg = allScores.reversed.take(5).map((s) => s.score).reduce((a, b) => a + b) / 5;
-      final lastFiveAvg = allScores.take(5).map((s) => s.score).reduce((a, b) => a + b) / 5;
+      final firstFiveAvg = allScores.reversed.take(5).map((s) => s.score.toDouble()).reduce((a, b) => a + b) / 5;
+      final lastFiveAvg = allScores.take(5).map((s) => s.score.toDouble()).reduce((a, b) => a + b) / 5;
       improvementTrend = lastFiveAvg - firstFiveAvg;
     }
 
@@ -1054,14 +1051,11 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen>
   _ProgressData _calculateProgressData(List<ScoreRecord> allScores) {
     final totalPractices = allScores.length.toDouble();
     final streakDays = _calculateStreakDays(allScores).toDouble();
-    
+
     // 週間練習回数を計算
     final now = DateTime.now();
     final weekStart = now.subtract(Duration(days: now.weekday - 1));
-    final weeklyPractices = allScores
-        .where((score) => score.createdAt.isAfter(weekStart))
-        .length
-        .toDouble();
+    final weeklyPractices = allScores.where((score) => score.createdAt.isAfter(weekStart)).length.toDouble();
 
     // 平均正答率を計算
     double averageAccuracy = 0.0;

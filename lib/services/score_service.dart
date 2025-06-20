@@ -53,10 +53,31 @@ class ScoreService extends ChangeNotifier {
     }
   }
 
+  /// スコアを追加（saveScoreのエイリアス）
+  Future<void> addScore(
+    MathOperationType operation,
+    int correctAnswers,
+    int totalQuestions,
+    Duration timeSpent,
+  ) async {
+    final score = ScoreRecord(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      date: DateTime.now(),
+      operation: operation,
+      correctAnswers: correctAnswers,
+      totalQuestions: totalQuestions,
+      timeSpent: timeSpent,
+    );
+    await saveScore(score);
+  }
+
   /// 特定の操作タイプのスコア履歴を取得
   List<ScoreRecord> getScoresByOperation(MathOperationType operation) {
     return _scores.where((score) => score.operation == operation).toList();
   }
+
+  /// 全スコアを取得（scoresのエイリアス）
+  List<ScoreRecord> getAllScores() => scores;
 
   /// 最新のスコアと前回のスコアを比較して改善度を取得
   ScoreImprovement getImprovement(MathOperationType operation) {
@@ -87,8 +108,7 @@ class ScoreService extends ChangeNotifier {
 
     if (operationScores.isEmpty) return 0.0;
 
-    final totalAccuracy =
-        operationScores.map((score) => score.accuracy).reduce((a, b) => a + b);
+    final totalAccuracy = operationScores.map((score) => score.accuracy).reduce((a, b) => a + b);
 
     return totalAccuracy / operationScores.length;
   }

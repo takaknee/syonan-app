@@ -125,7 +125,7 @@ class _AiTutorScreenState extends State<AiTutorScreen> {
               theme,
               '平均正答率',
               '${analysis.averageAccuracy}%',
-              Icons.target,
+              Icons.track_changes,
             ),
             _buildAnalysisItem(
               theme,
@@ -318,9 +318,9 @@ class _AiTutorScreenState extends State<AiTutorScreen> {
 
   _PerformanceAnalysis _analyzeUserPerformance(ScoreService scoreService) {
     final allScores = scoreService.getAllScores();
-    
+
     if (allScores.isEmpty) {
-      return _PerformanceAnalysis(
+      return const _PerformanceAnalysis(
         totalPractices: 0,
         averageAccuracy: 0,
         strongSubject: '初回練習',
@@ -337,36 +337,25 @@ class _AiTutorScreenState extends State<AiTutorScreen> {
     }
 
     // 各計算タイプの成績を計算
-    final multiplicationScores = allScores
-        .where((score) => score.operationType == MathOperationType.multiplication)
-        .toList();
-    final divisionScores = allScores
-        .where((score) => score.operationType == MathOperationType.division)
-        .toList();
-    final additionScores = allScores
-        .where((score) => score.operationType == MathOperationType.addition)
-        .toList();
-    final subtractionScores = allScores
-        .where((score) => score.operationType == MathOperationType.subtraction)
-        .toList();
+    final multiplicationScores =
+        allScores.where((score) => score.operationType == MathOperationType.multiplication).toList();
+    final divisionScores = allScores.where((score) => score.operationType == MathOperationType.division).toList();
+    final additionScores = allScores.where((score) => score.operationType == MathOperationType.addition).toList();
+    final subtractionScores = allScores.where((score) => score.operationType == MathOperationType.subtraction).toList();
 
     // 平均スコアを計算
     final multiplicationAvg = multiplicationScores.isEmpty
         ? 0.0
-        : multiplicationScores.map((s) => s.score).reduce((a, b) => a + b) /
-            multiplicationScores.length;
+        : multiplicationScores.map((s) => s.score).reduce((a, b) => a + b) / multiplicationScores.length;
     final divisionAvg = divisionScores.isEmpty
         ? 0.0
-        : divisionScores.map((s) => s.score).reduce((a, b) => a + b) /
-            divisionScores.length;
+        : divisionScores.map((s) => s.score).reduce((a, b) => a + b) / divisionScores.length;
     final additionAvg = additionScores.isEmpty
         ? 0.0
-        : additionScores.map((s) => s.score).reduce((a, b) => a + b) /
-            additionScores.length;
+        : additionScores.map((s) => s.score).reduce((a, b) => a + b) / additionScores.length;
     final subtractionAvg = subtractionScores.isEmpty
         ? 0.0
-        : subtractionScores.map((s) => s.score).reduce((a, b) => a + b) /
-            subtractionScores.length;
+        : subtractionScores.map((s) => s.score).reduce((a, b) => a + b) / subtractionScores.length;
 
     // 最も得意な分野と苦手な分野を判定
     final averages = {
@@ -376,8 +365,7 @@ class _AiTutorScreenState extends State<AiTutorScreen> {
       '引き算': subtractionAvg,
     };
 
-    final sortedByScore = averages.entries.toList()
-      ..sort((a, b) => b.value.compareTo(a.value));
+    final sortedByScore = averages.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
 
     final strongSubject = sortedByScore.first.key;
     final weakSubject = sortedByScore.last.key;
@@ -459,13 +447,13 @@ class _AiTutorScreenState extends State<AiTutorScreen> {
     }
 
     if (averageAccuracy < 50) {
-      recommendations.add('${weakSubject}の基礎をもう一度復習してみましょう。');
+      recommendations.add('$weakSubjectの基礎をもう一度復習してみましょう。');
       recommendations.add('間違えても大丈夫！間違いから学ぶことが大切です。');
     } else if (averageAccuracy < 70) {
-      recommendations.add('${weakSubject}をもう少し練習すると、さらに上達しますよ！');
-      recommendations.add('${strongSubject}は得意なので、自信を持って続けてください。');
+      recommendations.add('$weakSubjectをもう少し練習すると、さらに上達しますよ！');
+      recommendations.add('$strongSubjectは得意なので、自信を持って続けてください。');
     } else if (averageAccuracy < 90) {
-      recommendations.add('とても上手です！${weakSubject}も少し練習すれば完璧になりそうです。');
+      recommendations.add('とても上手です！$weakSubjectも少し練習すれば完璧になりそうです。');
       recommendations.add('時々、より難しい問題にも挑戦してみてください。');
     } else {
       recommendations.add('素晴らしい成績です！全ての分野でとても上手にできています。');

@@ -64,8 +64,8 @@ void main() {
         );
 
         expect(building.canUpgrade(), true);
-        
-        const maxLevelBuilding = building.copyWith(level: 3);
+
+        final maxLevelBuilding = building.copyWith(level: 3);
         expect(maxLevelBuilding.canUpgrade(), false);
       });
 
@@ -84,7 +84,7 @@ void main() {
         );
 
         final upgraded = building.upgraded();
-        
+
         expect(upgraded.level, 2);
         expect(upgraded.production[ResourceType.money], greaterThan(5));
       });
@@ -164,10 +164,12 @@ void main() {
       test('can check if has enough resources', () {
         expect(gameState.hasEnoughResources({ResourceType.money: 30}), true);
         expect(gameState.hasEnoughResources({ResourceType.money: 60}), false);
-        expect(gameState.hasEnoughResources({
-          ResourceType.money: 30,
-          ResourceType.materials: 10,
-        }), true);
+        expect(
+            gameState.hasEnoughResources({
+              ResourceType.money: 30,
+              ResourceType.materials: 10,
+            }),
+            true);
       });
 
       test('can check if has building', () {
@@ -196,7 +198,7 @@ void main() {
       test('calculates remaining time correctly', () {
         final startTime = DateTime.now().subtract(const Duration(minutes: 2));
         final gameStateWithTime = gameState.copyWith(gameStartTime: startTime);
-        
+
         final remaining = gameStateWithTime.remainingTime;
         expect(remaining.inMinutes, lessThan(9));
         expect(remaining.inMinutes, greaterThan(7));
@@ -205,7 +207,7 @@ void main() {
       test('detects time up correctly', () {
         final startTime = DateTime.now().subtract(const Duration(minutes: 11));
         final gameStateWithTime = gameState.copyWith(gameStartTime: startTime);
-        
+
         expect(gameStateWithTime.isTimeUp, true);
       });
     });

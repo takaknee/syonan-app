@@ -406,6 +406,40 @@
         "focus": true,
         "panel": "new"
       }
+    },
+    // コンパイル時刻付きビルド
+    {
+      "label": "Flutter: Webアプリ起動（時刻付き）",
+      "type": "shell",
+      "command": "/workspaces/syonan-app/scripts/build-with-time.sh",
+      "args": [
+        "run"
+      ],
+      "group": "build",
+      "isBackground": true,
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "dedicated"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Flutter: Webビルド（時刻付き）",
+      "type": "shell",
+      "command": "/workspaces/syonan-app/scripts/build-with-time.sh",
+      "args": [
+        "build-web"
+      ],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
     }
   ]
 }

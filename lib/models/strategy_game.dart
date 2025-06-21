@@ -1,4 +1,5 @@
 /// 水滸伝戦略ゲームのモデル
+library;
 
 /// 地域/領土を表すクラス
 class Territory {

@@ -6,8 +6,8 @@ import 'package:syonan_app/screens/multiplayer_battle_screen.dart';
 import 'package:syonan_app/screens/parent_dashboard_screen.dart';
 import 'package:syonan_app/screens/story_mode_screen.dart';
 import 'package:syonan_app/services/math_service.dart';
-import 'package:syonan_app/services/score_service.dart';
 import 'package:syonan_app/services/points_service.dart';
+import 'package:syonan_app/services/score_service.dart';
 
 void main() {
   group('New Feature Screens Tests', () {

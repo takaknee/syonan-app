@@ -28,7 +28,7 @@ void main() {
     });
 
     test('should calculate final score correctly', () {
-      final gameState = StrategyGameState(
+      final gameState = const StrategyGameState(
         territories: [
           Territory(
             id: 'test1',
@@ -48,7 +48,7 @@ void main() {
         selectedTerritoryId: null,
       );
 
-      final duration = Duration(minutes: 8);
+      final duration = const Duration(minutes: 8);
       final score = gameService.calculateFinalScore(gameState, duration);
 
       expect(score, greaterThan(0));
@@ -67,7 +67,7 @@ void main() {
     });
 
     test('should get attackable targets correctly', () {
-      final gameState = StrategyGameState(
+      final gameState = const StrategyGameState(
         territories: [
           Territory(
             id: 'player1',

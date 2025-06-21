@@ -1,4 +1,5 @@
 /// 街づくりゲームのモデル
+library;
 
 /// 資源の種類
 enum ResourceType {

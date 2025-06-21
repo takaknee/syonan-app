@@ -3,10 +3,10 @@ import 'package:provider/provider.dart';
 
 import '../models/math_problem.dart';
 import '../services/math_service.dart';
-import '../services/score_service.dart';
 import '../services/points_service.dart';
-import '../widgets/problem_card.dart';
+import '../services/score_service.dart';
 import '../widgets/answer_input.dart';
+import '../widgets/problem_card.dart';
 
 /// ストーリーモード画面
 /// 冒険しながら算数を学ぶストーリー形式の学習画面

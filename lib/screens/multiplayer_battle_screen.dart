@@ -1,12 +1,13 @@
+import 'dart:async';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'dart:math';
-import 'dart:async';
 
 import '../models/math_problem.dart';
 import '../services/math_service.dart';
-import '../services/score_service.dart';
 import '../services/points_service.dart';
+import '../services/score_service.dart';
 
 /// みんなでバトル画面
 /// AIとの算数バトルゲーム

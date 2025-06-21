@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 
 import '../models/math_problem.dart';
 import '../models/score_record.dart';
-import '../services/score_service.dart';
 import '../services/points_service.dart';
+import '../services/score_service.dart';
 
 /// 保護者ダッシュボード画面
 /// 子供の学習進捗を詳しく確認できる画面

@@ -168,7 +168,7 @@ class _CityBuilderGameScreenState extends State<CityBuilderGameScreen> {
                   color: entry.value > 0 ? Colors.green : Colors.red,
                 ),
               );
-            }).toList(),
+            }),
           ],
         ),
         actions: [
@@ -451,7 +451,7 @@ class _CityBuilderGameScreenState extends State<CityBuilderGameScreen> {
             children: [
               Text(template.emoji, style: const TextStyle(fontSize: 20)),
               Text(
-                isUpgrade ? '${template.name} Lv.${existingBuilding!.level + 1}' : template.name,
+                isUpgrade ? '${template.name} Lv.${existingBuilding.level + 1}' : template.name,
                 style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),

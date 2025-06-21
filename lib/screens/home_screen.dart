@@ -8,7 +8,6 @@ import '../services/mini_game_service.dart';
 import '../services/points_service.dart';
 import '../services/score_service.dart';
 import '../utils/build_info.dart';
-import '../widgets/coming_soon_card.dart';
 import '../widgets/feature_card.dart';
 import '../widgets/mini_game_button.dart';
 import '../widgets/points_card.dart';

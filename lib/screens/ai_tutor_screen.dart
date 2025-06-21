@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../models/math_problem.dart';
-import '../services/score_service.dart';
 import '../services/math_service.dart';
-import '../widgets/problem_card.dart';
+import '../services/score_service.dart';
 import 'practice_screen.dart';
 
 /// AI先生画面

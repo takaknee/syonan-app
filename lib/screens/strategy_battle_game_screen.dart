@@ -211,7 +211,6 @@ class _StrategyBattleGameScreenState extends State<StrategyBattleGameScreen> {
               ),
               // アクションパネル
               Expanded(
-                flex: 1,
                 child: _buildActionPanel(),
               ),
             ],
@@ -484,7 +483,7 @@ class _StrategyBattleGameScreenState extends State<StrategyBattleGameScreen> {
             Expanded(
               child: ElevatedButton(
                 onPressed: canRecruit ? () => _recruitTroops(territory.id, 1) : null,
-                child: Text('兵士募集 (${StrategyGameService.troopCost}金)'),
+                child: const Text('兵士募集 (${StrategyGameService.troopCost}金)'),
               ),
             ),
           ],

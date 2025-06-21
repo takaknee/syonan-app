@@ -115,7 +115,12 @@ jobs:
       - name: Build Web
         run: |
           echo "🏗️ Building Flutter web app..."
-          flutter build web --release --base-href "/syonan-app/"
+          BUILD_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          echo "📅 Build time: $BUILD_TIME"
+          flutter build web --release --base-href "/syonan-app/" \
+            --dart-define=BUILD_TIME="$BUILD_TIME" \
+            --dart-define=BUILD_NUMBER="${{ github.run_number }}" \
+            --dart-define=COMMIT_HASH="${{ github.sha }}"
 
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v4

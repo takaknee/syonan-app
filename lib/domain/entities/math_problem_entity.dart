@@ -17,7 +17,6 @@ enum MathOperationType {
 
 /// 算数問題のエンティティ
 class MathProblemEntity {
-
   MathProblemEntity({
     required this.firstNumber,
     required this.secondNumber,
@@ -71,15 +70,10 @@ class MathProblemEntity {
           correctAnswer == other.correctAnswer;
 
   @override
-  int get hashCode =>
-      firstNumber.hashCode ^
-      secondNumber.hashCode ^
-      operation.hashCode ^
-      correctAnswer.hashCode;
+  int get hashCode => firstNumber.hashCode ^ secondNumber.hashCode ^ operation.hashCode ^ correctAnswer.hashCode;
 
   @override
-  String toString() =>
-      'MathProblemEntity($problemText = $correctAnswer, difficulty: $difficultyLevel)';
+  String toString() => 'MathProblemEntity($problemText = $correctAnswer, difficulty: $difficultyLevel)';
 
   /// エンティティをコピーして新しいインスタンスを作成
   MathProblemEntity copyWith({

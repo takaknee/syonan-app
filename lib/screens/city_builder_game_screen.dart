@@ -21,7 +21,6 @@ class _CityBuilderGameScreenState extends State<CityBuilderGameScreen> {
   late CityGameState _gameState;
   Timer? _gameTimer;
   bool _isGameComplete = false;
-  String? _lastEventMessage;
 
   @override
   void initState() {
@@ -39,7 +38,6 @@ class _CityBuilderGameScreenState extends State<CityBuilderGameScreen> {
     setState(() {
       _gameState = _gameService.initializeGame();
       _isGameComplete = false;
-      _lastEventMessage = null;
     });
 
     // チュートリアルを表示

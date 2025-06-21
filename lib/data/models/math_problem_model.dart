@@ -2,7 +2,6 @@ import '../../domain/entities/math_problem_entity.dart';
 
 /// 算数問題のデータモデル（JSON変換用）
 class MathProblemModel extends MathProblemEntity {
-
   /// EntityからModelを作成
   factory MathProblemModel.fromEntity(MathProblemEntity entity) {
     return MathProblemModel(

@@ -15,8 +15,7 @@ class DodgeGameScreen extends StatefulWidget {
   State<DodgeGameScreen> createState() => _DodgeGameScreenState();
 }
 
-class _DodgeGameScreenState extends State<DodgeGameScreen>
-    with TickerProviderStateMixin {
+class _DodgeGameScreenState extends State<DodgeGameScreen> with TickerProviderStateMixin {
   late AnimationController _gameController;
   late AnimationController _explosionController;
 
@@ -113,8 +112,7 @@ class _DodgeGameScreenState extends State<DodgeGameScreen>
   }
 
   void _startObstacleSpawning() {
-    _obstacleTimer =
-        Timer.periodic(Duration(milliseconds: _spawnRate.round()), (timer) {
+    _obstacleTimer = Timer.periodic(Duration(milliseconds: _spawnRate.round()), (timer) {
       if (!_isPlaying) return;
 
       _spawnObstacle();
@@ -129,8 +127,7 @@ class _DodgeGameScreenState extends State<DodgeGameScreen>
 
   void _spawnObstacle() {
     final x = _random.nextDouble();
-    final size =
-        0.04 + _random.nextDouble() * 0.04; // Random size between 0.04 and 0.08
+    final size = 0.04 + _random.nextDouble() * 0.04; // Random size between 0.04 and 0.08
     final speed = _obstacleSpeed + _random.nextDouble() * 1.0;
 
     final colors = [Colors.red, Colors.orange, Colors.yellow, Colors.purple];
@@ -160,7 +157,7 @@ class _DodgeGameScreenState extends State<DodgeGameScreen>
   void _spawnPowerUp() {
     final x = _random.nextDouble();
     final type = PowerUpType.values[_random.nextInt(PowerUpType.values.length)];
-    
+
     _powerUps.add(PowerUp(
       x: x,
       y: -0.1,
@@ -171,9 +168,9 @@ class _DodgeGameScreenState extends State<DodgeGameScreen>
   void _shoot() {
     final currentTime = DateTime.now().millisecondsSinceEpoch.toDouble();
     final cooldown = _rapidFireActive ? _shotCooldown / 2.5 : _shotCooldown; // Reduced from /3 to /2.5
-    
+
     if (currentTime - _lastShotTime < cooldown) return;
-    
+
     _lastShotTime = currentTime;
 
     if (_multiShotActive) {
@@ -238,7 +235,7 @@ class _DodgeGameScreenState extends State<DodgeGameScreen>
             if (_checkProjectileObstacleCollision(_projectiles[i], obstacle)) {
               _projectiles.removeAt(i);
               hitByProjectile = true;
-              
+
               // Add score with combo multiplier
               _combo++;
               final comboMultiplier = 1 + (_combo - 1) * 0.3; // Reduced from 0.5 to 0.3 for balance
@@ -306,7 +303,7 @@ class _DodgeGameScreenState extends State<DodgeGameScreen>
 
   void _activatePowerUp(PowerUpType type) {
     final currentTime = DateTime.now().millisecondsSinceEpoch.toDouble();
-    
+
     switch (type) {
       case PowerUpType.rapidFire:
         _rapidFireActive = true;
@@ -505,8 +502,7 @@ class _DodgeGameScreenState extends State<DodgeGameScreen>
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
-                  border:
-                      Border.all(color: Colors.white.withValues(alpha: 0.3)),
+                  border: Border.all(color: Colors.white.withValues(alpha: 0.3)),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -551,14 +547,14 @@ class _DodgeGameScreenState extends State<DodgeGameScreen>
                       Column(
                         children: [
                           Icon(
-                            _combo >= 5 ? Icons.local_fire_department : Icons.whatshot, 
+                            _combo >= 5 ? Icons.local_fire_department : Icons.whatshot,
                             color: _combo >= 5 ? Colors.red : Colors.orange,
                           ),
                           const SizedBox(height: 4),
                           Text(
                             _combo >= 5 ? 'ファイア!' : 'コンボ',
                             style: TextStyle(
-                              color: _combo >= 5 ? Colors.red : Colors.white, 
+                              color: _combo >= 5 ? Colors.red : Colors.white,
                               fontSize: 12,
                             ),
                           ),
@@ -697,8 +693,7 @@ class _DodgeGameScreenState extends State<DodgeGameScreen>
                       },
                       onTapDown: (details) {
                         if (!_isPlaying) return;
-                        final tapX =
-                            details.localPosition.dx / screenSize.width;
+                        final tapX = details.localPosition.dx / screenSize.width;
                         final deltaX = tapX - _playerX;
                         _movePlayer(deltaX * 0.3); // Smooth movement
                       },
@@ -713,10 +708,8 @@ class _DodgeGameScreenState extends State<DodgeGameScreen>
                           children: [
                             // Obstacles
                             ..._obstacles.map((obstacle) => Positioned(
-                                  left: obstacle.x * screenSize.width -
-                                      (obstacle.size * screenSize.width / 2),
-                                  top: obstacle.y * (screenSize.height - 200) -
-                                      (obstacle.size * screenSize.width / 2),
+                                  left: obstacle.x * screenSize.width - (obstacle.size * screenSize.width / 2),
+                                  top: obstacle.y * (screenSize.height - 200) - (obstacle.size * screenSize.width / 2),
                                   child: Container(
                                     width: obstacle.size * screenSize.width,
                                     height: obstacle.size * screenSize.width,
@@ -725,15 +718,14 @@ class _DodgeGameScreenState extends State<DodgeGameScreen>
                                       shape: BoxShape.circle,
                                       boxShadow: [
                                         BoxShadow(
-                                          color: obstacle.color
-                                              .withValues(alpha: 0.5),
+                                          color: obstacle.color.withValues(alpha: 0.5),
                                           blurRadius: 8,
                                           spreadRadius: 2,
                                         ),
                                       ],
                                     ),
-                                    child: obstacle.isDestructible 
-                                        ? null 
+                                    child: obstacle.isDestructible
+                                        ? null
                                         : const Center(
                                             child: Icon(
                                               Icons.shield,
@@ -746,8 +738,7 @@ class _DodgeGameScreenState extends State<DodgeGameScreen>
 
                             // Projectiles
                             ..._projectiles.map((projectile) => Positioned(
-                                  left: projectile.x * screenSize.width -
-                                      (projectile.size * screenSize.width / 2),
+                                  left: projectile.x * screenSize.width - (projectile.size * screenSize.width / 2),
                                   top: projectile.y * (screenSize.height - 200) -
                                       (projectile.size * screenSize.width / 2),
                                   child: Container(
@@ -769,23 +760,18 @@ class _DodgeGameScreenState extends State<DodgeGameScreen>
 
                             // Power-ups
                             ..._powerUps.map((powerUp) => Positioned(
-                                  left: powerUp.x * screenSize.width -
-                                      (powerUp.size * screenSize.width / 2),
-                                  top: powerUp.y * (screenSize.height - 200) -
-                                      (powerUp.size * screenSize.width / 2),
+                                  left: powerUp.x * screenSize.width - (powerUp.size * screenSize.width / 2),
+                                  top: powerUp.y * (screenSize.height - 200) - (powerUp.size * screenSize.width / 2),
                                   child: Container(
                                     width: powerUp.size * screenSize.width,
                                     height: powerUp.size * screenSize.width,
                                     decoration: BoxDecoration(
-                                      color: powerUp.type == PowerUpType.rapidFire 
-                                          ? Colors.green 
-                                          : Colors.purple,
+                                      color: powerUp.type == PowerUpType.rapidFire ? Colors.green : Colors.purple,
                                       shape: BoxShape.circle,
                                       boxShadow: [
                                         BoxShadow(
-                                          color: (powerUp.type == PowerUpType.rapidFire 
-                                              ? Colors.green 
-                                              : Colors.purple).withValues(alpha: 0.5),
+                                          color: (powerUp.type == PowerUpType.rapidFire ? Colors.green : Colors.purple)
+                                              .withValues(alpha: 0.5),
                                           blurRadius: 6,
                                           spreadRadius: 2,
                                         ),
@@ -793,9 +779,7 @@ class _DodgeGameScreenState extends State<DodgeGameScreen>
                                     ),
                                     child: Center(
                                       child: Icon(
-                                        powerUp.type == PowerUpType.rapidFire 
-                                            ? Icons.speed 
-                                            : Icons.scatter_plot,
+                                        powerUp.type == PowerUpType.rapidFire ? Icons.speed : Icons.scatter_plot,
                                         color: Colors.white,
                                         size: 20,
                                       ),
@@ -806,25 +790,17 @@ class _DodgeGameScreenState extends State<DodgeGameScreen>
                             // Player
                             AnimatedPositioned(
                               duration: const Duration(milliseconds: 100),
-                              left: _playerX * screenSize.width -
-                                  (_playerSize * screenSize.width / 2),
-                              top: _playerY * (screenSize.height - 200) -
-                                  (_playerSize * screenSize.width / 2),
+                              left: _playerX * screenSize.width - (_playerSize * screenSize.width / 2),
+                              top: _playerY * (screenSize.height - 200) - (_playerSize * screenSize.width / 2),
                               child: AnimatedBuilder(
                                 animation: _explosionController,
                                 builder: (context, child) {
                                   if (_explosionController.value > 0) {
                                     return Container(
-                                      width: _playerSize *
-                                          screenSize.width *
-                                          (1 + _explosionController.value * 2),
-                                      height: _playerSize *
-                                          screenSize.width *
-                                          (1 + _explosionController.value * 2),
+                                      width: _playerSize * screenSize.width * (1 + _explosionController.value * 2),
+                                      height: _playerSize * screenSize.width * (1 + _explosionController.value * 2),
                                       decoration: BoxDecoration(
-                                        color: Colors.red.withValues(
-                                            alpha:
-                                                1 - _explosionController.value),
+                                        color: Colors.red.withValues(alpha: 1 - _explosionController.value),
                                         shape: BoxShape.circle,
                                       ),
                                     );

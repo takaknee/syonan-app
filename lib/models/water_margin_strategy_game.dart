@@ -265,6 +265,7 @@ class WaterMarginGameState {
     required this.gameStatus,
     this.selectedProvinceId,
     this.selectedHeroId,
+    this.advancedHeroes,
   });
 
   final List<Province> provinces;
@@ -274,6 +275,7 @@ class WaterMarginGameState {
   final GameStatus gameStatus;
   final String? selectedProvinceId;
   final String? selectedHeroId;
+  final Map<String, dynamic>? advancedHeroes; // 拡張英雄データ（将来の実装用）
 
   WaterMarginGameState copyWith({
     List<Province>? provinces,
@@ -283,6 +285,7 @@ class WaterMarginGameState {
     GameStatus? gameStatus,
     String? selectedProvinceId,
     String? selectedHeroId,
+    Map<String, dynamic>? advancedHeroes,
   }) {
     return WaterMarginGameState(
       provinces: provinces ?? this.provinces,
@@ -292,6 +295,7 @@ class WaterMarginGameState {
       gameStatus: gameStatus ?? this.gameStatus,
       selectedProvinceId: selectedProvinceId ?? this.selectedProvinceId,
       selectedHeroId: selectedHeroId ?? this.selectedHeroId,
+      advancedHeroes: advancedHeroes ?? this.advancedHeroes,
     );
   }
 

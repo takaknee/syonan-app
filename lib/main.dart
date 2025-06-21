@@ -37,8 +37,7 @@ class SyonanApp extends StatelessWidget {
         Provider<MathService>(create: (_) => MathService()),
         ChangeNotifierProvider<ScoreService>(create: (_) => ScoreService()),
         ChangeNotifierProvider<PointsService>(create: (_) => PointsService()),
-        ChangeNotifierProvider<MiniGameService>(
-            create: (_) => MiniGameService()),
+        ChangeNotifierProvider<MiniGameService>(create: (_) => MiniGameService()),
       ],
       child: MaterialApp(
         title: '算数れんしゅう',

@@ -43,10 +43,8 @@ class _NumberPuzzleGameScreenState extends State<NumberPuzzleGameScreen> {
     final finalScore = _score + (1000 - duration.inSeconds).clamp(0, 1000);
 
     // スコアを記録
-    final miniGameService =
-        Provider.of<MiniGameService>(context, listen: false);
-    miniGameService.recordScore(
-        'number_puzzle', finalScore, MiniGameDifficulty.normal);
+    final miniGameService = Provider.of<MiniGameService>(context, listen: false);
+    miniGameService.recordScore('number_puzzle', finalScore, MiniGameDifficulty.normal);
 
     _showGameCompleteDialog(finalScore);
   }
@@ -117,13 +115,11 @@ class _NumberPuzzleGameScreenState extends State<NumberPuzzleGameScreen> {
                 children: [
                   Text(
                     'スコア: $_score',
-                    style: const TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   Text(
                     'レベル: $_level',
-                    style: const TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -142,8 +138,7 @@ class _NumberPuzzleGameScreenState extends State<NumberPuzzleGameScreen> {
                     const SizedBox(height: 24),
                     const Text(
                       '数字パズル',
-                      style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 16),
                     const Text(
@@ -157,8 +152,7 @@ class _NumberPuzzleGameScreenState extends State<NumberPuzzleGameScreen> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF795548),
                         foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 32, vertical: 16),
+                        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                       ),
                       child: const Text('デモスコア獲得'),
                     ),

@@ -4,39 +4,39 @@ library;
 /// 資源の種類
 enum ResourceType {
   population, // 人口
-  food,       // 食料
-  materials,  // 材料
-  energy,     // エネルギー
-  money,      // お金
+  food, // 食料
+  materials, // 材料
+  energy, // エネルギー
+  money, // お金
 }
 
 /// 建物の種類
 enum BuildingType {
   // 住宅系
-  house,      // 家
-  apartment,  // アパート
-  mansion,    // マンション
-  
+  house, // 家
+  apartment, // アパート
+  mansion, // マンション
+
   // 生産系
-  farm,       // 農場
-  factory,    // 工場
+  farm, // 農場
+  factory, // 工場
   powerPlant, // 発電所
-  mine,       // 鉱山
-  
+  mine, // 鉱山
+
   // サービス系
-  shop,       // 商店
-  hospital,   // 病院
-  school,     // 学校
-  park,       // 公園
+  shop, // 商店
+  hospital, // 病院
+  school, // 学校
+  park, // 公園
 }
 
 /// ユニットの種類
 enum UnitType {
-  worker,     // 労働者
-  farmer,     // 農民
-  engineer,   // エンジニア
-  merchant,   // 商人
-  student,    // 学生
+  worker, // 労働者
+  farmer, // 農民
+  engineer, // エンジニア
+  merchant, // 商人
+  student, // 学生
 }
 
 /// 建物のクラス
@@ -61,8 +61,8 @@ class Building {
   final int maxLevel;
   final Map<ResourceType, int> buildCost;
   final Map<ResourceType, int> production; // 毎ターンの生産量
-  final Map<ResourceType, int> upkeep;     // 毎ターンの維持費
-  final int populationProvided;            // 提供する人口
+  final Map<ResourceType, int> upkeep; // 毎ターンの維持費
+  final int populationProvided; // 提供する人口
   final Map<ResourceType, int> unlockRequirements; // 建設に必要な条件
 
   Building copyWith({
@@ -97,10 +97,10 @@ class Building {
   /// レベルアップ後の建物を取得
   Building upgraded() {
     if (!canUpgrade()) return this;
-    
+
     final newLevel = level + 1;
     final multiplier = 1.0 + (newLevel * 0.3); // レベルが上がるごとに30%増加
-    
+
     return copyWith(
       level: newLevel,
       buildCost: buildCost.map((k, v) => MapEntry(k, (v * multiplier * 0.8).round())),
@@ -153,10 +153,10 @@ class CityGameState {
 
   final Map<ResourceType, int> resources;
   final Map<BuildingType, Building> buildings; // 建設済みの建物
-  final Map<UnitType, int> units;               // 保有するユニット数
+  final Map<UnitType, int> units; // 保有するユニット数
   final int currentTurn;
   final GameStatus gameStatus;
-  final int citySize;                           // 街のサイズ（建設可能な建物数に影響）
+  final int citySize; // 街のサイズ（建設可能な建物数に影響）
   final BuildingType? selectedBuildingType;
   final List<RandomEvent> availableEvents;
   final DateTime gameStartTime;

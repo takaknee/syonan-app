@@ -11,12 +11,10 @@ class SlidingPuzzleGameScreen extends StatefulWidget {
   const SlidingPuzzleGameScreen({super.key});
 
   @override
-  State<SlidingPuzzleGameScreen> createState() =>
-      _SlidingPuzzleGameScreenState();
+  State<SlidingPuzzleGameScreen> createState() => _SlidingPuzzleGameScreenState();
 }
 
-class _SlidingPuzzleGameScreenState extends State<SlidingPuzzleGameScreen>
-    with TickerProviderStateMixin {
+class _SlidingPuzzleGameScreenState extends State<SlidingPuzzleGameScreen> with TickerProviderStateMixin {
   late AnimationController _slideController;
   late AnimationController _successController;
 
@@ -139,8 +137,7 @@ class _SlidingPuzzleGameScreenState extends State<SlidingPuzzleGameScreen>
     const baseScore = 1000;
     final movesPenalty = _moves * 5;
     final timePenalty = duration.inSeconds;
-    final score =
-        (baseScore - movesPenalty - timePenalty).clamp(100, baseScore);
+    final score = (baseScore - movesPenalty - timePenalty).clamp(100, baseScore);
 
     showDialog(
       context: context,
@@ -301,8 +298,7 @@ class _SlidingPuzzleGameScreenState extends State<SlidingPuzzleGameScreen>
                         StreamBuilder(
                           stream: Stream.periodic(const Duration(seconds: 1)),
                           builder: (context, snapshot) {
-                            final elapsed =
-                                DateTime.now().difference(_startTime);
+                            final elapsed = DateTime.now().difference(_startTime);
                             final minutes = elapsed.inMinutes;
                             final seconds = elapsed.inSeconds % 60;
                             return Text(
@@ -355,8 +351,7 @@ class _SlidingPuzzleGameScreenState extends State<SlidingPuzzleGameScreen>
                     ),
                     child: GridView.builder(
                       physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 4,
                         crossAxisSpacing: 4,
                         mainAxisSpacing: 4,
@@ -374,16 +369,13 @@ class _SlidingPuzzleGameScreenState extends State<SlidingPuzzleGameScreen>
                               child: AnimatedContainer(
                                 duration: const Duration(milliseconds: 200),
                                 decoration: BoxDecoration(
-                                  color: isEmpty
-                                      ? Colors.transparent
-                                      : theme.colorScheme.primary,
+                                  color: isEmpty ? Colors.transparent : theme.colorScheme.primary,
                                   borderRadius: BorderRadius.circular(8),
                                   boxShadow: isEmpty
                                       ? null
                                       : [
                                           BoxShadow(
-                                            color: Colors.black
-                                                .withValues(alpha: 0.2),
+                                            color: Colors.black.withValues(alpha: 0.2),
                                             blurRadius: 4,
                                             offset: const Offset(0, 2),
                                           ),
@@ -394,8 +386,7 @@ class _SlidingPuzzleGameScreenState extends State<SlidingPuzzleGameScreen>
                                     : Center(
                                         child: Text(
                                           '$value',
-                                          style: theme.textTheme.headlineMedium
-                                              ?.copyWith(
+                                          style: theme.textTheme.headlineMedium?.copyWith(
                                             color: theme.colorScheme.onPrimary,
                                             fontWeight: FontWeight.bold,
                                           ),

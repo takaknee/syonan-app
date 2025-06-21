@@ -30,8 +30,7 @@ class AppBindings {
   /// SharedPreferencesを取得
   static SharedPreferences get sharedPreferences {
     if (_sharedPreferences == null) {
-      throw Exception(
-          'SharedPreferences not initialized. Call AppBindings.init() first.');
+      throw Exception('SharedPreferences not initialized. Call AppBindings.init() first.');
     }
     return _sharedPreferences!;
   }
@@ -64,8 +63,7 @@ class AppBindings {
 
   /// GetScoreStatisticsUseCaseを取得
   static GetScoreStatisticsUseCase get getScoreStatisticsUseCase {
-    return _getScoreStatisticsUseCase ??=
-        GetScoreStatisticsUseCase(scoreRepository);
+    return _getScoreStatisticsUseCase ??= GetScoreStatisticsUseCase(scoreRepository);
   }
 
   /// MathPracticeControllerを取得

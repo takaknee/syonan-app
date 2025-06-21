@@ -28,8 +28,7 @@ class PracticeScreen extends StatefulWidget {
   State<PracticeScreen> createState() => _PracticeScreenState();
 }
 
-class _PracticeScreenState extends State<PracticeScreen>
-    with TickerProviderStateMixin {
+class _PracticeScreenState extends State<PracticeScreen> with TickerProviderStateMixin {
   late final List<MathProblem> _problems;
   late final List<int?> _userAnswers;
   late final List<bool> _isCorrect;
@@ -101,9 +100,7 @@ class _PracticeScreenState extends State<PracticeScreen>
 
           // メインコンテンツ
           Expanded(
-            child: _isCompleted
-                ? _buildResultView(theme)
-                : _buildProblemView(theme),
+            child: _isCompleted ? _buildResultView(theme) : _buildProblemView(theme),
           ),
         ],
       ),
@@ -141,8 +138,7 @@ class _PracticeScreenState extends State<PracticeScreen>
           const SizedBox(height: 8),
           LinearProgressIndicator(
             value: progress,
-            backgroundColor:
-                theme.colorScheme.onPrimaryContainer.withValues(alpha: 0.3),
+            backgroundColor: theme.colorScheme.onPrimaryContainer.withValues(alpha: 0.3),
             valueColor: AlwaysStoppedAnimation<Color>(
               theme.colorScheme.primary,
             ),
@@ -203,9 +199,7 @@ class _PracticeScreenState extends State<PracticeScreen>
                   Icon(
                     accuracy >= 0.8 ? Icons.star : Icons.thumb_up,
                     size: 64,
-                    color: accuracy >= 0.8
-                        ? Colors.amber
-                        : theme.colorScheme.primary,
+                    color: accuracy >= 0.8 ? Colors.amber : theme.colorScheme.primary,
                   ),
                   const SizedBox(height: 16),
                   Text(
@@ -394,8 +388,7 @@ class _PracticeScreenState extends State<PracticeScreen>
     final improvement = scoreService.getImprovement(widget.operation);
 
     // 改善があった場合、または高いスコアの場合にダイアログを表示
-    if (improvement == ScoreImprovement.improved ||
-        scoreRecord.level == ScoreLevel.excellent) {
+    if (improvement == ScoreImprovement.improved || scoreRecord.level == ScoreLevel.excellent) {
       Future.delayed(const Duration(milliseconds: 500), () {
         if (mounted) {
           showDialog(

@@ -30,7 +30,6 @@ class _MultiplayerBattleScreenState extends State<MultiplayerBattleScreen> with 
   int _playerScore = 0;
   int _aiScore = 0;
   int _timeRemaining = _timePerRound;
-  bool _isGameActive = false;
   bool _isGameFinished = false;
   bool _roundAnswered = false;
 
@@ -75,7 +74,6 @@ class _MultiplayerBattleScreenState extends State<MultiplayerBattleScreen> with 
 
   void _startBattle() {
     setState(() {
-      _isGameActive = true;
       _currentRound = 1;
     });
     _startNewRound();
@@ -162,7 +160,6 @@ class _MultiplayerBattleScreenState extends State<MultiplayerBattleScreen> with 
 
   void _finishGame() async {
     setState(() {
-      _isGameActive = false;
       _isGameFinished = true;
     });
 

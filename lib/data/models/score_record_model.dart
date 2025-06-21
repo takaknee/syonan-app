@@ -2,7 +2,6 @@ import '../../domain/entities/score_record_entity.dart';
 
 /// スコア記録のデータモデル
 class ScoreRecordModel extends ScoreRecordEntity {
-
   /// EntityからModelに変換
   factory ScoreRecordModel.fromEntity(ScoreRecordEntity entity) {
     return ScoreRecordModel(

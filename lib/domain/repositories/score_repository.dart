@@ -47,8 +47,7 @@ abstract class ScoreRepository {
   Future<Result<ScoreRecordEntity?>> getBestScore(MathOperationType operation);
 
   /// 最新のスコアを取得
-  Future<Result<ScoreRecordEntity?>> getLatestScore(
-      MathOperationType operation);
+  Future<Result<ScoreRecordEntity?>> getLatestScore(MathOperationType operation);
 
   /// スコア統計を取得
   Future<Result<Map<String, dynamic>>> getScoreStatistics({String? userId});

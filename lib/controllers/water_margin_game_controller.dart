@@ -9,6 +9,7 @@ import '../data/water_margin_map.dart';
 import '../models/advanced_battle_system.dart';
 import '../models/ai_system.dart';
 import '../models/game_events.dart';
+import '../models/hero_advancement.dart';
 import '../models/water_margin_strategy_game.dart';
 
 /// 水滸伝戦略ゲームのメインコントローラー
@@ -28,11 +29,22 @@ class WaterMarginGameController extends ChangeNotifier {
   /// イベントログ
   List<String> _eventLog = [];
 
+  /// 拡張英雄システム管理
+  final Map<String, AdvancedHero> _advancedHeroes = {};
+
   /// 現在のゲーム状態を取得
   WaterMarginGameState get gameState => _gameState;
 
   /// イベントログを取得
   List<String> get eventLog => List.unmodifiable(_eventLog);
+
+  /// 拡張英雄を取得
+  AdvancedHero? getAdvancedHero(String heroId) {
+    return _advancedHeroes[heroId];
+  }
+
+  /// 全ての拡張英雄を取得
+  Map<String, AdvancedHero> get advancedHeroes => Map.unmodifiable(_advancedHeroes);
 
   /// ゲームを初期化
   void initializeGame() {
@@ -43,7 +55,50 @@ class WaterMarginGameController extends ChangeNotifier {
       playerGold: 1000,
       gameStatus: GameStatus.playing,
     );
+
+    // 既存英雄を拡張英雄に変換
+    _initializeAdvancedHeroes();
+
     notifyListeners();
+  }
+
+  /// 拡張英雄システム初期化
+  void _initializeAdvancedHeroes() {
+    _advancedHeroes.clear();
+
+    for (final hero in _gameState.heroes) {
+      _initializeAdvancedHero(hero.id);
+    }
+  }
+
+  /// 単一英雄の拡張データ初期化
+  void _initializeAdvancedHero(String heroId) {
+    final hero = _gameState.heroes.firstWhere(
+      (h) => h.id == heroId,
+      orElse: () => throw ArgumentError('Hero not found: $heroId'),
+    );
+
+    // 基本経験値を設定（既存英雄はレベル1からスタート）
+    final initialExp = <ExperienceType, int>{
+      ExperienceType.combat: 0,
+      ExperienceType.administration: 0,
+      ExperienceType.diplomacy: 0,
+      ExperienceType.leadership: 0,
+    };
+
+    final advancedStats = HeroAdvancedStats(
+      baseStats: hero.stats,
+      level: 1,
+      experience: initialExp,
+      skills: <HeroLevelSkill>{},
+    );
+
+    final advancedHero = AdvancedHero(
+      baseHero: hero,
+      advancedStats: advancedStats,
+    );
+
+    _advancedHeroes[hero.id] = advancedHero;
   }
 
   // === UI操作系 ===
@@ -198,8 +253,11 @@ class WaterMarginGameController extends ChangeNotifier {
         return p;
       }).toList();
 
+      // 参加英雄に戦闘経験値を付与
+      _awardCombatExperience(sourceProvinceId, 50); // 勝利時経験値
+
       _gameState = _gameState.copyWith(provinces: updatedProvinces);
-      notifyListeners();
+      _addEventLog('${source.name}が${target.name}を制圧しました！');
       return true;
     } else {
       // 敗北: 兵力減少のみ
@@ -273,125 +331,52 @@ class WaterMarginGameController extends ChangeNotifier {
     return BattleTerrain.plains; // デフォルトは平野
   }
 
-  // === 内政系 ===
+  // === フェーズ3: 英雄レベルアップシステム ===
 
-  /// 州の開発
-  bool developProvince(String provinceId, DevelopmentType type) {
-    final province = _gameState.getProvinceById(provinceId);
-    if (province == null || province.controller != Faction.liangshan) return false;
+  /// 戦闘経験値を付与
+  void _awardCombatExperience(String provinceId, int baseExperience) {
+    final participatingHeroes = _getProvinceBattleHeroes(provinceId);
 
-    final cost = _getDevelopmentCost(type);
-    if (_gameState.playerGold < cost) return false;
+    for (final hero in participatingHeroes) {
+      final advancedHero = _advancedHeroes[hero.id];
+      if (advancedHero != null) {
+        // 英雄の戦闘力に応じて経験値調整
+        final experienceGained = (baseExperience * (hero.stats.combatPower / 100)).round();
+        final updatedAdvancedHero = advancedHero.gainExperience(
+          ExperienceType.combat,
+          experienceGained,
+        );
 
-    final newState = _applyDevelopment(province.state, type);
-    final updatedProvinces = _gameState.provinces.map((p) {
-      if (p.id == provinceId) {
-        return p.copyWith(state: newState);
+        _advancedHeroes[hero.id] = updatedAdvancedHero;
+
+        // レベルアップ通知
+        if (updatedAdvancedHero.advancedStats.level > advancedHero.advancedStats.level) {
+          _addEventLog('${hero.name}がレベル${updatedAdvancedHero.advancedStats.level}になりました！');
+        }
       }
-      return p;
-    }).toList();
-
-    _gameState = _gameState.copyWith(
-      provinces: updatedProvinces,
-      playerGold: _gameState.playerGold - cost,
-    );
-
-    notifyListeners();
-    return true;
-  }
-
-  /// 開発コスト
-  int _getDevelopmentCost(DevelopmentType type) {
-    switch (type) {
-      case DevelopmentType.agriculture:
-        return 200;
-      case DevelopmentType.commerce:
-        return 300;
-      case DevelopmentType.military:
-        return 400;
-      case DevelopmentType.security:
-        return 150;
     }
   }
 
-  /// 開発効果適用
-  ProvinceState _applyDevelopment(ProvinceState state, DevelopmentType type) {
-    switch (type) {
-      case DevelopmentType.agriculture:
-        return state.copyWith(
-          agriculture: (state.agriculture + 10).clamp(0, 100),
-        );
-      case DevelopmentType.commerce:
-        return state.copyWith(
-          commerce: (state.commerce + 10).clamp(0, 100),
-        );
-      case DevelopmentType.military:
-        return state.copyWith(
-          military: (state.military + 10).clamp(0, 100),
-        );
-      case DevelopmentType.security:
-        return state.copyWith(
-          security: (state.security + 10).clamp(0, 100),
-        );
+  /// 内政経験値を付与
+  void _awardAdministrationExperience(String heroId, int baseExperience) {
+    final advancedHero = _advancedHeroes[heroId];
+    if (advancedHero != null) {
+      final experienceGained = (baseExperience * (advancedHero.baseHero.stats.administrativePower / 100)).round();
+      final updatedAdvancedHero = advancedHero.gainExperience(
+        ExperienceType.administration,
+        experienceGained,
+      );
+
+      _advancedHeroes[heroId] = updatedAdvancedHero;
+
+      // レベルアップ通知
+      if (updatedAdvancedHero.advancedStats.level > advancedHero.advancedStats.level) {
+        _addEventLog('${advancedHero.baseHero.name}がレベル${updatedAdvancedHero.advancedStats.level}になりました！');
+      }
     }
   }
 
-  // === 英雄系 ===
-
-  /// 英雄を登用
-  bool recruitHero(String heroId) {
-    final hero = _gameState.getHeroById(heroId);
-    if (hero == null || hero.isRecruited) return false;
-
-    final cost = _getRecruitmentCost(hero);
-    if (_gameState.playerGold < cost) return false;
-
-    final updatedHeroes = _gameState.heroes.map((h) {
-      if (h.id == heroId) {
-        return h.copyWith(
-          isRecruited: true,
-          faction: Faction.liangshan,
-        );
-      }
-      return h;
-    }).toList();
-
-    _gameState = _gameState.copyWith(
-      heroes: updatedHeroes,
-      playerGold: _gameState.playerGold - cost,
-    );
-
-    notifyListeners();
-    return true;
-  }
-
-  /// 登用コスト計算
-  int _getRecruitmentCost(Hero hero) {
-    // 能力値に基づいてコスト計算
-    final totalStats = hero.stats.force + hero.stats.intelligence + hero.stats.charisma + hero.stats.leadership;
-    return (totalStats * 3).round();
-  }
-
-  // === ゲーム状態問い合わせ ===
-
-  /// 攻撃可能な州を取得
-  List<Province> getAttackableProvinces(String sourceProvinceId) {
-    final source = _gameState.getProvinceById(sourceProvinceId);
-    if (source == null || source.controller != Faction.liangshan) return [];
-
-    return source.adjacentProvinceIds
-        .map((id) => _gameState.getProvinceById(id))
-        .where((p) => p != null && p.controller != Faction.liangshan)
-        .cast<Province>()
-        .toList();
-  }
-
-  /// 登用可能な英雄を取得
-  List<Hero> getRecruitableHeroes() {
-    return _gameState.heroes.where((h) => !h.isRecruited && h.faction != Faction.imperial).toList();
-  }
-
-  // === フェーズ2: 高度化機能 ===
+  // === フェーズ2: 高度化機能統合 ===
 
   /// ランダムイベント処理
   void _processRandomEvents() {
@@ -513,6 +498,7 @@ class WaterMarginGameController extends ChangeNotifier {
         }).toList();
 
         _gameState = _gameState.copyWith(provinces: updatedProvinces);
+        _addEventLog('${source.controller.name}が${target.name}を占領');
       }
     }
   }
@@ -566,7 +552,151 @@ class WaterMarginGameController extends ChangeNotifier {
       final updatedHeroes = _gameState.heroes.map((h) => h.id == hero.id ? recruitedHero : h).toList();
 
       _gameState = _gameState.copyWith(heroes: updatedHeroes);
+      _addEventLog('${hero.faction.name}が${hero.name}を登用');
     }
+  }
+
+  // === フェーズ3: プレイヤー内政・開発機能 ===
+
+  /// プレイヤーが州を開発
+  bool developProvince(String provinceId, DevelopmentType type, {String? assignedHeroId}) {
+    final province = _gameState.getProvinceById(provinceId);
+    if (province?.controller != Faction.liangshan) return false;
+
+    // 開発コスト
+    const developmentCost = 200;
+    if (_gameState.playerGold < developmentCost) return false;
+
+    final updatedProvinces = _gameState.provinces.map((p) {
+      if (p.id == provinceId) {
+        var newState = p.state;
+        switch (type) {
+          case DevelopmentType.agriculture:
+            newState = newState.copyWith(
+              agriculture: (newState.agriculture + 10).clamp(0, 100),
+            );
+            break;
+          case DevelopmentType.commerce:
+            newState = newState.copyWith(
+              commerce: (newState.commerce + 10).clamp(0, 100),
+            );
+            break;
+          case DevelopmentType.military:
+            return p.copyWith(
+              currentTroops: p.currentTroops + 1000,
+            );
+          case DevelopmentType.security:
+            newState = newState.copyWith(
+              security: (newState.security + 10).clamp(0, 100),
+            );
+            break;
+        }
+        return p.copyWith(state: newState);
+      }
+      return p;
+    }).toList();
+
+    _gameState = _gameState.copyWith(
+      provinces: updatedProvinces,
+      playerGold: _gameState.playerGold - developmentCost,
+    );
+
+    // 担当英雄に内政経験値付与
+    if (assignedHeroId != null) {
+      _awardAdministrationExperience(assignedHeroId, 30);
+    }
+
+    _addEventLog('${province!.name}の${_developmentTypeName(type)}を実施');
+    notifyListeners();
+    return true;
+  }
+
+  /// 開発タイプの日本語名
+  String _developmentTypeName(DevelopmentType type) {
+    switch (type) {
+      case DevelopmentType.agriculture:
+        return '農業開発';
+      case DevelopmentType.commerce:
+        return '商業開発';
+      case DevelopmentType.military:
+        return '軍備強化';
+      case DevelopmentType.security:
+        return '治安改善';
+    }
+  }
+
+  /// 登用可能な英雄を取得
+  List<Hero> getRecruitableHeroes() {
+    return _gameState.heroes
+        .where((hero) =>
+                !hero.isRecruited &&
+                hero.faction != Faction.imperial && // 朝廷軍は登用不可
+                hero.faction != Faction.liangshan // 既に梁山泊所属は除外
+            )
+        .toList();
+  }
+
+  /// 英雄を登用
+  bool recruitHero(String heroId) {
+    final hero = _gameState.heroes.firstWhere(
+      (h) => h.id == heroId,
+      orElse: () => throw ArgumentError('Hero not found: $heroId'),
+    );
+
+    // 既に登用済みまたは登用不可チェック
+    if (hero.isRecruited || hero.faction == Faction.imperial || hero.faction == Faction.liangshan) {
+      return false;
+    }
+
+    // 登用費用計算
+    final cost = _calculateRecruitmentCost(hero);
+    if (_gameState.playerGold < cost) {
+      return false;
+    }
+
+    // 英雄を更新
+    final updatedHeroes = _gameState.heroes.map((h) {
+      if (h.id == heroId) {
+        return h.copyWith(
+          isRecruited: true,
+          faction: Faction.liangshan,
+        );
+      }
+      return h;
+    }).toList();
+
+    // ゲーム状態更新
+    _gameState = _gameState.copyWith(
+      heroes: updatedHeroes,
+      playerGold: _gameState.playerGold - cost,
+    );
+
+    // 拡張英雄データ初期化
+    _initializeAdvancedHero(heroId);
+
+    _addEventLog('${hero.nickname}（${hero.name}）が仲間になりました！');
+    notifyListeners();
+    return true;
+  }
+
+  /// 登用費用を計算
+  int _calculateRecruitmentCost(Hero hero) {
+    final totalStats = hero.stats.force + hero.stats.intelligence + hero.stats.charisma + hero.stats.leadership;
+    return (totalStats * 3).round();
+  }
+
+  /// 攻撃可能な州を取得
+  List<Province> getAttackableProvinces(String fromProvinceId) {
+    final fromProvince = _gameState.provinces.firstWhere(
+      (p) => p.id == fromProvinceId,
+      orElse: () => throw ArgumentError('Province not found: $fromProvinceId'),
+    );
+
+    // 隣接する州で、プレイヤーが支配していない州を返す
+    return _gameState.provinces
+        .where((province) =>
+            fromProvince.adjacentProvinceIds.contains(province.id) && province.controller != Faction.liangshan)
+        .toList();
   }
 }
 

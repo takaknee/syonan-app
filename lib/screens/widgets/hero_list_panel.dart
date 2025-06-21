@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import '../../controllers/water_margin_game_controller.dart';
 import '../../models/water_margin_strategy_game.dart' as game show Hero;
 import '../../models/water_margin_strategy_game.dart' hide Hero;
+import 'hero_detail_dialog.dart';
 
 /// 英雄の一覧と管理を行うパネル
 class HeroListPanel extends StatefulWidget {
@@ -328,6 +329,12 @@ class _HeroCard extends StatelessWidget {
                 const SizedBox(height: 12),
                 _RecruitButton(hero: hero, controller: controller),
               ],
+
+              // 詳細表示ボタン（仲間の場合のみ）
+              if (isRecruited) ...[
+                const SizedBox(height: 12),
+                _HeroDetailButton(hero: hero, controller: controller),
+              ],
             ],
           ),
         ),
@@ -524,6 +531,47 @@ class _RecruitButton extends StatelessWidget {
             child: const Text('登用'),
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// 英雄詳細表示ボタン
+class _HeroDetailButton extends StatelessWidget {
+  const _HeroDetailButton({
+    required this.hero,
+    required this.controller,
+  });
+
+  final game.Hero hero;
+  final WaterMarginGameController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton.icon(
+        onPressed: () => _showHeroDetailDialog(context, hero, controller),
+        icon: const Icon(Icons.info, size: 16),
+        label: const Text('詳細'),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.blue,
+          foregroundColor: Colors.white,
+          padding: const EdgeInsets.symmetric(vertical: 6),
+        ),
+      ),
+    );
+  }
+
+  void _showHeroDetailDialog(
+    BuildContext context,
+    game.Hero hero,
+    WaterMarginGameController controller,
+  ) {
+    showDialog(
+      context: context,
+      builder: (context) => HeroDetailDialog(
+        hero: hero,
       ),
     );
   }

@@ -1,6 +1,5 @@
 /// アプリケーション内で使用する例外の基底クラス
 abstract class AppException implements Exception {
-
   const AppException({
     required this.message,
     this.code,

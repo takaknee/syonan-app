@@ -136,8 +136,8 @@ class _DodgeGameScreenState extends State<DodgeGameScreen>
     final colors = [Colors.red, Colors.orange, Colors.yellow, Colors.purple];
     final color = colors[_random.nextInt(colors.length)];
 
-    // 20% chance for indestructible obstacles (dark red)
-    final isDestructible = _random.nextDouble() > 0.2;
+    // 25% chance for indestructible obstacles (dark red) - increased from 20%
+    final isDestructible = _random.nextDouble() > 0.25;
     final finalColor = isDestructible ? color : Colors.red.shade900;
     final points = isDestructible ? 50 : 0;
 
@@ -151,8 +151,8 @@ class _DodgeGameScreenState extends State<DodgeGameScreen>
       points: points,
     ));
 
-    // Occasionally spawn power-ups (5% chance)
-    if (_random.nextDouble() < 0.05) {
+    // Occasionally spawn power-ups (8% chance) - increased from 5%
+    if (_random.nextDouble() < 0.08) {
       _spawnPowerUp();
     }
   }
@@ -170,18 +170,18 @@ class _DodgeGameScreenState extends State<DodgeGameScreen>
 
   void _shoot() {
     final currentTime = DateTime.now().millisecondsSinceEpoch.toDouble();
-    final cooldown = _rapidFireActive ? _shotCooldown / 3 : _shotCooldown;
+    final cooldown = _rapidFireActive ? _shotCooldown / 2.5 : _shotCooldown; // Reduced from /3 to /2.5
     
     if (currentTime - _lastShotTime < cooldown) return;
     
     _lastShotTime = currentTime;
 
     if (_multiShotActive) {
-      // Triple shot
+      // Triple shot with wider spread
       _projectiles.addAll([
-        Projectile(x: _playerX - 0.03, y: _playerY),
+        Projectile(x: _playerX - 0.04, y: _playerY), // Increased spread
         Projectile(x: _playerX, y: _playerY),
-        Projectile(x: _playerX + 0.03, y: _playerY),
+        Projectile(x: _playerX + 0.04, y: _playerY),
       ]);
     } else {
       // Single shot
@@ -203,8 +203,8 @@ class _DodgeGameScreenState extends State<DodgeGameScreen>
         _multiShotActive = false;
       }
 
-      // Reset combo if no hits for 3 seconds
-      if (currentTime - _comboResetTime > 3000 && _combo > 0) {
+      // Reset combo if no hits for 2 seconds (reduced from 3 seconds)
+      if (currentTime - _comboResetTime > 2000 && _combo > 0) {
         _combo = 0;
       }
 
@@ -241,7 +241,7 @@ class _DodgeGameScreenState extends State<DodgeGameScreen>
               
               // Add score with combo multiplier
               _combo++;
-              final comboMultiplier = 1 + (_combo - 1) * 0.5;
+              final comboMultiplier = 1 + (_combo - 1) * 0.3; // Reduced from 0.5 to 0.3 for balance
               _score += (obstacle.points * comboMultiplier).round();
               _comboResetTime = currentTime;
               break;
@@ -550,16 +550,22 @@ class _DodgeGameScreenState extends State<DodgeGameScreen>
                     if (_combo > 1)
                       Column(
                         children: [
-                          const Icon(Icons.whatshot, color: Colors.orange),
+                          Icon(
+                            _combo >= 5 ? Icons.local_fire_department : Icons.whatshot, 
+                            color: _combo >= 5 ? Colors.red : Colors.orange,
+                          ),
                           const SizedBox(height: 4),
-                          const Text(
-                            'コンボ',
-                            style: TextStyle(color: Colors.white, fontSize: 12),
+                          Text(
+                            _combo >= 5 ? 'ファイア!' : 'コンボ',
+                            style: TextStyle(
+                              color: _combo >= 5 ? Colors.red : Colors.white, 
+                              fontSize: 12,
+                            ),
                           ),
                           Text(
                             '×$_combo',
-                            style: const TextStyle(
-                              color: Colors.orange,
+                            style: TextStyle(
+                              color: _combo >= 5 ? Colors.red : Colors.orange,
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
                             ),
@@ -653,10 +659,10 @@ class _DodgeGameScreenState extends State<DodgeGameScreen>
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: const Text(
-                              '画面をタップ・ドラッグして移動\n'
-                              'ダブルタップで弾を撃って障害物を破壊！\n'
-                              'パワーアップをゲットして連続破壊を狙おう！\n'
-                              '60秒間生き延びることができるかな？',
+                              '🎯 画面をタップ・ドラッグして移動\n'
+                              '🔫 ダブルタップで弾を撃って障害物を破壊！\n'
+                              '⚡ パワーアップをゲットして連続破壊を狙おう！\n'
+                              '🏆 60秒間生き延びることができるかな？',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Colors.white,

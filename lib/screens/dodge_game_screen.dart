@@ -37,6 +37,20 @@ class _DodgeGameScreenState extends State<DodgeGameScreen>
   double _obstacleSpeed = 2.0; // pixels per frame
   double _spawnRate = 2000; // milliseconds between spawns
 
+  // Projectiles (shooting mechanics)
+  final List<Projectile> _projectiles = [];
+  double _lastShotTime = 0;
+  final double _shotCooldown = 200; // milliseconds between shots
+  int _combo = 0;
+  double _comboResetTime = 0;
+
+  // Power-ups
+  final List<PowerUp> _powerUps = [];
+  bool _rapidFireActive = false;
+  double _rapidFireEndTime = 0;
+  bool _multiShotActive = false;
+  double _multiShotEndTime = 0;
+
   // Game state
   bool _gameStarted = false;
 
@@ -69,9 +83,15 @@ class _DodgeGameScreenState extends State<DodgeGameScreen>
       _score = 0;
       _timeLeft = 60.0;
       _obstacles.clear();
+      _projectiles.clear();
+      _powerUps.clear();
       _playerX = 0.5;
       _obstacleSpeed = 2.0;
       _spawnRate = 2000;
+      _combo = 0;
+      _comboResetTime = 0;
+      _rapidFireActive = false;
+      _multiShotActive = false;
     });
 
     // Start game timer (countdown)
@@ -116,26 +136,128 @@ class _DodgeGameScreenState extends State<DodgeGameScreen>
     final colors = [Colors.red, Colors.orange, Colors.yellow, Colors.purple];
     final color = colors[_random.nextInt(colors.length)];
 
+    // 20% chance for indestructible obstacles (dark red)
+    final isDestructible = _random.nextDouble() > 0.2;
+    final finalColor = isDestructible ? color : Colors.red.shade900;
+    final points = isDestructible ? 50 : 0;
+
     _obstacles.add(Obstacle(
       x: x,
       y: -0.1,
       size: size,
       speed: speed,
-      color: color,
+      color: finalColor,
+      isDestructible: isDestructible,
+      points: points,
     ));
+
+    // Occasionally spawn power-ups (5% chance)
+    if (_random.nextDouble() < 0.05) {
+      _spawnPowerUp();
+    }
+  }
+
+  void _spawnPowerUp() {
+    final x = _random.nextDouble();
+    final type = PowerUpType.values[_random.nextInt(PowerUpType.values.length)];
+    
+    _powerUps.add(PowerUp(
+      x: x,
+      y: -0.1,
+      type: type,
+    ));
+  }
+
+  void _shoot() {
+    final currentTime = DateTime.now().millisecondsSinceEpoch.toDouble();
+    final cooldown = _rapidFireActive ? _shotCooldown / 3 : _shotCooldown;
+    
+    if (currentTime - _lastShotTime < cooldown) return;
+    
+    _lastShotTime = currentTime;
+
+    if (_multiShotActive) {
+      // Triple shot
+      _projectiles.addAll([
+        Projectile(x: _playerX - 0.03, y: _playerY),
+        Projectile(x: _playerX, y: _playerY),
+        Projectile(x: _playerX + 0.03, y: _playerY),
+      ]);
+    } else {
+      // Single shot
+      _projectiles.add(Projectile(x: _playerX, y: _playerY));
+    }
   }
 
   void _gameLoop() {
     if (!_isPlaying) return;
 
+    final currentTime = DateTime.now().millisecondsSinceEpoch.toDouble();
+
     setState(() {
-      // Update obstacles
+      // Update power-up timers
+      if (_rapidFireActive && currentTime > _rapidFireEndTime) {
+        _rapidFireActive = false;
+      }
+      if (_multiShotActive && currentTime > _multiShotEndTime) {
+        _multiShotActive = false;
+      }
+
+      // Reset combo if no hits for 3 seconds
+      if (currentTime - _comboResetTime > 3000 && _combo > 0) {
+        _combo = 0;
+      }
+
+      // Update projectiles
+      _projectiles.removeWhere((projectile) {
+        projectile.y -= projectile.speed / 100;
+        return projectile.y < -0.1; // Remove projectiles that go off screen
+      });
+
+      // Update power-ups
+      _powerUps.removeWhere((powerUp) {
+        powerUp.y += powerUp.speed / 100;
+
+        // Check collision with player
+        if (_checkPowerUpCollision(powerUp)) {
+          _activatePowerUp(powerUp.type);
+          return true;
+        }
+
+        return powerUp.y > 1.1; // Remove power-ups that fall off screen
+      });
+
+      // Update obstacles and check collisions
       _obstacles.removeWhere((obstacle) {
         obstacle.y += obstacle.speed / 100;
 
+        // Check projectile-obstacle collisions
+        bool hitByProjectile = false;
+        if (obstacle.isDestructible) {
+          for (int i = _projectiles.length - 1; i >= 0; i--) {
+            if (_checkProjectileObstacleCollision(_projectiles[i], obstacle)) {
+              _projectiles.removeAt(i);
+              hitByProjectile = true;
+              
+              // Add score with combo multiplier
+              _combo++;
+              final comboMultiplier = 1 + (_combo - 1) * 0.5;
+              _score += (obstacle.points * comboMultiplier).round();
+              _comboResetTime = currentTime;
+              break;
+            }
+          }
+        }
+
+        if (hitByProjectile) {
+          return true; // Remove destroyed obstacle
+        }
+
         // Remove obstacles that are off screen
         if (obstacle.y > 1.1) {
-          _score += 10; // Points for surviving
+          if (!hitByProjectile) {
+            _score += 10; // Points for surviving
+          }
           return true;
         }
 
@@ -162,6 +284,39 @@ class _DodgeGameScreenState extends State<DodgeGameScreen>
     final minDistance = (_playerSize + obstacle.size) / 2;
 
     return distance < minDistance;
+  }
+
+  bool _checkProjectileObstacleCollision(Projectile projectile, Obstacle obstacle) {
+    final dx = projectile.x - obstacle.x;
+    final dy = projectile.y - obstacle.y;
+    final distance = sqrt(dx * dx + dy * dy);
+    final minDistance = (projectile.size + obstacle.size) / 2;
+
+    return distance < minDistance;
+  }
+
+  bool _checkPowerUpCollision(PowerUp powerUp) {
+    final dx = _playerX - powerUp.x;
+    final dy = _playerY - powerUp.y;
+    final distance = sqrt(dx * dx + dy * dy);
+    final minDistance = (_playerSize + powerUp.size) / 2;
+
+    return distance < minDistance;
+  }
+
+  void _activatePowerUp(PowerUpType type) {
+    final currentTime = DateTime.now().millisecondsSinceEpoch.toDouble();
+    
+    switch (type) {
+      case PowerUpType.rapidFire:
+        _rapidFireActive = true;
+        _rapidFireEndTime = currentTime + 5000; // 5 seconds
+        break;
+      case PowerUpType.multiShot:
+        _multiShotActive = true;
+        _multiShotEndTime = currentTime + 8000; // 8 seconds
+        break;
+    }
   }
 
   void _gameOver() {
@@ -298,9 +453,15 @@ class _DodgeGameScreenState extends State<DodgeGameScreen>
       _score = 0;
       _timeLeft = 60.0;
       _obstacles.clear();
+      _projectiles.clear();
+      _powerUps.clear();
       _playerX = 0.5;
       _obstacleSpeed = 2.0;
       _spawnRate = 2000;
+      _combo = 0;
+      _comboResetTime = 0;
+      _rapidFireActive = false;
+      _multiShotActive = false;
     });
     _explosionController.reset();
   }
@@ -386,10 +547,81 @@ class _DodgeGameScreenState extends State<DodgeGameScreen>
                         ),
                       ],
                     ),
+                    if (_combo > 1)
+                      Column(
+                        children: [
+                          const Icon(Icons.whatshot, color: Colors.orange),
+                          const SizedBox(height: 4),
+                          const Text(
+                            'コンボ',
+                            style: TextStyle(color: Colors.white, fontSize: 12),
+                          ),
+                          Text(
+                            '×$_combo',
+                            style: const TextStyle(
+                              color: Colors.orange,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
                   ],
                 ),
               ),
             ),
+
+            // Power-up status indicators
+            if (_rapidFireActive || _multiShotActive)
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if (_rapidFireActive) ...[
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: Colors.green.withValues(alpha: 0.8),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: const Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.speed, color: Colors.white, size: 16),
+                            SizedBox(width: 4),
+                            Text(
+                              '高速射撃',
+                              style: TextStyle(color: Colors.white, fontSize: 12),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                    ],
+                    if (_multiShotActive) ...[
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: Colors.purple.withValues(alpha: 0.8),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: const Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.scatter_plot, color: Colors.white, size: 16),
+                            SizedBox(width: 4),
+                            Text(
+                              '3連射',
+                              style: TextStyle(color: Colors.white, fontSize: 12),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
 
             // Game area
             Expanded(
@@ -421,8 +653,9 @@ class _DodgeGameScreenState extends State<DodgeGameScreen>
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: const Text(
-                              '画面をタップ・ドラッグして\n'
-                              '落ちてくる障害物を避けよう！\n'
+                              '画面をタップ・ドラッグして移動\n'
+                              'ダブルタップで弾を撃って障害物を破壊！\n'
+                              'パワーアップをゲットして連続破壊を狙おう！\n'
                               '60秒間生き延びることができるかな？',
                               textAlign: TextAlign.center,
                               style: TextStyle(
@@ -463,6 +696,10 @@ class _DodgeGameScreenState extends State<DodgeGameScreen>
                         final deltaX = tapX - _playerX;
                         _movePlayer(deltaX * 0.3); // Smooth movement
                       },
+                      onDoubleTap: () {
+                        if (!_isPlaying) return;
+                        _shoot();
+                      },
                       child: SizedBox(
                         width: double.infinity,
                         height: double.infinity,
@@ -488,6 +725,74 @@ class _DodgeGameScreenState extends State<DodgeGameScreen>
                                           spreadRadius: 2,
                                         ),
                                       ],
+                                    ),
+                                    child: obstacle.isDestructible 
+                                        ? null 
+                                        : const Center(
+                                            child: Icon(
+                                              Icons.shield,
+                                              color: Colors.white,
+                                              size: 16,
+                                            ),
+                                          ),
+                                  ),
+                                )),
+
+                            // Projectiles
+                            ..._projectiles.map((projectile) => Positioned(
+                                  left: projectile.x * screenSize.width -
+                                      (projectile.size * screenSize.width / 2),
+                                  top: projectile.y * (screenSize.height - 200) -
+                                      (projectile.size * screenSize.width / 2),
+                                  child: Container(
+                                    width: projectile.size * screenSize.width,
+                                    height: projectile.size * screenSize.width * 2,
+                                    decoration: BoxDecoration(
+                                      color: Colors.cyan,
+                                      borderRadius: BorderRadius.circular(2),
+                                      boxShadow: const [
+                                        BoxShadow(
+                                          color: Colors.cyan,
+                                          blurRadius: 4,
+                                          spreadRadius: 1,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                )),
+
+                            // Power-ups
+                            ..._powerUps.map((powerUp) => Positioned(
+                                  left: powerUp.x * screenSize.width -
+                                      (powerUp.size * screenSize.width / 2),
+                                  top: powerUp.y * (screenSize.height - 200) -
+                                      (powerUp.size * screenSize.width / 2),
+                                  child: Container(
+                                    width: powerUp.size * screenSize.width,
+                                    height: powerUp.size * screenSize.width,
+                                    decoration: BoxDecoration(
+                                      color: powerUp.type == PowerUpType.rapidFire 
+                                          ? Colors.green 
+                                          : Colors.purple,
+                                      shape: BoxShape.circle,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: (powerUp.type == PowerUpType.rapidFire 
+                                              ? Colors.green 
+                                              : Colors.purple).withValues(alpha: 0.5),
+                                          blurRadius: 6,
+                                          spreadRadius: 2,
+                                        ),
+                                      ],
+                                    ),
+                                    child: Center(
+                                      child: Icon(
+                                        powerUp.type == PowerUpType.rapidFire 
+                                            ? Icons.speed 
+                                            : Icons.scatter_plot,
+                                        color: Colors.white,
+                                        size: 20,
+                                      ),
                                     ),
                                   ),
                                 )),
@@ -562,10 +867,47 @@ class Obstacle {
     required this.size,
     required this.speed,
     required this.color,
+    this.isDestructible = true,
+    this.points = 50,
   });
   double x;
   double y;
   final double size;
   final double speed;
   final Color color;
+  final bool isDestructible;
+  final int points;
+}
+
+class Projectile {
+  Projectile({
+    required this.x,
+    required this.y,
+    this.speed = 8.0,
+    this.size = 0.02,
+  });
+  double x;
+  double y;
+  final double speed;
+  final double size;
+}
+
+class PowerUp {
+  PowerUp({
+    required this.x,
+    required this.y,
+    required this.type,
+    this.speed = 2.0,
+    this.size = 0.06,
+  });
+  double x;
+  double y;
+  final PowerUpType type;
+  final double speed;
+  final double size;
+}
+
+enum PowerUpType {
+  rapidFire,
+  multiShot,
 }

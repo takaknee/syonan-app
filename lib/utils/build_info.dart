@@ -1,8 +1,5 @@
 /// ビルド情報を管理するクラス
 class BuildInfo {
-  // アプリ起動時に一度だけ設定されるビルド時刻
-  static final DateTime _buildTime = DateTime.now();
-
   /// ビルド日時を取得
   static String getBuildDateTime() {
     // GitHub Actionsでビルド時に設定される環境変数から取得
@@ -20,18 +17,17 @@ class BuildInfo {
         try {
           final dateTime = DateTime.parse(compiledTime);
           final jstDateTime = dateTime.add(const Duration(hours: 9));
-          return '開発ビルド (${jstDateTime.year}年${jstDateTime.month}月${jstDateTime.day}日 '
+          return 'ビルド時刻: ${jstDateTime.year}年${jstDateTime.month}月${jstDateTime.day}日 '
               '${jstDateTime.hour.toString().padLeft(2, '0')}:'
-              '${jstDateTime.minute.toString().padLeft(2, '0')})';
+              '${jstDateTime.minute.toString().padLeft(2, '0')}';
         } catch (e) {
-          // パースエラーの場合は固定時刻を使用
+          // パースエラーの場合は開発ビルド表示
+          return '開発ビルド（時刻取得エラー）';
         }
       }
 
-      // 環境変数が設定されていない場合は、アプリ起動時の時刻を使用
-      return '開発ビルド (${_buildTime.year}年${_buildTime.month}月${_buildTime.day}日 '
-          '${_buildTime.hour.toString().padLeft(2, '0')}:'
-          '${_buildTime.minute.toString().padLeft(2, '0')})';
+      // 環境変数が設定されていない場合
+      return '開発ビルド（時刻未設定）';
     }
 
     try {
@@ -39,11 +35,11 @@ class BuildInfo {
       final dateTime = DateTime.parse(buildTime);
       // 日本時間に変換（UTC+9）
       final jstDateTime = dateTime.add(const Duration(hours: 9));
-      return '${jstDateTime.year}年${jstDateTime.month}月${jstDateTime.day}日 '
+      return 'ビルド時刻: ${jstDateTime.year}年${jstDateTime.month}月${jstDateTime.day}日 '
           '${jstDateTime.hour.toString().padLeft(2, '0')}:'
           '${jstDateTime.minute.toString().padLeft(2, '0')} (JST)';
     } catch (e) {
-      return buildTime;
+      return 'ビルド時刻: $buildTime';
     }
   }
 
@@ -54,7 +50,8 @@ class BuildInfo {
     );
 
     if (buildNumber.isEmpty) {
-      return 'dev-${DateTime.now().millisecondsSinceEpoch}';
+      // 固定の開発ビルド番号を使用
+      return 'dev-build';
     }
 
     return buildNumber;

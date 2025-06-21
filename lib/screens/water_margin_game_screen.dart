@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 
 import '../controllers/water_margin_game_controller.dart';
 import '../models/water_margin_strategy_game.dart';
+import 'widgets/event_notification.dart';
 import 'widgets/game_info_panel.dart';
 import 'widgets/hero_list_panel.dart';
 import 'widgets/province_detail_panel.dart';
@@ -126,7 +127,26 @@ class _GamePlayView extends StatelessWidget {
               ),
             ),
           ),
-          child: const HeroListPanel(),
+          child: Column(
+            children: [
+              // 英雄リスト
+              const Expanded(
+                flex: 2,
+                child: HeroListPanel(),
+              ),
+              const Divider(height: 1),
+              // イベントログ
+              Expanded(
+                child: Consumer<WaterMarginGameController>(
+                  builder: (context, controller, child) {
+                    return EventLogPanel(
+                      recentEvents: controller.eventLog,
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ],
     );

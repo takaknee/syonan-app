@@ -6,10 +6,16 @@ import 'package:flutter/material.dart' hide Hero;
 
 import '../data/water_margin_heroes.dart';
 import '../data/water_margin_map.dart';
+import '../models/advanced_battle_system.dart';
+import '../models/ai_system.dart';
+import '../models/game_events.dart';
 import '../models/water_margin_strategy_game.dart';
 
 /// 水滸伝戦略ゲームのメインコントローラー
 class WaterMarginGameController extends ChangeNotifier {
+  /// コンストラクタ
+  WaterMarginGameController();
+
   /// ゲーム状態
   WaterMarginGameState _gameState = WaterMarginGameState(
     provinces: WaterMarginMap.initialProvinces,
@@ -19,8 +25,14 @@ class WaterMarginGameController extends ChangeNotifier {
     gameStatus: GameStatus.playing,
   );
 
+  /// イベントログ
+  List<String> _eventLog = [];
+
   /// 現在のゲーム状態を取得
   WaterMarginGameState get gameState => _gameState;
+
+  /// イベントログを取得
+  List<String> get eventLog => List.unmodifiable(_eventLog);
 
   /// ゲームを初期化
   void initializeGame() {
@@ -71,9 +83,12 @@ class WaterMarginGameController extends ChangeNotifier {
     final updatedProvinces = _processProvincesDevelopment();
 
     // 3. AI行動
-    _processAIActions();
+    _processAdvancedAI();
 
-    // 4. 勝利条件チェック
+    // 4. イベント処理
+    _processRandomEvents();
+
+    // 5. 勝利条件チェック
     final newGameStatus = _checkVictoryConditions();
 
     _gameState = _gameState.copyWith(
@@ -124,13 +139,6 @@ class WaterMarginGameController extends ChangeNotifier {
   }
 
   /// AI行動処理（フェーズ1では簡易版）
-  void _processAIActions() {
-    // 将来の実装: AI勢力の行動決定
-    // - 領土拡張
-    // - 軍備増強
-    // - 外交交渉
-  }
-
   /// 勝利条件チェック
   GameStatus _checkVictoryConditions() {
     // 敗北条件: 梁山泊を失った
@@ -216,32 +224,53 @@ class WaterMarginGameController extends ChangeNotifier {
 
   /// 戦闘計算（簡易版）
   BattleResult _calculateBattle(Province attacker, Province defender) {
-    // 攻撃力計算
-    int attackPower = attacker.currentTroops;
-
-    // 防御力計算（地形ボーナス込み）
-    int defensePower = defender.currentTroops;
-    if (defender.specialFeature?.contains('防御') == true) {
-      defensePower = (defensePower * 1.2).round();
-    }
-    if (defender.specialFeature?.contains('要塞') == true) {
-      defensePower = (defensePower * 1.15).round();
-    }
-
-    // 戦闘結果判定
-    final bool attackerWins = attackPower > defensePower;
-
-    // 損失計算
-    final int attackerLosses = (attacker.currentTroops * 0.3).round();
-    final int defenderLosses =
-        attackerWins ? (defender.currentTroops * 0.7).round() : (defender.currentTroops * 0.2).round();
-
-    return BattleResult(
-      attackerWins: attackerWins,
-      attackerLosses: attackerLosses,
-      defenderLosses: defenderLosses,
-      territoryConquered: attackerWins,
+    // 改良戦闘システムを使用
+    final attackerParticipant = BattleParticipant(
+      faction: attacker.controller,
+      troops: attacker.currentTroops,
+      heroes: _getProvinceBattleHeroes(attacker.id),
+      province: attacker,
     );
+
+    final defenderParticipant = BattleParticipant(
+      faction: defender.controller,
+      troops: defender.currentTroops,
+      heroes: _getProvinceBattleHeroes(defender.id),
+      province: defender,
+    );
+
+    // 地形判定（簡易実装）
+    final terrain = _getProvinceTerrain(defender);
+
+    final advancedResult = AdvancedBattleSystem.calculateBattle(
+      attacker: attackerParticipant,
+      defender: defenderParticipant,
+      battleType: BattleType.fieldBattle,
+      terrain: terrain,
+    );
+
+    // 従来のBattleResultに変換
+    return BattleResult(
+      attackerWins: advancedResult.winner == attacker.controller,
+      attackerLosses: advancedResult.attackerLosses,
+      defenderLosses: advancedResult.defenderLosses,
+      territoryConquered: advancedResult.winner == attacker.controller,
+    );
+  }
+
+  /// 州の戦闘に参加する英雄リストを取得
+  List<Hero> _getProvinceBattleHeroes(String provinceId) {
+    return _gameState.heroes.where((hero) => hero.isRecruited && hero.currentProvinceId == provinceId).toList();
+  }
+
+  /// 州の地形を取得
+  BattleTerrain _getProvinceTerrain(Province province) {
+    // 特殊地形の簡易判定
+    if (province.specialFeature?.contains('山') == true) return BattleTerrain.mountains;
+    if (province.specialFeature?.contains('河') == true) return BattleTerrain.river;
+    if (province.specialFeature?.contains('要塞') == true) return BattleTerrain.fortress;
+    if (province.specialFeature?.contains('森') == true) return BattleTerrain.forest;
+    return BattleTerrain.plains; // デフォルトは平野
   }
 
   // === 内政系 ===
@@ -361,6 +390,184 @@ class WaterMarginGameController extends ChangeNotifier {
   List<Hero> getRecruitableHeroes() {
     return _gameState.heroes.where((h) => !h.isRecruited && h.faction != Faction.imperial).toList();
   }
+
+  // === フェーズ2: 高度化機能 ===
+
+  /// ランダムイベント処理
+  void _processRandomEvents() {
+    // イベント発生確率チェック（20%程度）
+    if (DateTime.now().millisecondsSinceEpoch % 5 == 0) {
+      final allEvents = WaterMarginEvents.allEvents;
+      if (allEvents.isNotEmpty) {
+        // 最初のイベントを実行（実際はランダム選択）
+        final event = allEvents.first;
+        _triggerEvent(event);
+      }
+    }
+  }
+
+  /// イベントを発動
+  void _triggerEvent(GameEvent event) {
+    // イベントログに記録
+    _addEventLog('${event.title}: ${event.description}');
+
+    // 最初の選択肢の効果を適用（実際はプレイヤーが選択）
+    if (event.choices.isNotEmpty) {
+      final choice = event.choices.first;
+
+      for (final effect in choice.effects) {
+        switch (effect.type) {
+          case EventEffectType.goldChange:
+            _gameState = _gameState.copyWith(
+              playerGold: (_gameState.playerGold + effect.value).clamp(0, 999999),
+            );
+            _addEventLog('資金が${effect.value > 0 ? '+' : ''}${effect.value}両変動');
+            break;
+          case EventEffectType.troopsChange:
+            if (effect.targetId != null) {
+              final updatedProvinces = _gameState.provinces.map((province) {
+                if (province.id == effect.targetId || effect.targetId == 'all') {
+                  return province.copyWith(
+                    currentTroops: (province.currentTroops + effect.value).clamp(0, 99999),
+                  );
+                }
+                return province;
+              }).toList();
+
+              _gameState = _gameState.copyWith(provinces: updatedProvinces);
+              _addEventLog('兵力が${effect.value > 0 ? '+' : ''}${effect.value}増減');
+            }
+            break;
+          case EventEffectType.heroRecruitment:
+            _addEventLog('英雄登用の機会');
+            break;
+          case EventEffectType.provinceControl:
+            _addEventLog('州の支配権に変化');
+            break;
+          case EventEffectType.loyaltyChange:
+            _addEventLog('民心が変動');
+            break;
+          case EventEffectType.relationshipChange:
+            _addEventLog('関係値が変動');
+            break;
+        }
+      }
+    }
+  }
+
+  /// イベントログに追加
+  void _addEventLog(String message) {
+    _eventLog.insert(0, 'ターン${_gameState.currentTurn}: $message');
+    // 最大20件まで保持
+    if (_eventLog.length > 20) {
+      _eventLog = _eventLog.take(20).toList();
+    }
+  }
+
+  /// AI行動の高度化処理
+  void _processAdvancedAI() {
+    for (final faction in [Faction.imperial, Faction.warlord]) {
+      final result = AdvancedAISystem.decideAction(_gameState, faction);
+
+      // AI行動を実行
+      switch (result.chosenAction.type) {
+        case AIActionType.attack:
+          _executeAIAttack(result.chosenAction);
+          break;
+        case AIActionType.develop:
+          _executeAIDevelopment(result.chosenAction);
+          break;
+        case AIActionType.recruit:
+          _executeAIRecruitment(result.chosenAction);
+          break;
+        case AIActionType.diplomacy:
+          // 外交行動（簡易実装）
+          break;
+        case AIActionType.fortify:
+          // 要塞化行動（簡易実装）
+          break;
+        case AIActionType.wait:
+          // 待機行動（何もしない）
+          break;
+      }
+    }
+  }
+
+  /// AI攻撃を実行
+  void _executeAIAttack(AIAction action) {
+    final source = _gameState.getProvinceById(action.sourceProvinceId);
+    final target = _gameState.getProvinceById(action.targetProvinceId ?? '');
+
+    if (source != null &&
+        target != null &&
+        source.controller != target.controller &&
+        source.adjacentProvinceIds.contains(target.id)) {
+      // 簡易AI戦闘
+      final battleResult = _calculateBattle(source, target);
+      if (battleResult.attackerWins) {
+        final updatedProvinces = _gameState.provinces.map((p) {
+          if (p.id == target.id) {
+            return p.copyWith(controller: source.controller);
+          }
+          return p;
+        }).toList();
+
+        _gameState = _gameState.copyWith(provinces: updatedProvinces);
+      }
+    }
+  }
+
+  /// AI開発を実行
+  void _executeAIDevelopment(AIAction action) {
+    final province = _gameState.getProvinceById(action.sourceProvinceId);
+    if (province != null && action.developmentType != null) {
+      final updatedProvinces = _gameState.provinces.map((p) {
+        if (p.id == province.id) {
+          var newState = p.state;
+          switch (action.developmentType!) {
+            case DevelopmentType.agriculture:
+              newState = newState.copyWith(
+                agriculture: (newState.agriculture + 5).clamp(0, 100),
+              );
+              break;
+            case DevelopmentType.commerce:
+              newState = newState.copyWith(
+                commerce: (newState.commerce + 5).clamp(0, 100),
+              );
+              break;
+            case DevelopmentType.military:
+              return p.copyWith(
+                currentTroops: p.currentTroops + 500,
+              );
+            case DevelopmentType.security:
+              newState = newState.copyWith(
+                security: (newState.security + 5).clamp(0, 100),
+              );
+              break;
+          }
+          return p.copyWith(state: newState);
+        }
+        return p;
+      }).toList();
+
+      _gameState = _gameState.copyWith(provinces: updatedProvinces);
+    }
+  }
+
+  /// AI英雄登用を実行
+  void _executeAIRecruitment(AIAction action) {
+    // 簡易AI英雄登用（未登用の英雄をランダムに登用）
+    final availableHeroes = _gameState.heroes.where((h) => !h.isRecruited && h.faction != Faction.liangshan).toList();
+
+    if (availableHeroes.isNotEmpty) {
+      final hero = availableHeroes.first;
+      final recruitedHero = hero.copyWith(isRecruited: true);
+
+      final updatedHeroes = _gameState.heroes.map((h) => h.id == hero.id ? recruitedHero : h).toList();
+
+      _gameState = _gameState.copyWith(heroes: updatedHeroes);
+    }
+  }
 }
 
 /// 戦闘結果
@@ -376,12 +583,4 @@ class BattleResult {
   final int attackerLosses;
   final int defenderLosses;
   final bool territoryConquered;
-}
-
-/// 開発の種類
-enum DevelopmentType {
-  agriculture, // 農業開発
-  commerce, // 商業開発
-  military, // 軍事開発
-  security, // 治安改善
 }

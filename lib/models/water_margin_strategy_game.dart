@@ -45,6 +45,14 @@ enum HeroSkill {
   scout, // 斥候（情報収集特化）
 }
 
+/// 内政開発の種類
+enum DevelopmentType {
+  agriculture, // 農業開発
+  commerce, // 商業開発
+  military, // 軍備強化
+  security, // 治安維持
+}
+
 /// 水滸伝の英雄
 class Hero {
   const Hero({

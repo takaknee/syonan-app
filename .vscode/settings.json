@@ -9,7 +9,6 @@
   "chat.agent.enabled": true,
   "dart.flutterSdkPath": "${workspaceFolder}/flutter",
   "dart.sdkPath": "${workspaceFolder}/flutter/bin/cache/dart-sdk",
-  "dart.analysisServerPath": "${workspaceFolder}/flutter/bin/cache/dart-sdk/bin/dart",
   "dart.lineLength": 120,
   "dart.insertArgumentPlaceholders": false,
   "dart.updateImportsOnRename": true,
@@ -43,22 +42,14 @@
     "length": 2000,
     "inlineSuggestCount": 3
   },
-  "github.copilot.chat.followUps": "always",
   "github.copilot.chat.localeOverride": "ja",
   "github.copilot.chat.agent.runTasks": true,
   "github.copilot.nextEditSuggestions.enabled": true,
   "github.copilot.nextEditSuggestions.fixes": true,
   "github.copilot.chat.agent.autoFix": true,
   "github.copilot.chat.codesearch.enabled": true,
-  "github.copilot.chat.search.keywordSuggestions": true,
-  "github.copilot.chat.welcomeMessage": "always",
-  "github.copilot.conversation.showWelcomeMessage": true,
-  "github.copilot.advanced.debug": false,
-  "github.copilot.advanced.listCount": 10,
-  "github.copilot.chat.referenceFiles": "always",
   "github.copilot.chat.scopeSelection": true,
   "github.copilot.editor.enableCodeActions": true,
-  "github.copilot.prompt.addTests": "always",
   "files.associations": {
     "*.dart": "dart"
   },
@@ -82,11 +73,7 @@
     "dart": "html"
   },
   "dart.showTodos": false,
-  "dart.analysisServerFolderFilter": [
-    "!flutter"
-  ],
   "dart.analyzeAngularTemplates": false,
-  "dart.triggerSignatureHelpAutomatically": false,
   "dart.enableSdkFormatter": true,
   "makefile.configureOnOpen": false
 }

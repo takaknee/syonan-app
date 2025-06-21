@@ -134,13 +134,29 @@
     },
     // === ビルドタスク ===
     {
-      "label": "Flutter: Webビルド",
+      "label": "Flutter: Webビルド（開発用）",
       "type": "shell",
       "command": "/home/vscode/flutter/bin/flutter",
       "args": [
         "build",
         "web",
         "--release"
+      ],
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Flutter: Webビルド（開発時刻付き）",
+      "type": "shell",
+      "command": "/workspaces/syonan-app/scripts/build-with-time.sh",
+      "args": [
+        "build-web"
       ],
       "group": "build",
       "presentation": {
@@ -171,7 +187,7 @@
     },
     // === Web開発 ===
     {
-      "label": "Flutter: Webアプリ起動",
+      "label": "Flutter: Webアプリ起動（開発用）",
       "type": "shell",
       "command": "/home/vscode/flutter/bin/flutter",
       "args": [
@@ -182,6 +198,23 @@
         "0.0.0.0",
         "--web-port",
         "9100"
+      ],
+      "group": "build",
+      "isBackground": true,
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "dedicated"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Flutter: Webアプリ起動（開発時刻付き）",
+      "type": "shell",
+      "command": "/workspaces/syonan-app/scripts/build-with-time.sh",
+      "args": [
+        "run"
       ],
       "group": "build",
       "isBackground": true,
@@ -210,6 +243,7 @@
       },
       "problemMatcher": []
     },
+    // === システム管理 ===
     {
       "label": "システム: ポート9100解放",
       "type": "shell",
@@ -406,40 +440,6 @@
         "focus": true,
         "panel": "new"
       }
-    },
-    // コンパイル時刻付きビルド
-    {
-      "label": "Flutter: Webアプリ起動（時刻付き）",
-      "type": "shell",
-      "command": "/workspaces/syonan-app/scripts/build-with-time.sh",
-      "args": [
-        "run"
-      ],
-      "group": "build",
-      "isBackground": true,
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": false,
-        "panel": "dedicated"
-      },
-      "problemMatcher": []
-    },
-    {
-      "label": "Flutter: Webビルド（時刻付き）",
-      "type": "shell",
-      "command": "/workspaces/syonan-app/scripts/build-with-time.sh",
-      "args": [
-        "build-web"
-      ],
-      "group": "build",
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": false,
-        "panel": "shared"
-      },
-      "problemMatcher": []
     }
   ]
 }

@@ -176,6 +176,16 @@ class AvailableMiniGames {
       color: 0xFF8BC34A, // Light Green
     ),
     MiniGame(
+      id: 'water_margin',
+      type: MiniGameType.strategy,
+      name: '水滸伝 天下統一',
+      description: '梁山泊を率いて天下統一を目指そう！',
+      emoji: '🏔️',
+      pointsCost: 25,
+      difficulty: MiniGameDifficulty.hard,
+      color: 0xFF3F51B5, // Indigo
+    ),
+    MiniGame(
       id: 'city_builder',
       type: MiniGameType.simulation,
       name: '街づくり',

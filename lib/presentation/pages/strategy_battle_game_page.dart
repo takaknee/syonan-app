@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../controllers/strategy_game_controller.dart';
 import '../../services/strategy_game_service.dart';
+import '../controllers/strategy_game_controller.dart';
 import '../widgets/strategy_game/action_panel.dart';
 import '../widgets/strategy_game/game_dialogs.dart';
 import '../widgets/strategy_game/game_info_panel.dart';

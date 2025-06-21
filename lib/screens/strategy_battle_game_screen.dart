@@ -11,8 +11,7 @@ class StrategyBattleGameScreen extends StatefulWidget {
   const StrategyBattleGameScreen({super.key});
 
   @override
-  State<StrategyBattleGameScreen> createState() =>
-      _StrategyBattleGameScreenState();
+  State<StrategyBattleGameScreen> createState() => _StrategyBattleGameScreenState();
 }
 
 class _StrategyBattleGameScreenState extends State<StrategyBattleGameScreen> {
@@ -55,17 +54,15 @@ class _StrategyBattleGameScreenState extends State<StrategyBattleGameScreen> {
     final finalScore = _gameService.calculateFinalScore(_gameState, duration);
 
     // スコアを記録
-    final miniGameService =
-        Provider.of<MiniGameService>(context, listen: false);
-    miniGameService.recordScore(
-        'strategy_battle', finalScore, MiniGameDifficulty.hard);
+    final miniGameService = Provider.of<MiniGameService>(context, listen: false);
+    miniGameService.recordScore('strategy_battle', finalScore, MiniGameDifficulty.hard);
 
     _showGameCompleteDialog(finalScore);
   }
 
   void _showGameCompleteDialog(int finalScore) {
     final isVictory = _gameState.gameStatus == GameStatus.victory;
-    
+
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -116,9 +113,7 @@ class _StrategyBattleGameScreenState extends State<StrategyBattleGameScreen> {
   void _selectTerritory(String territoryId) {
     setState(() {
       _gameState = _gameState.copyWith(
-        selectedTerritoryId: _gameState.selectedTerritoryId == territoryId 
-            ? null 
-            : territoryId,
+        selectedTerritoryId: _gameState.selectedTerritoryId == territoryId ? null : territoryId,
       );
     });
   }
@@ -126,9 +121,9 @@ class _StrategyBattleGameScreenState extends State<StrategyBattleGameScreen> {
   void _attackTerritory(String attackerTerritoryId, String defenderTerritoryId) {
     final attacker = _gameState.getTerritoryById(attackerTerritoryId);
     final defender = _gameState.getTerritoryById(defenderTerritoryId);
-    
+
     if (attacker == null || defender == null) return;
-    
+
     setState(() {
       _gameState = _gameService.attackTerritory(
         _gameState,
@@ -140,7 +135,7 @@ class _StrategyBattleGameScreenState extends State<StrategyBattleGameScreen> {
     // 戦闘結果を表示
     final conqueredTerritory = _gameState.getTerritoryById(defenderTerritoryId);
     final wasConquered = conqueredTerritory?.owner == Owner.player;
-    
+
     _showBattleResult(defender.name, wasConquered);
 
     // ゲーム終了チェック
@@ -153,9 +148,7 @@ class _StrategyBattleGameScreenState extends State<StrategyBattleGameScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          victory 
-            ? '🎉 $territoryNameを占領しました！'
-            : '😓 $territoryNameの攻略に失敗...',
+          victory ? '🎉 $territoryNameを占領しました！' : '😓 $territoryNameの攻略に失敗...',
         ),
         backgroundColor: victory ? Colors.green : Colors.red,
         duration: const Duration(seconds: 2),
@@ -209,9 +202,12 @@ class _StrategyBattleGameScreenState extends State<StrategyBattleGameScreen> {
                 flex: 3,
                 child: _buildGameMap(),
               ),
-              // アクションパネル
-              Expanded(
-                child: _buildActionPanel(),
+              // アクションパネル（AndroidのホームボタンバーによるUI隠れを防ぐ）
+              SafeArea(
+                top: false,
+                child: Expanded(
+                  child: _buildActionPanel(),
+                ),
               ),
             ],
           ),
@@ -225,7 +221,7 @@ class _StrategyBattleGameScreenState extends State<StrategyBattleGameScreen> {
     final totalTerritories = _gameState.territories.length;
     final playerPercent = _gameState.playerTerritoryCount / totalTerritories;
     final enemyPercent = _gameState.enemyTerritoryCount / totalTerritories;
-    
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -307,13 +303,13 @@ class _StrategyBattleGameScreenState extends State<StrategyBattleGameScreen> {
     final isSelected = _gameState.selectedTerritoryId == territory.id;
     final isPlayerTerritory = territory.owner == Owner.player;
     final isEnemyTerritory = territory.owner == Owner.enemy;
-    final canAttack = isSelected && isPlayerTerritory && 
-                     _gameService.getAttackableTargets(_gameState, territory.id).isNotEmpty;
-    
+    final canAttack =
+        isSelected && isPlayerTerritory && _gameService.getAttackableTargets(_gameState, territory.id).isNotEmpty;
+
     Color backgroundColor;
     Color borderColor;
     String ownerEmoji;
-    
+
     if (isPlayerTerritory) {
       backgroundColor = const Color(0xFF4CAF50);
       borderColor = isSelected ? Colors.lightBlue : Colors.green;
@@ -335,18 +331,17 @@ class _StrategyBattleGameScreenState extends State<StrategyBattleGameScreen> {
         child: Container(
           decoration: BoxDecoration(
             color: backgroundColor.withValues(alpha: isSelected ? 1.0 : 0.8),
-            border: Border.all(
-              color: borderColor, 
-              width: isSelected ? 3 : 1
-            ),
+            border: Border.all(color: borderColor, width: isSelected ? 3 : 1),
             borderRadius: BorderRadius.circular(8),
-            boxShadow: isSelected ? [
-              BoxShadow(
-                color: borderColor.withValues(alpha: 0.3),
-                spreadRadius: 2,
-                blurRadius: 4,
-              )
-            ] : null,
+            boxShadow: isSelected
+                ? [
+                    BoxShadow(
+                      color: borderColor.withValues(alpha: 0.3),
+                      spreadRadius: 2,
+                      blurRadius: 4,
+                    )
+                  ]
+                : null,
           ),
           child: Stack(
             children: [
@@ -380,6 +375,8 @@ class _StrategyBattleGameScreenState extends State<StrategyBattleGameScreen> {
                           const SizedBox(width: 2),
                         ],
                         Text(ownerEmoji, style: const TextStyle(fontSize: 12)),
+                        const SizedBox(width: 2),
+                        Text(territory.terrainIcon, style: const TextStyle(fontSize: 10)),
                       ],
                     ),
                     const SizedBox(height: 2),
@@ -422,7 +419,7 @@ class _StrategyBattleGameScreenState extends State<StrategyBattleGameScreen> {
 
   Widget _buildActionPanel() {
     final selectedTerritory = _gameState.selectedTerritory;
-    
+
     if (selectedTerritory == null) {
       return Container(
         padding: const EdgeInsets.all(16),
@@ -465,16 +462,35 @@ class _StrategyBattleGameScreenState extends State<StrategyBattleGameScreen> {
   }
 
   Widget _buildPlayerTerritoryActions(Territory territory) {
-    final canRecruit = _gameState.playerGold >= StrategyGameService.troopCost &&
-                      territory.troops < territory.maxTroops;
-    
+    final canRecruit = _gameState.playerGold >= StrategyGameService.troopCost && territory.troops < territory.maxTroops;
+
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Text(
+          '${territory.name} ${territory.terrainIcon}',
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          territory.terrainDescription,
+          style: const TextStyle(fontSize: 12, color: Colors.blue),
+        ),
+        const SizedBox(height: 8),
         Row(
           children: [
             Text('兵力: ${territory.troops}/${territory.maxTroops}'),
             const Spacer(),
+            Text('収入: +${territory.incomePerTurn}金/ターン'),
+          ],
+        ),
+        const SizedBox(height: 4),
+        Row(
+          children: [
             Text('資源: ${territory.resources}'),
+            const Spacer(),
+            if (territory.defenseBonus > 0)
+              Text('防御: +${territory.defenseBonus}', style: const TextStyle(color: Colors.green)),
           ],
         ),
         const SizedBox(height: 8),
@@ -496,22 +512,50 @@ class _StrategyBattleGameScreenState extends State<StrategyBattleGameScreen> {
 
   Widget _buildEnemyTerritoryActions(Territory territory) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('敵領土 - 兵力: ${territory.troops}'),
-        if (territory.isCapital)
-          const Text('👑 敵の首都！', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+        Text(
+          '${territory.name} ${territory.terrainIcon}',
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.red),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          territory.terrainDescription,
+          style: const TextStyle(fontSize: 12, color: Colors.orange),
+        ),
+        const SizedBox(height: 8),
+        Row(
+          children: [
+            Text('敵兵力: ${territory.troops}'),
+            const Spacer(),
+            if (territory.defenseBonus > 0)
+              Text('防御: +${territory.defenseBonus}', style: const TextStyle(color: Colors.red)),
+          ],
+        ),
+        if (territory.isCapital) ...[
+          const SizedBox(height: 4),
+          const Text('👑 敵の首都 - 追加防御+5', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+        ],
       ],
     );
   }
 
   List<Widget> _buildAttackButtons(Territory territory) {
     final attackableTargets = _gameService.getAttackableTargets(_gameState, territory.id);
-    
+
     if (attackableTargets.isEmpty || territory.troops <= 1) {
       return [const Text('攻撃可能な敵がいません', style: TextStyle(color: Colors.grey))];
     }
 
     return attackableTargets.map((target) {
+      final attackPower = territory.troops - 1; // 1部隊は残す
+      final defenseTotal = target.troops + target.defenseBonus + (target.isCapital ? 5 : 0);
+      final winChance = attackPower > defenseTotal
+          ? '勝率: 高'
+          : attackPower == defenseTotal
+              ? '勝率: 互角'
+              : '勝率: 低';
+
       return Padding(
         padding: const EdgeInsets.only(top: 4),
         child: ElevatedButton(
@@ -520,7 +564,16 @@ class _StrategyBattleGameScreenState extends State<StrategyBattleGameScreen> {
             backgroundColor: Colors.red,
             foregroundColor: Colors.white,
           ),
-          child: Text('${target.name}を攻撃 (兵力${target.troops})'),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('${target.name}を攻撃 ${target.terrainIcon}'),
+              Text(
+                '敵兵力${target.troops}+防御${target.defenseBonus} | $winChance',
+                style: const TextStyle(fontSize: 10),
+              ),
+            ],
+          ),
         ),
       );
     }).toList();

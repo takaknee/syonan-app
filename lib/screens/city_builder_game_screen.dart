@@ -1,11 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'dart:async';
 
-import '../models/mini_game.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import '../models/city_building_game.dart';
-import '../services/mini_game_service.dart';
+import '../models/mini_game.dart';
 import '../services/city_building_game_service.dart';
+import '../services/mini_game_service.dart';
 
 /// 街づくりゲーム画面
 class CityBuilderGameScreen extends StatefulWidget {
@@ -40,12 +41,12 @@ class _CityBuilderGameScreenState extends State<CityBuilderGameScreen> {
       _isGameComplete = false;
       _lastEventMessage = null;
     });
-    
+
     // チュートリアルを表示
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _showTutorial();
     });
-    
+
     // ゲームタイマーを開始（1秒ごとに時間チェック）
     _gameTimer?.cancel();
     _gameTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
@@ -101,10 +102,8 @@ class _CityBuilderGameScreenState extends State<CityBuilderGameScreen> {
     final finalScore = _gameService.calculateFinalScore(_gameState);
 
     // スコアを記録
-    final miniGameService =
-        Provider.of<MiniGameService>(context, listen: false);
-    miniGameService.recordScore(
-        'city_builder', finalScore, MiniGameDifficulty.hard);
+    final miniGameService = Provider.of<MiniGameService>(context, listen: false);
+    miniGameService.recordScore('city_builder', finalScore, MiniGameDifficulty.hard);
 
     _showGameCompleteDialog(finalScore);
   }
@@ -121,12 +120,12 @@ class _CityBuilderGameScreenState extends State<CityBuilderGameScreen> {
     if (_isGameComplete) return;
 
     final oldResources = Map<ResourceType, int>.from(_gameState.resources);
-    
+
     final turnResult = _gameService.endTurn(_gameState);
-    
+
     setState(() {
       _gameState = turnResult.gameState;
-      
+
       // ゲーム終了チェック
       if (_gameState.gameStatus != GameStatus.playing) {
         _completeGame();
@@ -183,19 +182,19 @@ class _CityBuilderGameScreenState extends State<CityBuilderGameScreen> {
 
   void _showTurnSummary(Map<ResourceType, int> oldResources, Map<ResourceType, int> newResources) {
     final changes = <String>[];
-    
+
     for (final resourceType in ResourceType.values) {
       final oldValue = oldResources[resourceType] ?? 0;
       final newValue = newResources[resourceType] ?? 0;
       final change = newValue - oldValue;
-      
+
       if (change != 0) {
         final emoji = _getResourceEmoji(resourceType);
         final sign = change > 0 ? '+' : '';
         changes.add('$emoji$sign$change');
       }
     }
-    
+
     if (changes.isNotEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -209,7 +208,7 @@ class _CityBuilderGameScreenState extends State<CityBuilderGameScreen> {
   void _showGameCompleteDialog(int finalScore) {
     String title;
     String message;
-    
+
     switch (_gameState.gameStatus) {
       case GameStatus.victory:
         title = '🏆 街づくり大成功！';
@@ -335,7 +334,7 @@ class _CityBuilderGameScreenState extends State<CityBuilderGameScreen> {
               ),
             ),
             const SizedBox(height: 16),
-            
+
             // 街の情報
             Container(
               width: double.infinity,
@@ -363,7 +362,7 @@ class _CityBuilderGameScreenState extends State<CityBuilderGameScreen> {
               ),
             ),
             const SizedBox(height: 16),
-            
+
             // 建物選択
             Expanded(
               child: Column(
@@ -392,7 +391,7 @@ class _CityBuilderGameScreenState extends State<CityBuilderGameScreen> {
                 ],
               ),
             ),
-            
+
             // アクションボタン
             Row(
               children: [
@@ -432,14 +431,14 @@ class _CityBuilderGameScreenState extends State<CityBuilderGameScreen> {
   }
 
   Widget _buildBuildingCard(BuildingType buildingType) {
-    final template = _getBuildingTemplate(buildingType);
+    final template = _gameService.getBuildingTemplate(buildingType);
     if (template == null) return const SizedBox.shrink();
-    
+
     final existingBuilding = _gameState.buildings[buildingType];
-    final canBuild = _gameState.hasEnoughResources(template.buildCost) && 
-                    (_gameState.totalBuildings < _gameState.citySize || existingBuilding != null);
+    final canBuild = _gameState.hasEnoughResources(template.buildCost) &&
+        (_gameState.totalBuildings < _gameState.citySize || existingBuilding != null);
     final isUpgrade = existingBuilding != null;
-    
+
     return Card(
       color: canBuild ? null : Colors.grey[100],
       child: InkWell(
@@ -472,7 +471,7 @@ class _CityBuilderGameScreenState extends State<CityBuilderGameScreen> {
                 }).toList(),
               ),
               // 生産・効果
-              if (template.production.isNotEmpty) 
+              if (template.production.isNotEmpty)
                 Wrap(
                   alignment: WrapAlignment.center,
                   children: template.production.entries.map((entry) {
@@ -517,161 +516,6 @@ class _CityBuilderGameScreenState extends State<CityBuilderGameScreen> {
         ),
       ),
     );
-  }
-
-  Building? _getBuildingTemplate(BuildingType type) {
-    // 既存の建物があればそのレベルアップ版を返す
-    final existing = _gameState.buildings[type];
-    if (existing != null && existing.canUpgrade()) {
-      return existing.upgraded();
-    }
-    
-    // 新規建物のテンプレートを取得
-    switch (type) {
-      case BuildingType.house:
-        return const Building(
-          type: BuildingType.house,
-          name: '家',
-          emoji: '🏠',
-          level: 1,
-          maxLevel: 3,
-          buildCost: {ResourceType.materials: 10, ResourceType.money: 20},
-          production: {},
-          upkeep: {ResourceType.energy: 1},
-          populationProvided: 4,
-          unlockRequirements: {},
-        );
-      case BuildingType.apartment:
-        return const Building(
-          type: BuildingType.apartment,
-          name: 'アパート',
-          emoji: '🏢',
-          level: 1,
-          maxLevel: 3,
-          buildCost: {ResourceType.materials: 25, ResourceType.money: 50},
-          production: {},
-          upkeep: {ResourceType.energy: 2},
-          populationProvided: 12,
-          unlockRequirements: {ResourceType.population: 20},
-        );
-      case BuildingType.mansion:
-        return const Building(
-          type: BuildingType.mansion,
-          name: 'マンション',
-          emoji: '🏬',
-          level: 1,
-          maxLevel: 2,
-          buildCost: {ResourceType.materials: 50, ResourceType.money: 100},
-          production: {},
-          upkeep: {ResourceType.energy: 4},
-          populationProvided: 30,
-          unlockRequirements: {ResourceType.population: 50},
-        );
-      case BuildingType.farm:
-        return const Building(
-          type: BuildingType.farm,
-          name: '農場',
-          emoji: '🚜',
-          level: 1,
-          maxLevel: 4,
-          buildCost: {ResourceType.materials: 15, ResourceType.money: 30},
-          production: {ResourceType.food: 8},
-          upkeep: {ResourceType.energy: 1},
-          populationProvided: 0,
-          unlockRequirements: {},
-        );
-      case BuildingType.factory:
-        return const Building(
-          type: BuildingType.factory,
-          name: '工場',
-          emoji: '🏭',
-          level: 1,
-          maxLevel: 4,
-          buildCost: {ResourceType.materials: 30, ResourceType.money: 60},
-          production: {ResourceType.materials: 6, ResourceType.money: 10},
-          upkeep: {ResourceType.energy: 3, ResourceType.food: 2},
-          populationProvided: 0,
-          unlockRequirements: {ResourceType.population: 15},
-        );
-      case BuildingType.powerPlant:
-        return const Building(
-          type: BuildingType.powerPlant,
-          name: '発電所',
-          emoji: '⚡',
-          level: 1,
-          maxLevel: 3,
-          buildCost: {ResourceType.materials: 40, ResourceType.money: 80},
-          production: {ResourceType.energy: 12},
-          upkeep: {ResourceType.materials: 2},
-          populationProvided: 0,
-          unlockRequirements: {ResourceType.population: 25},
-        );
-      case BuildingType.mine:
-        return const Building(
-          type: BuildingType.mine,
-          name: '鉱山',
-          emoji: '⛏️',
-          level: 1,
-          maxLevel: 3,
-          buildCost: {ResourceType.money: 70},
-          production: {ResourceType.materials: 10},
-          upkeep: {ResourceType.energy: 2, ResourceType.food: 1},
-          populationProvided: 0,
-          unlockRequirements: {ResourceType.population: 20},
-        );
-      case BuildingType.shop:
-        return const Building(
-          type: BuildingType.shop,
-          name: '商店',
-          emoji: '🏪',
-          level: 1,
-          maxLevel: 3,
-          buildCost: {ResourceType.materials: 20, ResourceType.money: 40},
-          production: {ResourceType.money: 15},
-          upkeep: {ResourceType.energy: 1},
-          populationProvided: 0,
-          unlockRequirements: {ResourceType.population: 30},
-        );
-      case BuildingType.hospital:
-        return const Building(
-          type: BuildingType.hospital,
-          name: '病院',
-          emoji: '🏥',
-          level: 1,
-          maxLevel: 2,
-          buildCost: {ResourceType.materials: 35, ResourceType.money: 100},
-          production: {},
-          upkeep: {ResourceType.energy: 3, ResourceType.money: 10},
-          populationProvided: 5,
-          unlockRequirements: {ResourceType.population: 40},
-        );
-      case BuildingType.school:
-        return const Building(
-          type: BuildingType.school,
-          name: '学校',
-          emoji: '🏫',
-          level: 1,
-          maxLevel: 2,
-          buildCost: {ResourceType.materials: 30, ResourceType.money: 80},
-          production: {},
-          upkeep: {ResourceType.energy: 2, ResourceType.money: 5},
-          populationProvided: 8,
-          unlockRequirements: {ResourceType.population: 35},
-        );
-      case BuildingType.park:
-        return const Building(
-          type: BuildingType.park,
-          name: '公園',
-          emoji: '🌳',
-          level: 1,
-          maxLevel: 2,
-          buildCost: {ResourceType.money: 25},
-          production: {},
-          upkeep: {ResourceType.money: 2},
-          populationProvided: 3,
-          unlockRequirements: {ResourceType.population: 25},
-        );
-    }
   }
 
   String _getResourceEmoji(ResourceType type) {

@@ -1,14 +1,15 @@
 import 'dart:math';
+
 import '../models/city_building_game.dart';
 
 /// 街づくりゲームのゲームロジックサービス
 class CityBuildingGameService {
   static const int maxTurns = 30; // 約10分でゲーム終了を目指す
-  static const int startingPopulation = 10;
-  static const int startingFood = 20;
-  static const int startingMaterials = 15;
-  static const int startingEnergy = 10;
-  static const int startingMoney = 50;
+  static const int startingPopulation = 8;
+  static const int startingFood = 25;
+  static const int startingMaterials = 20;
+  static const int startingEnergy = 12;
+  static const int startingMoney = 60;
   static const int baseCitySize = 3; // 初期建設可能数
 
   final Random _random = Random();
@@ -38,7 +39,7 @@ class CityBuildingGameService {
   CityGameState buildBuilding(CityGameState gameState, BuildingType buildingType) {
     if (gameState.gameStatus != GameStatus.playing) return gameState;
 
-    final buildingTemplate = _getBuildingTemplate(buildingType);
+    final buildingTemplate = getBuildingTemplate(buildingType);
     if (buildingTemplate == null) return gameState;
 
     // 建設条件をチェック
@@ -93,8 +94,25 @@ class CityBuildingGameService {
     }
 
     // 基本消費（人口による食料消費など）
-    final population = gameState.totalPopulation;
-    newResources[ResourceType.food] = (newResources[ResourceType.food] ?? 0) - (population ~/ 2);
+    final totalPopulation = gameState.totalPopulation;
+    var populationCapacity = newResources[ResourceType.population] ?? 0;
+
+    // 収容可能人口から実際の人口を計算
+    for (final building in gameState.buildings.values) {
+      populationCapacity += building.populationProvided;
+    }
+
+    // 人口は収容能力を超えない
+    final actualPopulation = totalPopulation.clamp(0, populationCapacity);
+    newResources[ResourceType.population] = actualPopulation;
+
+    // 人口による食料消費（1人あたり0.5食料）
+    final foodConsumption = (actualPopulation * 0.5).round();
+    newResources[ResourceType.food] = (newResources[ResourceType.food] ?? 0) - foodConsumption;
+
+    // 人口による収入（人口が多いほど税収増加）
+    final taxIncome = (actualPopulation * 0.3).round();
+    newResources[ResourceType.money] = (newResources[ResourceType.money] ?? 0) + taxIncome;
 
     // リソースの最低値を0に設定
     for (final key in newResources.keys) {
@@ -136,7 +154,7 @@ class CityBuildingGameService {
     final available = <BuildingType>[];
 
     for (final buildingType in BuildingType.values) {
-      final template = _getBuildingTemplate(buildingType);
+      final template = getBuildingTemplate(buildingType);
       if (template != null) {
         // 建設可能な条件をチェック
         if (gameState.hasEnoughResources(template.unlockRequirements)) {
@@ -182,7 +200,7 @@ class CityBuildingGameService {
   }
 
   /// 建物テンプレートを取得
-  Building? _getBuildingTemplate(BuildingType type) {
+  Building? getBuildingTemplate(BuildingType type) {
     switch (type) {
       case BuildingType.house:
         return const Building(
@@ -191,10 +209,10 @@ class CityBuildingGameService {
           emoji: '🏠',
           level: 1,
           maxLevel: 3,
-          buildCost: {ResourceType.materials: 10, ResourceType.money: 20},
+          buildCost: {ResourceType.materials: 8, ResourceType.money: 15},
           production: {},
           upkeep: {ResourceType.energy: 1},
-          populationProvided: 4,
+          populationProvided: 5,
           unlockRequirements: {},
         );
       case BuildingType.apartment:
@@ -230,8 +248,8 @@ class CityBuildingGameService {
           emoji: '🚜',
           level: 1,
           maxLevel: 4,
-          buildCost: {ResourceType.materials: 15, ResourceType.money: 30},
-          production: {ResourceType.food: 8},
+          buildCost: {ResourceType.materials: 12, ResourceType.money: 25},
+          production: {ResourceType.food: 10},
           upkeep: {ResourceType.energy: 1},
           populationProvided: 0,
           unlockRequirements: {},

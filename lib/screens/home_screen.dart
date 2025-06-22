@@ -8,6 +8,7 @@ import '../services/mini_game_service.dart';
 import '../services/points_service.dart';
 import '../services/score_service.dart';
 import '../utils/build_info.dart';
+import '../utils/responsive_utils.dart';
 import '../widgets/feature_card.dart';
 import '../widgets/mini_game_button.dart';
 import '../widgets/points_card.dart';
@@ -64,37 +65,37 @@ class _HomeScreenState extends State<HomeScreen> {
         child: scoreService.isLoading || pointsService.isLoading || miniGameService.isLoading
             ? const Center(child: CircularProgressIndicator())
             : SingleChildScrollView(
-                padding: const EdgeInsets.all(20),
+                padding: ResponsiveUtils.getSafeAreaPadding(context),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // ヘッダー
                     _buildHeader(theme),
-                    const SizedBox(height: 24),
+                    SizedBox(height: ResponsiveUtils.getSpacing(context)),
 
                     // ポイント表示
                     _buildPointsSection(pointsService),
-                    const SizedBox(height: 24),
+                    SizedBox(height: ResponsiveUtils.getSpacing(context)),
 
                     // 練習ボタン
                     _buildPracticeSection(theme),
-                    const SizedBox(height: 32),
+                    SizedBox(height: ResponsiveUtils.getSpacing(context, factor: 1.5)),
 
                     // ミニゲーム
                     _buildMiniGamesSection(theme, pointsService, miniGameService),
-                    const SizedBox(height: 32),
+                    SizedBox(height: ResponsiveUtils.getSpacing(context, factor: 1.5)),
 
                     // 新機能
                     _buildFeaturesSection(theme),
-                    const SizedBox(height: 32),
+                    SizedBox(height: ResponsiveUtils.getSpacing(context, factor: 1.5)),
 
                     // 統計情報
                     _buildStatsSection(theme, scoreService),
-                    const SizedBox(height: 24),
+                    SizedBox(height: ResponsiveUtils.getSpacing(context)),
 
                     // スコア履歴ボタン
                     _buildScoreHistoryButton(theme),
-                    const SizedBox(height: 24),
+                    SizedBox(height: ResponsiveUtils.getSpacing(context)),
 
                     // ビルド情報
                     _buildBuildInfo(theme),
@@ -157,58 +158,11 @@ class _HomeScreenState extends State<HomeScreen> {
             fontStyle: FontStyle.italic,
           ),
         ),
-        const SizedBox(height: 16),
-        Row(
-          children: [
-            Expanded(
-              child: PracticeButton(
-                title: '掛け算',
-                subtitle: '九九の練習',
-                icon: Icons.close,
-                color: Colors.blue,
-                onTap: () => _startPractice(MathOperationType.multiplication),
-                onLongPress: () => _showDifficultyDialog(MathOperationType.multiplication),
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: PracticeButton(
-                title: '割り算',
-                subtitle: '割り算の練習',
-                icon: Icons.more_horiz,
-                color: Colors.green,
-                onTap: () => _startPractice(MathOperationType.division),
-                onLongPress: () => _showDifficultyDialog(MathOperationType.division),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 16),
-        Row(
-          children: [
-            Expanded(
-              child: PracticeButton(
-                title: '足し算',
-                subtitle: '足し算の練習',
-                icon: Icons.add,
-                color: Colors.orange,
-                onTap: () => _startPractice(MathOperationType.addition),
-                onLongPress: () => _showDifficultyDialog(MathOperationType.addition),
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: PracticeButton(
-                title: '引き算',
-                subtitle: '引き算の練習',
-                icon: Icons.remove,
-                color: Colors.purple,
-                onTap: () => _startPractice(MathOperationType.subtraction),
-                onLongPress: () => _showDifficultyDialog(MathOperationType.subtraction),
-              ),
-            ),
-          ],
-        ),
+        SizedBox(height: ResponsiveUtils.getSpacing(context)),
+        // モバイルファーストのレスポンシブレイアウト
+        ResponsiveUtils.isMobile(context)
+            ? _buildMobilePracticeLayout()
+            : _buildTabletPracticeLayout(),
       ],
     );
   }
@@ -235,120 +189,9 @@ class _HomeScreenState extends State<HomeScreen> {
             fontStyle: FontStyle.italic,
           ),
         ),
-        const SizedBox(height: 16),
-        // First row - Study games
-        Row(
-          children: [
-            Expanded(
-              child: MiniGameButton(
-                miniGame: AvailableMiniGames.all.firstWhere((game) => game.id == 'number_memory'),
-                hasEnoughPoints: pointsService.totalPoints >= 10,
-                playCount: miniGameService.getPlayCount('number_memory'),
-                bestScore: miniGameService.getBestScore('number_memory'),
-                onTap: () => _startMiniGame('number_memory', pointsService),
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: MiniGameButton(
-                miniGame: AvailableMiniGames.all.firstWhere((game) => game.id == 'speed_math'),
-                hasEnoughPoints: pointsService.totalPoints >= 15,
-                playCount: miniGameService.getPlayCount('speed_math'),
-                bestScore: miniGameService.getBestScore('speed_math'),
-                onTap: () => _startMiniGame('speed_math', pointsService),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 12),
-        // Second row - Entertainment games
-        Row(
-          children: [
-            Expanded(
-              child: MiniGameButton(
-                miniGame: AvailableMiniGames.all.firstWhere((game) => game.id == 'sliding_puzzle'),
-                hasEnoughPoints: pointsService.totalPoints >= 8,
-                playCount: miniGameService.getPlayCount('sliding_puzzle'),
-                bestScore: miniGameService.getBestScore('sliding_puzzle'),
-                onTap: () => _startMiniGame('sliding_puzzle', pointsService),
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: MiniGameButton(
-                miniGame: AvailableMiniGames.all.firstWhere((game) => game.id == 'rhythm_tap'),
-                hasEnoughPoints: pointsService.totalPoints >= 12,
-                playCount: miniGameService.getPlayCount('rhythm_tap'),
-                bestScore: miniGameService.getBestScore('rhythm_tap'),
-                onTap: () => _startMiniGame('rhythm_tap', pointsService),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 12),
-        // Third row - Action game (centered)
-        Center(
-          child: SizedBox(
-            width: MediaQuery.of(context).size.width * 0.45,
-            child: MiniGameButton(
-              miniGame: AvailableMiniGames.all.firstWhere((game) => game.id == 'dodge_game'),
-              hasEnoughPoints: pointsService.totalPoints >= 10,
-              playCount: miniGameService.getPlayCount('dodge_game'),
-              bestScore: miniGameService.getBestScore('dodge_game'),
-              onTap: () => _startMiniGame('dodge_game', pointsService),
-            ),
-          ),
-        ),
-        const SizedBox(height: 12),
-        // Fourth row - Advanced puzzle games
-        Row(
-          children: [
-            Expanded(
-              child: MiniGameButton(
-                miniGame: AvailableMiniGames.all.firstWhere((game) => game.id == 'number_puzzle'),
-                hasEnoughPoints: pointsService.totalPoints >= 12,
-                playCount: miniGameService.getPlayCount('number_puzzle'),
-                bestScore: miniGameService.getBestScore('number_puzzle'),
-                onTap: () => _startMiniGame('number_puzzle', pointsService),
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: MiniGameButton(
-                miniGame: AvailableMiniGames.all.firstWhere((game) => game.id == 'strategy_battle'),
-                hasEnoughPoints: pointsService.totalPoints >= 18,
-                playCount: miniGameService.getPlayCount('strategy_battle'),
-                bestScore: miniGameService.getBestScore('strategy_battle'),
-                onTap: () => _startMiniGame('strategy_battle', pointsService),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 12),
-        // Fifth row - Strategy games
-        Row(
-          children: [
-            Expanded(
-              child: MiniGameButton(
-                miniGame: AvailableMiniGames.all.firstWhere((game) => game.id == 'water_margin'),
-                hasEnoughPoints: pointsService.totalPoints >= 25,
-                playCount: miniGameService.getPlayCount('water_margin'),
-                bestScore: miniGameService.getBestScore('water_margin'),
-                onTap: () => _startMiniGame('water_margin', pointsService),
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: MiniGameButton(
-                miniGame: AvailableMiniGames.all.firstWhere((game) => game.id == 'city_builder'),
-                hasEnoughPoints: pointsService.totalPoints >= 20,
-                playCount: miniGameService.getPlayCount('city_builder'),
-                bestScore: miniGameService.getBestScore('city_builder'),
-                onTap: () => _startMiniGame('city_builder', pointsService),
-              ),
-            ),
-          ],
-        ),
+        SizedBox(height: ResponsiveUtils.getSpacing(context, factor: 0.8)),
+        // レスポンシブなミニゲームレイアウト
+        _buildResponsiveMiniGameGrid(pointsService, miniGameService),
       ],
     );
   }
@@ -363,7 +206,7 @@ class _HomeScreenState extends State<HomeScreen> {
             color: theme.colorScheme.primary,
           ),
         ),
-        const SizedBox(height: 8),
+        SizedBox(height: ResponsiveUtils.getSpacing(context, factor: 0.5)),
         Text(
           '楽しい学習機能を使ってみましょう！',
           style: theme.textTheme.bodySmall?.copyWith(
@@ -371,7 +214,7 @@ class _HomeScreenState extends State<HomeScreen> {
             fontStyle: FontStyle.italic,
           ),
         ),
-        const SizedBox(height: 16),
+        SizedBox(height: ResponsiveUtils.getSpacing(context)),
         // First row
         Row(
           children: [
@@ -384,7 +227,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-            const SizedBox(width: 16),
+            SizedBox(width: ResponsiveUtils.getSpacing(context)),
             Expanded(
               child: FeatureCard(
                 feature: ComingSoonFeatures.all.firstWhere((feature) => feature.id == 'multiplayer_battle'),
@@ -396,7 +239,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: ResponsiveUtils.getSpacing(context, factor: 0.8)),
         // Second row
         Row(
           children: [
@@ -409,7 +252,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-            const SizedBox(width: 16),
+            SizedBox(width: ResponsiveUtils.getSpacing(context)),
             Expanded(
               child: FeatureCard(
                 feature: ComingSoonFeatures.all.firstWhere((feature) => feature.id == 'parent_dashboard'),
@@ -896,6 +739,112 @@ class _HomeScreenState extends State<HomeScreen> {
       MaterialPageRoute(
         builder: (context) => gameScreen,
       ),
+    );
+  }
+
+  /// モバイル用の練習ボタンレイアウト（縦配置）
+  Widget _buildMobilePracticeLayout() {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: PracticeButton(
+                title: '掛け算',
+                subtitle: '九九の練習',
+                icon: Icons.close,
+                color: Colors.blue,
+                onTap: () => _startPractice(MathOperationType.multiplication),
+                onLongPress: () => _showDifficultyDialog(MathOperationType.multiplication),
+              ),
+            ),
+            SizedBox(width: ResponsiveUtils.getSpacing(context)),
+            Expanded(
+              child: PracticeButton(
+                title: '割り算',
+                subtitle: '割り算の練習',
+                icon: Icons.more_horiz,
+                color: Colors.green,
+                onTap: () => _startPractice(MathOperationType.division),
+                onLongPress: () => _showDifficultyDialog(MathOperationType.division),
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: ResponsiveUtils.getSpacing(context)),
+        Row(
+          children: [
+            Expanded(
+              child: PracticeButton(
+                title: '足し算',
+                subtitle: '足し算の練習',
+                icon: Icons.add,
+                color: Colors.orange,
+                onTap: () => _startPractice(MathOperationType.addition),
+                onLongPress: () => _showDifficultyDialog(MathOperationType.addition),
+              ),
+            ),
+            SizedBox(width: ResponsiveUtils.getSpacing(context)),
+            Expanded(
+              child: PracticeButton(
+                title: '引き算',
+                subtitle: '引き算の練習',
+                icon: Icons.remove,
+                color: Colors.purple,
+                onTap: () => _startPractice(MathOperationType.subtraction),
+                onLongPress: () => _showDifficultyDialog(MathOperationType.subtraction),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  /// タブレット用の練習ボタンレイアウト（同じレイアウトだが余白調整）
+  Widget _buildTabletPracticeLayout() {
+    return _buildMobilePracticeLayout(); // 同じレイアウトを使用
+  }
+
+  /// レスポンシブなミニゲームグリッド
+  Widget _buildResponsiveMiniGameGrid(PointsService pointsService, MiniGameService miniGameService) {
+    final games = [
+      {'id': 'number_memory', 'points': 10},
+      {'id': 'speed_math', 'points': 15},
+      {'id': 'sliding_puzzle', 'points': 8},
+      {'id': 'rhythm_tap', 'points': 12},
+      {'id': 'dodge_game', 'points': 10},
+      {'id': 'number_puzzle', 'points': 12},
+      {'id': 'strategy_battle', 'points': 18},
+      {'id': 'water_margin', 'points': 25},
+      {'id': 'city_builder', 'points': 20},
+    ];
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final columns = ResponsiveUtils.getGridColumns(context);
+        final spacing = ResponsiveUtils.getSpacing(context);
+        
+        return Wrap(
+          spacing: spacing,
+          runSpacing: spacing,
+          children: games.map((game) {
+            final gameId = game['id'] as String;
+            final requiredPoints = game['points'] as int;
+            
+            return SizedBox(
+              width: (constraints.maxWidth - (spacing * (columns - 1))) / columns,
+              child: MiniGameButton(
+                miniGame: AvailableMiniGames.all.firstWhere((g) => g.id == gameId),
+                hasEnoughPoints: pointsService.totalPoints >= requiredPoints,
+                playCount: miniGameService.getPlayCount(gameId),
+                bestScore: miniGameService.getBestScore(gameId),
+                onTap: () => _startMiniGame(gameId, pointsService),
+              ),
+            );
+          }).toList(),
+        );
+      },
     );
   }
 }

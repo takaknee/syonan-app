@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/coming_soon_feature.dart';
+import '../utils/responsive_utils.dart';
 
 /// 実装済み機能を表示するカードウィジェット
 class FeatureCard extends StatelessWidget {
@@ -24,7 +25,7 @@ class FeatureCard extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(12),
         child: Container(
-          padding: const EdgeInsets.all(20),
+          padding: EdgeInsets.all(ResponsiveUtils.getVerticalPadding(context)),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
             gradient: LinearGradient(
@@ -40,7 +41,7 @@ class FeatureCard extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Container(
-                padding: const EdgeInsets.all(16),
+                padding: EdgeInsets.all(ResponsiveUtils.isMobile(context) ? 12.0 : 16.0),
                 decoration: BoxDecoration(
                   color: featureColor.withValues(alpha: 0.1),
                   shape: BoxShape.circle,
@@ -51,29 +52,38 @@ class FeatureCard extends StatelessWidget {
                 ),
                 child: Text(
                   feature.emoji,
-                  style: const TextStyle(fontSize: 28),
+                  style: TextStyle(fontSize: ResponsiveUtils.isMobile(context) ? 24 : 28),
                 ),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: ResponsiveUtils.getSpacing(context, factor: 0.8)),
               Text(
                 feature.name,
                 style: theme.textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: featureColor,
+                  fontSize: ResponsiveUtils.isMobile(context) ? 14.0 : null,
                 ),
                 textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
               ),
-              const SizedBox(height: 4),
+              SizedBox(height: ResponsiveUtils.getSpacing(context, factor: 0.2)),
               Text(
                 feature.description,
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                  fontSize: ResponsiveUtils.isMobile(context) ? 11.0 : null,
                 ),
                 textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: ResponsiveUtils.getSpacing(context, factor: 0.6)),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: EdgeInsets.symmetric(
+                  horizontal: ResponsiveUtils.isMobile(context) ? 8.0 : 12.0,
+                  vertical: ResponsiveUtils.isMobile(context) ? 4.0 : 6.0,
+                ),
                 decoration: BoxDecoration(
                   color: featureColor.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
@@ -86,15 +96,16 @@ class FeatureCard extends StatelessWidget {
                   children: [
                     Icon(
                       Icons.play_arrow,
-                      size: 16,
+                      size: ResponsiveUtils.isMobile(context) ? 14 : 16,
                       color: featureColor,
                     ),
-                    const SizedBox(width: 4),
+                    SizedBox(width: ResponsiveUtils.getSpacing(context, factor: 0.2)),
                     Text(
                       '利用可能',
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: featureColor,
                         fontWeight: FontWeight.bold,
+                        fontSize: ResponsiveUtils.isMobile(context) ? 10.0 : null,
                       ),
                     ),
                   ],

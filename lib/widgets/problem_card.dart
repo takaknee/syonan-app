@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/math_problem.dart';
+import '../utils/responsive_utils.dart';
 
 /// 算数問題を表示するカードウィジェット
 class ProblemCard extends StatelessWidget {
@@ -93,7 +94,7 @@ class ProblemCard extends StatelessWidget {
       elevation: 8,
       child: Container(
         width: double.infinity,
-        padding: const EdgeInsets.all(32),
+        padding: EdgeInsets.all(ResponsiveUtils.getVerticalPadding(context) * 1.5),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           gradient: LinearGradient(
@@ -196,7 +197,7 @@ class ProblemCard extends StatelessWidget {
                   child: Text(
                     '?',
                     style: theme.textTheme.headlineLarge?.copyWith(
-                      fontSize: 48,
+                      fontSize: ResponsiveUtils.isMobile(context) ? 36 : 48,
                       fontWeight: FontWeight.bold,
                       color: theme.colorScheme.onSecondary,
                     ),
@@ -209,7 +210,7 @@ class ProblemCard extends StatelessWidget {
             if (_shouldShowVisualAid(problem))
               Column(
                 children: [
-                  const SizedBox(height: 24),
+                  SizedBox(height: ResponsiveUtils.getSpacing(context)),
                   _buildVisualAid(problem, theme),
                 ],
               ),

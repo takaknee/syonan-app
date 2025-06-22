@@ -8,6 +8,7 @@ import '../models/math_problem.dart';
 import '../models/mini_game.dart';
 import '../services/mini_game_service.dart';
 import '../services/points_service.dart';
+import '../utils/responsive_utils.dart';
 
 /// スピード計算ゲーム画面
 class SpeedMathGameScreen extends StatefulWidget {
@@ -395,7 +396,7 @@ class _SpeedMathGameScreenState extends State<SpeedMathGameScreen> with TickerPr
 
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.all(20),
+              padding: ResponsiveUtils.getSafeAreaPadding(context),
               child: Column(
                 children: [
                   // 統計表示
@@ -412,7 +413,7 @@ class _SpeedMathGameScreenState extends State<SpeedMathGameScreen> with TickerPr
                     ],
                   ),
 
-                  const SizedBox(height: 32),
+                  SizedBox(height: ResponsiveUtils.getSpacing(context, factor: 1.5)),
 
                   // 問題表示
                   if (_currentProblem != null && _isGameActive)
@@ -424,22 +425,22 @@ class _SpeedMathGameScreenState extends State<SpeedMathGameScreen> with TickerPr
                           child: Card(
                             elevation: 8,
                             child: Padding(
-                              padding: const EdgeInsets.all(32),
+                              padding: EdgeInsets.all(ResponsiveUtils.getVerticalPadding(context) * 1.5),
                               child: Column(
                                 children: [
                                   Text(
                                     _currentProblem!.questionText,
-                                    style: const TextStyle(
-                                      fontSize: 36,
+                                    style: TextStyle(
+                                      fontSize: ResponsiveUtils.isMobile(context) ? 28 : 36,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  const SizedBox(height: 24),
-                                  const Text('=', style: TextStyle(fontSize: 32)),
-                                  const SizedBox(height: 24),
+                                  SizedBox(height: ResponsiveUtils.getSpacing(context)),
+                                  Text('=', style: TextStyle(fontSize: ResponsiveUtils.isMobile(context) ? 24 : 32)),
+                                  SizedBox(height: ResponsiveUtils.getSpacing(context)),
                                   Container(
-                                    width: 200,
-                                    padding: const EdgeInsets.all(16),
+                                    width: ResponsiveUtils.isMobile(context) ? 150 : 200,
+                                    padding: EdgeInsets.all(ResponsiveUtils.getVerticalPadding(context)),
                                     decoration: BoxDecoration(
                                       border: Border.all(
                                         color: theme.colorScheme.primary,
@@ -450,7 +451,7 @@ class _SpeedMathGameScreenState extends State<SpeedMathGameScreen> with TickerPr
                                     child: Text(
                                       _userAnswer.isEmpty ? '?' : _userAnswer,
                                       style: TextStyle(
-                                        fontSize: 28,
+                                        fontSize: ResponsiveUtils.isMobile(context) ? 20 : 28,
                                         fontWeight: FontWeight.bold,
                                         color: _userAnswer.isEmpty
                                             ? theme.colorScheme.onSurface.withValues(alpha: 0.5)
@@ -553,9 +554,12 @@ class _SpeedMathGameScreenState extends State<SpeedMathGameScreen> with TickerPr
     bool isDelete = false,
     bool isSubmit = false,
   }) {
+    final buttonSize = ResponsiveUtils.isMobile(context) ? 60.0 : 80.0;
+    final buttonHeight = ResponsiveUtils.isMobile(context) ? 50.0 : 60.0;
+    
     return SizedBox(
-      width: 80,
-      height: 60,
+      width: buttonSize,
+      height: buttonHeight,
       child: ElevatedButton(
         onPressed: () {
           if (isDelete) {
@@ -580,7 +584,9 @@ class _SpeedMathGameScreenState extends State<SpeedMathGameScreen> with TickerPr
         child: Text(
           text,
           style: TextStyle(
-            fontSize: isSubmit ? 16 : 20,
+            fontSize: ResponsiveUtils.isMobile(context) 
+                ? (isSubmit ? 14 : 16) 
+                : (isSubmit ? 16 : 20),
             fontWeight: FontWeight.bold,
           ),
         ),

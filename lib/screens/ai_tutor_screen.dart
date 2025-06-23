@@ -82,7 +82,8 @@ class _AiTutorScreenState extends State<AiTutorScreen> {
             'あなたの学習状況を分析して、\n最適な学習方法をアドバイスします！',
             textAlign: TextAlign.center,
             style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onPrimaryContainer.withValues(alpha: 0.8),
+              color:
+                  theme.colorScheme.onPrimaryContainer.withValues(alpha: 0.8),
             ),
           ),
         ],
@@ -336,25 +337,37 @@ class _AiTutorScreenState extends State<AiTutorScreen> {
     }
 
     // 各計算タイプの成績を計算
-    final multiplicationScores =
-        allScores.where((score) => score.operationType == MathOperationType.multiplication).toList();
-    final divisionScores = allScores.where((score) => score.operationType == MathOperationType.division).toList();
-    final additionScores = allScores.where((score) => score.operationType == MathOperationType.addition).toList();
-    final subtractionScores = allScores.where((score) => score.operationType == MathOperationType.subtraction).toList();
+    final multiplicationScores = allScores
+        .where(
+            (score) => score.operationType == MathOperationType.multiplication)
+        .toList();
+    final divisionScores = allScores
+        .where((score) => score.operationType == MathOperationType.division)
+        .toList();
+    final additionScores = allScores
+        .where((score) => score.operationType == MathOperationType.addition)
+        .toList();
+    final subtractionScores = allScores
+        .where((score) => score.operationType == MathOperationType.subtraction)
+        .toList();
 
     // 平均スコアを計算
     final multiplicationAvg = multiplicationScores.isEmpty
         ? 0.0
-        : multiplicationScores.map((s) => s.score).reduce((a, b) => a + b) / multiplicationScores.length;
+        : multiplicationScores.map((s) => s.score).reduce((a, b) => a + b) /
+            multiplicationScores.length;
     final divisionAvg = divisionScores.isEmpty
         ? 0.0
-        : divisionScores.map((s) => s.score).reduce((a, b) => a + b) / divisionScores.length;
+        : divisionScores.map((s) => s.score).reduce((a, b) => a + b) /
+            divisionScores.length;
     final additionAvg = additionScores.isEmpty
         ? 0.0
-        : additionScores.map((s) => s.score).reduce((a, b) => a + b) / additionScores.length;
+        : additionScores.map((s) => s.score).reduce((a, b) => a + b) /
+            additionScores.length;
     final subtractionAvg = subtractionScores.isEmpty
         ? 0.0
-        : subtractionScores.map((s) => s.score).reduce((a, b) => a + b) / subtractionScores.length;
+        : subtractionScores.map((s) => s.score).reduce((a, b) => a + b) /
+            subtractionScores.length;
 
     // 最も得意な分野と苦手な分野を判定
     final averages = {
@@ -364,7 +377,8 @@ class _AiTutorScreenState extends State<AiTutorScreen> {
       '引き算': subtractionAvg,
     };
 
-    final sortedByScore = averages.entries.toList()..sort((a, b) => b.value.compareTo(a.value));
+    final sortedByScore = averages.entries.toList()
+      ..sort((a, b) => b.value.compareTo(a.value));
 
     final strongSubject = sortedByScore.first.key;
     final weakSubject = sortedByScore.last.key;

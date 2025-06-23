@@ -44,19 +44,23 @@ class MiniGameService extends ChangeNotifier {
   int getBestScore(String gameId) {
     final gameScores = _scores.where((score) => score.gameId == gameId);
     if (gameScores.isEmpty) return 0;
-    return gameScores.map((score) => score.score).reduce((a, b) => a > b ? a : b);
+    return gameScores
+        .map((score) => score.score)
+        .reduce((a, b) => a > b ? a : b);
   }
 
   /// 特定のゲームの平均スコアを取得
   double getAverageScore(String gameId) {
     final gameScores = _scores.where((score) => score.gameId == gameId);
     if (gameScores.isEmpty) return 0.0;
-    final totalScore = gameScores.map((score) => score.score).reduce((a, b) => a + b);
+    final totalScore =
+        gameScores.map((score) => score.score).reduce((a, b) => a + b);
     return totalScore / gameScores.length;
   }
 
   /// スコアを記録
-  Future<void> recordScore(String gameId, int score, MiniGameDifficulty difficulty) async {
+  Future<void> recordScore(
+      String gameId, int score, MiniGameDifficulty difficulty) async {
     final newScore = MiniGameScore(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       gameId: gameId,
@@ -85,8 +89,11 @@ class MiniGameService extends ChangeNotifier {
 
   /// 全体の統計情報を取得
   Map<String, dynamic> getOverallStats() {
-    final totalGamesPlayed = _playCount.values.fold(0, (sum, count) => sum + count);
-    final totalScore = _scores.map((score) => score.score).fold(0, (sum, score) => sum + score);
+    final totalGamesPlayed =
+        _playCount.values.fold(0, (sum, count) => sum + count);
+    final totalScore = _scores
+        .map((score) => score.score)
+        .fold(0, (sum, score) => sum + score);
     final averageScore = _scores.isNotEmpty ? totalScore / _scores.length : 0.0;
 
     return {
@@ -104,7 +111,9 @@ class MiniGameService extends ChangeNotifier {
 
     if (scoresJson != null) {
       final scoresList = jsonDecode(scoresJson) as List;
-      _scores = scoresList.map((json) => MiniGameScore.fromJson(json as Map<String, dynamic>)).toList();
+      _scores = scoresList
+          .map((json) => MiniGameScore.fromJson(json as Map<String, dynamic>))
+          .toList();
     }
   }
 
@@ -124,7 +133,8 @@ class MiniGameService extends ChangeNotifier {
 
     if (playCountJson != null) {
       final playCountMap = jsonDecode(playCountJson) as Map<String, dynamic>;
-      _playCount = playCountMap.map((key, value) => MapEntry(key, value as int));
+      _playCount =
+          playCountMap.map((key, value) => MapEntry(key, value as int));
     }
   }
 

@@ -15,7 +15,8 @@ class ParentDashboardScreen extends StatefulWidget {
   State<ParentDashboardScreen> createState() => _ParentDashboardScreenState();
 }
 
-class _ParentDashboardScreenState extends State<ParentDashboardScreen> with SingleTickerProviderStateMixin {
+class _ParentDashboardScreenState extends State<ParentDashboardScreen>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override
@@ -228,7 +229,8 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen> with Sing
     );
   }
 
-  Widget _buildRecentActivityCard(ThemeData theme, List<ScoreRecord> allScores) {
+  Widget _buildRecentActivityCard(
+      ThemeData theme, List<ScoreRecord> allScores) {
     final recentScores = allScores.take(5).toList();
 
     return Card(
@@ -264,12 +266,15 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen> with Sing
                           width: 40,
                           height: 40,
                           decoration: BoxDecoration(
-                            color: _getOperationColor(theme, score.operationType).withValues(alpha: 0.1),
+                            color:
+                                _getOperationColor(theme, score.operationType)
+                                    .withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Icon(
                             _getOperationIcon(score.operationType),
-                            color: _getOperationColor(theme, score.operationType),
+                            color:
+                                _getOperationColor(theme, score.operationType),
                           ),
                         ),
                         const SizedBox(width: 12),
@@ -286,7 +291,8 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen> with Sing
                               Text(
                                 '${score.score.toStringAsFixed(0)}点 (${score.correctAnswers}/${score.totalQuestions}問正解)',
                                 style: theme.textTheme.bodySmall?.copyWith(
-                                  color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                                  color: theme.colorScheme.onSurface
+                                      .withValues(alpha: 0.6),
                                 ),
                               ),
                             ],
@@ -295,7 +301,8 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen> with Sing
                         Text(
                           _formatDate(score.createdAt),
                           style: theme.textTheme.bodySmall?.copyWith(
-                            color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                            color: theme.colorScheme.onSurface
+                                .withValues(alpha: 0.6),
                           ),
                         ),
                       ],
@@ -523,7 +530,8 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen> with Sing
                     const SizedBox(height: 8),
                     LinearProgressIndicator(
                       value: entry.value / 100,
-                      backgroundColor: theme.colorScheme.surfaceContainerHighest,
+                      backgroundColor:
+                          theme.colorScheme.surfaceContainerHighest,
                       valueColor: AlwaysStoppedAnimation<Color>(
                         _getAccuracyColor(theme, entry.value),
                       ),
@@ -674,7 +682,8 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen> with Sing
                     current.toStringAsFixed(current % 1 == 0 ? 0 : 1),
                     style: theme.textTheme.bodyLarge?.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: isAchieved ? Colors.green : theme.colorScheme.primary,
+                      color:
+                          isAchieved ? Colors.green : theme.colorScheme.primary,
                     ),
                   ),
                   Text(
@@ -732,7 +741,9 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen> with Sing
             ...milestones.map((milestone) => ListTile(
                   leading: Icon(
                     milestone.isAchieved ? Icons.star : Icons.star_border,
-                    color: milestone.isAchieved ? Colors.amber : theme.disabledColor,
+                    color: milestone.isAchieved
+                        ? Colors.amber
+                        : theme.disabledColor,
                     size: 32,
                   ),
                   title: Text(
@@ -750,7 +761,9 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen> with Sing
                           : theme.disabledColor,
                     ),
                   ),
-                  trailing: milestone.isAchieved ? const Icon(Icons.check_circle, color: Colors.green) : null,
+                  trailing: milestone.isAchieved
+                      ? const Icon(Icons.check_circle, color: Colors.green)
+                      : null,
                 )),
           ],
         ),
@@ -817,7 +830,9 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen> with Sing
               width: 30,
               height: height.toDouble(),
               decoration: BoxDecoration(
-                color: count > 0 ? theme.colorScheme.primary : theme.colorScheme.surfaceContainerHighest,
+                color: count > 0
+                    ? theme.colorScheme.primary
+                    : theme.colorScheme.surfaceContainerHighest,
                 borderRadius: BorderRadius.circular(4),
               ),
             ),
@@ -968,7 +983,9 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen> with Sing
     // 分野別平均スコアを計算
     final subjectScores = <MathOperationType, List<double>>{};
     for (final score in allScores) {
-      subjectScores.putIfAbsent(score.operationType, () => []).add(score.score.toDouble());
+      subjectScores
+          .putIfAbsent(score.operationType, () => [])
+          .add(score.score.toDouble());
     }
 
     String strongestSubject = '未設定';
@@ -1009,17 +1026,29 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen> with Sing
       );
     }
 
-    final totalCorrect = allScores.map((s) => s.correctAnswers).reduce((a, b) => a + b);
-    final totalQuestions = allScores.map((s) => s.totalQuestions).reduce((a, b) => a + b);
+    final totalCorrect =
+        allScores.map((s) => s.correctAnswers).reduce((a, b) => a + b);
+    final totalQuestions =
+        allScores.map((s) => s.totalQuestions).reduce((a, b) => a + b);
     final overallAccuracy = (totalCorrect / totalQuestions) * 100;
 
-    final highestScore = allScores.map((s) => s.score.toDouble()).reduce((a, b) => a > b ? a : b);
+    final highestScore = allScores
+        .map((s) => s.score.toDouble())
+        .reduce((a, b) => a > b ? a : b);
 
     // 改善度を計算（最初の5回と最後の5回の平均スコアを比較）
     double improvementTrend = 0.0;
     if (allScores.length >= 10) {
-      final firstFiveAvg = allScores.reversed.take(5).map((s) => s.score.toDouble()).reduce((a, b) => a + b) / 5;
-      final lastFiveAvg = allScores.take(5).map((s) => s.score.toDouble()).reduce((a, b) => a + b) / 5;
+      final firstFiveAvg = allScores.reversed
+              .take(5)
+              .map((s) => s.score.toDouble())
+              .reduce((a, b) => a + b) /
+          5;
+      final lastFiveAvg = allScores
+              .take(5)
+              .map((s) => s.score.toDouble())
+              .reduce((a, b) => a + b) /
+          5;
       improvementTrend = lastFiveAvg - firstFiveAvg;
     }
 
@@ -1029,14 +1058,20 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen> with Sing
     final subjectTotalQuestions = <MathOperationType, List<int>>{};
 
     for (final score in allScores) {
-      subjectScores.putIfAbsent(score.operationType, () => []).add(score.correctAnswers);
-      subjectTotalQuestions.putIfAbsent(score.operationType, () => []).add(score.totalQuestions);
+      subjectScores
+          .putIfAbsent(score.operationType, () => [])
+          .add(score.correctAnswers);
+      subjectTotalQuestions
+          .putIfAbsent(score.operationType, () => [])
+          .add(score.totalQuestions);
     }
 
     for (final entry in subjectScores.entries) {
       final totalCorrectForSubject = entry.value.reduce((a, b) => a + b);
-      final totalQuestionsForSubject = subjectTotalQuestions[entry.key]!.reduce((a, b) => a + b);
-      subjectPerformances[entry.key] = (totalCorrectForSubject / totalQuestionsForSubject) * 100;
+      final totalQuestionsForSubject =
+          subjectTotalQuestions[entry.key]!.reduce((a, b) => a + b);
+      subjectPerformances[entry.key] =
+          (totalCorrectForSubject / totalQuestionsForSubject) * 100;
     }
 
     return _PerformanceData(
@@ -1055,13 +1090,18 @@ class _ParentDashboardScreenState extends State<ParentDashboardScreen> with Sing
     // 週間練習回数を計算
     final now = DateTime.now();
     final weekStart = now.subtract(Duration(days: now.weekday - 1));
-    final weeklyPractices = allScores.where((score) => score.createdAt.isAfter(weekStart)).length.toDouble();
+    final weeklyPractices = allScores
+        .where((score) => score.createdAt.isAfter(weekStart))
+        .length
+        .toDouble();
 
     // 平均正答率を計算
     double averageAccuracy = 0.0;
     if (allScores.isNotEmpty) {
-      final totalCorrect = allScores.map((s) => s.correctAnswers).reduce((a, b) => a + b);
-      final totalQuestions = allScores.map((s) => s.totalQuestions).reduce((a, b) => a + b);
+      final totalCorrect =
+          allScores.map((s) => s.correctAnswers).reduce((a, b) => a + b);
+      final totalQuestions =
+          allScores.map((s) => s.totalQuestions).reduce((a, b) => a + b);
       averageAccuracy = (totalCorrect / totalQuestions) * 100;
     }
 
@@ -1288,7 +1328,8 @@ class _SimpleTrendPainter extends CustomPainter {
     final path = Path();
     for (int i = 0; i < scores.length; i++) {
       final x = (i / (scores.length - 1)) * size.width;
-      final y = size.height - ((scores[i].score - minScore) / range) * size.height;
+      final y =
+          size.height - ((scores[i].score - minScore) / range) * size.height;
 
       if (i == 0) {
         path.moveTo(x, y);
@@ -1306,7 +1347,8 @@ class _SimpleTrendPainter extends CustomPainter {
 
     for (int i = 0; i < scores.length; i++) {
       final x = (i / (scores.length - 1)) * size.width;
-      final y = size.height - ((scores[i].score - minScore) / range) * size.height;
+      final y =
+          size.height - ((scores[i].score - minScore) / range) * size.height;
       canvas.drawCircle(Offset(x, y), 4, pointPaint);
     }
   }

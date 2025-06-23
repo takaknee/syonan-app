@@ -17,7 +17,8 @@ class SpeedMathGameScreen extends StatefulWidget {
   State<SpeedMathGameScreen> createState() => _SpeedMathGameScreenState();
 }
 
-class _SpeedMathGameScreenState extends State<SpeedMathGameScreen> with TickerProviderStateMixin {
+class _SpeedMathGameScreenState extends State<SpeedMathGameScreen>
+    with TickerProviderStateMixin {
   late Timer _gameTimer;
   late AnimationController _progressController;
   late AnimationController _feedbackController;
@@ -204,7 +205,8 @@ class _SpeedMathGameScreenState extends State<SpeedMathGameScreen> with TickerPr
   }
 
   void _showGameOverDialog() {
-    final accuracy = _totalProblems > 0 ? (_correctAnswers / _totalProblems * 100) : 0.0;
+    final accuracy =
+        _totalProblems > 0 ? (_correctAnswers / _totalProblems * 100) : 0.0;
 
     showDialog(
       context: context,
@@ -385,7 +387,8 @@ class _SpeedMathGameScreenState extends State<SpeedMathGameScreen> with TickerPr
                     return LinearProgressIndicator(
                       value: 1 - _progressController.value,
                       backgroundColor: Colors.white.withValues(alpha: 0.3),
-                      valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
+                      valueColor:
+                          const AlwaysStoppedAnimation<Color>(Colors.white),
                     );
                   },
                 ),
@@ -402,11 +405,15 @@ class _SpeedMathGameScreenState extends State<SpeedMathGameScreen> with TickerPr
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      _buildStatCard('正解', _correctAnswers.toString(), Colors.green),
-                      _buildStatCard('問題数', _totalProblems.toString(), Colors.blue),
+                      _buildStatCard(
+                          '正解', _correctAnswers.toString(), Colors.green),
+                      _buildStatCard(
+                          '問題数', _totalProblems.toString(), Colors.blue),
                       _buildStatCard(
                         '正答率',
-                        _totalProblems > 0 ? '${(_correctAnswers / _totalProblems * 100).round()}%' : '0%',
+                        _totalProblems > 0
+                            ? '${(_correctAnswers / _totalProblems * 100).round()}%'
+                            : '0%',
                         Colors.purple,
                       ),
                     ],
@@ -435,7 +442,8 @@ class _SpeedMathGameScreenState extends State<SpeedMathGameScreen> with TickerPr
                                     ),
                                   ),
                                   const SizedBox(height: 24),
-                                  const Text('=', style: TextStyle(fontSize: 32)),
+                                  const Text('=',
+                                      style: TextStyle(fontSize: 32)),
                                   const SizedBox(height: 24),
                                   Container(
                                     width: 200,
@@ -453,7 +461,8 @@ class _SpeedMathGameScreenState extends State<SpeedMathGameScreen> with TickerPr
                                         fontSize: 28,
                                         fontWeight: FontWeight.bold,
                                         color: _userAnswer.isEmpty
-                                            ? theme.colorScheme.onSurface.withValues(alpha: 0.5)
+                                            ? theme.colorScheme.onSurface
+                                                .withValues(alpha: 0.5)
                                             : theme.colorScheme.primary,
                                       ),
                                       textAlign: TextAlign.center,

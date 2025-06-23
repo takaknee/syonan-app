@@ -74,7 +74,8 @@ class ScoreRepositoryImpl implements ScoreRepository {
   }
 
   @override
-  Future<Result<Map<String, dynamic>>> getScoreStatistics({String? userId}) async {
+  Future<Result<Map<String, dynamic>>> getScoreStatistics(
+      {String? userId}) async {
     try {
       final stats = await _localDataSource.getScoreStatistics(userId: userId);
       return Success(stats);
@@ -88,7 +89,8 @@ class ScoreRepositoryImpl implements ScoreRepository {
     MathOperationType operation,
   ) async {
     try {
-      final models = await _localDataSource.getScoreRecordsByOperation(operation);
+      final models =
+          await _localDataSource.getScoreRecordsByOperation(operation);
       return Success(models.cast<ScoreRecordEntity>());
     } catch (e) {
       return ResultFailure(const DataFailure('操作タイプ別スコアの取得に失敗しました'));
@@ -101,7 +103,9 @@ class ScoreRepositoryImpl implements ScoreRepository {
   ) async {
     try {
       final allModels = await _localDataSource.getAllScoreRecords();
-      final filtered = allModels.where((score) => score.difficultyLevel == difficultyLevel).toList();
+      final filtered = allModels
+          .where((score) => score.difficultyLevel == difficultyLevel)
+          .toList();
       return Success(filtered.cast<ScoreRecordEntity>());
     } catch (e) {
       return ResultFailure(const DataFailure('難易度別スコアの取得に失敗しました'));
@@ -115,8 +119,11 @@ class ScoreRepositoryImpl implements ScoreRepository {
   ) async {
     try {
       final allModels = await _localDataSource.getAllScoreRecords();
-      final filtered =
-          allModels.where((score) => score.timestamp.isAfter(startDate) && score.timestamp.isBefore(endDate)).toList();
+      final filtered = allModels
+          .where((score) =>
+              score.timestamp.isAfter(startDate) &&
+              score.timestamp.isBefore(endDate))
+          .toList();
       return Success(filtered.cast<ScoreRecordEntity>());
     } catch (e) {
       return ResultFailure(const DataFailure('期間別スコアの取得に失敗しました'));
@@ -126,7 +133,8 @@ class ScoreRepositoryImpl implements ScoreRepository {
   @override
   Future<Result<double>> getAverageScore(MathOperationType operation) async {
     try {
-      final models = await _localDataSource.getScoreRecordsByOperation(operation);
+      final models =
+          await _localDataSource.getScoreRecordsByOperation(operation);
       if (models.isEmpty) return const Success(0.0);
 
       final total = models.map((s) => s.score).fold(0, (a, b) => a + b);
@@ -138,7 +146,8 @@ class ScoreRepositoryImpl implements ScoreRepository {
   }
 
   @override
-  Future<Result<ScoreRecordEntity?>> getBestScore(MathOperationType operation) async {
+  Future<Result<ScoreRecordEntity?>> getBestScore(
+      MathOperationType operation) async {
     try {
       final model = await _localDataSource.getBestScore(operation: operation);
       return Success(model);
@@ -148,9 +157,11 @@ class ScoreRepositoryImpl implements ScoreRepository {
   }
 
   @override
-  Future<Result<ScoreRecordEntity?>> getLatestScore(MathOperationType operation) async {
+  Future<Result<ScoreRecordEntity?>> getLatestScore(
+      MathOperationType operation) async {
     try {
-      final models = await _localDataSource.getScoreRecordsByOperation(operation);
+      final models =
+          await _localDataSource.getScoreRecordsByOperation(operation);
       if (models.isEmpty) return const Success(null);
 
       models.sort((a, b) => b.timestamp.compareTo(a.timestamp));
@@ -167,8 +178,11 @@ class ScoreRepositoryImpl implements ScoreRepository {
       if (allModels.isEmpty) return const Success(0);
 
       // 日付でグループ化して連続日数を計算
-      final practicesDays =
-          allModels.map((s) => DateTime(s.timestamp.year, s.timestamp.month, s.timestamp.day)).toSet().toList();
+      final practicesDays = allModels
+          .map((s) =>
+              DateTime(s.timestamp.year, s.timestamp.month, s.timestamp.day))
+          .toSet()
+          .toList();
 
       practicesDays.sort((a, b) => b.compareTo(a));
 

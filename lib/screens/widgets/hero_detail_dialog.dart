@@ -35,7 +35,8 @@ class HeroDetailDialog extends StatelessWidget {
                   children: [
                     Text(
                       hero.name,
-                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     Text(
                       hero.nickname,
@@ -72,7 +73,8 @@ class HeroDetailDialog extends StatelessWidget {
                   ],
 
                   // 習得スキル
-                  if (advancedHero != null && advancedHero.advancedStats.skills.isNotEmpty) ...[
+                  if (advancedHero != null &&
+                      advancedHero.advancedStats.skills.isNotEmpty) ...[
                     _buildSkillsSection(context, advancedHero),
                     const Divider(),
                   ],
@@ -90,6 +92,24 @@ class HeroDetailDialog extends StatelessWidget {
             ),
           ),
           actions: [
+            // 訓練ボタン（仲間の場合のみ）
+            if (hero.isRecruited) ...[
+              Consumer<WaterMarginGameController>(
+                builder: (context, controller, child) {
+                  return ElevatedButton.icon(
+                    onPressed: () =>
+                        _showTrainingOptions(context, hero, controller),
+                    icon: const Icon(Icons.fitness_center, size: 16),
+                    label: const Text('訓練'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.orange,
+                      foregroundColor: Colors.white,
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(width: 8),
+            ],
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
               child: const Text('閉じる'),
@@ -116,7 +136,8 @@ class HeroDetailDialog extends StatelessWidget {
               children: [
                 Text(
                   'レベル $level',
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 Chip(
                   label: Text(_rankName(rank)),
@@ -133,15 +154,19 @@ class HeroDetailDialog extends StatelessWidget {
                 backgroundColor: Colors.grey[300],
               ),
             ] else
-              const Text('最大レベル達成！', style: TextStyle(color: Colors.amber, fontWeight: FontWeight.bold)),
+              const Text('最大レベル達成！',
+                  style: TextStyle(
+                      color: Colors.amber, fontWeight: FontWeight.bold)),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildStatsSection(BuildContext context, Hero hero, AdvancedHero? advancedHero) {
-    final effectiveStats = advancedHero?.advancedStats.effectiveStats ?? hero.stats;
+  Widget _buildStatsSection(
+      BuildContext context, Hero hero, AdvancedHero? advancedHero) {
+    final effectiveStats =
+        advancedHero?.advancedStats.effectiveStats ?? hero.stats;
     final hasBonus = advancedHero != null;
 
     return Card(
@@ -150,13 +175,19 @@ class HeroDetailDialog extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('能力値', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            const Text('能力値',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
-            _buildStatRow('武力', hero.stats.force, effectiveStats.force, hasBonus),
-            _buildStatRow('知力', hero.stats.intelligence, effectiveStats.intelligence, hasBonus),
-            _buildStatRow('魅力', hero.stats.charisma, effectiveStats.charisma, hasBonus),
-            _buildStatRow('統率', hero.stats.leadership, effectiveStats.leadership, hasBonus),
-            _buildStatRow('義理', hero.stats.loyalty, effectiveStats.loyalty, hasBonus),
+            _buildStatRow(
+                '武力', hero.stats.force, effectiveStats.force, hasBonus),
+            _buildStatRow('知力', hero.stats.intelligence,
+                effectiveStats.intelligence, hasBonus),
+            _buildStatRow(
+                '魅力', hero.stats.charisma, effectiveStats.charisma, hasBonus),
+            _buildStatRow('統率', hero.stats.leadership,
+                effectiveStats.leadership, hasBonus),
+            _buildStatRow(
+                '義理', hero.stats.loyalty, effectiveStats.loyalty, hasBonus),
             const SizedBox(height: 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -186,7 +217,8 @@ class HeroDetailDialog extends StatelessWidget {
                       TextSpan(text: '$base'),
                       TextSpan(
                         text: ' → $effective',
-                        style: const TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                            color: Colors.green, fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
@@ -197,7 +229,8 @@ class HeroDetailDialog extends StatelessWidget {
     );
   }
 
-  Widget _buildExperienceSection(BuildContext context, AdvancedHero advancedHero) {
+  Widget _buildExperienceSection(
+      BuildContext context, AdvancedHero advancedHero) {
     final experience = advancedHero.advancedStats.experience;
 
     return Card(
@@ -206,12 +239,17 @@ class HeroDetailDialog extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('経験値', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            const Text('経験値',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
-            _buildExpRow('戦闘', experience[ExperienceType.combat] ?? 0, Icons.military_tech),
-            _buildExpRow('内政', experience[ExperienceType.administration] ?? 0, Icons.home_work),
-            _buildExpRow('外交', experience[ExperienceType.diplomacy] ?? 0, Icons.handshake),
-            _buildExpRow('統率', experience[ExperienceType.leadership] ?? 0, Icons.groups),
+            _buildExpRow('戦闘', experience[ExperienceType.combat] ?? 0,
+                Icons.military_tech),
+            _buildExpRow('内政', experience[ExperienceType.administration] ?? 0,
+                Icons.home_work),
+            _buildExpRow('外交', experience[ExperienceType.diplomacy] ?? 0,
+                Icons.handshake),
+            _buildExpRow(
+                '統率', experience[ExperienceType.leadership] ?? 0, Icons.groups),
             const SizedBox(height: 8),
             Text(
               '総経験値: ${experience.values.fold(0, (sum, exp) => sum + exp)}',
@@ -247,7 +285,8 @@ class HeroDetailDialog extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('習得スキル', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            const Text('習得スキル',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
             Wrap(
               spacing: 8,
@@ -255,7 +294,8 @@ class HeroDetailDialog extends StatelessWidget {
               children: skills
                   .map((skill) => Chip(
                         label: Text(_skillName(skill)),
-                        backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+                        backgroundColor:
+                            Theme.of(context).colorScheme.secondaryContainer,
                       ))
                   .toList(),
             ),
@@ -265,7 +305,8 @@ class HeroDetailDialog extends StatelessWidget {
     );
   }
 
-  Widget _buildEquipmentSection(BuildContext context, AdvancedHero advancedHero) {
+  Widget _buildEquipmentSection(
+      BuildContext context, AdvancedHero advancedHero) {
     final equipment = advancedHero.advancedStats.equipment!;
 
     return Card(
@@ -274,11 +315,14 @@ class HeroDetailDialog extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('装備', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            const Text('装備',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
-            if (equipment.weapon != null) _buildEquipRow('武器', equipment.weapon!),
+            if (equipment.weapon != null)
+              _buildEquipRow('武器', equipment.weapon!),
             if (equipment.armor != null) _buildEquipRow('防具', equipment.armor!),
-            if (equipment.accessory != null) _buildEquipRow('装身具', equipment.accessory!),
+            if (equipment.accessory != null)
+              _buildEquipRow('装身具', equipment.accessory!),
           ],
         ),
       ),
@@ -307,12 +351,14 @@ class HeroDetailDialog extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('基本情報', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            const Text('基本情報',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
             _buildInfoRow('専門技能', _skillTypeName(hero.skill)),
             _buildInfoRow('勢力', _factionName(hero.faction)),
             _buildInfoRow('登用状況', hero.isRecruited ? '仲間' : '未登用'),
-            if (hero.currentProvinceId != null) _buildInfoRow('配置場所', hero.currentProvinceId!),
+            if (hero.currentProvinceId != null)
+              _buildInfoRow('配置場所', hero.currentProvinceId!),
           ],
         ),
       ),
@@ -427,5 +473,110 @@ class HeroDetailDialog extends StatelessWidget {
       case Faction.neutral:
         return '中立';
     }
+  }
+
+  /// 訓練オプションダイアログを表示
+  void _showTrainingOptions(
+      BuildContext context, Hero hero, WaterMarginGameController controller) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('${hero.nickname}の訓練'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text('訓練タイプを選択してください（費用: 100両）'),
+            const SizedBox(height: 16),
+            _buildTrainingButton(
+              context,
+              '戦闘訓練',
+              Icons.military_tech,
+              Colors.red,
+              () => _performTraining(
+                  context, hero.id, ExperienceType.combat, controller),
+              controller.gameState.playerGold >= 100,
+            ),
+            _buildTrainingButton(
+              context,
+              '内政訓練',
+              Icons.home_work,
+              Colors.green,
+              () => _performTraining(
+                  context, hero.id, ExperienceType.administration, controller),
+              controller.gameState.playerGold >= 100,
+            ),
+            _buildTrainingButton(
+              context,
+              '外交訓練',
+              Icons.handshake,
+              Colors.blue,
+              () => _performTraining(
+                  context, hero.id, ExperienceType.diplomacy, controller),
+              controller.gameState.playerGold >= 100,
+            ),
+            _buildTrainingButton(
+              context,
+              '統率訓練',
+              Icons.groups,
+              Colors.orange,
+              () => _performTraining(
+                  context, hero.id, ExperienceType.leadership, controller),
+              controller.gameState.playerGold >= 100,
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('キャンセル'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// 訓練ボタンを作成
+  Widget _buildTrainingButton(
+    BuildContext context,
+    String title,
+    IconData icon,
+    Color color,
+    VoidCallback onPressed,
+    bool enabled,
+  ) {
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.symmetric(vertical: 4),
+      child: ElevatedButton.icon(
+        onPressed: enabled ? onPressed : null,
+        icon: Icon(icon, size: 18),
+        label: Text(title),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: enabled ? color : Colors.grey,
+          foregroundColor: Colors.white,
+          padding: const EdgeInsets.symmetric(vertical: 12),
+        ),
+      ),
+    );
+  }
+
+  /// 訓練を実行
+  void _performTraining(
+    BuildContext context,
+    String heroId,
+    ExperienceType trainingType,
+    WaterMarginGameController controller,
+  ) {
+    Navigator.of(context).pop(); // 訓練選択ダイアログを閉じる
+
+    final success = controller.trainHero(heroId, trainingType);
+    final message = success ? '訓練が成功しました！' : '資金が不足しています';
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: success ? Colors.green : Colors.red,
+      ),
+    );
   }
 }

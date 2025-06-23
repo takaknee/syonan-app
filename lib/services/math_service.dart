@@ -101,7 +101,8 @@ class MathService {
     final usedProblems = <String>{};
 
     // 同じ問題が重複しないようにする
-    while (problems.length < count && usedProblems.length < _getMaxUniqueProblems(operation)) {
+    while (problems.length < count &&
+        usedProblems.length < _getMaxUniqueProblems(operation)) {
       final problem = generateProblem(operation);
       final problemKey = '${problem.firstNumber}_${problem.secondNumber}'
           '_${problem.operation.name}';
@@ -125,7 +126,8 @@ class MathService {
     final usedProblems = <String>{};
 
     // 同じ問題が重複しないようにする
-    while (problems.length < count && usedProblems.length < _getMaxUniqueProblems(operation)) {
+    while (problems.length < count &&
+        usedProblems.length < _getMaxUniqueProblems(operation)) {
       final problem = generateAdvancedProblem(operation, difficultyLevel);
       final problemKey = '${problem.firstNumber}_${problem.secondNumber}'
           '_${problem.operation.name}';
@@ -235,7 +237,8 @@ class MathService {
 
     switch (operation) {
       case MathOperationType.multiplication:
-        final firstNumber = _random.nextInt(maxNumber - minNumber + 1) + minNumber;
+        final firstNumber =
+            _random.nextInt(maxNumber - minNumber + 1) + minNumber;
         final secondNumber = _random.nextInt(9) + 1; // 掛ける数は1桁に制限
         return MathProblem(
           firstNumber: firstNumber,
@@ -256,10 +259,13 @@ class MathService {
         );
 
       case MathOperationType.addition:
-        final firstNumber = _random.nextInt(maxNumber - minNumber + 1) + minNumber;
+        final firstNumber =
+            _random.nextInt(maxNumber - minNumber + 1) + minNumber;
         final maxSecond = maxNumber - firstNumber;
         final minSecond = max(1, minNumber - firstNumber);
-        final secondNumber = maxSecond > minSecond ? _random.nextInt(maxSecond - minSecond + 1) + minSecond : minSecond;
+        final secondNumber = maxSecond > minSecond
+            ? _random.nextInt(maxSecond - minSecond + 1) + minSecond
+            : minSecond;
         return MathProblem(
           firstNumber: firstNumber,
           secondNumber: secondNumber,
@@ -268,11 +274,13 @@ class MathService {
         );
 
       case MathOperationType.subtraction:
-        final firstNumber = _random.nextInt(maxNumber - minNumber + 1) + minNumber;
+        final firstNumber =
+            _random.nextInt(maxNumber - minNumber + 1) + minNumber;
         final maxSecond = firstNumber - 1; // 答えが正の数になるように
         final minSecond = max(1, minNumber);
-        final secondNumber =
-            maxSecond >= minSecond ? _random.nextInt(maxSecond - minSecond + 1) + minSecond : minSecond;
+        final secondNumber = maxSecond >= minSecond
+            ? _random.nextInt(maxSecond - minSecond + 1) + minSecond
+            : minSecond;
         return MathProblem(
           firstNumber: firstNumber,
           secondNumber: secondNumber,

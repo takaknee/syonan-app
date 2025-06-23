@@ -58,7 +58,8 @@ class _FactionStatus extends StatelessWidget {
   Widget build(BuildContext context) {
     final factionCounts = <Faction, int>{};
     for (final faction in Faction.values) {
-      factionCounts[faction] = gameState.provinces.where((p) => p.controller == faction).length;
+      factionCounts[faction] =
+          gameState.provinces.where((p) => p.controller == faction).length;
     }
 
     return Card(
@@ -187,7 +188,8 @@ class _ResourceStatus extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(Icons.account_balance_wallet, color: Theme.of(context).colorScheme.primary),
+                Icon(Icons.account_balance_wallet,
+                    color: Theme.of(context).colorScheme.primary),
                 const SizedBox(width: 8),
                 Text(
                   '資源状況',
@@ -283,7 +285,8 @@ class _HeroStatus extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(Icons.person, color: Theme.of(context).colorScheme.primary),
+                Icon(Icons.person,
+                    color: Theme.of(context).colorScheme.primary),
                 const SizedBox(width: 8),
                 Text(
                   '英雄状況',

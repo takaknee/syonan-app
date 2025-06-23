@@ -41,7 +41,8 @@ class _WaterMarginGameView extends StatelessWidget {
             builder: (context, controller, child) {
               return Row(
                 children: [
-                  Icon(Icons.monetization_on, color: Theme.of(context).colorScheme.onPrimary),
+                  Icon(Icons.monetization_on,
+                      color: Theme.of(context).colorScheme.onPrimary),
                   const SizedBox(width: 4),
                   Text(
                     '${controller.gameState.playerGold}両',
@@ -51,7 +52,8 @@ class _WaterMarginGameView extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 16),
-                  Icon(Icons.access_time, color: Theme.of(context).colorScheme.onPrimary),
+                  Icon(Icons.access_time,
+                      color: Theme.of(context).colorScheme.onPrimary),
                   const SizedBox(width: 4),
                   Text(
                     '${controller.gameState.currentTurn}年',
@@ -197,7 +199,9 @@ class _VictoryScreen extends StatelessWidget {
                 children: [
                   ElevatedButton.icon(
                     onPressed: () {
-                      context.read<WaterMarginGameController>().initializeGame();
+                      context
+                          .read<WaterMarginGameController>()
+                          .initializeGame();
                     },
                     icon: const Icon(Icons.replay),
                     label: const Text('もう一度プレイ'),
@@ -263,7 +267,9 @@ class _DefeatScreen extends StatelessWidget {
                 children: [
                   ElevatedButton.icon(
                     onPressed: () {
-                      context.read<WaterMarginGameController>().initializeGame();
+                      context
+                          .read<WaterMarginGameController>()
+                          .initializeGame();
                     },
                     icon: const Icon(Icons.replay),
                     label: const Text('再挑戦'),

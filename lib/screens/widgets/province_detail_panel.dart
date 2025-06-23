@@ -462,7 +462,8 @@ class _DevelopmentActions extends StatelessWidget {
           icon: Icons.eco,
           label: '農業開発 (200両)',
           onPressed: controller.gameState.playerGold >= 200
-              ? () => controller.developProvince(province.id, DevelopmentType.agriculture)
+              ? () => controller.developProvince(
+                  province.id, DevelopmentType.agriculture)
               : null,
           color: Colors.green,
         ),
@@ -471,7 +472,8 @@ class _DevelopmentActions extends StatelessWidget {
           icon: Icons.store,
           label: '商業開発 (300両)',
           onPressed: controller.gameState.playerGold >= 300
-              ? () => controller.developProvince(province.id, DevelopmentType.commerce)
+              ? () => controller.developProvince(
+                  province.id, DevelopmentType.commerce)
               : null,
           color: Colors.orange,
         ),
@@ -480,7 +482,8 @@ class _DevelopmentActions extends StatelessWidget {
           icon: Icons.castle,
           label: '軍事強化 (400両)',
           onPressed: controller.gameState.playerGold >= 400
-              ? () => controller.developProvince(province.id, DevelopmentType.military)
+              ? () => controller.developProvince(
+                  province.id, DevelopmentType.military)
               : null,
           color: Colors.red,
         ),
@@ -489,7 +492,8 @@ class _DevelopmentActions extends StatelessWidget {
           icon: Icons.shield,
           label: '治安改善 (150両)',
           onPressed: controller.gameState.playerGold >= 150
-              ? () => controller.developProvince(province.id, DevelopmentType.security)
+              ? () => controller.developProvince(
+                  province.id, DevelopmentType.security)
               : null,
           color: Colors.blue,
         ),

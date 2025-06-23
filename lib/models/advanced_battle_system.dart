@@ -47,13 +47,17 @@ class BattleParticipant {
   /// 統率力ボーナス
   int get leadershipBonus {
     if (heroes.isEmpty) return 0;
-    return heroes.map((h) => h.stats.leadership).reduce((a, b) => a > b ? a : b);
+    return heroes
+        .map((h) => h.stats.leadership)
+        .reduce((a, b) => a > b ? a : b);
   }
 
   /// 知力ボーナス（策略用）
   int get intelligenceBonus {
     if (heroes.isEmpty) return 0;
-    return heroes.map((h) => h.stats.intelligence).reduce((a, b) => a > b ? a : b);
+    return heroes
+        .map((h) => h.stats.intelligence)
+        .reduce((a, b) => a > b ? a : b);
   }
 }
 
@@ -126,11 +130,13 @@ class AdvancedBattleSystem {
     defensePower = (defensePower * modifiers.defenseModifier).round();
 
     // 3. 戦闘結果判定
-    final winner = attackPower > defensePower ? attacker.faction : defender.faction;
+    final winner =
+        attackPower > defensePower ? attacker.faction : defender.faction;
     final attackerWins = winner == attacker.faction;
 
     // 4. 損失計算
-    final losses = _calculateLosses(attacker, defender, attackerWins, battleType);
+    final losses =
+        _calculateLosses(attacker, defender, attackerWins, battleType);
 
     // 5. 英雄の活躍計算
     final heroResults = _calculateHeroResults(
@@ -149,7 +155,9 @@ class AdvancedBattleSystem {
 
     // 7. 一騎討ち処理
     game.Hero? duelWinner;
-    if (battleType == BattleType.duel && attacker.heroes.isNotEmpty && defender.heroes.isNotEmpty) {
+    if (battleType == BattleType.duel &&
+        attacker.heroes.isNotEmpty &&
+        defender.heroes.isNotEmpty) {
       duelWinner = _processDuel(attacker.heroes.first, defender.heroes.first);
     }
 
@@ -185,7 +193,9 @@ class AdvancedBattleSystem {
         basePower = (basePower * 0.9).round();
         break;
       case BattleType.duel:
-        basePower = attacker.heroes.isNotEmpty ? attacker.heroes.first.stats.combatPower * 100 : basePower;
+        basePower = attacker.heroes.isNotEmpty
+            ? attacker.heroes.first.stats.combatPower * 100
+            : basePower;
         break;
       case BattleType.ambush:
         basePower = (basePower * 1.3).round(); // 奇襲は攻撃側有利
@@ -244,7 +254,9 @@ class AdvancedBattleSystem {
         basePower = (basePower * 1.0).round();
         break;
       case BattleType.duel:
-        basePower = defender.heroes.isNotEmpty ? defender.heroes.first.stats.combatPower * 100 : basePower;
+        basePower = defender.heroes.isNotEmpty
+            ? defender.heroes.first.stats.combatPower * 100
+            : basePower;
         break;
       case BattleType.ambush:
         basePower = (basePower * 0.7).round(); // 奇襲は防御側不利
@@ -312,7 +324,8 @@ class AdvancedBattleSystem {
     }
 
     for (final hero in defender.heroes) {
-      if (hero.skill == HeroSkill.administrator && terrain == BattleTerrain.fortress) {
+      if (hero.skill == HeroSkill.administrator &&
+          terrain == BattleTerrain.fortress) {
         defenseModifier += 0.15; // 政治家は要塞防御で力を発揮
       }
     }
@@ -378,7 +391,8 @@ class AdvancedBattleSystem {
       bool isInjured = _checkInjury(hero, performance);
 
       // 特殊な功績
-      String? specialAchievement = _checkSpecialAchievement(hero, performance, battleType);
+      String? specialAchievement =
+          _checkSpecialAchievement(hero, performance, battleType);
 
       return HeroBattleResult(
         hero: hero,
@@ -391,7 +405,8 @@ class AdvancedBattleSystem {
   }
 
   /// 英雄の性能判定
-  static HeroPerformance _calculateHeroPerformance(game.Hero hero, BattleType battleType) {
+  static HeroPerformance _calculateHeroPerformance(
+      game.Hero hero, BattleType battleType) {
     int relevantStat = 0;
 
     switch (battleType) {
@@ -410,7 +425,8 @@ class AdvancedBattleSystem {
     }
 
     // ランダム要素を加味
-    int randomFactor = (DateTime.now().millisecondsSinceEpoch % 40) - 20; // -20 to +20
+    int randomFactor =
+        (DateTime.now().millisecondsSinceEpoch % 40) - 20; // -20 to +20
     int totalPerformance = relevantStat + randomFactor;
 
     if (totalPerformance >= 90) return HeroPerformance.excellent;
@@ -420,7 +436,8 @@ class AdvancedBattleSystem {
   }
 
   /// 経験値計算
-  static int _calculateExperienceGain(HeroPerformance performance, BattleType battleType) {
+  static int _calculateExperienceGain(
+      HeroPerformance performance, BattleType battleType) {
     int baseExp = 0;
 
     switch (performance) {
@@ -511,7 +528,8 @@ class AdvancedBattleSystem {
     List<String> events = [];
 
     // 地形特殊イベント
-    if (terrain == BattleTerrain.marsh && defender.faction == Faction.liangshan) {
+    if (terrain == BattleTerrain.marsh &&
+        defender.faction == Faction.liangshan) {
       events.add('梁山泊の水路を活用した巧妙な戦術');
     }
 

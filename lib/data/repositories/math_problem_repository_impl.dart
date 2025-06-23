@@ -90,7 +90,8 @@ class MathProblemRepositoryImpl implements MathProblemRepository {
   }
 
   @override
-  Future<Result<Map<MathOperationType, int>>> getMaxProblemsPerOperation() async {
+  Future<Result<Map<MathOperationType, int>>>
+      getMaxProblemsPerOperation() async {
     try {
       const maxProblems = {
         MathOperationType.multiplication: 81,

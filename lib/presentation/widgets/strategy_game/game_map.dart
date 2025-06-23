@@ -22,10 +22,12 @@ class TerritoryTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final isSelected = gameState.selectedTerritoryId == territory.id;
     final isPlayerTerritory = territory.owner == Owner.player;
-    final canAttack =
-        isSelected && isPlayerTerritory && gameService.getAttackableTargets(gameState, territory.id).isNotEmpty;
+    final canAttack = isSelected &&
+        isPlayerTerritory &&
+        gameService.getAttackableTargets(gameState, territory.id).isNotEmpty;
 
-    final territoryStyle = _TerritoryStyle.fromOwner(territory.owner, isSelected);
+    final territoryStyle =
+        _TerritoryStyle.fromOwner(territory.owner, isSelected);
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
@@ -33,7 +35,8 @@ class TerritoryTile extends StatelessWidget {
         onTap: onTerritorySelected,
         child: Container(
           decoration: BoxDecoration(
-            color: territoryStyle.backgroundColor.withValues(alpha: isSelected ? 1.0 : 0.8),
+            color: territoryStyle.backgroundColor
+                .withValues(alpha: isSelected ? 1.0 : 0.8),
             border: Border.all(
               color: territoryStyle.borderColor,
               width: isSelected ? 3 : 1,

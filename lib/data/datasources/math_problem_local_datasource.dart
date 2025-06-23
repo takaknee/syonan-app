@@ -46,17 +46,21 @@ class MathProblemLocalDataSource {
     try {
       final problems = <MathProblemModel>[];
       final usedProblems = <String>{};
-      final maxUniqueProblems = _getMaxUniqueProblems(operation, difficultyLevel);
+      final maxUniqueProblems =
+          _getMaxUniqueProblems(operation, difficultyLevel);
       final maxAttempts = maxUniqueProblems * 3; // 無限ループ防止
       int attempts = 0;
 
-      while (problems.length < count && problems.length < maxUniqueProblems && attempts < maxAttempts) {
+      while (problems.length < count &&
+          problems.length < maxUniqueProblems &&
+          attempts < maxAttempts) {
         final problem = generateProblem(
           operation: operation,
           difficultyLevel: difficultyLevel,
         );
 
-        final problemKey = '${problem.firstNumber}_${problem.secondNumber}_${problem.operation.value}';
+        final problemKey =
+            '${problem.firstNumber}_${problem.secondNumber}_${problem.operation.value}';
 
         if (!usedProblems.contains(problemKey)) {
           problems.add(problem);
@@ -104,7 +108,8 @@ class MathProblemLocalDataSource {
   Map<String, dynamic> getProblemStatistics() {
     try {
       return {
-        'totalProblemsGenerated': _prefs.getInt('total_problems_generated') ?? 0,
+        'totalProblemsGenerated':
+            _prefs.getInt('total_problems_generated') ?? 0,
         'problemsByOperation': _getProblemsByOperation(),
         'lastGeneratedAt': _prefs.getString('last_problem_generated_at'),
       };

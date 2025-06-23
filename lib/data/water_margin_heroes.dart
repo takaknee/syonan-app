@@ -380,7 +380,8 @@ class WaterMarginHeroes {
   /// 名前から英雄を検索
   static Hero? findByName(String name) {
     try {
-      return initialHeroes.firstWhere((hero) => hero.name == name || hero.nickname == name);
+      return initialHeroes
+          .firstWhere((hero) => hero.name == name || hero.nickname == name);
     } catch (e) {
       return null;
     }

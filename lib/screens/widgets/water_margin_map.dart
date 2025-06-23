@@ -149,7 +149,8 @@ class _ProvinceWidget extends StatefulWidget {
   State<_ProvinceWidget> createState() => _ProvinceWidgetState();
 }
 
-class _ProvinceWidgetState extends State<_ProvinceWidget> with SingleTickerProviderStateMixin {
+class _ProvinceWidgetState extends State<_ProvinceWidget>
+    with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _scaleAnimation;
 
@@ -190,8 +191,14 @@ class _ProvinceWidgetState extends State<_ProvinceWidget> with SingleTickerProvi
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      left: widget.province.position.dx * MediaQuery.of(context).size.width * 0.4 + 100,
-      top: widget.province.position.dy * MediaQuery.of(context).size.height * 0.6 + 50,
+      left: widget.province.position.dx *
+              MediaQuery.of(context).size.width *
+              0.4 +
+          100,
+      top: widget.province.position.dy *
+              MediaQuery.of(context).size.height *
+              0.6 +
+          50,
       child: AnimatedBuilder(
         animation: _scaleAnimation,
         builder: (context, child) {

@@ -44,7 +44,8 @@ class WaterMarginGameController extends ChangeNotifier {
   }
 
   /// 全ての拡張英雄を取得
-  Map<String, AdvancedHero> get advancedHeroes => Map.unmodifiable(_advancedHeroes);
+  Map<String, AdvancedHero> get advancedHeroes =>
+      Map.unmodifiable(_advancedHeroes);
 
   /// ゲームを初期化
   void initializeGame() {
@@ -163,15 +164,22 @@ class WaterMarginGameController extends ChangeNotifier {
     for (final province in _gameState.provinces) {
       if (province.controller == Faction.liangshan) {
         // 基本収入
-        totalIncome += province.state.taxIncome;
+        var provinceIncome = province.state.taxIncome;
 
         // 特殊効果による収入ボーナス
         if (province.specialFeature?.contains('商業収入') == true) {
-          totalIncome += (province.state.taxIncome * 0.3).round();
+          provinceIncome += (province.state.taxIncome * 0.3).round();
         }
         if (province.specialFeature?.contains('皇都') == true) {
-          totalIncome += (province.state.taxIncome * 0.5).round();
+          provinceIncome += (province.state.taxIncome * 0.5).round();
         }
+
+        // 英雄による収入ボーナス
+        final heroEffects = calculateProvinceHeroEffects(province.id);
+        final incomeBonus = heroEffects['incomeBonus'] as int;
+        provinceIncome += incomeBonus;
+
+        totalIncome += provinceIncome;
       }
     }
 
@@ -183,27 +191,128 @@ class WaterMarginGameController extends ChangeNotifier {
     return _gameState.provinces.map((province) {
       if (province.controller == Faction.liangshan) {
         // プレイヤー領土の自然発展
-        final newState = province.state.copyWith(
+        var newState = province.state.copyWith(
           loyalty: (province.state.loyalty + 1).clamp(0, 100),
           security: (province.state.security + 1).clamp(0, 100),
         );
+
+        // 州に配置された英雄のスキル効果を適用
+        newState = _applyHeroSkillEffects(province, newState);
+
         return province.copyWith(state: newState);
       }
       return province;
     }).toList();
   }
 
+  /// 英雄スキル効果を州に適用
+  ProvinceState _applyHeroSkillEffects(
+      Province province, ProvinceState baseState) {
+    // 州に配置された英雄を取得
+    final provinceHeroes = _gameState.heroes
+        .where(
+            (hero) => hero.isRecruited && hero.currentProvinceId == province.id)
+        .toList();
+
+    var enhancedState = baseState;
+
+    for (final hero in provinceHeroes) {
+      final advancedHero = _advancedHeroes[hero.id];
+      if (advancedHero == null) continue;
+
+      // 基本スキル効果
+      switch (hero.skill) {
+        case HeroSkill.administrator:
+          // 政治家は内政ボーナス
+          enhancedState = enhancedState.copyWith(
+            agriculture: (enhancedState.agriculture + 2).clamp(0, 100),
+            commerce: (enhancedState.commerce + 2).clamp(0, 100),
+          );
+          break;
+        case HeroSkill.warrior:
+          // 武将は軍事・治安ボーナス
+          enhancedState = enhancedState.copyWith(
+            military: (enhancedState.military + 2).clamp(0, 100),
+            security: (enhancedState.security + 1).clamp(0, 100),
+          );
+          break;
+        case HeroSkill.strategist:
+          // 軍師は軍事・民心ボーナス
+          enhancedState = enhancedState.copyWith(
+            military: (enhancedState.military + 1).clamp(0, 100),
+            loyalty: (enhancedState.loyalty + 1).clamp(0, 100),
+          );
+          break;
+        case HeroSkill.diplomat:
+          // 外交官は民心・治安ボーナス
+          enhancedState = enhancedState.copyWith(
+            loyalty: (enhancedState.loyalty + 2).clamp(0, 100),
+            security: (enhancedState.security + 1).clamp(0, 100),
+          );
+          break;
+        case HeroSkill.scout:
+          // 斥候は治安・軍事ボーナス
+          enhancedState = enhancedState.copyWith(
+            security: (enhancedState.security + 2).clamp(0, 100),
+            military: (enhancedState.military + 1).clamp(0, 100),
+          );
+          break;
+      }
+
+      // レベルボーナス（レベルが高いほど効果アップ）
+      final levelBonus =
+          (advancedHero.advancedStats.level - 1) ~/ 2; // 2レベルごとに+1
+      if (levelBonus > 0) {
+        switch (hero.skill) {
+          case HeroSkill.administrator:
+            enhancedState = enhancedState.copyWith(
+              agriculture:
+                  (enhancedState.agriculture + levelBonus).clamp(0, 100),
+              commerce: (enhancedState.commerce + levelBonus).clamp(0, 100),
+            );
+            break;
+          case HeroSkill.warrior:
+            enhancedState = enhancedState.copyWith(
+              military: (enhancedState.military + levelBonus).clamp(0, 100),
+            );
+            break;
+          case HeroSkill.strategist:
+            enhancedState = enhancedState.copyWith(
+              military: (enhancedState.military + levelBonus).clamp(0, 100),
+              loyalty: (enhancedState.loyalty + levelBonus).clamp(0, 100),
+            );
+            break;
+          case HeroSkill.diplomat:
+            enhancedState = enhancedState.copyWith(
+              loyalty: (enhancedState.loyalty + levelBonus).clamp(0, 100),
+            );
+            break;
+          case HeroSkill.scout:
+            enhancedState = enhancedState.copyWith(
+              security: (enhancedState.security + levelBonus).clamp(0, 100),
+            );
+            break;
+        }
+      }
+    }
+
+    return enhancedState;
+  }
+
   /// AI行動処理（フェーズ1では簡易版）
   /// 勝利条件チェック
   GameStatus _checkVictoryConditions() {
     // 敗北条件: 梁山泊を失った
-    final liangshan = _gameState.provinces.firstWhere((p) => p.id == 'liangshan');
+    final liangshan =
+        _gameState.provinces.firstWhere((p) => p.id == 'liangshan');
     if (liangshan.controller != Faction.liangshan) {
       return GameStatus.defeat;
     }
 
     // 勝利条件1: 全州制圧
-    final playerProvinces = _gameState.provinces.where((p) => p.controller == Faction.liangshan).length;
+    final playerProvinces = _gameState.provinces
+        .where((p) => p.controller == Faction.liangshan)
+        .length;
     if (playerProvinces >= _gameState.provinces.length) {
       return GameStatus.victory;
     }
@@ -243,7 +352,8 @@ class WaterMarginGameController extends ChangeNotifier {
         if (p.id == targetProvinceId) {
           return p.copyWith(
             controller: Faction.liangshan,
-            currentTroops: (source.currentTroops - battleResult.attackerLosses) ~/ 2,
+            currentTroops:
+                (source.currentTroops - battleResult.attackerLosses) ~/ 2,
           );
         } else if (p.id == sourceProvinceId) {
           return p.copyWith(
@@ -253,8 +363,8 @@ class WaterMarginGameController extends ChangeNotifier {
         return p;
       }).toList();
 
-      // 参加英雄に戦闘経験値を付与
-      _awardCombatExperience(sourceProvinceId, 50); // 勝利時経験値
+      // 参加英雄に戦闘経験値を付与（勝利ボーナス）
+      _awardCombatExperienceToProvinceHeroes(sourceProvinceId, 50);
 
       _gameState = _gameState.copyWith(provinces: updatedProvinces);
       _addEventLog('${source.name}が${target.name}を制圧しました！');
@@ -274,8 +384,11 @@ class WaterMarginGameController extends ChangeNotifier {
         return p;
       }).toList();
 
+      // 参加英雄に戦闘経験値を付与（敗北でも経験は得る）
+      _awardCombatExperienceToProvinceHeroes(sourceProvinceId, 20);
+
       _gameState = _gameState.copyWith(provinces: updatedProvinces);
-      notifyListeners();
+      _addEventLog('${source.name}の攻撃は失敗しました...');
       return false;
     }
   }
@@ -286,14 +399,14 @@ class WaterMarginGameController extends ChangeNotifier {
     final attackerParticipant = BattleParticipant(
       faction: attacker.controller,
       troops: attacker.currentTroops,
-      heroes: _getProvinceBattleHeroes(attacker.id),
+      heroes: _getEnhancedBattleHeroes(attacker.id),
       province: attacker,
     );
 
     final defenderParticipant = BattleParticipant(
       faction: defender.controller,
       troops: defender.currentTroops,
-      heroes: _getProvinceBattleHeroes(defender.id),
+      heroes: _getEnhancedBattleHeroes(defender.id),
       province: defender,
     );
 
@@ -316,32 +429,104 @@ class WaterMarginGameController extends ChangeNotifier {
     );
   }
 
-  /// 州の戦闘に参加する英雄リストを取得
+  /// 州の戦闘に参加する英雄リストを取得（レベル・装備強化版）
+  List<Hero> _getEnhancedBattleHeroes(String provinceId) {
+    final baseHeroes = _gameState.heroes
+        .where(
+            (hero) => hero.isRecruited && hero.currentProvinceId == provinceId)
+        .toList();
+
+    // 拡張英雄データを反映した強化英雄リストを作成
+    return baseHeroes.map((hero) {
+      final advancedHero = _advancedHeroes[hero.id];
+      if (advancedHero != null) {
+        // レベルと装備効果を反映した能力値で英雄を強化
+        final enhancedStats = _calculateEnhancedStats(hero, advancedHero);
+        return hero.copyWith(stats: enhancedStats);
+      }
+      return hero;
+    }).toList();
+  }
+
+  /// 英雄の拡張能力値を計算（レベル・装備効果込み）
+  HeroStats _calculateEnhancedStats(Hero baseHero, AdvancedHero advancedHero) {
+    final baseStats = baseHero.stats;
+    final level = advancedHero.advancedStats.level;
+
+    // レベルによる基本ボーナス（レベル1から＋2ずつ）
+    final levelBonus = (level - 1) * 2;
+
+    // 装備効果を取得（装備システムの totalBonus を使用）
+    final equipmentStats = advancedHero.advancedStats.equipment?.totalBonus ??
+        const HeroStats(
+          force: 0,
+          intelligence: 0,
+          charisma: 0,
+          leadership: 0,
+          loyalty: 0,
+        );
+
+    // 最終能力値を計算（上限100）
+    return HeroStats(
+      force:
+          (baseStats.force + levelBonus + equipmentStats.force).clamp(1, 100),
+      intelligence:
+          (baseStats.intelligence + levelBonus + equipmentStats.intelligence)
+              .clamp(1, 100),
+      charisma: (baseStats.charisma + levelBonus + equipmentStats.charisma)
+          .clamp(1, 100),
+      leadership:
+          (baseStats.leadership + levelBonus + equipmentStats.leadership)
+              .clamp(1, 100),
+      loyalty: (baseStats.loyalty + levelBonus + equipmentStats.loyalty)
+          .clamp(1, 100),
+    );
+  }
+
+  /// 州の戦闘に参加する英雄リストを取得（旧版・互換性用）
   List<Hero> _getProvinceBattleHeroes(String provinceId) {
-    return _gameState.heroes.where((hero) => hero.isRecruited && hero.currentProvinceId == provinceId).toList();
+    return _getEnhancedBattleHeroes(provinceId);
   }
 
   /// 州の地形を取得
   BattleTerrain _getProvinceTerrain(Province province) {
     // 特殊地形の簡易判定
-    if (province.specialFeature?.contains('山') == true) return BattleTerrain.mountains;
-    if (province.specialFeature?.contains('河') == true) return BattleTerrain.river;
-    if (province.specialFeature?.contains('要塞') == true) return BattleTerrain.fortress;
-    if (province.specialFeature?.contains('森') == true) return BattleTerrain.forest;
+    if (province.specialFeature?.contains('山') == true)
+      return BattleTerrain.mountains;
+    if (province.specialFeature?.contains('河') == true)
+      return BattleTerrain.river;
+    if (province.specialFeature?.contains('要塞') == true)
+      return BattleTerrain.fortress;
+    if (province.specialFeature?.contains('森') == true)
+      return BattleTerrain.forest;
     return BattleTerrain.plains; // デフォルトは平野
   }
 
   // === フェーズ3: 英雄レベルアップシステム ===
 
-  /// 戦闘経験値を付与
-  void _awardCombatExperience(String provinceId, int baseExperience) {
+  /// 州の英雄たちに戦闘経験値を付与
+  void _awardCombatExperienceToProvinceHeroes(
+      String provinceId, int baseExperience) {
     final participatingHeroes = _getProvinceBattleHeroes(provinceId);
 
     for (final hero in participatingHeroes) {
       final advancedHero = _advancedHeroes[hero.id];
       if (advancedHero != null) {
-        // 英雄の戦闘力に応じて経験値調整
-        final experienceGained = (baseExperience * (hero.stats.combatPower / 100)).round();
+        // 英雄の戦闘力と技能に応じて経験値調整
+        var experienceMultiplier = 1.0;
+
+        // 武将は戦闘経験値ボーナス
+        if (hero.skill == HeroSkill.warrior) {
+          experienceMultiplier = 1.5;
+        } else if (hero.skill == HeroSkill.strategist) {
+          experienceMultiplier = 1.2; // 軍師も戦闘で少しボーナス
+        }
+
+        final experienceGained = (baseExperience *
+                (hero.stats.combatPower / 100) *
+                experienceMultiplier)
+            .round();
+
         final updatedAdvancedHero = advancedHero.gainExperience(
           ExperienceType.combat,
           experienceGained,
@@ -350,8 +535,10 @@ class WaterMarginGameController extends ChangeNotifier {
         _advancedHeroes[hero.id] = updatedAdvancedHero;
 
         // レベルアップ通知
-        if (updatedAdvancedHero.advancedStats.level > advancedHero.advancedStats.level) {
-          _addEventLog('${hero.name}がレベル${updatedAdvancedHero.advancedStats.level}になりました！');
+        if (updatedAdvancedHero.advancedStats.level >
+            advancedHero.advancedStats.level) {
+          _addEventLog(
+              '${hero.nickname}がレベル${updatedAdvancedHero.advancedStats.level}になりました！');
         }
       }
     }
@@ -361,7 +548,9 @@ class WaterMarginGameController extends ChangeNotifier {
   void _awardAdministrationExperience(String heroId, int baseExperience) {
     final advancedHero = _advancedHeroes[heroId];
     if (advancedHero != null) {
-      final experienceGained = (baseExperience * (advancedHero.baseHero.stats.administrativePower / 100)).round();
+      final experienceGained = (baseExperience *
+              (advancedHero.baseHero.stats.administrativePower / 100))
+          .round();
       final updatedAdvancedHero = advancedHero.gainExperience(
         ExperienceType.administration,
         experienceGained,
@@ -370,8 +559,10 @@ class WaterMarginGameController extends ChangeNotifier {
       _advancedHeroes[heroId] = updatedAdvancedHero;
 
       // レベルアップ通知
-      if (updatedAdvancedHero.advancedStats.level > advancedHero.advancedStats.level) {
-        _addEventLog('${advancedHero.baseHero.name}がレベル${updatedAdvancedHero.advancedStats.level}になりました！');
+      if (updatedAdvancedHero.advancedStats.level >
+          advancedHero.advancedStats.level) {
+        _addEventLog(
+            '${advancedHero.baseHero.name}がレベル${updatedAdvancedHero.advancedStats.level}になりました！');
       }
     }
   }
@@ -404,23 +595,27 @@ class WaterMarginGameController extends ChangeNotifier {
         switch (effect.type) {
           case EventEffectType.goldChange:
             _gameState = _gameState.copyWith(
-              playerGold: (_gameState.playerGold + effect.value).clamp(0, 999999),
+              playerGold:
+                  (_gameState.playerGold + effect.value).clamp(0, 999999),
             );
             _addEventLog('資金が${effect.value > 0 ? '+' : ''}${effect.value}両変動');
             break;
           case EventEffectType.troopsChange:
             if (effect.targetId != null) {
               final updatedProvinces = _gameState.provinces.map((province) {
-                if (province.id == effect.targetId || effect.targetId == 'all') {
+                if (province.id == effect.targetId ||
+                    effect.targetId == 'all') {
                   return province.copyWith(
-                    currentTroops: (province.currentTroops + effect.value).clamp(0, 99999),
+                    currentTroops:
+                        (province.currentTroops + effect.value).clamp(0, 99999),
                   );
                 }
                 return province;
               }).toList();
 
               _gameState = _gameState.copyWith(provinces: updatedProvinces);
-              _addEventLog('兵力が${effect.value > 0 ? '+' : ''}${effect.value}増減');
+              _addEventLog(
+                  '兵力が${effect.value > 0 ? '+' : ''}${effect.value}増減');
             }
             break;
           case EventEffectType.heroRecruitment:
@@ -543,13 +738,17 @@ class WaterMarginGameController extends ChangeNotifier {
   /// AI英雄登用を実行
   void _executeAIRecruitment(AIAction action) {
     // 簡易AI英雄登用（未登用の英雄をランダムに登用）
-    final availableHeroes = _gameState.heroes.where((h) => !h.isRecruited && h.faction != Faction.liangshan).toList();
+    final availableHeroes = _gameState.heroes
+        .where((h) => !h.isRecruited && h.faction != Faction.liangshan)
+        .toList();
 
     if (availableHeroes.isNotEmpty) {
       final hero = availableHeroes.first;
       final recruitedHero = hero.copyWith(isRecruited: true);
 
-      final updatedHeroes = _gameState.heroes.map((h) => h.id == hero.id ? recruitedHero : h).toList();
+      final updatedHeroes = _gameState.heroes
+          .map((h) => h.id == hero.id ? recruitedHero : h)
+          .toList();
 
       _gameState = _gameState.copyWith(heroes: updatedHeroes);
       _addEventLog('${hero.faction.name}が${hero.name}を登用');
@@ -559,7 +758,8 @@ class WaterMarginGameController extends ChangeNotifier {
   // === フェーズ3: プレイヤー内政・開発機能 ===
 
   /// プレイヤーが州を開発
-  bool developProvince(String provinceId, DevelopmentType type, {String? assignedHeroId}) {
+  bool developProvince(String provinceId, DevelopmentType type,
+      {String? assignedHeroId}) {
     final province = _gameState.getProvinceById(provinceId);
     if (province?.controller != Faction.liangshan) return false;
 
@@ -644,7 +844,9 @@ class WaterMarginGameController extends ChangeNotifier {
     );
 
     // 既に登用済みまたは登用不可チェック
-    if (hero.isRecruited || hero.faction == Faction.imperial || hero.faction == Faction.liangshan) {
+    if (hero.isRecruited ||
+        hero.faction == Faction.imperial ||
+        hero.faction == Faction.liangshan) {
       return false;
     }
 
@@ -681,7 +883,10 @@ class WaterMarginGameController extends ChangeNotifier {
 
   /// 登用費用を計算
   int _calculateRecruitmentCost(Hero hero) {
-    final totalStats = hero.stats.force + hero.stats.intelligence + hero.stats.charisma + hero.stats.leadership;
+    final totalStats = hero.stats.force +
+        hero.stats.intelligence +
+        hero.stats.charisma +
+        hero.stats.leadership;
     return (totalStats * 3).round();
   }
 
@@ -695,8 +900,274 @@ class WaterMarginGameController extends ChangeNotifier {
     // 隣接する州で、プレイヤーが支配していない州を返す
     return _gameState.provinces
         .where((province) =>
-            fromProvince.adjacentProvinceIds.contains(province.id) && province.controller != Faction.liangshan)
+            fromProvince.adjacentProvinceIds.contains(province.id) &&
+            province.controller != Faction.liangshan)
         .toList();
+  }
+
+  // === 英雄配置・移動システム ===
+
+  /// 英雄を州に配置
+  bool assignHeroToProvince(String heroId, String provinceId) {
+    final hero = _gameState.getHeroById(heroId);
+    final province = _gameState.getProvinceById(provinceId);
+
+    if (hero == null || province == null) return false;
+    if (!hero.isRecruited) return false;
+    if (province.controller != Faction.liangshan) return false;
+
+    // 英雄を更新
+    final updatedHeroes = _gameState.heroes.map((h) {
+      if (h.id == heroId) {
+        return h.copyWith(currentProvinceId: provinceId);
+      }
+      return h;
+    }).toList();
+
+    _gameState = _gameState.copyWith(heroes: updatedHeroes);
+    _addEventLog('${hero.nickname}が${province.name}に配置されました');
+    notifyListeners();
+    return true;
+  }
+
+  /// 州に配置された英雄リストを取得
+  List<Hero> getProvinceHeroes(String provinceId) {
+    return _gameState.heroes
+        .where(
+            (hero) => hero.isRecruited && hero.currentProvinceId == provinceId)
+        .toList();
+  }
+
+  /// 配置されていない英雄リストを取得
+  List<Hero> getUnassignedHeroes() {
+    return _gameState.heroes
+        .where((hero) => hero.isRecruited && hero.currentProvinceId == null)
+        .toList();
+  }
+
+  /// 州の英雄による効果を計算
+  Map<String, dynamic> calculateProvinceHeroEffects(String provinceId) {
+    final heroes = getProvinceHeroes(provinceId);
+
+    var combatBonus = 0;
+    var administrationBonus = 0;
+    var diplomacyBonus = 0;
+    var incomeBonus = 0;
+    var securityBonus = 0;
+
+    for (final hero in heroes) {
+      final advancedHero = _advancedHeroes[hero.id];
+      if (advancedHero == null) continue;
+
+      final level = advancedHero.advancedStats.level;
+      final levelMultiplier = 1.0 + (level - 1) * 0.1; // レベル毎に10%増加
+
+      switch (hero.skill) {
+        case HeroSkill.warrior:
+          combatBonus += (20 * levelMultiplier).round();
+          securityBonus += (10 * levelMultiplier).round();
+          break;
+        case HeroSkill.strategist:
+          combatBonus += (15 * levelMultiplier).round();
+          administrationBonus += (15 * levelMultiplier).round();
+          break;
+        case HeroSkill.administrator:
+          administrationBonus += (25 * levelMultiplier).round();
+          incomeBonus += (15 * levelMultiplier).round();
+          break;
+        case HeroSkill.diplomat:
+          diplomacyBonus += (20 * levelMultiplier).round();
+          administrationBonus += (10 * levelMultiplier).round();
+          break;
+        case HeroSkill.scout:
+          securityBonus += (20 * levelMultiplier).round();
+          combatBonus += (10 * levelMultiplier).round();
+          break;
+      }
+    }
+
+    return {
+      'combatBonus': combatBonus,
+      'administrationBonus': administrationBonus,
+      'diplomacyBonus': diplomacyBonus,
+      'incomeBonus': incomeBonus,
+      'securityBonus': securityBonus,
+      'heroCount': heroes.length,
+    };
+  }
+
+  // === 英雄訓練・成長システム ===
+
+  /// 英雄を訓練して経験値を付与
+  bool trainHero(String heroId, ExperienceType trainingType) {
+    final hero = _gameState.getHeroById(heroId);
+    if (hero == null || !hero.isRecruited) return false;
+
+    // 訓練コスト
+    const trainingCost = 100;
+    if (_gameState.playerGold < trainingCost) return false;
+
+    final advancedHero = _advancedHeroes[heroId];
+    if (advancedHero == null) return false;
+
+    // 訓練による経験値計算
+    var baseExperience = 25;
+    var experienceMultiplier = 1.0;
+
+    // 英雄の適性による経験値ボーナス
+    switch (trainingType) {
+      case ExperienceType.combat:
+        if (hero.skill == HeroSkill.warrior) experienceMultiplier = 1.5;
+        if (hero.skill == HeroSkill.strategist) experienceMultiplier = 1.2;
+        break;
+      case ExperienceType.administration:
+        if (hero.skill == HeroSkill.administrator) experienceMultiplier = 1.5;
+        if (hero.skill == HeroSkill.strategist) experienceMultiplier = 1.2;
+        break;
+      case ExperienceType.diplomacy:
+        if (hero.skill == HeroSkill.diplomat) experienceMultiplier = 1.5;
+        if (hero.skill == HeroSkill.administrator) experienceMultiplier = 1.2;
+        break;
+      case ExperienceType.leadership:
+        if (hero.skill == HeroSkill.strategist) experienceMultiplier = 1.5;
+        if (hero.skill == HeroSkill.warrior) experienceMultiplier = 1.2;
+        break;
+    }
+
+    final experienceGained = (baseExperience * experienceMultiplier).round();
+    final updatedAdvancedHero =
+        advancedHero.gainExperience(trainingType, experienceGained);
+    _advancedHeroes[heroId] = updatedAdvancedHero;
+
+    // 資金消費
+    _gameState = _gameState.copyWith(
+      playerGold: _gameState.playerGold - trainingCost,
+    );
+
+    // レベルアップ通知
+    if (updatedAdvancedHero.advancedStats.level >
+        advancedHero.advancedStats.level) {
+      _addEventLog(
+          '${hero.nickname}がレベル${updatedAdvancedHero.advancedStats.level}になりました！');
+    }
+
+    _addEventLog(
+        '${hero.nickname}が${_getTrainingTypeName(trainingType)}訓練を行いました');
+    notifyListeners();
+    return true;
+  }
+
+  /// 英雄に装備を付与
+  bool equipHeroItem(String heroId, Equipment equipment) {
+    final advancedHero = _advancedHeroes[heroId];
+    if (advancedHero == null) return false;
+
+    final currentEquipment =
+        advancedHero.advancedStats.equipment ?? const HeroEquipment();
+
+    HeroEquipment newEquipment;
+    switch (equipment.type) {
+      case EquipmentType.weapon:
+        newEquipment = HeroEquipment(
+          weapon: equipment,
+          armor: currentEquipment.armor,
+          accessory: currentEquipment.accessory,
+        );
+        break;
+      case EquipmentType.armor:
+        newEquipment = HeroEquipment(
+          weapon: currentEquipment.weapon,
+          armor: equipment,
+          accessory: currentEquipment.accessory,
+        );
+        break;
+      case EquipmentType.accessory:
+        newEquipment = HeroEquipment(
+          weapon: currentEquipment.weapon,
+          armor: currentEquipment.armor,
+          accessory: equipment,
+        );
+        break;
+    }
+
+    // 新しい拡張英雄データを作成
+    final newAdvancedStats = HeroAdvancedStats(
+      baseStats: advancedHero.advancedStats.baseStats,
+      level: advancedHero.advancedStats.level,
+      experience: advancedHero.advancedStats.experience,
+      skills: advancedHero.advancedStats.skills,
+      equipment: newEquipment,
+    );
+
+    final newAdvancedHero = AdvancedHero(
+      baseHero: advancedHero.baseHero,
+      advancedStats: newAdvancedStats,
+    );
+
+    _advancedHeroes[heroId] = newAdvancedHero;
+
+    _addEventLog('${advancedHero.baseHero.nickname}が${equipment.name}を装備しました');
+    notifyListeners();
+    return true;
+  }
+
+  /// 英雄の全経験値を取得
+  Map<ExperienceType, int> getHeroExperience(String heroId) {
+    final advancedHero = _advancedHeroes[heroId];
+    return advancedHero?.advancedStats.experience ?? {};
+  }
+
+  /// 英雄のレベル情報を取得
+  Map<String, dynamic> getHeroLevelInfo(String heroId) {
+    final advancedHero = _advancedHeroes[heroId];
+    if (advancedHero == null) {
+      return {
+        'level': 1,
+        'totalExp': 0,
+        'expToNext': 100,
+        'rank': 'Recruit',
+      };
+    }
+
+    final stats = advancedHero.advancedStats;
+    final totalExp = stats.experience.values.fold(0, (sum, exp) => sum + exp);
+
+    return {
+      'level': stats.level,
+      'totalExp': totalExp,
+      'expToNext': stats.expToNextLevel,
+      'rank': _getRankName(stats.rank),
+    };
+  }
+
+  /// 訓練タイプの日本語名
+  String _getTrainingTypeName(ExperienceType type) {
+    switch (type) {
+      case ExperienceType.combat:
+        return '戦闘';
+      case ExperienceType.administration:
+        return '内政';
+      case ExperienceType.diplomacy:
+        return '外交';
+      case ExperienceType.leadership:
+        return '統率';
+    }
+  }
+
+  /// 階級の日本語名
+  String _getRankName(HeroRank rank) {
+    switch (rank) {
+      case HeroRank.recruit:
+        return '新兵';
+      case HeroRank.veteran:
+        return '歴戦';
+      case HeroRank.elite:
+        return '精鋭';
+      case HeroRank.master:
+        return '達人';
+      case HeroRank.legend:
+        return '伝説';
+    }
   }
 }
 

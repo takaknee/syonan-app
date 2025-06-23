@@ -26,7 +26,8 @@ class GenerateMathProblemsUseCase {
       );
     }
 
-    if (difficultyLevel != null && (difficultyLevel < 1 || difficultyLevel > 5)) {
+    if (difficultyLevel != null &&
+        (difficultyLevel < 1 || difficultyLevel > 5)) {
       return ResultFailure(
         const ValidationFailure('難易度レベルは1～5の範囲である必要があります'),
       );
@@ -57,7 +58,8 @@ class GenerateSingleMathProblemUseCase {
     int? difficultyLevel,
   }) async {
     // 入力検証
-    if (difficultyLevel != null && (difficultyLevel < 1 || difficultyLevel > 5)) {
+    if (difficultyLevel != null &&
+        (difficultyLevel < 1 || difficultyLevel > 5)) {
       return ResultFailure(
         const ValidationFailure('難易度レベルは1～5の範囲である必要があります'),
       );

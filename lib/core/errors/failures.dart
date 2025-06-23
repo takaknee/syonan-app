@@ -7,7 +7,10 @@ abstract class Failure {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is Failure && runtimeType == other.runtimeType && message == other.message && code == other.code;
+      other is Failure &&
+          runtimeType == other.runtimeType &&
+          message == other.message &&
+          code == other.code;
 
   @override
   int get hashCode => message.hashCode ^ code.hashCode;

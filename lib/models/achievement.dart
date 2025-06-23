@@ -101,7 +101,9 @@ class UserAchievement {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    return other is UserAchievement && other.achievementId == achievementId && other.unlockedAt == unlockedAt;
+    return other is UserAchievement &&
+        other.achievementId == achievementId &&
+        other.unlockedAt == unlockedAt;
   }
 
   @override
@@ -389,6 +391,8 @@ class AvailableAchievements {
 
   /// カテゴリー別に実績を取得
   static List<Achievement> getByCategory(AchievementCategory category) {
-    return all.where((achievement) => achievement.category == category).toList();
+    return all
+        .where((achievement) => achievement.category == category)
+        .toList();
   }
 }

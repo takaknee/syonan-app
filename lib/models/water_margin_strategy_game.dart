@@ -30,10 +30,12 @@ class HeroStats {
   final int loyalty; // 1-100
 
   /// 総合戦闘力
-  int get combatPower => ((force + leadership) * 0.6 + intelligence * 0.4).round();
+  int get combatPower =>
+      ((force + leadership) * 0.6 + intelligence * 0.4).round();
 
   /// 内政能力
-  int get administrativePower => ((intelligence + charisma) * 0.7 + leadership * 0.3).round();
+  int get administrativePower =>
+      ((intelligence + charisma) * 0.7 + leadership * 0.3).round();
 }
 
 /// 英雄の専門技能
@@ -171,7 +173,8 @@ class ProvinceState {
   }
 
   /// 州の総合評価
-  int get overallRating => ((agriculture + commerce + security + military + loyalty) / 5).round();
+  int get overallRating =>
+      ((agriculture + commerce + security + military + loyalty) / 5).round();
 
   /// 食料生産量（人口 x 農業度）
   int get foodProduction => ((population / 100) * agriculture).round();
@@ -275,7 +278,7 @@ class WaterMarginGameState {
   final GameStatus gameStatus;
   final String? selectedProvinceId;
   final String? selectedHeroId;
-  final Map<String, dynamic>? advancedHeroes; // 拡張英雄データ（将来の実装用）
+  final Map<String, dynamic>? advancedHeroes; // TODO: 後でAdvancedHero型に変更予定
 
   WaterMarginGameState copyWith({
     List<Province>? provinces,
@@ -300,11 +303,13 @@ class WaterMarginGameState {
   }
 
   /// プレイヤーが支配する州数
-  int get playerProvinceCount => provinces.where((p) => p.controller == Faction.liangshan).length;
+  int get playerProvinceCount =>
+      provinces.where((p) => p.controller == Faction.liangshan).length;
 
   /// プレイヤーの総兵力
-  int get playerTotalTroops =>
-      provinces.where((p) => p.controller == Faction.liangshan).fold(0, (sum, p) => sum + p.currentTroops);
+  int get playerTotalTroops => provinces
+      .where((p) => p.controller == Faction.liangshan)
+      .fold(0, (sum, p) => sum + p.currentTroops);
 
   /// 仲間になった英雄数
   int get recruitedHeroCount => heroes.where((h) => h.isRecruited).length;

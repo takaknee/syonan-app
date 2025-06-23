@@ -30,12 +30,17 @@ class MathPracticeController extends ChangeNotifier {
   String? get error => _error;
 
   MathProblemEntity? get currentProblem =>
-      _problems.isNotEmpty && _currentProblemIndex < _problems.length ? _problems[_currentProblemIndex] : null;
+      _problems.isNotEmpty && _currentProblemIndex < _problems.length
+          ? _problems[_currentProblemIndex]
+          : null;
 
   int get correctCount => _isCorrect.where((correct) => correct).length;
-  double get accuracy => _problems.isEmpty ? 0.0 : correctCount / _problems.length;
+  double get accuracy =>
+      _problems.isEmpty ? 0.0 : correctCount / _problems.length;
   int get totalProblems => _problems.length;
-  bool get hasCurrentAnswer => _currentProblemIndex < _userAnswers.length && _userAnswers[_currentProblemIndex] != null;
+  bool get hasCurrentAnswer =>
+      _currentProblemIndex < _userAnswers.length &&
+      _userAnswers[_currentProblemIndex] != null;
 
   /// 練習セッションを開始
   Future<void> startPractice({
@@ -75,7 +80,8 @@ class MathPracticeController extends ChangeNotifier {
     if (_currentProblemIndex >= _problems.length) return;
 
     _userAnswers[_currentProblemIndex] = answer;
-    _isCorrect[_currentProblemIndex] = _problems[_currentProblemIndex].isCorrectAnswer(answer);
+    _isCorrect[_currentProblemIndex] =
+        _problems[_currentProblemIndex].isCorrectAnswer(answer);
 
     notifyListeners();
   }

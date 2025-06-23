@@ -123,12 +123,26 @@ class HeroAdvancedStats {
         );
 
     return HeroStats(
-      force: (baseStats.force + levelBonus + skillBonus.force + equipBonus.force).clamp(1, 150),
-      intelligence:
-          (baseStats.intelligence + levelBonus + skillBonus.intelligence + equipBonus.intelligence).clamp(1, 150),
-      charisma: (baseStats.charisma + levelBonus + skillBonus.charisma + equipBonus.charisma).clamp(1, 150),
-      leadership: (baseStats.leadership + levelBonus + skillBonus.leadership + equipBonus.leadership).clamp(1, 150),
-      loyalty: (baseStats.loyalty + skillBonus.loyalty + equipBonus.loyalty).clamp(1, 150),
+      force:
+          (baseStats.force + levelBonus + skillBonus.force + equipBonus.force)
+              .clamp(1, 150),
+      intelligence: (baseStats.intelligence +
+              levelBonus +
+              skillBonus.intelligence +
+              equipBonus.intelligence)
+          .clamp(1, 150),
+      charisma: (baseStats.charisma +
+              levelBonus +
+              skillBonus.charisma +
+              equipBonus.charisma)
+          .clamp(1, 150),
+      leadership: (baseStats.leadership +
+              levelBonus +
+              skillBonus.leadership +
+              equipBonus.leadership)
+          .clamp(1, 150),
+      loyalty: (baseStats.loyalty + skillBonus.loyalty + equipBonus.loyalty)
+          .clamp(1, 150),
     );
   }
 
@@ -263,19 +277,28 @@ class HeroEquipment {
 
   /// 装備による総合ボーナス
   HeroStats get totalBonus {
-    final weaponBonus =
-        weapon?.statBonus ?? const HeroStats(force: 0, intelligence: 0, charisma: 0, leadership: 0, loyalty: 0);
-    final armorBonus =
-        armor?.statBonus ?? const HeroStats(force: 0, intelligence: 0, charisma: 0, leadership: 0, loyalty: 0);
-    final accessoryBonus =
-        accessory?.statBonus ?? const HeroStats(force: 0, intelligence: 0, charisma: 0, leadership: 0, loyalty: 0);
+    final weaponBonus = weapon?.statBonus ??
+        const HeroStats(
+            force: 0, intelligence: 0, charisma: 0, leadership: 0, loyalty: 0);
+    final armorBonus = armor?.statBonus ??
+        const HeroStats(
+            force: 0, intelligence: 0, charisma: 0, leadership: 0, loyalty: 0);
+    final accessoryBonus = accessory?.statBonus ??
+        const HeroStats(
+            force: 0, intelligence: 0, charisma: 0, leadership: 0, loyalty: 0);
 
     return HeroStats(
       force: weaponBonus.force + armorBonus.force + accessoryBonus.force,
-      intelligence: weaponBonus.intelligence + armorBonus.intelligence + accessoryBonus.intelligence,
-      charisma: weaponBonus.charisma + armorBonus.charisma + accessoryBonus.charisma,
-      leadership: weaponBonus.leadership + armorBonus.leadership + accessoryBonus.leadership,
-      loyalty: weaponBonus.loyalty + armorBonus.loyalty + accessoryBonus.loyalty,
+      intelligence: weaponBonus.intelligence +
+          armorBonus.intelligence +
+          accessoryBonus.intelligence,
+      charisma:
+          weaponBonus.charisma + armorBonus.charisma + accessoryBonus.charisma,
+      leadership: weaponBonus.leadership +
+          armorBonus.leadership +
+          accessoryBonus.leadership,
+      loyalty:
+          weaponBonus.loyalty + armorBonus.loyalty + accessoryBonus.loyalty,
     );
   }
 }
@@ -334,7 +357,9 @@ class AdvancedHero {
   /// 実際の戦闘力（レベル・装備補正込み）
   int get effectiveCombatPower {
     final stats = advancedStats.effectiveStats;
-    int basePower = ((stats.force + stats.leadership) * 0.6 + stats.intelligence * 0.4).round();
+    int basePower =
+        ((stats.force + stats.leadership) * 0.6 + stats.intelligence * 0.4)
+            .round();
 
     // スキルボーナス
     if (advancedStats.skills.contains(HeroLevelSkill.berserker)) {
@@ -350,7 +375,9 @@ class AdvancedHero {
   /// 実際の内政力（レベル・装備補正込み）
   int get effectiveAdministrativePower {
     final stats = advancedStats.effectiveStats;
-    int basePower = ((stats.intelligence + stats.charisma) * 0.7 + stats.leadership * 0.3).round();
+    int basePower =
+        ((stats.intelligence + stats.charisma) * 0.7 + stats.leadership * 0.3)
+            .round();
 
     // スキルボーナス
     if (advancedStats.skills.contains(HeroLevelSkill.administrator)) {

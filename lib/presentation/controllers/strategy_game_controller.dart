@@ -68,7 +68,8 @@ class StrategyGameController extends ChangeNotifier {
   /// 領土を選択
   void selectTerritory(String territoryId) {
     _gameState = _gameState.copyWith(
-      selectedTerritoryId: _gameState.selectedTerritoryId == territoryId ? null : territoryId,
+      selectedTerritoryId:
+          _gameState.selectedTerritoryId == territoryId ? null : territoryId,
     );
     notifyListeners();
   }
@@ -127,8 +128,10 @@ class StrategyGameController extends ChangeNotifier {
     final finalScore = gameService.calculateFinalScore(_gameState, duration);
 
     // スコアを記録
-    final miniGameService = Provider.of<MiniGameService>(context, listen: false);
-    miniGameService.recordScore('strategy_battle', finalScore, MiniGameDifficulty.hard);
+    final miniGameService =
+        Provider.of<MiniGameService>(context, listen: false);
+    miniGameService.recordScore(
+        'strategy_battle', finalScore, MiniGameDifficulty.hard);
 
     _triggerGameCompleteDialog(finalScore);
   }

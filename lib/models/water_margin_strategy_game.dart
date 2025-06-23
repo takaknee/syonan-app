@@ -4,6 +4,7 @@ library;
 
 import 'package:flutter/material.dart';
 
+import 'diplomacy_system.dart';
 import 'province_facility.dart';
 
 /// 勢力（プレイヤー、朝廷、豪族など）
@@ -263,7 +264,7 @@ class Province {
 
 /// ゲーム全体の状態
 class WaterMarginGameState {
-  const WaterMarginGameState({
+  WaterMarginGameState({
     required this.provinces,
     required this.heroes,
     required this.currentTurn,
@@ -272,6 +273,7 @@ class WaterMarginGameState {
     this.selectedProvinceId,
     this.selectedHeroId,
     this.advancedHeroes,
+    this.diplomacy,
   });
 
   final List<Province> provinces;
@@ -282,6 +284,7 @@ class WaterMarginGameState {
   final String? selectedProvinceId;
   final String? selectedHeroId;
   final Map<String, dynamic>? advancedHeroes; // TODO: 後でAdvancedHero型に変更予定
+  final DiplomaticSystem? diplomacy; // 外交システム
 
   WaterMarginGameState copyWith({
     List<Province>? provinces,
@@ -292,6 +295,7 @@ class WaterMarginGameState {
     String? selectedProvinceId,
     String? selectedHeroId,
     Map<String, dynamic>? advancedHeroes,
+    DiplomaticSystem? diplomacy,
   }) {
     return WaterMarginGameState(
       provinces: provinces ?? this.provinces,
@@ -302,6 +306,7 @@ class WaterMarginGameState {
       selectedProvinceId: selectedProvinceId ?? this.selectedProvinceId,
       selectedHeroId: selectedHeroId ?? this.selectedHeroId,
       advancedHeroes: advancedHeroes ?? this.advancedHeroes,
+      diplomacy: diplomacy ?? this.diplomacy,
     );
   }
 

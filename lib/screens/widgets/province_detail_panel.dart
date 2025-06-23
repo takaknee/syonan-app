@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../../controllers/water_margin_game_controller.dart';
 import '../../models/water_margin_strategy_game.dart';
+import 'facility_management_panel.dart';
 
 /// 選択された州の詳細情報を表示するパネル
 class ProvinceDetailPanel extends StatelessWidget {
@@ -82,22 +83,52 @@ class _ProvinceDetailView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
+    return DefaultTabController(
+      length: 2,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // 州ヘッダー
           _ProvinceHeader(province: province),
           const SizedBox(height: 16),
 
-          // 州の状態
-          _ProvinceStats(province: province),
-          const SizedBox(height: 16),
+          // タブバー
+          const TabBar(
+            tabs: [
+              Tab(
+                icon: Icon(Icons.info_outline),
+                text: '基本情報',
+              ),
+              Tab(
+                icon: Icon(Icons.business),
+                text: '施設管理',
+              ),
+            ],
+          ),
 
-          // アクションボタン
-          _ProvinceActions(
-            province: province,
-            controller: controller,
+          // タブビュー
+          Expanded(
+            child: TabBarView(
+              children: [
+                // 基本情報タブ
+                SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 16),
+                      // 州の状態
+                      _ProvinceStats(province: province),
+                      const SizedBox(height: 16),
+                      // アクションボタン
+                      _ProvinceActions(
+                        province: province,
+                        controller: controller,
+                      ),
+                    ],
+                  ),
+                ),
+                // 施設管理タブ
+                FacilityManagementPanel(province: province),
+              ],
+            ),
           ),
         ],
       ),
@@ -462,8 +493,7 @@ class _DevelopmentActions extends StatelessWidget {
           icon: Icons.eco,
           label: '農業開発 (200両)',
           onPressed: controller.gameState.playerGold >= 200
-              ? () => controller.developProvince(
-                  province.id, DevelopmentType.agriculture)
+              ? () => controller.developProvince(province.id, DevelopmentType.agriculture)
               : null,
           color: Colors.green,
         ),
@@ -472,8 +502,7 @@ class _DevelopmentActions extends StatelessWidget {
           icon: Icons.store,
           label: '商業開発 (300両)',
           onPressed: controller.gameState.playerGold >= 300
-              ? () => controller.developProvince(
-                  province.id, DevelopmentType.commerce)
+              ? () => controller.developProvince(province.id, DevelopmentType.commerce)
               : null,
           color: Colors.orange,
         ),
@@ -482,8 +511,7 @@ class _DevelopmentActions extends StatelessWidget {
           icon: Icons.castle,
           label: '軍事強化 (400両)',
           onPressed: controller.gameState.playerGold >= 400
-              ? () => controller.developProvince(
-                  province.id, DevelopmentType.military)
+              ? () => controller.developProvince(province.id, DevelopmentType.military)
               : null,
           color: Colors.red,
         ),
@@ -492,8 +520,7 @@ class _DevelopmentActions extends StatelessWidget {
           icon: Icons.shield,
           label: '治安改善 (150両)',
           onPressed: controller.gameState.playerGold >= 150
-              ? () => controller.developProvince(
-                  province.id, DevelopmentType.security)
+              ? () => controller.developProvince(province.id, DevelopmentType.security)
               : null,
           color: Colors.blue,
         ),

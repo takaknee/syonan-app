@@ -10,7 +10,9 @@ import '../models/advanced_battle_system.dart';
 import '../models/ai_system.dart';
 import '../models/game_events.dart';
 import '../models/hero_advancement.dart';
+import '../models/province_facility.dart' as facility;
 import '../models/water_margin_strategy_game.dart';
+import '../services/facility_service.dart';
 
 /// 水滸伝戦略ゲームのメインコントローラー
 class WaterMarginGameController extends ChangeNotifier {
@@ -44,8 +46,7 @@ class WaterMarginGameController extends ChangeNotifier {
   }
 
   /// 全ての拡張英雄を取得
-  Map<String, AdvancedHero> get advancedHeroes =>
-      Map.unmodifiable(_advancedHeroes);
+  Map<String, AdvancedHero> get advancedHeroes => Map.unmodifiable(_advancedHeroes);
 
   /// ゲームを初期化
   void initializeGame() {
@@ -132,19 +133,25 @@ class WaterMarginGameController extends ChangeNotifier {
   void nextTurn() {
     if (_gameState.gameStatus != GameStatus.playing) return;
 
-    // 1. 収入計算
+    // 1. 施設建設を1ターン進める
+    _advanceAllFacilityConstruction();
+
+    // 2. 施設効果を適用
+    _applyFacilityEffectsToProvinces();
+
+    // 3. 収入計算
     final income = _calculateTurnIncome();
 
-    // 2. 内政処理
+    // 4. 内政処理
     final updatedProvinces = _processProvincesDevelopment();
 
-    // 3. AI行動
+    // 5. AI行動
     _processAdvancedAI();
 
-    // 4. イベント処理
+    // 6. イベント処理
     _processRandomEvents();
 
-    // 5. 勝利条件チェック
+    // 7. 勝利条件チェック
     final newGameStatus = _checkVictoryConditions();
 
     _gameState = _gameState.copyWith(
@@ -206,13 +213,10 @@ class WaterMarginGameController extends ChangeNotifier {
   }
 
   /// 英雄スキル効果を州に適用
-  ProvinceState _applyHeroSkillEffects(
-      Province province, ProvinceState baseState) {
+  ProvinceState _applyHeroSkillEffects(Province province, ProvinceState baseState) {
     // 州に配置された英雄を取得
-    final provinceHeroes = _gameState.heroes
-        .where(
-            (hero) => hero.isRecruited && hero.currentProvinceId == province.id)
-        .toList();
+    final provinceHeroes =
+        _gameState.heroes.where((hero) => hero.isRecruited && hero.currentProvinceId == province.id).toList();
 
     var enhancedState = baseState;
 
@@ -260,14 +264,12 @@ class WaterMarginGameController extends ChangeNotifier {
       }
 
       // レベルボーナス（レベルが高いほど効果アップ）
-      final levelBonus =
-          (advancedHero.advancedStats.level - 1) ~/ 2; // 2レベルごとに+1
+      final levelBonus = (advancedHero.advancedStats.level - 1) ~/ 2; // 2レベルごとに+1
       if (levelBonus > 0) {
         switch (hero.skill) {
           case HeroSkill.administrator:
             enhancedState = enhancedState.copyWith(
-              agriculture:
-                  (enhancedState.agriculture + levelBonus).clamp(0, 100),
+              agriculture: (enhancedState.agriculture + levelBonus).clamp(0, 100),
               commerce: (enhancedState.commerce + levelBonus).clamp(0, 100),
             );
             break;
@@ -303,16 +305,13 @@ class WaterMarginGameController extends ChangeNotifier {
   /// 勝利条件チェック
   GameStatus _checkVictoryConditions() {
     // 敗北条件: 梁山泊を失った
-    final liangshan =
-        _gameState.provinces.firstWhere((p) => p.id == 'liangshan');
+    final liangshan = _gameState.provinces.firstWhere((p) => p.id == 'liangshan');
     if (liangshan.controller != Faction.liangshan) {
       return GameStatus.defeat;
     }
 
     // 勝利条件1: 全州制圧
-    final playerProvinces = _gameState.provinces
-        .where((p) => p.controller == Faction.liangshan)
-        .length;
+    final playerProvinces = _gameState.provinces.where((p) => p.controller == Faction.liangshan).length;
     if (playerProvinces >= _gameState.provinces.length) {
       return GameStatus.victory;
     }
@@ -352,8 +351,7 @@ class WaterMarginGameController extends ChangeNotifier {
         if (p.id == targetProvinceId) {
           return p.copyWith(
             controller: Faction.liangshan,
-            currentTroops:
-                (source.currentTroops - battleResult.attackerLosses) ~/ 2,
+            currentTroops: (source.currentTroops - battleResult.attackerLosses) ~/ 2,
           );
         } else if (p.id == sourceProvinceId) {
           return p.copyWith(
@@ -431,10 +429,8 @@ class WaterMarginGameController extends ChangeNotifier {
 
   /// 州の戦闘に参加する英雄リストを取得（レベル・装備強化版）
   List<Hero> _getEnhancedBattleHeroes(String provinceId) {
-    final baseHeroes = _gameState.heroes
-        .where(
-            (hero) => hero.isRecruited && hero.currentProvinceId == provinceId)
-        .toList();
+    final baseHeroes =
+        _gameState.heroes.where((hero) => hero.isRecruited && hero.currentProvinceId == provinceId).toList();
 
     // 拡張英雄データを反映した強化英雄リストを作成
     return baseHeroes.map((hero) {
@@ -468,18 +464,11 @@ class WaterMarginGameController extends ChangeNotifier {
 
     // 最終能力値を計算（上限100）
     return HeroStats(
-      force:
-          (baseStats.force + levelBonus + equipmentStats.force).clamp(1, 100),
-      intelligence:
-          (baseStats.intelligence + levelBonus + equipmentStats.intelligence)
-              .clamp(1, 100),
-      charisma: (baseStats.charisma + levelBonus + equipmentStats.charisma)
-          .clamp(1, 100),
-      leadership:
-          (baseStats.leadership + levelBonus + equipmentStats.leadership)
-              .clamp(1, 100),
-      loyalty: (baseStats.loyalty + levelBonus + equipmentStats.loyalty)
-          .clamp(1, 100),
+      force: (baseStats.force + levelBonus + equipmentStats.force).clamp(1, 100),
+      intelligence: (baseStats.intelligence + levelBonus + equipmentStats.intelligence).clamp(1, 100),
+      charisma: (baseStats.charisma + levelBonus + equipmentStats.charisma).clamp(1, 100),
+      leadership: (baseStats.leadership + levelBonus + equipmentStats.leadership).clamp(1, 100),
+      loyalty: (baseStats.loyalty + levelBonus + equipmentStats.loyalty).clamp(1, 100),
     );
   }
 
@@ -491,22 +480,25 @@ class WaterMarginGameController extends ChangeNotifier {
   /// 州の地形を取得
   BattleTerrain _getProvinceTerrain(Province province) {
     // 特殊地形の簡易判定
-    if (province.specialFeature?.contains('山') == true)
+    if (province.specialFeature?.contains('山') == true) {
       return BattleTerrain.mountains;
-    if (province.specialFeature?.contains('河') == true)
+    }
+    if (province.specialFeature?.contains('河') == true) {
       return BattleTerrain.river;
-    if (province.specialFeature?.contains('要塞') == true)
+    }
+    if (province.specialFeature?.contains('要塞') == true) {
       return BattleTerrain.fortress;
-    if (province.specialFeature?.contains('森') == true)
+    }
+    if (province.specialFeature?.contains('森') == true) {
       return BattleTerrain.forest;
+    }
     return BattleTerrain.plains; // デフォルトは平野
   }
 
   // === フェーズ3: 英雄レベルアップシステム ===
 
   /// 州の英雄たちに戦闘経験値を付与
-  void _awardCombatExperienceToProvinceHeroes(
-      String provinceId, int baseExperience) {
+  void _awardCombatExperienceToProvinceHeroes(String provinceId, int baseExperience) {
     final participatingHeroes = _getProvinceBattleHeroes(provinceId);
 
     for (final hero in participatingHeroes) {
@@ -522,10 +514,7 @@ class WaterMarginGameController extends ChangeNotifier {
           experienceMultiplier = 1.2; // 軍師も戦闘で少しボーナス
         }
 
-        final experienceGained = (baseExperience *
-                (hero.stats.combatPower / 100) *
-                experienceMultiplier)
-            .round();
+        final experienceGained = (baseExperience * (hero.stats.combatPower / 100) * experienceMultiplier).round();
 
         final updatedAdvancedHero = advancedHero.gainExperience(
           ExperienceType.combat,
@@ -535,10 +524,8 @@ class WaterMarginGameController extends ChangeNotifier {
         _advancedHeroes[hero.id] = updatedAdvancedHero;
 
         // レベルアップ通知
-        if (updatedAdvancedHero.advancedStats.level >
-            advancedHero.advancedStats.level) {
-          _addEventLog(
-              '${hero.nickname}がレベル${updatedAdvancedHero.advancedStats.level}になりました！');
+        if (updatedAdvancedHero.advancedStats.level > advancedHero.advancedStats.level) {
+          _addEventLog('${hero.nickname}がレベル${updatedAdvancedHero.advancedStats.level}になりました！');
         }
       }
     }
@@ -548,9 +535,7 @@ class WaterMarginGameController extends ChangeNotifier {
   void _awardAdministrationExperience(String heroId, int baseExperience) {
     final advancedHero = _advancedHeroes[heroId];
     if (advancedHero != null) {
-      final experienceGained = (baseExperience *
-              (advancedHero.baseHero.stats.administrativePower / 100))
-          .round();
+      final experienceGained = (baseExperience * (advancedHero.baseHero.stats.administrativePower / 100)).round();
       final updatedAdvancedHero = advancedHero.gainExperience(
         ExperienceType.administration,
         experienceGained,
@@ -559,10 +544,8 @@ class WaterMarginGameController extends ChangeNotifier {
       _advancedHeroes[heroId] = updatedAdvancedHero;
 
       // レベルアップ通知
-      if (updatedAdvancedHero.advancedStats.level >
-          advancedHero.advancedStats.level) {
-        _addEventLog(
-            '${advancedHero.baseHero.name}がレベル${updatedAdvancedHero.advancedStats.level}になりました！');
+      if (updatedAdvancedHero.advancedStats.level > advancedHero.advancedStats.level) {
+        _addEventLog('${advancedHero.baseHero.name}がレベル${updatedAdvancedHero.advancedStats.level}になりました！');
       }
     }
   }
@@ -595,27 +578,23 @@ class WaterMarginGameController extends ChangeNotifier {
         switch (effect.type) {
           case EventEffectType.goldChange:
             _gameState = _gameState.copyWith(
-              playerGold:
-                  (_gameState.playerGold + effect.value).clamp(0, 999999),
+              playerGold: (_gameState.playerGold + effect.value).clamp(0, 999999),
             );
             _addEventLog('資金が${effect.value > 0 ? '+' : ''}${effect.value}両変動');
             break;
           case EventEffectType.troopsChange:
             if (effect.targetId != null) {
               final updatedProvinces = _gameState.provinces.map((province) {
-                if (province.id == effect.targetId ||
-                    effect.targetId == 'all') {
+                if (province.id == effect.targetId || effect.targetId == 'all') {
                   return province.copyWith(
-                    currentTroops:
-                        (province.currentTroops + effect.value).clamp(0, 99999),
+                    currentTroops: (province.currentTroops + effect.value).clamp(0, 99999),
                   );
                 }
                 return province;
               }).toList();
 
               _gameState = _gameState.copyWith(provinces: updatedProvinces);
-              _addEventLog(
-                  '兵力が${effect.value > 0 ? '+' : ''}${effect.value}増減');
+              _addEventLog('兵力が${effect.value > 0 ? '+' : ''}${effect.value}増減');
             }
             break;
           case EventEffectType.heroRecruitment:
@@ -738,17 +717,13 @@ class WaterMarginGameController extends ChangeNotifier {
   /// AI英雄登用を実行
   void _executeAIRecruitment(AIAction action) {
     // 簡易AI英雄登用（未登用の英雄をランダムに登用）
-    final availableHeroes = _gameState.heroes
-        .where((h) => !h.isRecruited && h.faction != Faction.liangshan)
-        .toList();
+    final availableHeroes = _gameState.heroes.where((h) => !h.isRecruited && h.faction != Faction.liangshan).toList();
 
     if (availableHeroes.isNotEmpty) {
       final hero = availableHeroes.first;
       final recruitedHero = hero.copyWith(isRecruited: true);
 
-      final updatedHeroes = _gameState.heroes
-          .map((h) => h.id == hero.id ? recruitedHero : h)
-          .toList();
+      final updatedHeroes = _gameState.heroes.map((h) => h.id == hero.id ? recruitedHero : h).toList();
 
       _gameState = _gameState.copyWith(heroes: updatedHeroes);
       _addEventLog('${hero.faction.name}が${hero.name}を登用');
@@ -758,8 +733,7 @@ class WaterMarginGameController extends ChangeNotifier {
   // === フェーズ3: プレイヤー内政・開発機能 ===
 
   /// プレイヤーが州を開発
-  bool developProvince(String provinceId, DevelopmentType type,
-      {String? assignedHeroId}) {
+  bool developProvince(String provinceId, DevelopmentType type, {String? assignedHeroId}) {
     final province = _gameState.getProvinceById(provinceId);
     if (province?.controller != Faction.liangshan) return false;
 
@@ -844,9 +818,7 @@ class WaterMarginGameController extends ChangeNotifier {
     );
 
     // 既に登用済みまたは登用不可チェック
-    if (hero.isRecruited ||
-        hero.faction == Faction.imperial ||
-        hero.faction == Faction.liangshan) {
+    if (hero.isRecruited || hero.faction == Faction.imperial || hero.faction == Faction.liangshan) {
       return false;
     }
 
@@ -883,10 +855,7 @@ class WaterMarginGameController extends ChangeNotifier {
 
   /// 登用費用を計算
   int _calculateRecruitmentCost(Hero hero) {
-    final totalStats = hero.stats.force +
-        hero.stats.intelligence +
-        hero.stats.charisma +
-        hero.stats.leadership;
+    final totalStats = hero.stats.force + hero.stats.intelligence + hero.stats.charisma + hero.stats.leadership;
     return (totalStats * 3).round();
   }
 
@@ -900,8 +869,7 @@ class WaterMarginGameController extends ChangeNotifier {
     // 隣接する州で、プレイヤーが支配していない州を返す
     return _gameState.provinces
         .where((province) =>
-            fromProvince.adjacentProvinceIds.contains(province.id) &&
-            province.controller != Faction.liangshan)
+            fromProvince.adjacentProvinceIds.contains(province.id) && province.controller != Faction.liangshan)
         .toList();
   }
 
@@ -932,17 +900,12 @@ class WaterMarginGameController extends ChangeNotifier {
 
   /// 州に配置された英雄リストを取得
   List<Hero> getProvinceHeroes(String provinceId) {
-    return _gameState.heroes
-        .where(
-            (hero) => hero.isRecruited && hero.currentProvinceId == provinceId)
-        .toList();
+    return _gameState.heroes.where((hero) => hero.isRecruited && hero.currentProvinceId == provinceId).toList();
   }
 
   /// 配置されていない英雄リストを取得
   List<Hero> getUnassignedHeroes() {
-    return _gameState.heroes
-        .where((hero) => hero.isRecruited && hero.currentProvinceId == null)
-        .toList();
+    return _gameState.heroes.where((hero) => hero.isRecruited && hero.currentProvinceId == null).toList();
   }
 
   /// 州の英雄による効果を計算
@@ -1035,8 +998,7 @@ class WaterMarginGameController extends ChangeNotifier {
     }
 
     final experienceGained = (baseExperience * experienceMultiplier).round();
-    final updatedAdvancedHero =
-        advancedHero.gainExperience(trainingType, experienceGained);
+    final updatedAdvancedHero = advancedHero.gainExperience(trainingType, experienceGained);
     _advancedHeroes[heroId] = updatedAdvancedHero;
 
     // 資金消費
@@ -1045,14 +1007,11 @@ class WaterMarginGameController extends ChangeNotifier {
     );
 
     // レベルアップ通知
-    if (updatedAdvancedHero.advancedStats.level >
-        advancedHero.advancedStats.level) {
-      _addEventLog(
-          '${hero.nickname}がレベル${updatedAdvancedHero.advancedStats.level}になりました！');
+    if (updatedAdvancedHero.advancedStats.level > advancedHero.advancedStats.level) {
+      _addEventLog('${hero.nickname}がレベル${updatedAdvancedHero.advancedStats.level}になりました！');
     }
 
-    _addEventLog(
-        '${hero.nickname}が${_getTrainingTypeName(trainingType)}訓練を行いました');
+    _addEventLog('${hero.nickname}が${_getTrainingTypeName(trainingType)}訓練を行いました');
     notifyListeners();
     return true;
   }
@@ -1062,8 +1021,7 @@ class WaterMarginGameController extends ChangeNotifier {
     final advancedHero = _advancedHeroes[heroId];
     if (advancedHero == null) return false;
 
-    final currentEquipment =
-        advancedHero.advancedStats.equipment ?? const HeroEquipment();
+    final currentEquipment = advancedHero.advancedStats.equipment ?? const HeroEquipment();
 
     HeroEquipment newEquipment;
     switch (equipment.type) {
@@ -1168,6 +1126,197 @@ class WaterMarginGameController extends ChangeNotifier {
       case HeroRank.legend:
         return '伝説';
     }
+  }
+
+  // === フェーズ3: 施設建設システム ===
+
+  /// 州の現在の資源を取得
+  Map<facility.ResourceType, int> getProvinceResources(String provinceId) {
+    final province = _gameState.getProvinceById(provinceId);
+    if (province == null) return {};
+
+    return {
+      facility.ResourceType.population: province.state.population,
+      facility.ResourceType.food: province.state.agriculture * 10, // 農業値から食料を概算
+      facility.ResourceType.wood: province.state.agriculture * 5, // 農業から木材を概算
+      facility.ResourceType.iron: province.state.commerce * 3, // 商業から鉄を概算
+      facility.ResourceType.gold: _gameState.playerGold, // 全体の資金
+      facility.ResourceType.culture: province.state.loyalty * 2, // 民心から文化値
+      facility.ResourceType.military: province.state.military,
+    };
+  }
+
+  /// 州で建設可能な施設リストを取得
+  List<facility.FacilityType> getAvailableFacilitiesForProvince(String provinceId) {
+    final province = _gameState.getProvinceById(provinceId);
+    if (province?.controller != Faction.liangshan) return [];
+
+    final facilities = province?.facilities ?? const facility.ProvinceFacilities();
+    final resources = getProvinceResources(provinceId);
+
+    return FacilityService.getAvailableFacilities(facilities, resources);
+  }
+
+  /// 施設建設を開始
+  bool startFacilityConstruction(String provinceId, facility.FacilityType facilityType) {
+    final province = _gameState.getProvinceById(provinceId);
+    if (province?.controller != Faction.liangshan) return false;
+
+    final currentFacilities = province?.facilities ?? const facility.ProvinceFacilities();
+    final resources = getProvinceResources(provinceId);
+
+    if (!FacilityService.canBuildFacility(facilityType, currentFacilities, resources)) {
+      return false;
+    }
+
+    // 建設コストを計算
+    final buildCost = FacilityService.calculateBuildCost(facilityType, currentFacilities);
+
+    // 資源を消費
+    var newPlayerGold = _gameState.playerGold;
+    if (buildCost.containsKey(facility.ResourceType.gold)) {
+      newPlayerGold -= buildCost[facility.ResourceType.gold]!;
+      if (newPlayerGold < 0) return false;
+    }
+
+    // 建設開始
+    final newFacilities = FacilityService.startConstruction(
+      facilityType,
+      currentFacilities,
+      resources,
+    );
+
+    // 州情報を更新
+    final updatedProvinces = _gameState.provinces.map((p) {
+      if (p.id == provinceId) {
+        return p.copyWith(facilities: newFacilities);
+      }
+      return p;
+    }).toList();
+
+    _gameState = _gameState.copyWith(
+      provinces: updatedProvinces,
+      playerGold: newPlayerGold,
+    );
+
+    final facilityTemplate = FacilityService.getFacilityTemplate(facilityType);
+    _addEventLog('${province!.name}で${facilityTemplate?.name ?? '施設'}の建設を開始しました');
+    notifyListeners();
+    return true;
+  }
+
+  /// 施設建設をキャンセル
+  bool cancelFacilityConstruction(String provinceId, facility.FacilityType facilityType) {
+    final province = _gameState.getProvinceById(provinceId);
+    if (province?.controller != Faction.liangshan) return false;
+
+    final currentFacilities = province?.facilities ?? const facility.ProvinceFacilities();
+
+    if (!currentFacilities.isUnderConstruction(facilityType)) return false;
+
+    final newFacilities = FacilityService.cancelConstruction(facilityType, currentFacilities);
+
+    final updatedProvinces = _gameState.provinces.map((p) {
+      if (p.id == provinceId) {
+        return p.copyWith(facilities: newFacilities);
+      }
+      return p;
+    }).toList();
+
+    _gameState = _gameState.copyWith(provinces: updatedProvinces);
+
+    final facilityTemplate = FacilityService.getFacilityTemplate(facilityType);
+    _addEventLog('${province!.name}で${facilityTemplate?.name ?? '施設'}の建設をキャンセルしました');
+    notifyListeners();
+    return true;
+  }
+
+  /// 州の施設効果を取得
+  Map<facility.ResourceType, int> getProvinceFacilityEffects(String provinceId) {
+    final province = _gameState.getProvinceById(provinceId);
+    if (province == null) return {};
+
+    final facilities = province.facilities ?? const facility.ProvinceFacilities();
+    return facilities.calculateEffects();
+  }
+
+  /// 州の施設維持費を取得
+  Map<facility.ResourceType, int> getProvinceFacilityUpkeep(String provinceId) {
+    final province = _gameState.getProvinceById(provinceId);
+    if (province == null) return {};
+
+    final facilities = province.facilities ?? const facility.ProvinceFacilities();
+    return facilities.calculateUpkeepCosts();
+  }
+
+  /// 全州の施設建設を1ターン進める（ターン処理時に呼び出し）
+  void _advanceAllFacilityConstruction() {
+    final updatedProvinces = _gameState.provinces.map((province) {
+      if (province.controller == Faction.liangshan && province.facilities != null) {
+        final advancedFacilities = FacilityService.advanceConstruction(province.facilities!);
+
+        // 建設完了チェック
+        final originalProjects = province.facilities!.constructionProjects.length;
+        final newProjects = advancedFacilities.constructionProjects.length;
+
+        if (newProjects < originalProjects) {
+          // 施設が完成した
+          final completedFacilities = province.facilities!.constructionProjects.length - newProjects;
+          _addEventLog('${province.name}で$completedFacilities件の施設建設が完了しました！');
+        }
+
+        return province.copyWith(facilities: advancedFacilities);
+      }
+      return province;
+    }).toList();
+
+    _gameState = _gameState.copyWith(provinces: updatedProvinces);
+  }
+
+  /// 施設効果を州の発展処理に適用
+  void _applyFacilityEffectsToProvinces() {
+    final updatedProvinces = _gameState.provinces.map((province) {
+      if (province.controller == Faction.liangshan && province.facilities != null) {
+        final facilityEffects = province.facilities!.calculateEffects();
+        final facilityUpkeep = province.facilities!.calculateUpkeepCosts();
+
+        // 施設効果を州状態に適用
+        var newState = province.state;
+
+        // 軍事力効果
+        if (facilityEffects.containsKey(facility.ResourceType.military)) {
+          newState = newState.copyWith(
+            military: (newState.military + facilityEffects[facility.ResourceType.military]!).clamp(0, 100),
+          );
+        }
+
+        // 文化効果（民心に影響）
+        if (facilityEffects.containsKey(facility.ResourceType.culture)) {
+          newState = newState.copyWith(
+            loyalty: (newState.loyalty + (facilityEffects[facility.ResourceType.culture]! / 4).round()).clamp(0, 100),
+          );
+        }
+
+        // 金銭効果（プレイヤー資金に影響）
+        if (facilityEffects.containsKey(facility.ResourceType.gold)) {
+          _gameState = _gameState.copyWith(
+            playerGold: _gameState.playerGold + facilityEffects[facility.ResourceType.gold]!,
+          );
+        }
+
+        // 維持費を消費
+        if (facilityUpkeep.containsKey(facility.ResourceType.gold)) {
+          _gameState = _gameState.copyWith(
+            playerGold: (_gameState.playerGold - facilityUpkeep[facility.ResourceType.gold]!).clamp(0, 999999),
+          );
+        }
+
+        return province.copyWith(state: newState);
+      }
+      return province;
+    }).toList();
+
+    _gameState = _gameState.copyWith(provinces: updatedProvinces);
   }
 }
 

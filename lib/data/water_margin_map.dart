@@ -326,25 +326,20 @@ class WaterMarginMap {
   static Map<Faction, int> getProvinceCountByFaction() {
     final Map<Faction, int> counts = {};
     for (final faction in Faction.values) {
-      counts[faction] =
-          initialProvinces.where((p) => p.controller == faction).length;
+      counts[faction] = initialProvinces.where((p) => p.controller == faction).length;
     }
     return counts;
   }
 
   /// プレイヤーの隣接州を取得（拡張可能な州）
   static List<Province> getExpandableProvinces() {
-    final playerProvinces = initialProvinces
-        .where((p) => p.controller == Faction.liangshan)
-        .toList();
+    final playerProvinces = initialProvinces.where((p) => p.controller == Faction.liangshan).toList();
     final expandable = <Province>[];
 
     for (final playerProvince in playerProvinces) {
       for (final adjacentId in playerProvince.adjacentProvinceIds) {
         final adjacent = getProvinceById(adjacentId);
-        if (adjacent != null &&
-            adjacent.controller != Faction.liangshan &&
-            !expandable.contains(adjacent)) {
+        if (adjacent != null && adjacent.controller != Faction.liangshan && !expandable.contains(adjacent)) {
           expandable.add(adjacent);
         }
       }

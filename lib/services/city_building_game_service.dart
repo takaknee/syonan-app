@@ -36,19 +36,22 @@ class CityBuildingGameService {
   }
 
   /// 建物を建設
-  CityGameState buildBuilding(
-      CityGameState gameState, BuildingType buildingType) {
+  CityGameState buildBuilding(CityGameState gameState, BuildingType buildingType) {
     if (gameState.gameStatus != GameStatus.playing) return gameState;
 
     final buildingTemplate = getBuildingTemplate(buildingType);
     if (buildingTemplate == null) return gameState;
 
     // 建設条件をチェック
-    if (!gameState.hasEnoughResources(buildingTemplate.buildCost))
+    if (!gameState.hasEnoughResources(buildingTemplate.buildCost)) {
       return gameState;
-    if (gameState.totalBuildings >= gameState.citySize) return gameState;
-    if (!gameState.hasEnoughResources(buildingTemplate.unlockRequirements))
+    }
+    if (gameState.totalBuildings >= gameState.citySize) {
       return gameState;
+    }
+    if (!gameState.hasEnoughResources(buildingTemplate.unlockRequirements)) {
+      return gameState;
+    }
 
     // 既に同じ建物があればレベルアップ
     final existingBuilding = gameState.buildings[buildingType];
@@ -111,13 +114,11 @@ class CityBuildingGameService {
 
     // 人口による食料消費（1人あたり0.5食料）
     final foodConsumption = (actualPopulation * 0.5).round();
-    newResources[ResourceType.food] =
-        (newResources[ResourceType.food] ?? 0) - foodConsumption;
+    newResources[ResourceType.food] = (newResources[ResourceType.food] ?? 0) - foodConsumption;
 
     // 人口による収入（人口が多いほど税収増加）
     final taxIncome = (actualPopulation * 0.3).round();
-    newResources[ResourceType.money] =
-        (newResources[ResourceType.money] ?? 0) + taxIncome;
+    newResources[ResourceType.money] = (newResources[ResourceType.money] ?? 0) + taxIncome;
 
     // リソースの最低値を0に設定
     for (final key in newResources.keys) {
@@ -139,8 +140,7 @@ class CityBuildingGameService {
     }
 
     // 街の拡張判定
-    if (gameState.totalBuildings >= gameState.citySize &&
-        _random.nextDouble() < 0.3) {
+    if (gameState.totalBuildings >= gameState.citySize && _random.nextDouble() < 0.3) {
       updatedGameState = updatedGameState.copyWith(
         citySize: gameState.citySize + 1,
       );
@@ -422,8 +422,7 @@ class CityBuildingGameService {
     final newResources = Map<ResourceType, int>.from(gameState.resources);
 
     for (final entry in event.effects.entries) {
-      newResources[entry.key] =
-          ((newResources[entry.key] ?? 0) + entry.value).clamp(0, 9999);
+      newResources[entry.key] = ((newResources[entry.key] ?? 0) + entry.value).clamp(0, 9999);
     }
 
     return EventResult(

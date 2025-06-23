@@ -4,6 +4,8 @@ library;
 
 import 'package:flutter/material.dart';
 
+import 'province_facility.dart';
+
 /// 勢力（プレイヤー、朝廷、豪族など）
 enum Faction {
   liangshan, // 梁山泊（プレイヤー）
@@ -30,12 +32,10 @@ class HeroStats {
   final int loyalty; // 1-100
 
   /// 総合戦闘力
-  int get combatPower =>
-      ((force + leadership) * 0.6 + intelligence * 0.4).round();
+  int get combatPower => ((force + leadership) * 0.6 + intelligence * 0.4).round();
 
   /// 内政能力
-  int get administrativePower =>
-      ((intelligence + charisma) * 0.7 + leadership * 0.3).round();
+  int get administrativePower => ((intelligence + charisma) * 0.7 + leadership * 0.3).round();
 }
 
 /// 英雄の専門技能
@@ -173,8 +173,7 @@ class ProvinceState {
   }
 
   /// 州の総合評価
-  int get overallRating =>
-      ((agriculture + commerce + security + military + loyalty) / 5).round();
+  int get overallRating => ((agriculture + commerce + security + military + loyalty) / 5).round();
 
   /// 食料生産量（人口 x 農業度）
   int get foodProduction => ((population / 100) * agriculture).round();
@@ -198,6 +197,7 @@ class Province {
     required this.adjacentProvinceIds,
     this.capital = false,
     this.specialFeature,
+    this.facilities,
   });
 
   final String id;
@@ -209,6 +209,7 @@ class Province {
   final List<String> adjacentProvinceIds; // 隣接州
   final bool capital; // 首都かどうか
   final String? specialFeature; // 特殊な特徴
+  final ProvinceFacilities? facilities; // 施設管理
 
   Province copyWith({
     String? id,
@@ -220,6 +221,7 @@ class Province {
     List<String>? adjacentProvinceIds,
     bool? capital,
     String? specialFeature,
+    ProvinceFacilities? facilities,
   }) {
     return Province(
       id: id ?? this.id,
@@ -231,6 +233,7 @@ class Province {
       adjacentProvinceIds: adjacentProvinceIds ?? this.adjacentProvinceIds,
       capital: capital ?? this.capital,
       specialFeature: specialFeature ?? this.specialFeature,
+      facilities: facilities ?? this.facilities,
     );
   }
 
@@ -303,13 +306,11 @@ class WaterMarginGameState {
   }
 
   /// プレイヤーが支配する州数
-  int get playerProvinceCount =>
-      provinces.where((p) => p.controller == Faction.liangshan).length;
+  int get playerProvinceCount => provinces.where((p) => p.controller == Faction.liangshan).length;
 
   /// プレイヤーの総兵力
-  int get playerTotalTroops => provinces
-      .where((p) => p.controller == Faction.liangshan)
-      .fold(0, (sum, p) => sum + p.currentTroops);
+  int get playerTotalTroops =>
+      provinces.where((p) => p.controller == Faction.liangshan).fold(0, (sum, p) => sum + p.currentTroops);
 
   /// 仲間になった英雄数
   int get recruitedHeroCount => heroes.where((h) => h.isRecruited).length;

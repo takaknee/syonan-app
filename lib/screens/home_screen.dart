@@ -61,9 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
       body: SafeArea(
-        child: scoreService.isLoading ||
-                pointsService.isLoading ||
-                miniGameService.isLoading
+        child: scoreService.isLoading || pointsService.isLoading || miniGameService.isLoading
             ? const Center(child: CircularProgressIndicator())
             : SingleChildScrollView(
                 padding: const EdgeInsets.all(20),
@@ -83,8 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     const SizedBox(height: 32),
 
                     // ミニゲーム
-                    _buildMiniGamesSection(
-                        theme, pointsService, miniGameService),
+                    _buildMiniGamesSection(theme, pointsService, miniGameService),
                     const SizedBox(height: 32),
 
                     // 新機能
@@ -170,8 +167,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 icon: Icons.close,
                 color: Colors.blue,
                 onTap: () => _startPractice(MathOperationType.multiplication),
-                onLongPress: () =>
-                    _showDifficultyDialog(MathOperationType.multiplication),
+                onLongPress: () => _showDifficultyDialog(MathOperationType.multiplication),
               ),
             ),
             const SizedBox(width: 16),
@@ -182,8 +178,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 icon: Icons.more_horiz,
                 color: Colors.green,
                 onTap: () => _startPractice(MathOperationType.division),
-                onLongPress: () =>
-                    _showDifficultyDialog(MathOperationType.division),
+                onLongPress: () => _showDifficultyDialog(MathOperationType.division),
               ),
             ),
           ],
@@ -198,8 +193,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 icon: Icons.add,
                 color: Colors.orange,
                 onTap: () => _startPractice(MathOperationType.addition),
-                onLongPress: () =>
-                    _showDifficultyDialog(MathOperationType.addition),
+                onLongPress: () => _showDifficultyDialog(MathOperationType.addition),
               ),
             ),
             const SizedBox(width: 16),
@@ -210,8 +204,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 icon: Icons.remove,
                 color: Colors.purple,
                 onTap: () => _startPractice(MathOperationType.subtraction),
-                onLongPress: () =>
-                    _showDifficultyDialog(MathOperationType.subtraction),
+                onLongPress: () => _showDifficultyDialog(MathOperationType.subtraction),
               ),
             ),
           ],
@@ -248,8 +241,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Expanded(
               child: MiniGameButton(
-                miniGame: AvailableMiniGames.all
-                    .firstWhere((game) => game.id == 'number_memory'),
+                miniGame: AvailableMiniGames.all.firstWhere((game) => game.id == 'number_memory'),
                 hasEnoughPoints: pointsService.totalPoints >= 10,
                 playCount: miniGameService.getPlayCount('number_memory'),
                 bestScore: miniGameService.getBestScore('number_memory'),
@@ -259,8 +251,7 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(width: 16),
             Expanded(
               child: MiniGameButton(
-                miniGame: AvailableMiniGames.all
-                    .firstWhere((game) => game.id == 'speed_math'),
+                miniGame: AvailableMiniGames.all.firstWhere((game) => game.id == 'speed_math'),
                 hasEnoughPoints: pointsService.totalPoints >= 15,
                 playCount: miniGameService.getPlayCount('speed_math'),
                 bestScore: miniGameService.getBestScore('speed_math'),
@@ -275,8 +266,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Expanded(
               child: MiniGameButton(
-                miniGame: AvailableMiniGames.all
-                    .firstWhere((game) => game.id == 'sliding_puzzle'),
+                miniGame: AvailableMiniGames.all.firstWhere((game) => game.id == 'sliding_puzzle'),
                 hasEnoughPoints: pointsService.totalPoints >= 8,
                 playCount: miniGameService.getPlayCount('sliding_puzzle'),
                 bestScore: miniGameService.getBestScore('sliding_puzzle'),
@@ -286,8 +276,7 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(width: 16),
             Expanded(
               child: MiniGameButton(
-                miniGame: AvailableMiniGames.all
-                    .firstWhere((game) => game.id == 'rhythm_tap'),
+                miniGame: AvailableMiniGames.all.firstWhere((game) => game.id == 'rhythm_tap'),
                 hasEnoughPoints: pointsService.totalPoints >= 12,
                 playCount: miniGameService.getPlayCount('rhythm_tap'),
                 bestScore: miniGameService.getBestScore('rhythm_tap'),
@@ -302,8 +291,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: SizedBox(
             width: MediaQuery.of(context).size.width * 0.45,
             child: MiniGameButton(
-              miniGame: AvailableMiniGames.all
-                  .firstWhere((game) => game.id == 'dodge_game'),
+              miniGame: AvailableMiniGames.all.firstWhere((game) => game.id == 'dodge_game'),
               hasEnoughPoints: pointsService.totalPoints >= 10,
               playCount: miniGameService.getPlayCount('dodge_game'),
               bestScore: miniGameService.getBestScore('dodge_game'),
@@ -317,8 +305,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Expanded(
               child: MiniGameButton(
-                miniGame: AvailableMiniGames.all
-                    .firstWhere((game) => game.id == 'number_puzzle'),
+                miniGame: AvailableMiniGames.all.firstWhere((game) => game.id == 'number_puzzle'),
                 hasEnoughPoints: pointsService.totalPoints >= 12,
                 playCount: miniGameService.getPlayCount('number_puzzle'),
                 bestScore: miniGameService.getBestScore('number_puzzle'),
@@ -328,8 +315,7 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(width: 16),
             Expanded(
               child: MiniGameButton(
-                miniGame: AvailableMiniGames.all
-                    .firstWhere((game) => game.id == 'strategy_battle'),
+                miniGame: AvailableMiniGames.all.firstWhere((game) => game.id == 'strategy_battle'),
                 hasEnoughPoints: pointsService.totalPoints >= 18,
                 playCount: miniGameService.getPlayCount('strategy_battle'),
                 bestScore: miniGameService.getBestScore('strategy_battle'),
@@ -344,8 +330,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Expanded(
               child: MiniGameButton(
-                miniGame: AvailableMiniGames.all
-                    .firstWhere((game) => game.id == 'water_margin'),
+                miniGame: AvailableMiniGames.all.firstWhere((game) => game.id == 'water_margin'),
                 hasEnoughPoints: pointsService.totalPoints >= 25,
                 playCount: miniGameService.getPlayCount('water_margin'),
                 bestScore: miniGameService.getBestScore('water_margin'),
@@ -355,8 +340,7 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(width: 16),
             Expanded(
               child: MiniGameButton(
-                miniGame: AvailableMiniGames.all
-                    .firstWhere((game) => game.id == 'city_builder'),
+                miniGame: AvailableMiniGames.all.firstWhere((game) => game.id == 'city_builder'),
                 hasEnoughPoints: pointsService.totalPoints >= 20,
                 playCount: miniGameService.getPlayCount('city_builder'),
                 bestScore: miniGameService.getBestScore('city_builder'),
@@ -393,24 +377,20 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Expanded(
               child: FeatureCard(
-                feature: ComingSoonFeatures.all
-                    .firstWhere((feature) => feature.id == 'ai_tutor'),
+                feature: ComingSoonFeatures.all.firstWhere((feature) => feature.id == 'ai_tutor'),
                 onTap: () => Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => const AiTutorScreen()),
+                  MaterialPageRoute(builder: (context) => const AiTutorScreen()),
                 ),
               ),
             ),
             const SizedBox(width: 16),
             Expanded(
               child: FeatureCard(
-                feature: ComingSoonFeatures.all.firstWhere(
-                    (feature) => feature.id == 'multiplayer_battle'),
+                feature: ComingSoonFeatures.all.firstWhere((feature) => feature.id == 'multiplayer_battle'),
                 onTap: () => Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => const MultiplayerBattleScreen()),
+                  MaterialPageRoute(builder: (context) => const MultiplayerBattleScreen()),
                 ),
               ),
             ),
@@ -422,24 +402,20 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Expanded(
               child: FeatureCard(
-                feature: ComingSoonFeatures.all
-                    .firstWhere((feature) => feature.id == 'story_mode'),
+                feature: ComingSoonFeatures.all.firstWhere((feature) => feature.id == 'story_mode'),
                 onTap: () => Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => const StoryModeScreen()),
+                  MaterialPageRoute(builder: (context) => const StoryModeScreen()),
                 ),
               ),
             ),
             const SizedBox(width: 16),
             Expanded(
               child: FeatureCard(
-                feature: ComingSoonFeatures.all
-                    .firstWhere((feature) => feature.id == 'parent_dashboard'),
+                feature: ComingSoonFeatures.all.firstWhere((feature) => feature.id == 'parent_dashboard'),
                 onTap: () => Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => const ParentDashboardScreen()),
+                  MaterialPageRoute(builder: (context) => const ParentDashboardScreen()),
                 ),
               ),
             ),

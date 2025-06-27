@@ -14,8 +14,7 @@ class ScoreHistoryScreen extends StatefulWidget {
   State<ScoreHistoryScreen> createState() => _ScoreHistoryScreenState();
 }
 
-class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
-    with SingleTickerProviderStateMixin {
+class _ScoreHistoryScreenState extends State<ScoreHistoryScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override
@@ -43,8 +42,7 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
         bottom: TabBar(
           controller: _tabController,
           labelColor: theme.colorScheme.onPrimaryContainer,
-          unselectedLabelColor:
-              theme.colorScheme.onPrimaryContainer.withValues(alpha: 0.6),
+          unselectedLabelColor: theme.colorScheme.onPrimaryContainer.withValues(alpha: 0.6),
           indicatorColor: theme.colorScheme.primary,
           tabs: const [
             Tab(text: '掛け算', icon: Icon(Icons.close)),
@@ -101,8 +99,7 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
             itemCount: scores.length,
             itemBuilder: (context, index) {
               final score = scores[index];
-              final isRecentBest =
-                  bestScore != null && score.id == bestScore.id;
+              final isRecentBest = bestScore != null && score.id == bestScore.id;
 
               return Padding(
                 padding: const EdgeInsets.only(bottom: 12),
@@ -110,8 +107,7 @@ class _ScoreHistoryScreenState extends State<ScoreHistoryScreen>
                   scoreRecord: score,
                   isBest: isRecentBest,
                   showImprovement: index < scores.length - 1,
-                  previousScore:
-                      index < scores.length - 1 ? scores[index + 1] : null,
+                  previousScore: index < scores.length - 1 ? scores[index + 1] : null,
                 ),
               );
             },

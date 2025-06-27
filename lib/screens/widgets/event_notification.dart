@@ -74,8 +74,7 @@ class EventNotificationDialog extends StatelessWidget {
       case EventType.random:
         return const Icon(Icons.casino, color: Colors.green, size: 24);
       case EventType.battle:
-        return const Icon(Icons.local_fire_department,
-            color: Colors.red, size: 24);
+        return const Icon(Icons.local_fire_department, color: Colors.red, size: 24);
       case EventType.diplomatic:
         return const Icon(Icons.handshake, color: Colors.purple, size: 24);
     }
@@ -106,8 +105,7 @@ class EventLogPanel extends StatelessWidget {
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.primaryContainer,
-              borderRadius:
-                  const BorderRadius.vertical(top: Radius.circular(8)),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
             ),
             child: Row(
               children: [

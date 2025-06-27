@@ -107,8 +107,7 @@ class GetScoreStatisticsUseCase {
   }
 
   /// 最高スコアを取得する
-  Future<Result<ScoreRecordEntity?>> getBestScore(
-      MathOperationType operation) async {
+  Future<Result<ScoreRecordEntity?>> getBestScore(MathOperationType operation) async {
     try {
       return await _repository.getBestScore(operation);
     } catch (e) {

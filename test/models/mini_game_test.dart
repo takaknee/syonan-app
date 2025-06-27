@@ -186,8 +186,7 @@ void main() {
       expect(dodgeGame.color, 0xFF2196F3);
     });
 
-    test('new puzzle, strategy and simulation games have correct properties',
-        () {
+    test('new puzzle, strategy and simulation games have correct properties', () {
       final numberPuzzle = AvailableMiniGames.findById('number_puzzle');
       expect(numberPuzzle!.type, MiniGameType.puzzle);
       expect(numberPuzzle.pointsCost, 12);

@@ -103,10 +103,8 @@ class Building {
 
     return copyWith(
       level: newLevel,
-      buildCost:
-          buildCost.map((k, v) => MapEntry(k, (v * multiplier * 0.8).round())),
-      production:
-          production.map((k, v) => MapEntry(k, (v * multiplier).round())),
+      buildCost: buildCost.map((k, v) => MapEntry(k, (v * multiplier * 0.8).round())),
+      production: production.map((k, v) => MapEntry(k, (v * multiplier).round())),
       upkeep: upkeep.map((k, v) => MapEntry(k, (v * multiplier * 0.6).round())),
     );
   }

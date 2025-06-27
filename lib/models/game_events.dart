@@ -96,16 +96,13 @@ class EventRequirements {
     if (minGold != null && gameState.playerGold < minGold!) return false;
 
     if (requiredProvinces != null) {
-      final controlledProvinces = gameState.provinces
-          .where((p) => p.controller == Faction.liangshan)
-          .map((p) => p.id)
-          .toSet();
+      final controlledProvinces =
+          gameState.provinces.where((p) => p.controller == Faction.liangshan).map((p) => p.id).toSet();
       if (!requiredProvinces!.every(controlledProvinces.contains)) return false;
     }
 
     if (requiredHeroes != null) {
-      final recruitedHeroes =
-          gameState.heroes.where((h) => h.isRecruited).map((h) => h.id).toSet();
+      final recruitedHeroes = gameState.heroes.where((h) => h.isRecruited).map((h) => h.id).toSet();
       if (!requiredHeroes!.every(recruitedHeroes.contains)) return false;
     }
 
@@ -655,9 +652,7 @@ class WaterMarginEvents {
     WaterMarginGameState gameState,
     Set<String> triggeredEvents,
   ) {
-    return allEvents
-        .where((event) => event.canTrigger(gameState, triggeredEvents))
-        .toList();
+    return allEvents.where((event) => event.canTrigger(gameState, triggeredEvents)).toList();
   }
 
   /// ランダムイベントを1つ選択
@@ -668,8 +663,7 @@ class WaterMarginEvents {
     final availableEvents = getAvailableEvents(gameState, triggeredEvents);
     if (availableEvents.isEmpty) return null;
 
-    final randomIndex =
-        DateTime.now().millisecondsSinceEpoch % availableEvents.length;
+    final randomIndex = DateTime.now().millisecondsSinceEpoch % availableEvents.length;
     return availableEvents[randomIndex];
   }
 }

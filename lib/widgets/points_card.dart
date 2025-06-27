@@ -55,8 +55,7 @@ class PointsCard extends StatelessWidget {
                     Text(
                       'がくしゅうポイント',
                       style: theme.textTheme.bodyMedium?.copyWith(
-                        color: theme.colorScheme.onPrimaryContainer
-                            .withValues(alpha: 0.8),
+                        color: theme.colorScheme.onPrimaryContainer.withValues(alpha: 0.8),
                       ),
                     ),
                     Text(
@@ -72,8 +71,7 @@ class PointsCard extends StatelessWidget {
               if (onTap != null)
                 Icon(
                   Icons.arrow_forward_ios,
-                  color: theme.colorScheme.onPrimaryContainer
-                      .withValues(alpha: 0.6),
+                  color: theme.colorScheme.onPrimaryContainer.withValues(alpha: 0.6),
                   size: 16,
                 ),
             ],

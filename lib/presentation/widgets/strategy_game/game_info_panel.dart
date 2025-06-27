@@ -21,8 +21,7 @@ class GameInfoPanel extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: const Color(0xFF8BC34A).withValues(alpha: 0.1),
-        border:
-            const Border(bottom: BorderSide(color: Colors.grey, width: 0.5)),
+        border: const Border(bottom: BorderSide(color: Colors.grey, width: 0.5)),
       ),
       child: Column(
         children: [
@@ -46,8 +45,7 @@ class GameInfoPanel extends StatelessWidget {
               ),
               _InfoItem(
                 emoji: '📅',
-                value:
-                    '${gameState.currentTurn}/${StrategyGameService.maxTurns}',
+                value: '${gameState.currentTurn}/${StrategyGameService.maxTurns}',
                 label: 'ターン',
               ),
             ],

@@ -18,10 +18,10 @@ void main() {
       expect(gameState.currentTurn, equals(1));
       expect(gameState.gameStatus, equals(GameStatus.playing));
       expect(gameState.territories.length, equals(StrategyGameService.mapWidth * StrategyGameService.mapHeight));
-      
+
       // プレイヤーは最低1つの領土を持つ
       expect(gameState.playerTerritoryCount, greaterThan(0));
-      
+
       // 敵の首都が存在する
       final enemyCapital = gameState.territories.where((t) => t.isCapital).first;
       expect(enemyCapital.owner, equals(Owner.enemy));
@@ -59,9 +59,9 @@ void main() {
     test('should handle territory selection', () {
       final gameState = gameService.initializeGame();
       final territoryId = gameState.territories.first.id;
-      
+
       final updatedState = gameState.copyWith(selectedTerritoryId: territoryId);
-      
+
       expect(updatedState.selectedTerritoryId, equals(territoryId));
       expect(updatedState.selectedTerritory?.id, equals(territoryId));
     });
@@ -108,25 +108,23 @@ void main() {
       );
 
       final attackableTargets = gameService.getAttackableTargets(gameState, 'player1');
-      
+
       expect(attackableTargets.length, equals(1));
       expect(attackableTargets.first.id, equals('enemy1'));
     });
 
     test('should handle troop recruitment', () {
       final initialState = gameService.initializeGame();
-      final playerTerritory = initialState.territories
-          .firstWhere((t) => t.owner == Owner.player);
-      
+      final playerTerritory = initialState.territories.firstWhere((t) => t.owner == Owner.player);
+
       final updatedState = gameService.recruitTroops(
         initialState,
         playerTerritory.id,
         2,
       );
 
-      expect(updatedState.playerGold, 
-          equals(initialState.playerGold - (2 * StrategyGameService.troopCost)));
-      
+      expect(updatedState.playerGold, equals(initialState.playerGold - (2 * StrategyGameService.troopCost)));
+
       final updatedTerritory = updatedState.getTerritoryById(playerTerritory.id);
       expect(updatedTerritory?.troops, equals(playerTerritory.troops + 2));
     });

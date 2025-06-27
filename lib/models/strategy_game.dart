@@ -115,11 +115,7 @@ class Position {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is Position &&
-          runtimeType == other.runtimeType &&
-          x == other.x &&
-          y == other.y;
+      identical(this, other) || other is Position && runtimeType == other.runtimeType && x == other.x && y == other.y;
 
   @override
   int get hashCode => x.hashCode ^ y.hashCode;
@@ -172,16 +168,13 @@ class StrategyGameState {
   }
 
   /// プレイヤーが所有する領土数
-  int get playerTerritoryCount =>
-      territories.where((t) => t.owner == Owner.player).length;
+  int get playerTerritoryCount => territories.where((t) => t.owner == Owner.player).length;
 
   /// 敵が所有する領土数
-  int get enemyTerritoryCount =>
-      territories.where((t) => t.owner == Owner.enemy).length;
+  int get enemyTerritoryCount => territories.where((t) => t.owner == Owner.enemy).length;
 
   /// 中立の領土数
-  int get neutralTerritoryCount =>
-      territories.where((t) => t.owner == Owner.neutral).length;
+  int get neutralTerritoryCount => territories.where((t) => t.owner == Owner.neutral).length;
 
   /// 選択された領土を取得
   Territory? get selectedTerritory {
@@ -247,7 +240,6 @@ class WaterMarginTerritories {
   ];
 
   static String getRandomName() {
-    return names[
-        (DateTime.now().millisecondsSinceEpoch ~/ 1000) % names.length];
+    return names[(DateTime.now().millisecondsSinceEpoch ~/ 1000) % names.length];
   }
 }

@@ -105,8 +105,7 @@ class _StoryModeScreenState extends State<StoryModeScreen> {
             '計算の力で魔王を倒し、\n平和を取り戻そう！',
             textAlign: TextAlign.center,
             style: theme.textTheme.bodyMedium?.copyWith(
-              color:
-                  theme.colorScheme.onTertiaryContainer.withValues(alpha: 0.8),
+              color: theme.colorScheme.onTertiaryContainer.withValues(alpha: 0.8),
             ),
           ),
         ],
@@ -216,10 +215,7 @@ class _StoryModeScreenState extends State<StoryModeScreen> {
 
           return Card(
             margin: const EdgeInsets.only(bottom: 12),
-            color: isUnlocked
-                ? theme.cardColor
-                : theme.colorScheme.surfaceContainerHighest
-                    .withValues(alpha: 0.5),
+            color: isUnlocked ? theme.cardColor : theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
             child: ListTile(
               leading: Text(
                 chapterInfo.emoji,
@@ -264,8 +260,7 @@ class _StoryModeScreenState extends State<StoryModeScreen> {
   }
 
   Widget _buildBattleScreen(ThemeData theme) {
-    if (_currentProblems.isEmpty ||
-        _currentProblemIndex >= _currentProblems.length) {
+    if (_currentProblems.isEmpty || _currentProblemIndex >= _currentProblems.length) {
       return _buildBattleCompleteScreen(theme);
     }
 
@@ -320,8 +315,7 @@ class _StoryModeScreenState extends State<StoryModeScreen> {
                 Text(
                   '問題 ${_currentProblemIndex + 1} / $_problemsPerStage',
                   style: theme.textTheme.bodyMedium?.copyWith(
-                    color: theme.colorScheme.onTertiaryContainer
-                        .withValues(alpha: 0.8),
+                    color: theme.colorScheme.onTertiaryContainer.withValues(alpha: 0.8),
                   ),
                 ),
               ],
@@ -329,8 +323,7 @@ class _StoryModeScreenState extends State<StoryModeScreen> {
           ),
           CircularProgressIndicator(
             value: (_currentProblemIndex + 1) / _problemsPerStage,
-            backgroundColor:
-                theme.colorScheme.onTertiaryContainer.withValues(alpha: 0.3),
+            backgroundColor: theme.colorScheme.onTertiaryContainer.withValues(alpha: 0.3),
             valueColor: AlwaysStoppedAnimation<Color>(
               theme.colorScheme.onTertiaryContainer,
             ),
@@ -341,8 +334,7 @@ class _StoryModeScreenState extends State<StoryModeScreen> {
   }
 
   Widget _buildStoryContext(ThemeData theme) {
-    final storyText =
-        _getStoryText(_currentChapter, _currentStage, _currentProblemIndex);
+    final storyText = _getStoryText(_currentChapter, _currentStage, _currentProblemIndex);
 
     return Card(
       child: Padding(
@@ -376,8 +368,7 @@ class _StoryModeScreenState extends State<StoryModeScreen> {
   }
 
   Widget _buildBattleCompleteScreen(ThemeData theme) {
-    final isStageComplete =
-        _correctAnswers >= (_problemsPerStage * 0.7); // 70%以上で合格
+    final isStageComplete = _correctAnswers >= (_problemsPerStage * 0.7); // 70%以上で合格
 
     return Padding(
       padding: const EdgeInsets.all(16.0),
@@ -399,9 +390,7 @@ class _StoryModeScreenState extends State<StoryModeScreen> {
                     isStageComplete ? 'ステージクリア！' : 'もう一度挑戦！',
                     style: theme.textTheme.displaySmall?.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: isStageComplete
-                          ? theme.colorScheme.primary
-                          : theme.colorScheme.error,
+                      color: isStageComplete ? theme.colorScheme.primary : theme.colorScheme.error,
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -441,10 +430,8 @@ class _StoryModeScreenState extends State<StoryModeScreen> {
               const SizedBox(width: 16),
               Expanded(
                 child: ElevatedButton.icon(
-                  onPressed:
-                      isStageComplete ? _proceedToNextStage : _retryStage,
-                  icon: Icon(
-                      isStageComplete ? Icons.arrow_forward : Icons.refresh),
+                  onPressed: isStageComplete ? _proceedToNextStage : _retryStage,
+                  icon: Icon(isStageComplete ? Icons.arrow_forward : Icons.refresh),
                   label: Text(isStageComplete ? '次へ進む' : '再挑戦'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: theme.colorScheme.primary,

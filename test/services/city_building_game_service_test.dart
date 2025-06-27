@@ -55,14 +55,14 @@ void main() {
 
       test('cannot build more buildings than city size allows', () {
         var currentState = gameState;
-        
+
         // Build buildings up to city size limit
         for (int i = 0; i < gameState.citySize; i++) {
           currentState = service.buildBuilding(currentState, BuildingType.house);
         }
-        
+
         expect(currentState.totalBuildings, gameState.citySize);
-        
+
         // Try to build one more - should fail
         final overLimitState = service.buildBuilding(currentState, BuildingType.farm);
         expect(overLimitState.totalBuildings, gameState.citySize); // unchanged
@@ -72,10 +72,10 @@ void main() {
         // First build a house
         var newGameState = service.buildBuilding(gameState, BuildingType.house);
         expect(newGameState.hasBuilding(BuildingType.house), true);
-        
+
         final originalHouse = newGameState.buildings[BuildingType.house]!;
         expect(originalHouse.level, 1);
-        
+
         // Then upgrade it
         newGameState = service.buildBuilding(newGameState, BuildingType.house);
         final upgradedHouse = newGameState.buildings[BuildingType.house]!;
@@ -91,14 +91,14 @@ void main() {
         // Should include basic buildings that don't require population
         expect(options, contains(BuildingType.house));
         expect(options, contains(BuildingType.farm));
-        
+
         // Should not include buildings that require more population
         expect(options, isNot(contains(BuildingType.mansion))); // requires 50 population
       });
 
       test('includes more options as population grows', () {
         var gameState = service.initializeGame();
-        
+
         // Artificially increase population
         gameState = gameState.copyWith(
           resources: {
@@ -106,7 +106,7 @@ void main() {
             ResourceType.population: 25,
           },
         );
-        
+
         final options = service.getAvailableBuildingOptions(gameState);
         expect(options, contains(BuildingType.powerPlant)); // requires 25 population
       });
@@ -115,11 +115,11 @@ void main() {
     group('Score Calculation', () {
       test('calculates score based on game state', () {
         var gameState = service.initializeGame();
-        
+
         // Build some buildings to increase score
         gameState = service.buildBuilding(gameState, BuildingType.house);
         gameState = service.buildBuilding(gameState, BuildingType.farm);
-        
+
         final score = service.calculateFinalScore(gameState);
         expect(score, greaterThan(0));
       });
@@ -127,7 +127,7 @@ void main() {
       test('gives victory bonus for winning', () {
         var gameState = service.initializeGame();
         gameState = gameState.copyWith(gameStatus: GameStatus.victory);
-        
+
         final score = service.calculateFinalScore(gameState);
         expect(score, greaterThanOrEqualTo(1000)); // Victory bonus
       });
@@ -136,14 +136,14 @@ void main() {
     group('Turn Processing', () {
       test('advances turn and processes resources', () {
         var gameState = service.initializeGame();
-        
+
         // Build a farm to generate food
         gameState = service.buildBuilding(gameState, BuildingType.farm);
         final initialFood = gameState.resources[ResourceType.food]!;
-        
+
         final turnResult = service.endTurn(gameState);
         final newGameState = turnResult.gameState;
-        
+
         expect(newGameState.currentTurn, gameState.currentTurn + 1);
         // Food should increase due to farm production minus consumption
         expect(newGameState.resources[ResourceType.food], isNot(equals(initialFood)));
@@ -151,21 +151,21 @@ void main() {
 
       test('may trigger random events', () {
         final gameState = service.initializeGame();
-        
+
         // Run multiple turns to potentially trigger an event
         var currentState = gameState;
         bool eventTriggered = false;
-        
+
         for (int i = 0; i < 10; i++) {
           final turnResult = service.endTurn(currentState);
           currentState = turnResult.gameState;
-          
+
           if (turnResult.triggeredEvent != null) {
             eventTriggered = true;
             break;
           }
         }
-        
+
         // Note: This test might occasionally fail due to randomness
         // but it's useful to verify the event system works
         expect(eventTriggered, isTrue);
@@ -181,14 +181,14 @@ void main() {
             ResourceType.population: 100,
           },
         );
-        
+
         final turnResult = service.endTurn(gameState);
         expect(turnResult.gameState.gameStatus, GameStatus.victory);
       });
 
       test('detects victory when building count reaches 10', () {
         var gameState = service.initializeGame();
-        
+
         // Artificially set high building count
         final buildings = <BuildingType, Building>{};
         for (int i = 0; i < 10; i++) {
@@ -206,9 +206,9 @@ void main() {
             unlockRequirements: {},
           );
         }
-        
+
         gameState = gameState.copyWith(buildings: buildings);
-        
+
         final turnResult = service.endTurn(gameState);
         expect(turnResult.gameState.gameStatus, GameStatus.victory);
       });
@@ -221,7 +221,7 @@ void main() {
             ResourceType.money: 500,
           },
         );
-        
+
         final turnResult = service.endTurn(gameState);
         expect(turnResult.gameState.gameStatus, GameStatus.victory);
       });
@@ -236,7 +236,7 @@ void main() {
             ResourceType.population: 0,
           },
         );
-        
+
         final turnResult = service.endTurn(gameState);
         expect(turnResult.gameState.gameStatus, GameStatus.defeat);
       });
@@ -245,7 +245,7 @@ void main() {
         var gameState = service.initializeGame();
         final pastTime = DateTime.now().subtract(const Duration(minutes: 11));
         gameState = gameState.copyWith(gameStartTime: pastTime);
-        
+
         final turnResult = service.endTurn(gameState);
         expect(turnResult.gameState.gameStatus, GameStatus.timeUp);
       });

@@ -100,10 +100,8 @@ class _CityBuilderGameScreenState extends State<CityBuilderGameScreen> {
     final finalScore = _gameService.calculateFinalScore(_gameState);
 
     // スコアを記録
-    final miniGameService =
-        Provider.of<MiniGameService>(context, listen: false);
-    miniGameService.recordScore(
-        'city_builder', finalScore, MiniGameDifficulty.hard);
+    final miniGameService = Provider.of<MiniGameService>(context, listen: false);
+    miniGameService.recordScore('city_builder', finalScore, MiniGameDifficulty.hard);
 
     _showGameCompleteDialog(finalScore);
   }
@@ -180,8 +178,7 @@ class _CityBuilderGameScreenState extends State<CityBuilderGameScreen> {
     );
   }
 
-  void _showTurnSummary(Map<ResourceType, int> oldResources,
-      Map<ResourceType, int> newResources) {
+  void _showTurnSummary(Map<ResourceType, int> oldResources, Map<ResourceType, int> newResources) {
     final changes = <String>[];
 
     for (final resourceType in ResourceType.values) {
@@ -294,8 +291,7 @@ class _CityBuilderGameScreenState extends State<CityBuilderGameScreen> {
             child: Center(
               child: Text(
                 _formatTime(_gameState.remainingTime),
-                style:
-                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ),
           ),
@@ -318,24 +314,18 @@ class _CityBuilderGameScreenState extends State<CityBuilderGameScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      _buildResourceDisplay(
-                          '👥', '人口', _gameState.totalPopulation),
-                      _buildResourceDisplay('🍞', '食料',
-                          _gameState.resources[ResourceType.food] ?? 0),
-                      _buildResourceDisplay('🧱', '材料',
-                          _gameState.resources[ResourceType.materials] ?? 0),
+                      _buildResourceDisplay('👥', '人口', _gameState.totalPopulation),
+                      _buildResourceDisplay('🍞', '食料', _gameState.resources[ResourceType.food] ?? 0),
+                      _buildResourceDisplay('🧱', '材料', _gameState.resources[ResourceType.materials] ?? 0),
                     ],
                   ),
                   const SizedBox(height: 8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      _buildResourceDisplay('⚡', 'エネルギー',
-                          _gameState.resources[ResourceType.energy] ?? 0),
-                      _buildResourceDisplay('💰', 'お金',
-                          _gameState.resources[ResourceType.money] ?? 0),
-                      _buildResourceDisplay(
-                          '🏢', '建物', _gameState.totalBuildings),
+                      _buildResourceDisplay('⚡', 'エネルギー', _gameState.resources[ResourceType.energy] ?? 0),
+                      _buildResourceDisplay('💰', 'お金', _gameState.resources[ResourceType.money] ?? 0),
+                      _buildResourceDisplay('🏢', '建物', _gameState.totalBuildings),
                     ],
                   ),
                 ],
@@ -383,19 +373,15 @@ class _CityBuilderGameScreenState extends State<CityBuilderGameScreen> {
                   const SizedBox(height: 8),
                   Expanded(
                     child: GridView.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
                         childAspectRatio: 1.2,
                         crossAxisSpacing: 8,
                         mainAxisSpacing: 8,
                       ),
-                      itemCount: _gameService
-                          .getAvailableBuildingOptions(_gameState)
-                          .length,
+                      itemCount: _gameService.getAvailableBuildingOptions(_gameState).length,
                       itemBuilder: (context, index) {
-                        final buildingType = _gameService
-                            .getAvailableBuildingOptions(_gameState)[index];
+                        final buildingType = _gameService.getAvailableBuildingOptions(_gameState)[index];
                         return _buildBuildingCard(buildingType);
                       },
                     ),
@@ -448,8 +434,7 @@ class _CityBuilderGameScreenState extends State<CityBuilderGameScreen> {
 
     final existingBuilding = _gameState.buildings[buildingType];
     final canBuild = _gameState.hasEnoughResources(template.buildCost) &&
-        (_gameState.totalBuildings < _gameState.citySize ||
-            existingBuilding != null);
+        (_gameState.totalBuildings < _gameState.citySize || existingBuilding != null);
     final isUpgrade = existingBuilding != null;
 
     return Card(
@@ -463,11 +448,8 @@ class _CityBuilderGameScreenState extends State<CityBuilderGameScreen> {
             children: [
               Text(template.emoji, style: const TextStyle(fontSize: 20)),
               Text(
-                isUpgrade
-                    ? '${template.name} Lv.${existingBuilding.level + 1}'
-                    : template.name,
-                style:
-                    const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+                isUpgrade ? '${template.name} Lv.${existingBuilding.level + 1}' : template.name,
+                style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 2),
@@ -476,8 +458,7 @@ class _CityBuilderGameScreenState extends State<CityBuilderGameScreen> {
                 alignment: WrapAlignment.center,
                 children: template.buildCost.entries.map((entry) {
                   final resourceEmoji = _getResourceEmoji(entry.key);
-                  final hasEnough =
-                      (_gameState.resources[entry.key] ?? 0) >= entry.value;
+                  final hasEnough = (_gameState.resources[entry.key] ?? 0) >= entry.value;
                   return Text(
                     '$resourceEmoji${entry.value}',
                     style: TextStyle(
@@ -514,8 +495,7 @@ class _CityBuilderGameScreenState extends State<CityBuilderGameScreen> {
                 ),
               if (isUpgrade)
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+                  padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
                   decoration: BoxDecoration(
                     color: Colors.blue[100],
                     borderRadius: BorderRadius.circular(4),

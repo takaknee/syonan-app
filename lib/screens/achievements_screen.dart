@@ -13,8 +13,7 @@ class AchievementsScreen extends StatefulWidget {
   State<AchievementsScreen> createState() => _AchievementsScreenState();
 }
 
-class _AchievementsScreenState extends State<AchievementsScreen>
-    with SingleTickerProviderStateMixin {
+class _AchievementsScreenState extends State<AchievementsScreen> with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override
@@ -217,12 +216,9 @@ class _AchievementsScreenState extends State<AchievementsScreen>
                 const SizedBox(height: 8),
                 // ポイントコストとボタン
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: canAfford
-                        ? theme.colorScheme.primaryContainer
-                        : theme.colorScheme.errorContainer,
+                    color: canAfford ? theme.colorScheme.primaryContainer : theme.colorScheme.errorContainer,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Row(
@@ -231,17 +227,13 @@ class _AchievementsScreenState extends State<AchievementsScreen>
                       Icon(
                         Icons.stars,
                         size: 16,
-                        color: canAfford
-                            ? theme.colorScheme.onPrimaryContainer
-                            : theme.colorScheme.onErrorContainer,
+                        color: canAfford ? theme.colorScheme.onPrimaryContainer : theme.colorScheme.onErrorContainer,
                       ),
                       const SizedBox(width: 4),
                       Text(
                         '${achievement.pointsCost}P',
                         style: theme.textTheme.bodySmall?.copyWith(
-                          color: canAfford
-                              ? theme.colorScheme.onPrimaryContainer
-                              : theme.colorScheme.onErrorContainer,
+                          color: canAfford ? theme.colorScheme.onPrimaryContainer : theme.colorScheme.onErrorContainer,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -252,8 +244,7 @@ class _AchievementsScreenState extends State<AchievementsScreen>
                 const SizedBox(height: 8),
                 // 取得済みマーク
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
                     color: theme.colorScheme.primary,
                     borderRadius: BorderRadius.circular(8),

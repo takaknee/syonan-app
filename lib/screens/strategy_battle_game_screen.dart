@@ -12,8 +12,7 @@ class StrategyBattleGameScreen extends StatefulWidget {
   const StrategyBattleGameScreen({super.key});
 
   @override
-  State<StrategyBattleGameScreen> createState() =>
-      _StrategyBattleGameScreenState();
+  State<StrategyBattleGameScreen> createState() => _StrategyBattleGameScreenState();
 }
 
 class _StrategyBattleGameScreenState extends State<StrategyBattleGameScreen> {
@@ -96,8 +95,7 @@ class _StrategyBattleGameScreenState extends State<StrategyBattleGameScreen> {
             ),
           ],
         ),
-        if (_controller.showTutorial)
-          TutorialOverlay(onClose: _controller.closeTutorial),
+        if (_controller.showTutorial) TutorialOverlay(onClose: _controller.closeTutorial),
       ],
     );
   }

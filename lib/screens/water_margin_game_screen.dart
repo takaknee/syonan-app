@@ -9,6 +9,7 @@ import '../controllers/water_margin_game_controller.dart';
 import '../models/water_margin_strategy_game.dart';
 import 'widgets/event_notification.dart';
 import 'widgets/game_info_panel.dart';
+import 'widgets/hero_detail_panel.dart';
 import 'widgets/hero_list_panel.dart';
 import 'widgets/province_detail_panel.dart';
 import 'widgets/water_margin_map.dart';
@@ -41,8 +42,7 @@ class _WaterMarginGameView extends StatelessWidget {
             builder: (context, controller, child) {
               return Row(
                 children: [
-                  Icon(Icons.monetization_on,
-                      color: Theme.of(context).colorScheme.onPrimary),
+                  Icon(Icons.monetization_on, color: Theme.of(context).colorScheme.onPrimary),
                   const SizedBox(width: 4),
                   Text(
                     '${controller.gameState.playerGold}両',
@@ -52,8 +52,7 @@ class _WaterMarginGameView extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 16),
-                  Icon(Icons.access_time,
-                      color: Theme.of(context).colorScheme.onPrimary),
+                  Icon(Icons.access_time, color: Theme.of(context).colorScheme.onPrimary),
                   const SizedBox(width: 4),
                   Text(
                     '${controller.gameState.currentTurn}年',
@@ -129,25 +128,27 @@ class _GamePlayView extends StatelessWidget {
               ),
             ),
           ),
-          child: Column(
-            children: [
-              // 英雄リスト
-              const Expanded(
-                flex: 2,
-                child: HeroListPanel(),
-              ),
-              const Divider(height: 1),
-              // イベントログ
-              Expanded(
-                child: Consumer<WaterMarginGameController>(
-                  builder: (context, controller, child) {
-                    return EventLogPanel(
+          child: Consumer<WaterMarginGameController>(
+            builder: (context, controller, child) {
+              final selectedHero = controller.gameState.selectedHero;
+
+              return Column(
+                children: [
+                  // 英雄リスト vs 英雄詳細
+                  Expanded(
+                    flex: 2,
+                    child: selectedHero != null ? HeroDetailPanel(hero: selectedHero) : const HeroListPanel(),
+                  ),
+                  const Divider(height: 1),
+                  // イベントログ
+                  Expanded(
+                    child: EventLogPanel(
                       recentEvents: controller.eventLog,
-                    );
-                  },
-                ),
-              ),
-            ],
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
         ),
       ],
@@ -199,9 +200,7 @@ class _VictoryScreen extends StatelessWidget {
                 children: [
                   ElevatedButton.icon(
                     onPressed: () {
-                      context
-                          .read<WaterMarginGameController>()
-                          .initializeGame();
+                      context.read<WaterMarginGameController>().initializeGame();
                     },
                     icon: const Icon(Icons.replay),
                     label: const Text('もう一度プレイ'),
@@ -267,9 +266,7 @@ class _DefeatScreen extends StatelessWidget {
                 children: [
                   ElevatedButton.icon(
                     onPressed: () {
-                      context
-                          .read<WaterMarginGameController>()
-                          .initializeGame();
+                      context.read<WaterMarginGameController>().initializeGame();
                     },
                     icon: const Icon(Icons.replay),
                     label: const Text('再挑戦'),

@@ -28,8 +28,7 @@ void main() {
         expect(problem.operation, MathOperationType.multiplication);
         expect(problem.firstNumber, inInclusiveRange(1, 5));
         expect(problem.secondNumber, inInclusiveRange(1, 5));
-        expect(
-            problem.correctAnswer, problem.firstNumber * problem.secondNumber);
+        expect(problem.correctAnswer, problem.firstNumber * problem.secondNumber);
         expect(problem.difficultyLevel, 1);
       });
 
@@ -42,8 +41,7 @@ void main() {
 
         // Assert
         expect(problem.operation, MathOperationType.division);
-        expect(
-            problem.correctAnswer, problem.firstNumber ~/ problem.secondNumber);
+        expect(problem.correctAnswer, problem.firstNumber ~/ problem.secondNumber);
         expect(problem.difficultyLevel, 1);
       });
 
@@ -56,8 +54,7 @@ void main() {
 
         // Assert
         expect(problem.operation, MathOperationType.addition);
-        expect(
-            problem.correctAnswer, problem.firstNumber + problem.secondNumber);
+        expect(problem.correctAnswer, problem.firstNumber + problem.secondNumber);
         expect(problem.difficultyLevel, 1);
       });
 
@@ -70,8 +67,7 @@ void main() {
 
         // Assert
         expect(problem.operation, MathOperationType.subtraction);
-        expect(
-            problem.correctAnswer, problem.firstNumber - problem.secondNumber);
+        expect(problem.correctAnswer, problem.firstNumber - problem.secondNumber);
         expect(problem.correctAnswer, greaterThanOrEqualTo(0));
         expect(problem.difficultyLevel, 1);
       });
@@ -90,10 +86,7 @@ void main() {
         expect(problems, hasLength(5));
 
         // Check uniqueness
-        final problemKeys = problems
-            .map((p) =>
-                '${p.firstNumber}_${p.secondNumber}_${p.operation.value}')
-            .toSet();
+        final problemKeys = problems.map((p) => '${p.firstNumber}_${p.secondNumber}_${p.operation.value}').toSet();
         expect(problemKeys, hasLength(5));
       });
 
@@ -182,8 +175,7 @@ void main() {
         final settings = dataSource.getProblemSettings();
 
         // Assert
-        expect(
-            settings['defaultProblemCount'], AppConstants.defaultProblemCount);
+        expect(settings['defaultProblemCount'], AppConstants.defaultProblemCount);
         expect(settings['maxProblemCount'], AppConstants.maxProblemCount);
         expect(settings['minDifficultyLevel'], AppConstants.minDifficultyLevel);
         expect(settings['maxDifficultyLevel'], AppConstants.maxDifficultyLevel);
@@ -197,8 +189,7 @@ void main() {
 
         // Assert
         expect(statistics, containsPair('totalProblemsGenerated', isA<int>()));
-        expect(statistics,
-            containsPair('problemsByOperation', isA<Map<String, int>>()));
+        expect(statistics, containsPair('problemsByOperation', isA<Map<String, int>>()));
       });
     });
   });

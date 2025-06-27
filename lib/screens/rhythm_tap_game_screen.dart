@@ -15,8 +15,7 @@ class RhythmTapGameScreen extends StatefulWidget {
   State<RhythmTapGameScreen> createState() => _RhythmTapGameScreenState();
 }
 
-class _RhythmTapGameScreenState extends State<RhythmTapGameScreen>
-    with TickerProviderStateMixin {
+class _RhythmTapGameScreenState extends State<RhythmTapGameScreen> with TickerProviderStateMixin {
   late AnimationController _beatController;
   late AnimationController _successController;
   late AnimationController _rippleController;
@@ -110,8 +109,7 @@ class _RhythmTapGameScreenState extends State<RhythmTapGameScreen>
   }
 
   void _startBeats() {
-    _beatTimer =
-        Timer.periodic(Duration(milliseconds: _beatInterval.round()), (timer) {
+    _beatTimer = Timer.periodic(Duration(milliseconds: _beatInterval.round()), (timer) {
       if (!_isPlaying) return;
 
       setState(() {
@@ -265,25 +263,19 @@ class _RhythmTapGameScreenState extends State<RhythmTapGameScreen>
                     children: [
                       Column(
                         children: [
-                          const Text('Perfect',
-                              style:
-                                  TextStyle(color: Colors.green, fontSize: 12)),
+                          const Text('Perfect', style: TextStyle(color: Colors.green, fontSize: 12)),
                           Text('$_perfect'),
                         ],
                       ),
                       Column(
                         children: [
-                          const Text('Good',
-                              style: TextStyle(
-                                  color: Colors.orange, fontSize: 12)),
+                          const Text('Good', style: TextStyle(color: Colors.orange, fontSize: 12)),
                           Text('$_good'),
                         ],
                       ),
                       Column(
                         children: [
-                          const Text('Miss',
-                              style:
-                                  TextStyle(color: Colors.red, fontSize: 12)),
+                          const Text('Miss', style: TextStyle(color: Colors.red, fontSize: 12)),
                           Text('$_miss'),
                         ],
                       ),
@@ -373,8 +365,7 @@ class _RhythmTapGameScreenState extends State<RhythmTapGameScreen>
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
-                  border:
-                      Border.all(color: Colors.white.withValues(alpha: 0.3)),
+                  border: Border.all(color: Colors.white.withValues(alpha: 0.3)),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -523,8 +514,7 @@ class _RhythmTapGameScreenState extends State<RhythmTapGameScreen>
                               return Container(
                                 decoration: BoxDecoration(
                                   color: _beatActive
-                                      ? _currentColor.withValues(
-                                          alpha: 0.6 * _beatController.value)
+                                      ? _currentColor.withValues(alpha: 0.6 * _beatController.value)
                                       : Colors.transparent,
                                   borderRadius: BorderRadius.circular(20),
                                 ),
@@ -592,8 +582,7 @@ class _RhythmTapGameScreenState extends State<RhythmTapGameScreen>
                                         shape: BoxShape.circle,
                                         border: Border.all(
                                           color: _currentColor.withValues(
-                                            alpha:
-                                                1.0 - _rippleController.value,
+                                            alpha: 1.0 - _rippleController.value,
                                           ),
                                           width: 3,
                                         ),

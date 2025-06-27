@@ -129,8 +129,7 @@ class StrategyGameService {
   }
 
   /// ユニークな領土名を取得（重複を避ける）
-  String _getUniqueTerritoryName(
-      int index, List<Territory> existingTerritories) {
+  String _getUniqueTerritoryName(int index, List<Territory> existingTerritories) {
     final names = List<String>.from(WaterMarginTerritories.names);
     final usedNames = existingTerritories.map((t) => t.name).toSet();
 
@@ -163,15 +162,12 @@ class StrategyGameService {
       return gameState;
     }
 
-    final battleResult =
-        _resolveBattle(attacker.troops - 1, defender.troops, defender);
+    final battleResult = _resolveBattle(attacker.troops - 1, defender.troops, defender);
 
     final updatedTerritories = gameState.territories.map((territory) {
       if (territory.id == attackerTerritoryId) {
         return territory.copyWith(
-          troops: territory.troops -
-              battleResult.attackerLosses -
-              (territory.troops - 1),
+          troops: territory.troops - battleResult.attackerLosses - (territory.troops - 1),
         );
       } else if (territory.id == defenderTerritoryId) {
         if (battleResult.territoryConquered) {
@@ -261,13 +257,10 @@ class StrategyGameService {
   }
 
   /// 戦闘を解決（地形ボーナスと戦術要素を含む）
-  BattleResult _resolveBattle(
-      int attackerTroops, int defenderTroops, Territory defenderTerritory) {
+  BattleResult _resolveBattle(int attackerTroops, int defenderTroops, Territory defenderTerritory) {
     // 基本戦力計算
-    final attackerBasePower =
-        attackerTroops * (0.8 + _random.nextDouble() * 0.4);
-    final defenderBasePower =
-        defenderTroops * (0.9 + _random.nextDouble() * 0.4);
+    final attackerBasePower = attackerTroops * (0.8 + _random.nextDouble() * 0.4);
+    final defenderBasePower = defenderTroops * (0.9 + _random.nextDouble() * 0.4);
 
     // 防御側の地形ボーナスを適用
     final defenseBonus = defenderTerritory.defenseBonus;
@@ -286,15 +279,11 @@ class StrategyGameService {
     if (attackerWins) {
       // 攻撃側勝利時の損失
       defenderLosses = defenderTroops; // 全滅
-      attackerLosses = (attackerTroops * 0.3 * _random.nextDouble())
-          .round()
-          .clamp(1, attackerTroops - 1);
+      attackerLosses = (attackerTroops * 0.3 * _random.nextDouble()).round().clamp(1, attackerTroops - 1);
     } else {
       // 防御側勝利時の損失
       attackerLosses = (attackerTroops * 0.6).round().clamp(1, attackerTroops);
-      defenderLosses = (defenderTroops * 0.2 * _random.nextDouble())
-          .round()
-          .clamp(0, defenderTroops - 1);
+      defenderLosses = (defenderTroops * 0.2 * _random.nextDouble()).round().clamp(0, defenderTroops - 1);
     }
 
     return BattleResult(
@@ -336,8 +325,7 @@ class StrategyGameService {
     }
 
     // 敗北条件：プレイヤーの領土がすべて失われた、またはターン数上限
-    final playerTerritories =
-        gameState.territories.where((t) => t.owner == Owner.player).toList();
+    final playerTerritories = gameState.territories.where((t) => t.owner == Owner.player).toList();
 
     if (playerTerritories.isEmpty || gameState.currentTurn >= maxTurns) {
       return gameState.copyWith(gameStatus: GameStatus.defeat);
@@ -352,9 +340,7 @@ class StrategyGameService {
     String territoryId,
   ) {
     final territory = gameState.getTerritoryById(territoryId);
-    if (territory == null ||
-        territory.owner != Owner.player ||
-        territory.troops <= 1) {
+    if (territory == null || territory.owner != Owner.player || territory.troops <= 1) {
       return [];
     }
 

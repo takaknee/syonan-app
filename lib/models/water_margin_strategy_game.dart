@@ -238,22 +238,6 @@ class Province {
     );
   }
 
-  /// 勢力の色
-  Color get factionColor {
-    switch (controller) {
-      case Faction.liangshan:
-        return Colors.blue; // 梁山泊 - 青
-      case Faction.imperial:
-        return Colors.red; // 朝廷 - 赤
-      case Faction.warlord:
-        return Colors.purple; // 豪族 - 紫
-      case Faction.bandit:
-        return Colors.orange; // 盗賊 - オレンジ
-      case Faction.neutral:
-        return Colors.grey; // 中立 - 灰色
-    }
-  }
-
   /// 州のアイコン
   String get provinceIcon {
     if (capital) return '👑';
@@ -365,4 +349,47 @@ enum GameStatus {
   victory, // 勝利
   defeat, // 敗北
   paused, // 一時停止
+}
+
+/// Faction拡張
+extension FactionExtension on Faction {
+  /// 勢力の色
+  Color get factionColor {
+    switch (this) {
+      case Faction.liangshan:
+        return Colors.green;
+      case Faction.imperial:
+        return Colors.purple;
+      case Faction.warlord:
+        return Colors.red;
+      case Faction.bandit:
+        return Colors.orange;
+      case Faction.neutral:
+        return Colors.grey;
+    }
+  }
+
+  /// 勢力の表示名
+  String get displayName {
+    switch (this) {
+      case Faction.liangshan:
+        return '梁山泊';
+      case Faction.imperial:
+        return '宋朝廷';
+      case Faction.warlord:
+        return '豪族';
+      case Faction.bandit:
+        return '盗賊';
+      case Faction.neutral:
+        return '中立';
+    }
+  }
+}
+
+/// Province拡張
+extension ProvinceExtension on Province {
+  /// 支配勢力の色
+  Color get factionColor {
+    return controller.factionColor;
+  }
 }

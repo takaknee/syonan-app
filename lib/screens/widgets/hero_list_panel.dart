@@ -17,8 +17,7 @@ class HeroListPanel extends StatefulWidget {
   State<HeroListPanel> createState() => _HeroListPanelState();
 }
 
-class _HeroListPanelState extends State<HeroListPanel>
-    with SingleTickerProviderStateMixin {
+class _HeroListPanelState extends State<HeroListPanel> with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override
@@ -83,9 +82,7 @@ class _RecruitedHeroesTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<WaterMarginGameController>(
       builder: (context, controller, child) {
-        final recruitedHeroes = controller.gameState.heroes
-            .where((hero) => hero.isRecruited)
-            .toList();
+        final recruitedHeroes = controller.gameState.heroes.where((hero) => hero.isRecruited).toList();
 
         if (recruitedHeroes.isEmpty) {
           return const Center(
@@ -239,11 +236,10 @@ class _HeroCard extends StatelessWidget {
                       children: [
                         Text(
                           hero.nickname,
-                          style:
-                              Theme.of(context).textTheme.titleSmall?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    color: _getSkillColor(hero.skill),
-                                  ),
+                          style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: _getSkillColor(hero.skill),
+                              ),
                         ),
                         Text(
                           hero.name,
@@ -255,8 +251,7 @@ class _HeroCard extends StatelessWidget {
 
                   // 勢力表示
                   Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                     decoration: BoxDecoration(
                       color: _getFactionColor(hero.faction),
                       borderRadius: BorderRadius.circular(10),
@@ -470,9 +465,7 @@ class _RecruitButton extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton.icon(
-        onPressed: canAfford
-            ? () => _showRecruitmentDialog(context, hero, cost, controller)
-            : null,
+        onPressed: canAfford ? () => _showRecruitmentDialog(context, hero, cost, controller) : null,
         icon: const Icon(Icons.person_add, size: 16),
         label: Text('登用 ($cost両)'),
         style: ElevatedButton.styleFrom(
@@ -485,10 +478,7 @@ class _RecruitButton extends StatelessWidget {
   }
 
   int _calculateRecruitmentCost(game.Hero hero) {
-    final totalStats = hero.stats.force +
-        hero.stats.intelligence +
-        hero.stats.charisma +
-        hero.stats.leadership;
+    final totalStats = hero.stats.force + hero.stats.intelligence + hero.stats.charisma + hero.stats.leadership;
     return (totalStats * 3).round();
   }
 
@@ -533,8 +523,7 @@ class _RecruitButton extends StatelessWidget {
               final success = controller.recruitHero(hero.id);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(
-                      success ? '${hero.nickname}が仲間になりました！' : '登用に失敗しました'),
+                  content: Text(success ? '${hero.nickname}が仲間になりました！' : '登用に失敗しました'),
                   backgroundColor: success ? Colors.green : Colors.red,
                 ),
               );

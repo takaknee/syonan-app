@@ -9,16 +9,13 @@ import 'package:syonan_app/services/score_service.dart';
 
 void main() {
   group('Expert Mode Integration Tests', () {
-    testWidgets(
-        'PracticeScreen should show expert mode indicator when difficulty level is 5',
-        (tester) async {
+    testWidgets('PracticeScreen should show expert mode indicator when difficulty level is 5', (tester) async {
       await tester.pumpWidget(
         MultiProvider(
           providers: [
             Provider<MathService>(create: (_) => MathService()),
             ChangeNotifierProvider<ScoreService>(create: (_) => ScoreService()),
-            ChangeNotifierProvider<PointsService>(
-                create: (_) => PointsService()),
+            ChangeNotifierProvider<PointsService>(create: (_) => PointsService()),
           ],
           child: const MaterialApp(
             home: PracticeScreen(
@@ -41,16 +38,13 @@ void main() {
       expect(find.textContaining('レベル5'), findsOneWidget);
     });
 
-    testWidgets(
-        'PracticeScreen should not show expert mode indicator for normal difficu lty',
-        (tester) async {
+    testWidgets('PracticeScreen should not show expert mode indicator for normal difficu lty', (tester) async {
       await tester.pumpWidget(
         MultiProvider(
           providers: [
             Provider<MathService>(create: (_) => MathService()),
             ChangeNotifierProvider<ScoreService>(create: (_) => ScoreService()),
-            ChangeNotifierProvider<PointsService>(
-                create: (_) => PointsService()),
+            ChangeNotifierProvider<PointsService>(create: (_) => PointsService()),
           ],
           child: const MaterialApp(
             home: PracticeScreen(
@@ -72,16 +66,13 @@ void main() {
       expect(find.textContaining('レベル'), findsNothing);
     });
 
-    testWidgets(
-        'PracticeScreen should show level indicator for medium difficulty',
-        (tester) async {
+    testWidgets('PracticeScreen should show level indicator for medium difficulty', (tester) async {
       await tester.pumpWidget(
         MultiProvider(
           providers: [
             Provider<MathService>(create: (_) => MathService()),
             ChangeNotifierProvider<ScoreService>(create: (_) => ScoreService()),
-            ChangeNotifierProvider<PointsService>(
-                create: (_) => PointsService()),
+            ChangeNotifierProvider<PointsService>(create: (_) => PointsService()),
           ],
           child: const MaterialApp(
             home: PracticeScreen(

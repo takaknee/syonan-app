@@ -102,7 +102,7 @@ void main() {
 
         // Should navigate to AI Tutor screen - look for the AppBar title
         expect(find.text('🤖 AI先生'), findsOneWidget);
-        
+
         // Go back to home screen
         await tester.tap(find.byType(BackButton));
         await tester.pumpAndSettle();

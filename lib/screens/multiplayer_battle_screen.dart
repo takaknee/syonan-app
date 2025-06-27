@@ -15,12 +15,10 @@ class MultiplayerBattleScreen extends StatefulWidget {
   const MultiplayerBattleScreen({super.key});
 
   @override
-  State<MultiplayerBattleScreen> createState() =>
-      _MultiplayerBattleScreenState();
+  State<MultiplayerBattleScreen> createState() => _MultiplayerBattleScreenState();
 }
 
-class _MultiplayerBattleScreenState extends State<MultiplayerBattleScreen>
-    with TickerProviderStateMixin {
+class _MultiplayerBattleScreenState extends State<MultiplayerBattleScreen> with TickerProviderStateMixin {
   static const int _roundCount = 5;
   static const int _timePerRound = 10; // seconds
 
@@ -194,9 +192,7 @@ class _MultiplayerBattleScreenState extends State<MultiplayerBattleScreen>
         title: const Text('⚔️ みんなでバトル'),
         backgroundColor: theme.colorScheme.errorContainer,
       ),
-      body: !_isGameFinished
-          ? _buildGameScreen(theme)
-          : _buildResultScreen(theme),
+      body: !_isGameFinished ? _buildGameScreen(theme) : _buildResultScreen(theme),
     );
   }
 
@@ -255,8 +251,7 @@ class _MultiplayerBattleScreenState extends State<MultiplayerBattleScreen>
                     ),
                     const SizedBox(height: 4),
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                       decoration: BoxDecoration(
                         color: theme.colorScheme.primary,
                         borderRadius: BorderRadius.circular(20),
@@ -288,8 +283,7 @@ class _MultiplayerBattleScreenState extends State<MultiplayerBattleScreen>
                       builder: (context, child) {
                         return Transform.scale(
                           scale: 1.0 + (_battleController.value * 0.3),
-                          child:
-                              const Text('💥', style: TextStyle(fontSize: 24)),
+                          child: const Text('💥', style: TextStyle(fontSize: 24)),
                         );
                       },
                     ),
@@ -299,8 +293,7 @@ class _MultiplayerBattleScreenState extends State<MultiplayerBattleScreen>
               Expanded(
                 child: Column(
                   children: [
-                    Text(_aiOpponentEmoji,
-                        style: const TextStyle(fontSize: 32)),
+                    Text(_aiOpponentEmoji, style: const TextStyle(fontSize: 32)),
                     const SizedBox(height: 8),
                     Text(
                       _aiOpponentName,
@@ -310,8 +303,7 @@ class _MultiplayerBattleScreenState extends State<MultiplayerBattleScreen>
                     ),
                     const SizedBox(height: 4),
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 8),
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                       decoration: BoxDecoration(
                         color: theme.colorScheme.error,
                         borderRadius: BorderRadius.circular(20),
@@ -379,9 +371,7 @@ class _MultiplayerBattleScreenState extends State<MultiplayerBattleScreen>
             value: _timeRemaining / _timePerRound,
             backgroundColor: theme.colorScheme.surfaceContainerHighest,
             valueColor: AlwaysStoppedAnimation<Color>(
-              _timeRemaining > 3
-                  ? theme.colorScheme.primary
-                  : theme.colorScheme.error,
+              _timeRemaining > 3 ? theme.colorScheme.primary : theme.colorScheme.error,
             ),
             minHeight: 8,
           ),
@@ -391,9 +381,7 @@ class _MultiplayerBattleScreenState extends State<MultiplayerBattleScreen>
           '$_timeRemaining秒',
           style: theme.textTheme.headlineMedium?.copyWith(
             fontWeight: FontWeight.bold,
-            color: _timeRemaining > 3
-                ? theme.colorScheme.primary
-                : theme.colorScheme.error,
+            color: _timeRemaining > 3 ? theme.colorScheme.primary : theme.colorScheme.error,
           ),
         ),
       ],
@@ -505,11 +493,9 @@ class _MultiplayerBattleScreenState extends State<MultiplayerBattleScreen>
                       ),
                       Column(
                         children: [
-                          Text(_aiOpponentEmoji,
-                              style: const TextStyle(fontSize: 32)),
+                          Text(_aiOpponentEmoji, style: const TextStyle(fontSize: 32)),
                           const SizedBox(height: 8),
-                          Text(_aiOpponentName,
-                              style: theme.textTheme.titleMedium),
+                          Text(_aiOpponentName, style: theme.textTheme.titleMedium),
                           Text(
                             '$_aiScore',
                             style: theme.textTheme.displaySmall?.copyWith(

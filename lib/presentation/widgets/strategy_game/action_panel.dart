@@ -97,8 +97,7 @@ class _PlayerTerritoryActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final canRecruit = gameState.playerGold >= StrategyGameService.troopCost &&
-        territory.troops < territory.maxTroops;
+    final canRecruit = gameState.playerGold >= StrategyGameService.troopCost && territory.troops < territory.maxTroops;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -116,8 +115,7 @@ class _PlayerTerritoryActions extends StatelessWidget {
   }
 
   List<Widget> _buildAttackButtons() {
-    final attackableTargets =
-        gameService.getAttackableTargets(gameState, territory.id);
+    final attackableTargets = gameService.getAttackableTargets(gameState, territory.id);
 
     if (attackableTargets.isEmpty || territory.troops <= 1) {
       return [
@@ -267,8 +265,7 @@ class _AttackButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final attackPower = territory.troops - 1; // 1部隊は残す
-    final defenseTotal =
-        target.troops + target.defenseBonus + (target.isCapital ? 5 : 0);
+    final defenseTotal = target.troops + target.defenseBonus + (target.isCapital ? 5 : 0);
     final winChance = attackPower > defenseTotal
         ? '勝率: 高'
         : attackPower == defenseTotal

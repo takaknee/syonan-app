@@ -18,8 +18,7 @@ class PointsService extends ChangeNotifier {
   bool _isLoading = false;
 
   int get totalPoints => _totalPoints;
-  List<UserAchievement> get userAchievements =>
-      List.unmodifiable(_userAchievements);
+  List<UserAchievement> get userAchievements => List.unmodifiable(_userAchievements);
   bool get isLoading => _isLoading;
 
   /// サービス初期化
@@ -111,8 +110,7 @@ class PointsService extends ChangeNotifier {
   /// ユーザーの実績をAchievementオブジェクトのリストで取得
   List<Achievement> getUserAchievementDetails() {
     return _userAchievements
-        .map((userAchievement) =>
-            AvailableAchievements.findById(userAchievement.achievementId))
+        .map((userAchievement) => AvailableAchievements.findById(userAchievement.achievementId))
         .where((achievement) => achievement != null)
         .cast<Achievement>()
         .toList();
@@ -120,17 +118,12 @@ class PointsService extends ChangeNotifier {
 
   /// 購入可能な実績を取得（まだ持っていない実績）
   List<Achievement> getAvailableAchievements() {
-    return AvailableAchievements.all
-        .where((achievement) => !hasAchievement(achievement.id))
-        .toList();
+    return AvailableAchievements.all.where((achievement) => !hasAchievement(achievement.id)).toList();
   }
 
   /// 特定のカテゴリーの購入可能な実績を取得
-  List<Achievement> getAvailableAchievementsByCategory(
-      AchievementCategory category) {
-    return getAvailableAchievements()
-        .where((achievement) => achievement.category == category)
-        .toList();
+  List<Achievement> getAvailableAchievementsByCategory(AchievementCategory category) {
+    return getAvailableAchievements().where((achievement) => achievement.category == category).toList();
   }
 
   /// スコア記録からポイントを計算
@@ -138,8 +131,7 @@ class PointsService extends ChangeNotifier {
     int basePoints = 10; // 基本ポイント
 
     // 正答率に基づくボーナス
-    final accuracyBonus =
-        (score.accuracyPercentage / 10).floor(); // 10%ごとに1ポイント
+    final accuracyBonus = (score.accuracyPercentage / 10).floor(); // 10%ごとに1ポイント
 
     // レベルに基づくボーナス
     int levelBonus = 0;
@@ -198,13 +190,7 @@ class PointsService extends ChangeNotifier {
       volumeBonus = 5;
     }
 
-    return basePoints +
-        accuracyBonus +
-        levelBonus +
-        perfectBonus +
-        operationBonus +
-        timeBonus +
-        volumeBonus;
+    return basePoints + accuracyBonus + levelBonus + perfectBonus + operationBonus + timeBonus + volumeBonus;
   }
 
   /// ポイントをローカルストレージから読み込み

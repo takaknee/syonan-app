@@ -122,9 +122,7 @@ class AdvancedAISystem {
     final possibleActions = _generatePossibleActions(gameState, faction, ai);
 
     // 3. 各行動を評価
-    final evaluatedActions = possibleActions
-        .map((action) => _evaluateAction(action, situation, ai))
-        .toList()
+    final evaluatedActions = possibleActions.map((action) => _evaluateAction(action, situation, ai)).toList()
       ..sort((a, b) => b.priority.compareTo(a.priority));
 
     // 4. 最適行動を選択
@@ -147,19 +145,14 @@ class AdvancedAISystem {
     WaterMarginGameState gameState,
     Faction faction,
   ) {
-    final ownProvinces =
-        gameState.provinces.where((p) => p.controller == faction).toList();
+    final ownProvinces = gameState.provinces.where((p) => p.controller == faction).toList();
 
-    final enemyProvinces = gameState.provinces
-        .where((p) => p.controller == Faction.liangshan)
-        .toList();
+    final enemyProvinces = gameState.provinces.where((p) => p.controller == Faction.liangshan).toList();
 
     final totalTroops = ownProvinces.fold(0, (sum, p) => sum + p.currentTroops);
 
-    final averageLoyalty = ownProvinces.isNotEmpty
-        ? ownProvinces.fold(0, (sum, p) => sum + p.state.loyalty) /
-            ownProvinces.length
-        : 0.0;
+    final averageLoyalty =
+        ownProvinces.isNotEmpty ? ownProvinces.fold(0, (sum, p) => sum + p.state.loyalty) / ownProvinces.length : 0.0;
 
     final threatLevel = _calculateThreatLevel(gameState, faction);
     final economicStrength = _calculateEconomicStrength(ownProvinces);
@@ -179,10 +172,8 @@ class AdvancedAISystem {
   }
 
   /// 脅威レベル計算
-  static double _calculateThreatLevel(
-      WaterMarginGameState gameState, Faction faction) {
-    final ownProvinces =
-        gameState.provinces.where((p) => p.controller == faction).toList();
+  static double _calculateThreatLevel(WaterMarginGameState gameState, Faction faction) {
+    final ownProvinces = gameState.provinces.where((p) => p.controller == faction).toList();
 
     double threatLevel = 0.0;
 
@@ -190,8 +181,7 @@ class AdvancedAISystem {
       for (final adjacentId in province.adjacentProvinceIds) {
         final adjacent = gameState.getProvinceById(adjacentId);
         if (adjacent != null && adjacent.controller == Faction.liangshan) {
-          double provinceThreat =
-              adjacent.currentTroops / (province.currentTroops + 1);
+          double provinceThreat = adjacent.currentTroops / (province.currentTroops + 1);
           threatLevel += provinceThreat;
         }
       }
@@ -205,9 +195,7 @@ class AdvancedAISystem {
     if (provinces.isEmpty) return 0.0;
 
     final totalIncome = provinces.fold(0, (sum, p) => sum + p.state.taxIncome);
-    final averageCommerce =
-        provinces.fold(0, (sum, p) => sum + p.state.commerce) /
-            provinces.length;
+    final averageCommerce = provinces.fold(0, (sum, p) => sum + p.state.commerce) / provinces.length;
 
     return ((totalIncome / 100) + (averageCommerce / 100)).clamp(0.0, 1.0);
   }
@@ -217,9 +205,7 @@ class AdvancedAISystem {
     if (provinces.isEmpty) return 0.0;
 
     final totalTroops = provinces.fold(0, (sum, p) => sum + p.currentTroops);
-    final averageMilitary =
-        provinces.fold(0, (sum, p) => sum + p.state.military) /
-            provinces.length;
+    final averageMilitary = provinces.fold(0, (sum, p) => sum + p.state.military) / provinces.length;
 
     return ((totalTroops / 10000) + (averageMilitary / 100)).clamp(0.0, 1.0);
   }
@@ -231,16 +217,13 @@ class AdvancedAISystem {
     FactionAI ai,
   ) {
     final actions = <AIAction>[];
-    final ownProvinces =
-        gameState.provinces.where((p) => p.controller == faction).toList();
+    final ownProvinces = gameState.provinces.where((p) => p.controller == faction).toList();
 
     for (final province in ownProvinces) {
       // 攻撃行動
       for (final adjacentId in province.adjacentProvinceIds) {
         final target = gameState.getProvinceById(adjacentId);
-        if (target != null &&
-            target.controller != faction &&
-            province.currentTroops > 1000) {
+        if (target != null && target.controller != faction && province.currentTroops > 1000) {
           actions.add(AIAction(
             type: AIActionType.attack,
             priority: 0, // 後で評価
@@ -386,8 +369,7 @@ class AdvancedAISystem {
 
     // 脅威下では経済開発を後回し
     if (situation.isUnderPressure &&
-        (action.developmentType == DevelopmentType.agriculture ||
-            action.developmentType == DevelopmentType.commerce)) {
+        (action.developmentType == DevelopmentType.agriculture || action.developmentType == DevelopmentType.commerce)) {
       basePriority = (basePriority * 0.7).round();
     }
 

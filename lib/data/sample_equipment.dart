@@ -200,9 +200,7 @@ class SampleEquipment {
 
   /// レアリティ別装備取得
   static List<Equipment> getEquipmentByRarity(EquipmentRarity rarity) {
-    return allEquipment
-        .where((equipment) => equipment.rarity == rarity)
-        .toList();
+    return allEquipment.where((equipment) => equipment.rarity == rarity).toList();
   }
 
   /// タイプ別装備取得

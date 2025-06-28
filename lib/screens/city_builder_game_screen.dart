@@ -7,6 +7,7 @@ import '../models/city_building_game.dart';
 import '../models/mini_game.dart';
 import '../services/city_building_game_service.dart';
 import '../services/mini_game_service.dart';
+import '../utils/responsive_utils.dart';
 
 /// 街づくりゲーム画面
 class CityBuilderGameScreen extends StatefulWidget {
@@ -298,13 +299,13 @@ class _CityBuilderGameScreenState extends State<CityBuilderGameScreen> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: ResponsiveUtils.getSafeAreaPadding(context),
         child: Column(
           children: [
             // 資源表示
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(ResponsiveUtils.getVerticalPadding(context)),
               decoration: BoxDecoration(
                 color: const Color(0xFF607D8B).withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12),
